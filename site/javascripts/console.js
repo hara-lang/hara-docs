@@ -68,9 +68,6 @@
       status('state', 'READY');
       if (led) led.classList.add('is-ready');
       print([['hara-tty-o', `;; hara.wasm ${mod.version().replace('hara-wasm/', '')} ready`]]);
-      // page-host.js listens for this to register the .hal host namespaces
-      // and install the host/call handler before the first user eval.
-      document.dispatchEvent(new CustomEvent('hara:runtime-ready', { detail: { runtime } }));
     } catch (err) {
       console.error('[hara console]', err);
       status('runtime', 'WASM · ERROR');
