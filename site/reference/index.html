@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://hoebat.github.io/hara.lang/foundation-porting/">
+        <link rel="canonical" href="https://hoebat.github.io/hara.lang/reference/">
       
       
-        <link rel="prev" href="../development/">
+        <link rel="prev" href="../kernel/">
       
       
-        <link rel="next" href="../javadocs/">
+        <link rel="next" href="l0-language/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Foundation porting - Hara</title>
+        <title>Overview - Hara</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#talo-foundation-hal-port" class="md-skip">
+        <a href="#docs" class="md-skip">
           Skip to content
         </a>
       
@@ -103,7 +103,7 @@
     <a class="hara-system-nav__link hara-system-nav__link--hide-mobile" href="..">Play</a>
     <a class="hara-system-nav__link" href="../learn">Learn</a>
     <a class="hara-system-nav__link hara-system-nav__link--hide-mobile" href="../kernel">Kernel</a>
-    <a class="hara-system-nav__link" href="../reference/l0-language">Docs</a>
+    <a class="hara-system-nav__link" href="l0-language">Docs</a>
   </nav>
 
   <div class="hara-system-palette">
@@ -804,10 +804,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../reference/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -823,6 +832,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -835,7 +845,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/l0-language/" class="md-nav__link">
+      <a href="l0-language/" class="md-nav__link">
         
   
   
@@ -891,7 +901,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/namespaces/" class="md-nav__link">
+      <a href="namespaces/" class="md-nav__link">
         
   
   
@@ -919,7 +929,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/runtime-libraries/" class="md-nav__link">
+      <a href="runtime-libraries/" class="md-nav__link">
         
   
   
@@ -947,7 +957,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/extensions-contract/" class="md-nav__link">
+      <a href="extensions-contract/" class="md-nav__link">
         
   
   
@@ -975,7 +985,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/extensions/" class="md-nav__link">
+      <a href="extensions/" class="md-nav__link">
         
   
   
@@ -1003,7 +1013,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/repl/" class="md-nav__link">
+      <a href="repl/" class="md-nav__link">
         
   
   
@@ -1031,7 +1041,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/resp-protocol/" class="md-nav__link">
+      <a href="resp-protocol/" class="md-nav__link">
         
   
   
@@ -1059,7 +1069,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/native-flavors/" class="md-nav__link">
+      <a href="native-flavors/" class="md-nav__link">
         
   
   
@@ -1087,7 +1097,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/jvm-flavor/" class="md-nav__link">
+      <a href="jvm-flavor/" class="md-nav__link">
         
   
   
@@ -1115,7 +1125,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/xtalk-equivalence/" class="md-nav__link">
+      <a href="xtalk-equivalence/" class="md-nav__link">
         
   
   
@@ -1143,7 +1153,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/rust-runtime/" class="md-nav__link">
+      <a href="rust-runtime/" class="md-nav__link">
         
   
   
@@ -1171,7 +1181,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/clojure-core-compatibility/" class="md-nav__link">
+      <a href="clojure-core-compatibility/" class="md-nav__link">
         
   
   
@@ -1199,7 +1209,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/runtime-benchmarks/" class="md-nav__link">
+      <a href="runtime-benchmarks/" class="md-nav__link">
         
   
   
@@ -1252,37 +1262,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Foundation porting
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../foundation-porting/" class="md-nav__link">
         
   
   
@@ -1298,81 +1281,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#slice-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Slice status
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#source-convention" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Source convention
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pending-semantic-decisions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pending semantic decisions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#intentional-runtime-adaptations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Intentional runtime adaptations
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#project-convention" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Project convention
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1815,69 +1723,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#slice-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Slice status
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#source-convention" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Source convention
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pending-semantic-decisions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pending semantic decisions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#intentional-runtime-adaptations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Intentional runtime adaptations
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#project-convention" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Project convention
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -1894,289 +1739,27 @@
 
 
 
-<h1 id="talo-foundation-hal-port">Talo Foundation <code>.hal</code> Port<a class="headerlink" href="#talo-foundation-hal-port" title="Permanent link">&para;</a></h1>
-<p>This ledger tracks semantic decisions while porting <code>foundation-base/src/hara</code>
-to the <code>talo.*</code> transpiler library.
-An entry marked <code>pending</code> must not be implemented with changed behavior until it
-has been reviewed.</p>
-<h2 id="slice-status">Slice status<a class="headerlink" href="#slice-status" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Slice</th>
-<th>Status</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Project and namespace loader</td>
-<td>complete</td>
-<td>Self-contained examples live under <code>lib/bench/&lt;NUM&gt;-&lt;GROUP&gt;</code></td>
-</tr>
-<tr>
-<td>Common grammar foundation</td>
-<td>complete</td>
-<td>Grammar specification, macros, xtalk profiles/system, and aggregate grammar have translated facts</td>
-</tr>
-<tr>
-<td><code>talo.typed</code></td>
-<td>pending</td>
-<td>Does not include <code>hara.model</code></td>
-</tr>
-<tr>
-<td>Common preprocess and emit</td>
-<td>in progress</td>
-<td><code>preprocess-base</code> is complete; <code>emit-rewrite</code> follows the typed slice</td>
-</tr>
-<tr>
-<td><code>talo.common.book*</code></td>
-<td>in progress</td>
-<td><code>book-entry</code> and <code>book-meta</code> are dependency-complete record slices</td>
-</tr>
-<tr>
-<td>Remaining <code>talo.lang</code></td>
-<td>pending</td>
-<td>Split by library, rewrite, compiler, and runtime layers</td>
-</tr>
-</tbody>
-</table>
-<h2 id="source-convention">Source convention<a class="headerlink" href="#source-convention" title="Permanent link">&para;</a></h2>
-<p>Talo is a self-contained Hara project under <code>lib/</code>. Production
-namespaces live under <code>lib/src/talo</code>; translated tests live under
-<code>lib/test/talo</code>. Namespace roots are mapped predictably:</p>
-<table>
-<thead>
-<tr>
-<th>Foundation</th>
-<th>Talo</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>hara.common.*</code></td>
-<td><code>talo.common.*</code></td>
-</tr>
-<tr>
-<td><code>hara.typed.*</code></td>
-<td><code>talo.typed.*</code></td>
-</tr>
-<tr>
-<td><code>hara.lang.book*</code></td>
-<td><code>talo.common.book*</code></td>
-</tr>
-<tr>
-<td>transpiler-focused <code>hara.lang.*</code></td>
-<td><code>talo.lang.*</code></td>
-</tr>
-</tbody>
-</table>
-<p>Benchmarks consume these packaged namespaces and do not contain substitute
-implementations.</p>
-<h2 id="pending-semantic-decisions">Pending semantic decisions<a class="headerlink" href="#pending-semantic-decisions" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Area</th>
-<th>Original behavior</th>
-<th>Missing or different facility</th>
-<th>Proposed direction</th>
-<th>Decision</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Typed records</td>
-<td>Five Clojure records represent typed declarations</td>
-<td>Native Hara record declaration was missing</td>
-<td>Native <code>defstruct</code>, <code>-&gt;Record</code>, and <code>map-&gt;Record</code> constructors</td>
-<td>implemented</td>
-</tr>
-<tr>
-<td>Namespace analysis</td>
-<td>Uses <code>ns-publics</code>, <code>ns-aliases</code>, <code>ns-name</code>, and <code>requiring-resolve</code></td>
-<td>Hara exposed only part of this introspection</td>
-<td>Narrow deterministic namespace primitives; publics exclude referred Vars</td>
-<td>implemented</td>
-</tr>
-<tr>
-<td>Source analysis</td>
-<td>Uses tools.reader with file, line, and column metadata</td>
-<td>Hara parser did not expose a multi-form analysis API</td>
-<td>Capability-checked <code>read-forms</code> preserving file and source spans</td>
-<td>implemented</td>
-</tr>
-<tr>
-<td>Parallel work</td>
-<td>Some later language/runtime paths use futures and parallel task processing</td>
-<td>Hara promises differ from Clojure futures</td>
-<td>No sequential fallback until separately approved</td>
-<td>pending</td>
-</tr>
-<tr>
-<td>Host integrations</td>
-<td>Later language paths use filesystem, process, network, and JVM APIs</td>
-<td>Hara uses explicit capabilities and runtime flavors</td>
-<td>Keep operations unavailable until a capability-safe mapping is reviewed</td>
-<td>pending</td>
-</tr>
-</tbody>
-</table>
-<h2 id="intentional-runtime-adaptations">Intentional runtime adaptations<a class="headerlink" href="#intentional-runtime-adaptations" title="Permanent link">&para;</a></h2>
-<p>The following adaptations preserve observable Foundation behavior while using
-the portable Hara runtime:</p>
-<table>
-<thead>
-<tr>
-<th>Foundation construct</th>
-<th>Talo implementation</th>
-<th>Reason</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Nested argument destructuring in helper definitions</td>
-<td>Explicit <code>first</code>, <code>second</code>, <code>drop</code>, and indexed access</td>
-<td>Hara does not yet support every nested Clojure binding pattern</td>
-</tr>
-<tr>
-<td><code>list</code> and syntax-quoted generated forms</td>
-<td>Persistent lists assembled with <code>cons</code></td>
-<td>Hara does not expose Clojure's <code>list</code>, and syntax quote is not a runtime function</td>
-</tr>
-<tr>
-<td><code>with-meta</code></td>
-<td><code>IObjType/with-meta</code> through <code>protocol-call</code></td>
-<td>Metadata mutation is intentionally protocol-based</td>
-</tr>
-<tr>
-<td>Repeated traversal of lazy collection operations</td>
-<td>Materialize once with <code>vec</code></td>
-<td>Hara lazy iterators are one-shot</td>
-</tr>
-<tr>
-<td>Dynamic values consumed by lazy transforms</td>
-<td>Materialize inside the dynamic binding</td>
-<td>Deferred iteration must not escape the binding extent</td>
-</tr>
-<tr>
-<td>Arbitrary <code>eval</code> in grammar mixins</td>
-<td>Qualified symbol resolution plus a narrow form evaluator</td>
-<td>Portable HAL code must not depend on host evaluation</td>
-</tr>
-<tr>
-<td>Clojure <code>seq?</code> as a list/form predicate</td>
-<td>Dispatch after the supported symbol and map mixin cases</td>
-<td>Hara's <code>seq?</code> specifically identifies lazy <code>HaraSeq</code> values</td>
-</tr>
-<tr>
-<td>Runtime <code>macroexpand-1</code> for <code>-&gt;</code> and <code>-&gt;&gt;</code> data</td>
-<td>Explicit thread-first/thread-last form transformation</td>
-<td>Hara expands these forms during analysis; quoted transpiler data is transformed portably in HAL</td>
-</tr>
-<tr>
-<td>Macros imported by an <code>ns</code> declaration</td>
-<td><code>:refer-macros</code> in the generated <code>:require</code> specification</td>
-<td>Hara runtime <code>require</code> supported macro references, but source namespace declarations did not</td>
-</tr>
-<tr>
-<td>Nested macro argument destructuring</td>
-<td>Bind the vector as one macro argument and emit a runtime <code>first</code></td>
-<td>Hara macro parameters are symbols, while the public call shape remains unchanged</td>
-</tr>
-<tr>
-<td>Clojure <code>integer?</code> in index-offset folding</td>
-<td>Hara <code>number?</code></td>
-<td>Target grammar offsets are numeric indices and Hara currently exposes the broader numeric predicate</td>
-</tr>
-<tr>
-<td><code>std.lib.walk/prewalk</code> plus volatile accumulators</td>
-<td>Explicit pending-node loop with persistent maps and sets</td>
-<td>Keeps xtalk scanning portable and prevents mutable host values from escaping</td>
-</tr>
-<tr>
-<td>Clojure set union, subset, and membership helpers</td>
-<td>Small persistent reductions local to the xtalk system</td>
-<td>Hara deliberately does not expose the whole <code>clojure.set</code> surface</td>
-</tr>
-<tr>
-<td>Symbol-valued <code>code.test</code> <code>:id</code> metadata</td>
-<td>Fact names and <code>:refer</code> metadata only</td>
-<td>Unquoted metadata symbols are resolved by Hara; the test registry already has stable names</td>
-</tr>
-<tr>
-<td>Foundation <code>Grammer</code> record</td>
-<td>Persistent map tagged with <code>:polis/type :polis/grammar</code></td>
-<td>Hara records are structs rather than map values; downstream grammar consumers require keyword lookup and map semantics</td>
-</tr>
-<tr>
-<td>Metadata-based operator category ordering</td>
-<td>Explicit persistent <code>+op-categories+</code> and <code>+op-order+</code> vectors</td>
-<td>Hara Vars do not provide the Foundation compiler's source-line ordering contract</td>
-</tr>
-<tr>
-<td>Recursive lookup over lazy path tails</td>
-<td>Materialize the remaining path in <code>get-in</code> and <code>assoc-in</code></td>
-<td>Hara lazy iterators are one-shot; probing them with <code>empty?</code> must not consume the next lookup key</td>
-</tr>
-<tr>
-<td>Keyword lookup against sets</td>
-<td>Hara keywords now query persistent and Java sets</td>
-<td>Foundation argument parsing uses keyword lookup on grammar allow-lists and expects missing members to return <code>nil</code></td>
-</tr>
-<tr>
-<td>Metadata-bearing symbol equality</td>
-<td>Symbol equality and hashing ignore metadata</td>
-<td>Matches Clojure/Foundation value semantics and allows copied metadata assertions to compare unchanged</td>
-</tr>
-<tr>
-<td>Macro parameter destructuring</td>
-<td>Bind the vector parameter and select its first value inside <code>with:macro-opts</code></td>
-<td>Hara macro parameters currently support symbols and <code>&amp;</code>, so the public call shape remains unchanged while the implementation avoids nested parameter destructuring</td>
-</tr>
-<tr>
-<td><code>std.lib.walk</code></td>
-<td>Lazy Java-backed static library over persistent Hara collections</td>
-<td>Supplies the Foundation traversal contract without mutable host collections escaping; map/set implementations and metadata are preserved</td>
-</tr>
-<tr>
-<td><code>volatile!</code> used as a local traversal flag</td>
-<td>Hara <code>atom</code>, <code>reset!</code>, and <code>deref</code></td>
-<td><code>talo.common.preprocess-input</code> needs local mutable state only while checking whether a template expression can be evaluated</td>
-</tr>
-<tr>
-<td>Host form <code>eval</code> during preprocessing</td>
-<td>Core Hara <code>eval</code> evaluates the readable Hara form in the active namespace</td>
-<td>Preserves persisted template behavior while keeping evaluation inside the Hara runtime rather than invoking Clojure/JVM evaluation</td>
-</tr>
-<tr>
-<td>Foundation <code>std.lib.impl/defimpl</code> for <code>BookEntry</code></td>
-<td>Native Hara <code>defstruct</code> with the same fields and constructors</td>
-<td>Preserves lookup, construction, and type checks without introducing an implementation-only compatibility namespace; custom Foundation record printing remains unavailable</td>
-</tr>
-<tr>
-<td><code>std.lib.template/$</code> in copied record-construction facts</td>
-<td>Explicit persistent target forms assembled with <code>list</code></td>
-<td>Hara does not ship the Foundation template namespace; the test functions retain the same generated forms without adding a compatibility-only public namespace</td>
-</tr>
-</tbody>
-</table>
-<p>Translated <code>code.test</code> files are copied from Foundation by default. Namespace
-ownership and unsupported dependency syntax may be translated, but fact
-grouping, inputs, expected values, and metadata remain unchanged. A failing
-copied fact is treated as a source or runtime gap before any test adaptation is
-considered.</p>
-<h2 id="project-convention">Project convention<a class="headerlink" href="#project-convention" title="Permanent link">&para;</a></h2>
-<p>The nearest <code>project.hal</code> is discovered by walking upward from the working
-directory. Runnable project fixtures use
-<code>lib/bench/&lt;NUM&gt;-&lt;GROUP&gt;/{project.hal,src,test}</code>. A descriptor has this form:</p>
-<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="kd">defproject </span><span class="nv">project.name</span>
-<span class="w">  </span><span class="p">{</span><span class="ss">:source-paths</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;src&quot;</span><span class="p">]</span>
-<span class="w">   </span><span class="ss">:test-paths</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;test&quot;</span><span class="p">]})</span>
-</code></pre></div>
-<p>Namespace paths replace dots with directories and hyphens with underscores.
-Project source wins over packaged classpath source. Test paths are considered
-only for namespaces ending in <code>-test</code>.</p>
+<h1 id="docs">Docs<a class="headerlink" href="#docs" title="Permanent link">&para;</a></h1>
+<p>Reference documentation for the HARA language, runtime flavors, extension system, and developer workflows.</p>
+<ul>
+<li><a href="l0-language/">L0 language</a></li>
+<li><a href="../builtins/">Builtins</a></li>
+<li><a href="namespaces/">Namespace catalog</a></li>
+<li><a href="runtime-libraries/">Runtime libraries</a></li>
+<li><a href="extensions-contract/">Extensions contract</a></li>
+<li><a href="extensions/">Extension overview</a></li>
+<li><a href="repl/">REPL UX</a></li>
+<li><a href="resp-protocol/">RESP protocol</a></li>
+<li><a href="native-flavors/">Native flavors</a></li>
+<li><a href="jvm-flavor/">JVM flavor</a></li>
+<li><a href="xtalk-equivalence/">Xtalk equivalence</a></li>
+<li><a href="rust-runtime/">Rust/WASM runtime</a></li>
+<li><a href="clojure-core-compatibility/">Clojure core compatibility</a></li>
+<li><a href="runtime-benchmarks/">Runtime benchmarks</a></li>
+<li><a href="../development/">Developer guide</a></li>
+<li><a href="../foundation-porting/">Foundation porting</a></li>
+<li><a href="../javadocs/">Java API</a></li>
+</ul>
 
 
 
