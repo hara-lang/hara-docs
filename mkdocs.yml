@@ -27,7 +27,6 @@ extra_css:
   - stylesheets/hara.css
 extra_javascript:
   - javascripts/hara.js
-  - javascripts/game.js
   - javascripts/demo.js
   - javascripts/console.js
   - javascripts/page-host.js
