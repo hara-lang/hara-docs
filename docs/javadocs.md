@@ -38,3 +38,11 @@ failures        unsupported, denied, timeout, cancellation, and crash errors
 
 Do not document the old Foundation/TCP implementation as the current language API. Historical
 classes may be marked deprecated or linked to `README.legacy.md` while migration continues.
+
+## Rust API reference
+
+RustDoc output is a generated implementation reference, alongside JavaDocs rather than a
+replacement for the language and runtime specifications. When published, place it at
+`/api/rust/`, apply the Hara API stylesheet, and link it from this page and the shared site
+navigation. RustDoc pages should retain their generated search and crate/module navigation while
+using the same Hara tokens, code treatment, focus states, and links back to MkDocs and specs.

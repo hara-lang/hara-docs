@@ -4,11 +4,11 @@
   --hara-violet: #9c7bff;
   --hara-amber: #ffbd68;
   --hara-bg: #05070d;
-  --hara-panel: #0b101b;
-  --hara-panel-2: #101c2a;
-  --hara-line: #1e3848;
+  --hara-panel: #0a0f18;
+  --hara-panel-2: #0e1522;
+  --hara-line: rgba(65,245,228,.14);
   --hara-text: #dbe7ef;
-  --hara-muted: #8295a6;
+  --hara-muted: #8b9bad;
   --hara-shadow: rgba(65, 245, 228, .14);
 }
 
