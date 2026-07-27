@@ -1,6 +1,4 @@
-{#-
-  Site-wide theme extension: universal glass system bar + fixed Tron grid background.
--#}
+{# Site-wide metadata and subtle documentation background. #}
 {% extends "base.html" %}
 {% block extrahead %}
   {{ super() }}
@@ -15,10 +13,6 @@
   <meta name="twitter:description" content="Build live, across every host.">
   <meta name="twitter:image" content="https://docs.hara-lang.org/assets/og-hara-docs.png">
 {% endblock %}
-{% block header %}
-  {% include "partials/system-bar.html" %}
-{% endblock %}
-{% block tabs %}{% endblock %}
 {% block site_nav %}
 <div class="hara-bg" data-hara-component="parallax" data-hara-fixed aria-hidden="true">
   <canvas class="hara-game" data-hara-component="game"></canvas>
