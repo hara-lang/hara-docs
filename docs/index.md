@@ -10,6 +10,7 @@ hide:
 <section class="hara-home-section hara-home-intro">
   <p class="hara-label">01 / MAKE SOMETHING LIVE</p>
   <div>
+    <img class="hara-home-mark" src="assets/hara-mark.svg" alt="Hara">
     <h2>Code, see, change, repeat.</h2>
     <p>Hara is for projects that stay live while you make them. Work in a browser, a Chrome DevTools panel, or VS Code; evaluate a form, inspect its result, and move between source and visual views without losing the project underneath.</p>
   </div>

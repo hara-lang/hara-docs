@@ -241,6 +241,14 @@ body {
   font-weight: 700;
 }
 
+.hara-home-mark {
+  display: block;
+  width: clamp(7rem, 14vw, 11rem);
+  height: auto;
+  margin: 0 0 1.25rem;
+  filter: drop-shadow(0 0 20px rgba(48, 193, 242, .34));
+}
+
 .md-typeset h2 {
   margin-top: 2.4em;
   padding-top: .8em;
@@ -541,6 +549,11 @@ body {
 .hara-system-apple {
   width: 22px;
   height: 22px;
+}
+
+.hara-system-brand img {
+  object-fit: contain;
+  filter: drop-shadow(0 0 7px rgba(48, 193, 242, .42));
 }
 
 .hara-system-apple {
