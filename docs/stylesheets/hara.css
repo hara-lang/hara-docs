@@ -11,6 +11,44 @@
    locally, build unaffected). */
 @import url("../rust/studio/studio.css");
 
+/* The shared Hara UI kit is loaded by MkDocs before this adapter. Keep
+   Material-specific structure here; new docs components consume the canonical
+   --hara-* tokens and primitive classes from vendor/hara-ui. */
+
+.md-typeset .admonition,
+.md-typeset details {
+  border: 1px solid var(--hara-line);
+  border-radius: 4px;
+  background: rgba(4, 8, 15, .78);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .admonition-title,
+.md-typeset summary {
+  color: var(--hara-cyan-bright);
+  font-family: var(--hara-mono);
+  letter-spacing: .05em;
+}
+
+.md-typeset table:not([class]) {
+  border: 1px solid var(--hara-line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.md-typeset table:not([class]) th {
+  color: var(--hara-cyan-bright);
+  background: rgba(65, 245, 228, .07);
+  font-family: var(--hara-mono);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th {
+  border-color: var(--hara-line);
+}
+
 /* mkdocs-material slate scheme -> noir */
 [data-md-color-scheme="slate"] {
   --md-default-bg-color: var(--hara-bg);

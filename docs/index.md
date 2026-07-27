@@ -8,72 +8,80 @@ hide:
 ---
 
 <section class="hara-home-section hara-home-intro">
-  <p class="hara-label">01 / WHY HARA</p>
+  <p class="hara-label">01 / MAKE SOMETHING LIVE</p>
   <div>
-    <h2>One language. Clear boundaries.</h2>
-    <p>Hara keeps its core deliberately small. Host access, files, sockets and other effects are explicit capabilities rather than ambient magic, making programs easier to move, embed and reason about.</p>
+    <h2>Code, see, change, repeat.</h2>
+    <p>Hara is for projects that stay live while you make them. Work in a browser, a Chrome DevTools panel, or VS Code; evaluate a form, inspect its result, and move between source and visual views without losing the project underneath.</p>
   </div>
 </section>
 
 <section class="hara-home-section">
-  <p class="hara-label">02 / THE SHAPE</p>
+  <p class="hara-label">02 / THE WORKSPACE</p>
   <div class="hara-feature-grid">
     <article>
       <span>01</span>
-      <h3>Compact L0 core</h3>
-      <p>Functions, persistent collections, protocols, promises and explicit mutable markers form a focused language surface.</p>
+      <h3>Live evaluation</h3>
+      <p>Keep a running kernel close to your source and test ideas one form at a time.</p>
     </article>
     <article>
       <span>02</span>
-      <h3>Runtime-neutral contracts</h3>
-      <p>The same value model and library boundaries are specified across Truffle, Rust and WebAssembly hosts.</p>
+      <h3>Visual workspaces</h3>
+      <p>Use code, visual, patch, inspector, and REPL views as different ways to understand one project.</p>
     </article>
     <article>
       <span>03</span>
-      <h3>Built for embedding</h3>
-      <p>Use Hara from a CLI, a JVM application, a browser module, an editor or a purpose-built host.</p>
+      <h3>Projects that travel</h3>
+      <p>Move between the Studio, Hara Chrome, VS Code, and purpose-built hosts with explicit project boundaries.</p>
     </article>
     <article>
       <span>04</span>
-      <h3>Live development</h3>
-      <p>A shared REPL session, RESP transport and editor integrations keep evaluation close to the running system.</p>
+      <h3>A small portable core</h3>
+      <p>Hara keeps effects explicit so the same project can meet browser, JVM, Rust, and WebAssembly hosts clearly.</p>
     </article>
   </div>
 </section>
 
 <section class="hara-home-section hara-quickstart">
   <div>
-    <p class="hara-label">03 / QUICK START</p>
-    <h2>From source to REPL.</h2>
-    <p>Build the Truffle runtime with JDK 21 and Maven, evaluate a form, then enter the shared interactive session.</p>
+    <p class="hara-label">03 / FIRST PROJECT</p>
+    <h2>Make a browser game.</h2>
+    <p>Start with a small scene, run it live, and use the REPL to change its behaviour while it is open.</p>
   </div>
-  <pre><code>mvn -f java/pom.xml -Ptruffle package
-./hara eval '(+ 19 23)'
-./hara</code></pre>
+  <pre><code>; starter game loop
+(def state (atom {:x 40 :score 0}))
+(defn tick []
+  (swap! state update :x + 2))
+
+; evaluate, observe, adjust</code></pre>
 </section>
 
 <section class="hara-home-section hara-paths">
-  <p class="hara-label">04 / GO DEEPER</p>
+  <p class="hara-label">04 / CHOOSE A PATH</p>
   <div class="hara-path-grid">
-    <a href="user-guide/">
+    <a href="learn-programming/">
       <span>Learn</span>
-      <strong>User guide</strong>
-      <p>Install, evaluate, use the REPL and write Hara programs.</p>
+      <strong>Learn to program</strong>
+      <p>Start with values, decisions, functions, and live feedback.</p>
     </a>
-    <a href="reference/l0-language/">
-      <span>Specify</span>
-      <strong>L0 language</strong>
-      <p>Read the normative core language behaviour and data model.</p>
+    <a href="create/first-game/">
+      <span>Create</span>
+      <strong>First browser game</strong>
+      <p>Build a small interactive project around Hara's live workflow.</p>
     </a>
-    <a href="reference/rust-runtime/">
-      <span>Embed</span>
-      <strong>Rust and WASM</strong>
-      <p>Understand cross-runtime values, providers and conformance.</p>
+    <a href="create/chrome-project/">
+      <span>Workspace</span>
+      <strong>Hara Chrome project</strong>
+      <p>Use the DevTools panel, a project directory, spaces, and the REPL.</p>
     </a>
-    <a href="development/">
-      <span>Contribute</span>
-      <strong>Developer guide</strong>
-      <p>Build, test, benchmark and extend the implementation.</p>
+    <a href="create/vscode-project/">
+      <span>Editor</span>
+      <strong>Hara VS Code project</strong>
+      <p>Connect to a live Hara server and develop in an isolated session.</p>
+    </a>
+    <a href="projects/publish-greenways/">
+      <span>Share</span>
+      <strong>Greenways Spaces</strong>
+      <p>See the planned publishing journey and what is available today.</p>
     </a>
   </div>
 </section>
