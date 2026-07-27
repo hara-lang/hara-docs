@@ -13,10 +13,10 @@
       <span>Hara</span>
     </a>
     <nav class="hara-home-nav" aria-label="Primary navigation">
-      <a href="{{ 'studio/' | url }}">Studio</a>
-      <a href="{{ 'getting-started/' | url }}">Get started</a>
+      <a href="{{ 'learn-programming/' | url }}">Learn</a>
+      <a href="{{ 'create/first-game/' | url }}">Create</a>
+      <a href="{{ 'projects/' | url }}">Projects</a>
       <a href="{{ 'reference/' | url }}">Reference</a>
-      <a href="https://github.com/greenways-ai/hara">GitHub</a>
     </nav>
   </div>
 </header>
@@ -29,31 +29,33 @@
 <main class="hara-landing">
   <section class="hara-hero">
     <div class="hara-hero__copy">
-      <p class="hara-label">Runtime-neutral · live · embeddable</p>
-      <h1>A small Lisp for systems that need to live <em>everywhere.</em></h1>
-      <p class="hara-hero__lede">Hara combines a compact language core with explicit capabilities, persistent data and portable runtime contracts across the JVM, Rust and WebAssembly.</p>
+      <p class="hara-label">Live · visual · project-first</p>
+      <h1>Make something.<br><em>Keep it live.</em></h1>
+      <p class="hara-hero__lede">Hara is a programming workspace for turning an idea into a working project: write a form, see the result, change it, and carry the project between the browser, Chrome, and VS Code.</p>
       <div class="hara-hero__actions">
-        <a class="hara-button hara-button--primary" href="{{ 'studio/' | url }}">Try Hara Studio</a>
-        <a class="hara-button" href="{{ 'getting-started/' | url }}">Read the guide</a>
+        <a class="hara-button hara-button--primary" href="{{ 'create/first-game/' | url }}">Make your first game</a>
+        <a class="hara-button" href="{{ 'learn-programming/' | url }}">Learn to program</a>
       </div>
-      <p class="hara-status"><span></span> Active experimental runtime</p>
+      <p class="hara-status"><span></span> Start in the workspace that fits your project</p>
     </div>
 
     <div class="hara-code-card" aria-label="Hara example">
       <div class="hara-code-card__head">
-        <span>hello.hal</span>
-        <span>L0</span>
+        <span>first-game.hara</span>
+        <span>Live project</span>
       </div>
       <pre><code><span class="hara-code-muted">; data stays data</span>
-(def project
-  {:name "hara"
-   :runtimes [:jvm :rust :wasm]})
+(def player
+  (atom {:x 40 :score 0}))
 
-(map name (:runtimes project))
-<span class="hara-code-result">=&gt; ["jvm" "rust" "wasm"]</span></code></pre>
+(defn move-right [amount]
+  (swap! player update :x + amount))
+
+(move-right 2)
+<span class="hara-code-result">=&gt; {:x 42 :score 0}</span></code></pre>
       <div class="hara-code-card__foot">
-        <span>portable core</span>
-        <span>explicit host boundary</span>
+        <span>evaluate · observe · adjust</span>
+        <span>source stays portable</span>
       </div>
     </div>
   </section>
@@ -67,6 +69,6 @@
 {% block footer %}
 <footer class="hara-home-footer">
   <span>Hara is built by <a href="https://www.greenways.ai">Greenways</a>.</span>
-  <span><a href="https://github.com/greenways-ai/hara">Source on GitHub</a></span>
+  <span><a href="https://github.com/hara-lang/hara">Source on GitHub</a></span>
 </footer>
 {% endblock %}
