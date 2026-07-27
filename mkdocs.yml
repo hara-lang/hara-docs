@@ -1,6 +1,6 @@
 site_name: Hara
 site_description: A small, runtime-neutral language for live systems.
-site_url: https://greenways-ai.github.io/hara/
+site_url: https://docs.hara-lang.org/
 docs_dir: docs
 theme:
   name: material
@@ -76,8 +76,3 @@ nav:
       - Developer guide: development.md
       - Foundation porting: foundation-porting.md
       - Java API: javadocs.md
-  - Apps:
-      - hara-chrome: '!include ../apps/hara-chrome/mkdocs.yml'
-      - hara-emacs: '!include ../apps/hara-emacs/mkdocs.yml'
-  - Books:
-      - The Little Book of HAL: '!include ../books/the-little-book-of-hal/mkdocs.yml'
