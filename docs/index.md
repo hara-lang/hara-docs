@@ -1,12 +1,3 @@
----
-template: home.html
-title: Hara
-hide:
-  - navigation
-  - toc
-  - feedback
----
-
 <section class="hara-home-section hara-home-intro">
   <p class="hara-label">01 / MAKE SOMETHING LIVE</p>
   <div>
