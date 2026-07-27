@@ -7,7 +7,7 @@ project. The syntax is Clojure-inspired, but the loader and available libraries 
 
 Start a portable source file with `ns`:
 
-```clojure
+```hara
 (ns services.worker)
 
 (def worker-name "background")
@@ -20,7 +20,7 @@ function named `process-job`, `services.worker/process-job`.
 
 The nearest `project.hal` declares source and test roots:
 
-```clojure
+```hara
 (defproject services
   {:source-paths ["src"]
    :test-paths ["test"]})
@@ -41,7 +41,7 @@ source.
 
 Use `:as` when the dependency has several public Vars:
 
-```clojure
+```hara
 (ns services.api
   (:require [services.worker :as worker]
             [std.lib.string :as string]))
@@ -52,7 +52,7 @@ Use `:as` when the dependency has several public Vars:
 
 Use `:refer` for a small set of names that reads naturally without a qualifier:
 
-```clojure
+```hara
 (ns services.api-test
   (:require [services.worker :refer [worker-name]]))
 ```
@@ -64,14 +64,14 @@ Prefer explicit lists over `:refer :all` in application code. Test namespaces co
 At runtime, require a project, packaged, provider-backed, or extension namespace with a quoted
 symbol:
 
-```clojure
+```hara
 (require 'services.api)
 (services.api/normalize-route "  /STATUS  ")
 ```
 
 Use `{:reload true}` only during development when the source must be evaluated again:
 
-```clojure
+```hara
 (require 'services.api {:reload true})
 ```
 
@@ -87,7 +87,7 @@ example does.
 
 Use `(:config {:intrinsics ...})` to remove or rename generated aliases:
 
-```clojure
+```hara
 (ns compact.app
   (:config
     {:intrinsics
@@ -103,7 +103,7 @@ capability. See the [namespace catalog](reference/namespaces.md) for load modes 
 
 Vars retain documentation and argument metadata:
 
-```clojure
+```hara
 (get (meta #'services.api/dispatch) :doc)
 (get (meta #'services.api/dispatch) :arglists)
 ```

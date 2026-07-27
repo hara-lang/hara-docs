@@ -27,7 +27,7 @@ in the active REPL and compare the result in the canvas.
 
 Use the normal live-development rhythm:
 
-```clojure
+```hara
 ; change one form
 (def speed 2)
 

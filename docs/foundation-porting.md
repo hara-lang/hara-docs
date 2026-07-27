@@ -87,7 +87,7 @@ The nearest `project.hal` is discovered by walking upward from the working
 directory. Runnable project fixtures use
 `lib/bench/<NUM>-<GROUP>/{project.hal,src,test}`. A descriptor has this form:
 
-```clojure
+```hara
 (defproject project.name
   {:source-paths ["src"]
    :test-paths ["test"]})

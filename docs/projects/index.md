@@ -14,7 +14,7 @@ my-project/
     app.hal
 ```
 
-```clojure
+```hara
 (defproject my-project {:source-paths ["src"]})
 ```
 

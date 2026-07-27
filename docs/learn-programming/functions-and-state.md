@@ -5,7 +5,7 @@ while an interactive program runs.
 
 ## Name a behaviour
 
-```clojure
+```hara
 (defn move-right [player amount]
   (assoc player :x (+ (:x player) amount)))
 
@@ -21,7 +21,7 @@ returns a new player map. The original data is not silently changed.
 For a value that really must change over time, use an atom. The atom is the
 visible place where mutable state lives.
 
-```clojure
+```hara
 (def player (atom {:x 10 :score 0}))
 
 (swap! player move-right 3)

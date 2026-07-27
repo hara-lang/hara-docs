@@ -2,7 +2,7 @@
 
 ## A first program
 
-```clojure
+```hara
 (defn greet [name]
   (str "hello, " name))
 
@@ -17,7 +17,7 @@ arguments. Vectors, maps, sets, strings, numbers, keywords, and `nil` are data v
 The core is deliberately small. Every namespace receives qualified aliases for the generated
 string, bytes, promise, file, socket, block, and zip libraries:
 
-```clojure
+```hara
 (ns app)
 
 (str/trim "  ready  ")
@@ -26,7 +26,7 @@ string, bytes, promise, file, socket, block, and zip libraries:
 
 Require project code or opt-in providers explicitly. Aliases are local to the declaring namespace:
 
-```clojure
+```hara
 (ns app.api
   (:require [app.worker :as worker]
             [std.lib.task :as task]))
@@ -41,7 +41,7 @@ keeping capability grants separate. Read [Namespaces and modules](namespaces.md)
 
 Persistent collections are the default. Use `array` and `object` when mutation is intentional:
 
-```clojure
+```hara
 (let [a (array 1 2 3)]
   (. a (push-last 4))
   (. a (get 3)))
@@ -53,7 +53,7 @@ The marker value makes the mutability boundary visible at construction time.
 
 Promises model native completable asynchronous work:
 
-```clojure
+```hara
 (promise/then
   (promise/run (fn [] (file/read "data.bin")))
   (fn [bytes] (bytes/count bytes)))
@@ -64,7 +64,7 @@ they do not grow separate socket-promise method families.
 
 ## Files, sockets, and capabilities
 
-```clojure
+```hara
 (file/read "notes.txt")
 (file/write "notes.txt" (str/encode "hello"))
 ```

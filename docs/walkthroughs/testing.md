@@ -8,7 +8,7 @@ context, so they verify namespace loading, aliases, persistent values, and langu
 The service project declares `"test"` as a test root. Its test file is
 `test/services/api_test.hal`, matching `services.api-test`:
 
-```clojure
+```hara
 (ns services.api-test
   (:require [code.test :refer :all]
             [services.api :as api]
@@ -20,7 +20,7 @@ remain connected to their owning namespace.
 
 ## Register facts
 
-```clojure
+```hara
 (fact "normalizes routes through a namespace alias"
   (api/normalize-route "  /STATUS  ")
   => "/status")
@@ -54,7 +54,7 @@ same context.
 Exact values are the simplest expectation. For partial or exceptional results, require the matcher
 you need from `code.test`:
 
-```clojure
+```hara
 (ns example.matchers
   (:require [code.test :refer [contains fact throws]]))
 

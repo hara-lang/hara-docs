@@ -2,7 +2,7 @@
 
 The JVM provider is implemented internally under `hara.kernel.jvm` and selected per namespace:
 
-```clojure
+```hara
 (ns example.jvm
   (:flavor :jvm)
   (:import [java.lang String RuntimeException]
@@ -16,7 +16,7 @@ symbols such as `String/valueOf` resolve static fields or callable static method
 The dot form traverses left to right. A symbol reads a field, a list invokes a method, and a
 one-element vector performs the JVM extension for indexed access:
 
-```clojure
+```hara
 (. point x)
 (. point x (toString))
 (. value child parent)

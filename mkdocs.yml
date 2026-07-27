@@ -7,7 +7,7 @@ theme:
   custom_dir: overrides
   language: en
   font: false
-  favicon: assets/hara-mark.svg
+  favicon: assets/hara-favicon.svg
   logo: assets/hara-mark.svg
   features:
     - navigation.tabs
@@ -35,7 +35,14 @@ markdown_extensions:
   - admonition
   - attr_list
   - pymdownx.details
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      # Markdown authors use the Hara language name. The current syntax is
+      # compatible with Pygments' Clojure lexer; retain language-hara in the
+      # rendered markup so a dedicated lexer can replace this alias later.
+      pygments_lang_class: true
+      extend_pygments_lang:
+        - name: hara
+          lang: clojure
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true

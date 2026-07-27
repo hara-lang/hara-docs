@@ -18,7 +18,7 @@ Every namespace receives these aliases by default:
 `(ns app)` and `(ns app (:config {:intrinsics :all}))` are equivalent. Aliases can be excluded
 or renamed through the singular `:alias` option:
 
-```clojure
+```hara
 (ns app
   (:config
     {:intrinsics
@@ -30,7 +30,7 @@ or renamed through the singular `:alias` option:
 Exclusion only removes the qualified alias. It does not remove core constructors such as `bytes`.
 Generated namespaces also work with ordinary namespace clauses:
 
-```clojure
+```hara
 (ns app
   (:config {:intrinsics {:exclude [string]}})
   (:require [std.lib.string :as text :refer [trim]]))
@@ -46,7 +46,7 @@ signed 32-bit `bit-and`, `bit-or`, `bit-xor`, `bit-not`, `bit-shift-left`, and
 `array` and `object` create mutable marker values distinct from persistent `[]` and `{}`. Dot
 calls are accepted only on those marker values:
 
-```clojure
+```hara
 (. (array 1 2 3) (filter (fn [x] (> x 1))))
 (. (object "name" "Hara") (get "name"))
 ```

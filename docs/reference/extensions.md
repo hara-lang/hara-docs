@@ -3,7 +3,7 @@
 Hara extensions are loaded through ordinary namespace clauses. Runtime extensions are packaged
 as WASM modules; the program does not construct an engine or transport directly.
 
-```clojure
+```hara
 (ns app
   (:require [crypto.hash :as hash]))
 
@@ -12,7 +12,7 @@ as WASM modules; the program does not construct an engine or transport directly.
 
 An extension package contains a `hara.extension.edn` manifest beside its provider artifact:
 
-```clojure
+```hara
 {:namespace "crypto.hash"
  :version "0.1.0"
  :provider :wasm

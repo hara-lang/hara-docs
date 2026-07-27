@@ -23,7 +23,7 @@ underlying provider namespaces.
 Portable namespaces do not expose ambient JVM interop. A namespace explicitly selects the JVM
 flavor:
 
-```clojure
+```hara
 (ns example.jvm
   (:flavor :jvm)
   (:import [java.lang String]))
@@ -53,7 +53,7 @@ Extension manifests declare a namespace and export map. Requiring that symbol di
 project extension root or a packaged extension, validates its descriptor, and generates public Vars
 under the declared namespace:
 
-```clojure
+```hara
 (ns digest.app
   (:require [crypto.hash.sha256 :as sha]))
 ```

@@ -4,627 +4,627 @@
 
 ### `atom`
 Creates a standard atom with the given value.
-```clojure
+```hara
 (atom ...)
 ```
 
 ### `atom:basic`
-```clojure
+```hara
 (atom:basic ...)
 ```
 
 ### `compare`
-```clojure
+```hara
 (compare ...)
 ```
 
 ### `counter`
-```clojure
+```hara
 (counter ...)
 ```
 
 ### `deref`
 Dereferences the given reference object.
-```clojure
+```hara
 (deref ...)
 ```
 
 ### `flag`
-```clojure
+```hara
 (flag ...)
 ```
 
 ### `hash`
-```clojure
+```hara
 (hash ...)
 ```
 
 ### `keyword`
-```clojure
+```hara
 (keyword ...)
 ```
 
 ### `meta`
-```clojure
+```hara
 (meta ...)
 ```
 
 ### `realize`
-```clojure
+```hara
 (realize ...)
 ```
 
 ### `realized?`
-```clojure
+```hara
 (realized? ...)
 ```
 
 ### `reset!`
 Sets the value of atom to new value without regard for the current value. Returns the new value.
-```clojure
+```hara
 (reset! ...)
 ```
 
 ### `symbol`
-```clojure
+```hara
 (symbol ...)
 ```
 
 ### `type`
-```clojure
+```hara
 (type ...)
 ```
 
 ### `volatile`
-```clojure
+```hara
 (volatile ...)
 ```
 
 ### `with-meta`
-```clojure
+```hara
 (with-meta ...)
 ```
 
 ## BuiltinCheck (check)
 
 ### `boolean?`
-```clojure
+```hara
 (boolean? ...)
 ```
 
 ### `false?`
-```clojure
+```hara
 (false? ...)
 ```
 
 ### `nil?`
-```clojure
+```hara
 (nil? ...)
 ```
 
 ### `true?`
-```clojure
+```hara
 (true? ...)
 ```
 
 ### `zero?`
-```clojure
+```hara
 (zero? ...)
 ```
 
 ## BuiltinRef (ref)
 
 ### `compare-and-set!`
-```clojure
+```hara
 (compare-and-set! ...)
 ```
 
 ### `swap!`
-```clojure
+```hara
 (swap! ...)
 ```
 
 ### `vreset!`
-```clojure
+```hara
 (vreset! ...)
 ```
 
 ### `vswap!`
-```clojure
+```hara
 (vswap! ...)
 ```
 
 ## BuiltinCollection (coll)
 
 ### `assoc`
-```clojure
+```hara
 (assoc ...)
 ```
 
 ### `concat`
-```clojure
+```hara
 (concat ...)
 ```
 
 ### `conj`
-```clojure
+```hara
 (conj ...)
 ```
 
 ### `cons`
-```clojure
+```hara
 (cons ...)
 ```
 
 ### `count`
-```clojure
+```hara
 (count ...)
 ```
 
 ### `dissoc`
-```clojure
+```hara
 (dissoc ...)
 ```
 
 ### `empty`
-```clojure
+```hara
 (empty ...)
 ```
 
 ### `first`
-```clojure
+```hara
 (first ...)
 ```
 
 ### `get`
-```clojure
+```hara
 (get ...)
 ```
 
 ### `into`
-```clojure
+```hara
 (into ...)
 ```
 
 ### `keys`
-```clojure
+```hara
 (keys ...)
 ```
 
 ### `last`
-```clojure
+```hara
 (last ...)
 ```
 
 ### `merge`
-```clojure
+```hara
 (merge ...)
 ```
 
 ### `next`
-```clojure
+```hara
 (next ...)
 ```
 
 ### `nth`
-```clojure
+```hara
 (nth ...)
 ```
 
 ### `peek`
-```clojure
+```hara
 (peek ...)
 ```
 
 ### `pop`
-```clojure
+```hara
 (pop ...)
 ```
 
 ### `rest`
-```clojure
+```hara
 (rest ...)
 ```
 
 ### `seq`
-```clojure
+```hara
 (seq ...)
 ```
 
 ### `vals`
-```clojure
+```hara
 (vals ...)
 ```
 
 ### `zipmap`
-```clojure
+```hara
 (zipmap ...)
 ```
 
 ## BuiltinInterop (interop)
 
 ### `class`
-```clojure
+```hara
 (class ...)
 ```
 
 ### `new`
-```clojure
+```hara
 (new ...)
 ```
 
 ## BuiltinLambda (lambda)
 
 ### `F`
-```clojure
+```hara
 (F ...)
 ```
 
 ### `T`
-```clojure
+```hara
 (T ...)
 ```
 
 ### `apply`
-```clojure
+```hara
 (apply ...)
 ```
 
 ### `call`
-```clojure
+```hara
 (call ...)
 ```
 
 ### `comp`
-```clojure
+```hara
 (comp ...)
 ```
 
 ### `group-by`
-```clojure
+```hara
 (group-by ...)
 ```
 
 ### `identity`
-```clojure
+```hara
 (identity ...)
 ```
 
 ### `juxt`
-```clojure
+```hara
 (juxt ...)
 ```
 
 ### `keep`
-```clojure
+```hara
 (keep ...)
 ```
 
 ### `map`
-```clojure
+```hara
 (map ...)
 ```
 
 ### `map:apply`
-```clojure
+```hara
 (map:apply ...)
 ```
 
 ### `map:entries`
-```clojure
+```hara
 (map:entries ...)
 ```
 
 ### `map:juxt`
-```clojure
+```hara
 (map:juxt ...)
 ```
 
 ### `map:keys`
-```clojure
+```hara
 (map:keys ...)
 ```
 
 ### `map:vals`
-```clojure
+```hara
 (map:vals ...)
 ```
 
 ### `mapcat`
-```clojure
+```hara
 (mapcat ...)
 ```
 
 ### `partial`
-```clojure
+```hara
 (partial ...)
 ```
 
 ### `partition:pair`
-```clojure
+```hara
 (partition:pair ...)
 ```
 
 ### `pipe`
-```clojure
+```hara
 (pipe ...)
 ```
 
 ### `reduce`
-```clojure
+```hara
 (reduce ...)
 ```
 
 ### `reduce-in`
-```clojure
+```hara
 (reduce-in ...)
 ```
 
 ## BuiltinOps (ops)
 
 ### `*`
-```clojure
+```hara
 (* ...)
 ```
 
 ### `+`
-```clojure
+```hara
 (+ ...)
 ```
 
 ### `-`
-```clojure
+```hara
 (- ...)
 ```
 
 ### `/`
-```clojure
+```hara
 (/ ...)
 ```
 
 ### `<`
-```clojure
+```hara
 (< ...)
 ```
 
 ### `<=`
-```clojure
+```hara
 (<= ...)
 ```
 
 ### `=`
-```clojure
+```hara
 (= ...)
 ```
 
 ### `>`
-```clojure
+```hara
 (> ...)
 ```
 
 ### `>=`
-```clojure
+```hara
 (>= ...)
 ```
 
 ### `dec`
-```clojure
+```hara
 (dec ...)
 ```
 
 ### `inc`
-```clojure
+```hara
 (inc ...)
 ```
 
 ### `max`
-```clojure
+```hara
 (max ...)
 ```
 
 ### `min`
-```clojure
+```hara
 (min ...)
 ```
 
 ### `mod`
-```clojure
+```hara
 (mod ...)
 ```
 
 ### `quot`
-```clojure
+```hara
 (quot ...)
 ```
 
 ### `rem`
-```clojure
+```hara
 (rem ...)
 ```
 
 ## BuiltinRuntime (rt)
 
 ### `eval`
-```clojure
+```hara
 (eval ...)
 ```
 
 ### `load`
-```clojure
+```hara
 (load ...)
 ```
 
 ### `sys:add-paths`
-```clojure
+```hara
 (sys:add-paths ...)
 ```
 
 ### `sys:remove-paths`
-```clojure
+```hara
 (sys:remove-paths ...)
 ```
 
 ## BuiltinStruct (struct)
 
 ### `hash-map`
-```clojure
+```hara
 (hash-map ...)
 ```
 
 ### `hash-set`
-```clojure
+```hara
 (hash-set ...)
 ```
 
 ### `list`
-```clojure
+```hara
 (list ...)
 ```
 
 ### `vector`
-```clojure
+```hara
 (vector ...)
 ```
 
 ## BuiltinTime (time)
 
 ### `now`
-```clojure
+```hara
 (now ...)
 ```
 
 ## BuiltinNamespace (ns)
 
 ### `ns:aliases`
-```clojure
+```hara
 (ns:aliases ...)
 ```
 
 ### `ns:create`
-```clojure
+```hara
 (ns:create ...)
 ```
 
 ### `ns:find`
-```clojure
+```hara
 (ns:find ...)
 ```
 
 ### `ns:imports`
-```clojure
+```hara
 (ns:imports ...)
 ```
 
 ### `ns:list`
-```clojure
+```hara
 (ns:list ...)
 ```
 
 ### `ns:map`
-```clojure
+```hara
 (ns:map ...)
 ```
 
 ### `ns:name`
-```clojure
+```hara
 (ns:name ...)
 ```
 
 ## BuiltinUtil (util)
 
 ### `pr-str`
-```clojure
+```hara
 (pr-str ...)
 ```
 
 ### `println`
-```clojure
+```hara
 (println ...)
 ```
 
 ## Macro (macro)
 
 ### `.`
-```clojure
+```hara
 (. ...)
 ```
 
 ### `and`
-```clojure
+```hara
 (and ...)
 ```
 
 ### `case`
-```clojure
+```hara
 (case ...)
 ```
 
 ### `cond`
-```clojure
+```hara
 (cond ...)
 ```
 
 ### `def`
-```clojure
+```hara
 (def ...)
 ```
 
 ### `do`
-```clojure
+```hara
 (do ...)
 ```
 
 ### `fn`
-```clojure
+```hara
 (fn ...)
 ```
 
 ### `for`
-```clojure
+```hara
 (for ...)
 ```
 
 ### `if`
-```clojure
+```hara
 (if ...)
 ```
 
 ### `let`
-```clojure
+```hara
 (let ...)
 ```
 
 ### `loop`
-```clojure
+```hara
 (loop ...)
 ```
 
 ### `or`
-```clojure
+```hara
 (or ...)
 ```
 
 ### `quote`
-```clojure
+```hara
 (quote ...)
 ```
 
 ### `recur`
-```clojure
+```hara
 (recur ...)
 ```
 
 ### `throw`
-```clojure
+```hara
 (throw ...)
 ```
 
 ### `try`
-```clojure
+```hara
 (try ...)
 ```
 
 ### `var`
-```clojure
+```hara
 (var ...)
 ```

@@ -5,7 +5,7 @@ number, some text, a name, a list of things, or a set of labelled facts.
 
 ## Numbers and text
 
-```clojure
+```hara
 (+ 19 23)
 ; => 42
 
@@ -21,7 +21,7 @@ the values passed to it. This makes the shape of an instruction easy to read:
 
 A vector uses square brackets. It is useful when the order of values matters.
 
-```clojure
+```hara
 (def scores [10 20 30])
 (count scores)
 ; => 3
@@ -34,7 +34,7 @@ the two forms again, and see how the result changes.
 
 A map uses braces. Keywords, such as `:name`, are lightweight labels.
 
-```clojure
+```hara
 (def player {:name "Nova" :score 0})
 (:name player)
 ; => "Nova"

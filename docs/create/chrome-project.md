@@ -22,7 +22,7 @@ orbit-game/
     game.hal
 ```
 
-```clojure
+```hara
 ; project.hal
 (defproject orbit-game {:source-paths ["src"]})
 ```

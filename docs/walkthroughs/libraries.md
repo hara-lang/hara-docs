@@ -7,7 +7,7 @@ shows which portable feature or host capability it uses.
 
 The default aliases are available in every namespace:
 
-```clojure
+```hara
 (ns tutorial.data)
 
 (def encoded (str/encode "Hara"))
@@ -22,7 +22,7 @@ interop is involved.
 The other intrinsic aliases are `promise/`, `file/`, `socket/`, `block/`, and `zip/`. The last two
 support source-preserving blocks and tree navigation:
 
-```clojure
+```hara
 (block/parse-first "(+ 1 2)")
 (zip/zipper [1 [2 3]])
 ```
@@ -31,7 +31,7 @@ support source-preserving blocks and tree navigation:
 
 An explicit alias can make a dependency clearer or replace a default name:
 
-```clojure
+```hara
 (ns tutorial.labels
   (:require [std.lib.string :as text]))
 
@@ -45,7 +45,7 @@ summary. Both explicit aliases and intrinsic aliases point to the same live libr
 
 Some provider-backed namespaces are intentionally not injected:
 
-```clojure
+```hara
 (ns tutorial.tasks
   (:require [std.lib.task :as task]))
 ```
@@ -71,7 +71,7 @@ unsupported operation remain distinct failures, allowing the application to resp
 
 Use metadata rather than guessing arities:
 
-```clojure
+```hara
 [(get (meta #'str/join) :doc)
  (get (meta #'str/join) :arglists)]
 ```

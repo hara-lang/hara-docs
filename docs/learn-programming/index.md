@@ -22,7 +22,7 @@ something you can test immediately.
 
 Enter this in a REPL:
 
-```clojure
+```hara
 (+ 19 23)
 ```
 

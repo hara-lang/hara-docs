@@ -7,7 +7,7 @@ from a worker implementation, loads them by namespace, and returns persistent Ha
 
 `lib/examples/services/project.hal` defines the roots searched by `require`:
 
-```clojure
+```hara
 (defproject services
   {:source-paths ["src"]
    :test-paths ["test"]})
@@ -19,7 +19,7 @@ Run project commands from this directory so Hara discovers the descriptor by wal
 
 `src/services/worker.hal` matches the namespace `services.worker`:
 
-```clojure
+```hara
 (ns services.worker)
 
 (def worker-name "background")
@@ -37,7 +37,7 @@ public boundary.
 
 `src/services/api.hal` uses one project namespace and one generated library namespace:
 
-```clojure
+```hara
 (ns services.api
   (:require [services.worker :as worker]
             [std.lib.string :as string]))
@@ -64,7 +64,7 @@ cd lib/examples/services
 
 The result is the readable response map:
 
-```clojure
+```hara
 {:route "/status"
  :result {:worker "background"
           :job {:id 42 :action :health-check}

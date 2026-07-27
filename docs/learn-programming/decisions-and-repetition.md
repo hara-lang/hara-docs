@@ -8,7 +8,7 @@ or when they perform a small action many times.
 `if` chooses between two results. The first value is a question; only one of
 the next two forms is evaluated.
 
-```clojure
+```hara
 (def score 12)
 
 (if (>= score 10)
@@ -24,7 +24,7 @@ different path.
 
 `cond` is useful when there are several ordered choices.
 
-```clojure
+```hara
 (defn rank [score]
   (cond
     (>= score 100) "gold"
@@ -41,7 +41,7 @@ Read a `cond` from top to bottom. The first true condition supplies the result.
 
 Programs often apply one rule to each item in a collection.
 
-```clojure
+```hara
 (map (fn [score] (+ score 10)) [0 10 20])
 ; => [10 20 30]
 ```

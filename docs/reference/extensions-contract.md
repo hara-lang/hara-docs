@@ -32,7 +32,7 @@ program does not construct transport messages or call a WASM engine directly.
 
 An extension package contains a `hara.extension.edn` manifest beside its provider artifact:
 
-```clojure
+```hara
 {:namespace "crypto.hash"
  :version "0.1.0"
  :provider :wasm
@@ -46,7 +46,7 @@ The portable fields are `namespace`, the optional registry `identity`, `version`
 `capabilities`, and the optional `host-calls` and `handles` maps. Public handle tags are declared by
 wire type:
 
-```clojure
+```hara
 :handles {"tensor" {:tag math}}
 ```
 
@@ -177,7 +177,7 @@ A package identity such as `hara/ledger.noir` is the immutable registry owner/na
 `ledger.noir` remains the namespace used by Hara source. A multi-target descriptor declares
 target-specific entry points and the shared assets required by those entry points:
 
-```clojure
+```hara
 {:namespace "ledger.noir"
  :identity "hara/ledger.noir"
  :version "0.1.0"
@@ -274,7 +274,7 @@ at `extensions/ledger/noir/hara.extension.edn`. `hara.extensions.path` and
 Source checkouts may carry a `hara.build.edn`; installed packages do not. The canonical command
 adapter is explicit and contains no shell interpolation:
 
-```clojure
+```hara
 {:adapter :command
  :command ["npm" "run" "build:noir"]
  :working-directory "../../web"
