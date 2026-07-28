@@ -6,7 +6,7 @@ observe the result.
 
 ## Start with a runnable scene
 
-Open the [Studio](../studio.md) and choose **Browser Game**. The packaged
+Open [Playground](https://playground.hara-lang.org/) and choose **Browser Game**. The packaged
 project loads `project.edn` first, then `workspace.edn`, which connects the
 anonymous `src/tron.hal` document to its canvas and input node.
 

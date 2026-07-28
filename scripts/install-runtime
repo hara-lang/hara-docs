@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 LOCK="$ROOT/runtime.lock.json"
-DEST="$ROOT/docs"
+DEST="$ROOT/docs/rust"
 ARCHIVE=${HARA_STUDIO_RUNTIME_ARCHIVE:-}
 
 read_lock() {
@@ -28,10 +28,13 @@ fi
   exit 1
 }
 
-tar -xzf "$ARCHIVE" -C "$DEST"
-node "$ROOT/scripts/verify-runtime.mjs" "$DEST"
+STAGE=$(mktemp -d)
+trap 'rm -rf "$STAGE"' EXIT
+tar -xzf "$ARCHIVE" -C "$STAGE"
+node "$ROOT/scripts/verify-kernel-runtime.mjs" "$STAGE"
 
-# GitHub Pages serves the raw .wasm file without content compression. Keep a
-# gzip sidecar so the browser bootstrap can transfer the much smaller payload
-# and decompress it with the platform DecompressionStream API.
-gzip -9 -n -c "$DEST/rust/hara.wasm" > "$DEST/rust/hara.wasm.gz"
+# Docs ships only the browser kernel ABI. Studio, projects, examples, host
+# services, and workspace assets remain owned by playground.hara-lang.org.
+rm -rf "$DEST"
+mkdir -p "$DEST"
+cp "$STAGE/rust/hara.wasm" "$STAGE/rust/hta.js" "$STAGE/rust/hta-worker.js" "$DEST/"

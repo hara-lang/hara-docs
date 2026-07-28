@@ -1,6 +1,6 @@
-// The landing-card evaluator intentionally uses the same raw WASM broker as
-// Studio. It is a small, self-contained first contact: edits are evaluated in
-// the browser and never leave the visitor's device.
+// The landing-card evaluator uses a small raw-WASM kernel. It is a
+// self-contained first contact: edits are evaluated in the browser and never
+// leave the visitor's device.
 (() => {
   const card = document.querySelector("[data-hara-live]");
   if (!card) return;
@@ -32,19 +32,11 @@
   const asset = (path) => new URL(path, document.baseURI);
   const boot = (async () => {
     try {
-      const [{ createBrowserBroker }, { createHostServices }, wasm] = await Promise.all([
-        import(asset("rust/studio/broker.js").href),
-        import(asset("rust/studio/host-services.js").href),
-        fetch(asset("rust/hara.wasm"))
-      ]);
-      if (!wasm.ok) throw new Error(`hara.wasm: ${wasm.status}`);
-      broker = createBrowserBroker({
-        workerUrl: asset("rust/hta-worker.js"),
-        moduleBytes: new Uint8Array(await wasm.arrayBuffer()),
-        hostCalls: createHostServices(),
-        resources: {}
+      const { createDocsKernel } = await import(asset("javascripts/kernel.js").href);
+      broker = await createDocsKernel({
+        wasmUrl: asset("rust/hara.wasm"),
+        workerUrl: asset("rust/hta-worker.js")
       });
-      await broker.require("ROOT");
       status.textContent = "WASM · live";
     } catch (error) {
       status.textContent = "WASM · unavailable";
@@ -58,7 +50,7 @@
       await boot;
       if (!broker) return;
       status.textContent = "WASM · evaluating";
-      const value = await broker.eval("ROOT", source.value);
+      const value = await broker.eval(source.value);
       if (current !== revision) return;
       status.textContent = "WASM · live";
       show(`⇒ ${print(value)}`);

@@ -1,13 +1,7 @@
 ---
-template: studio.html
-title: Studio
-hide:
-  - navigation
-  - toc
-  - feedback
+title: Playground
 ---
 
-Choose **Starter**, **Browser Game**, or **Music** below. Each is a complete
-browser-local project with `project.edn`, `workspace.edn`, and editable HAL
-source. Nothing is uploaded; saved edits and recovery remain isolated to that
-project in this browser.
+<meta http-equiv="refresh" content="0; url=https://playground.hara-lang.org/">
+
+Hara Studio now lives in [Playground](https://playground.hara-lang.org/).

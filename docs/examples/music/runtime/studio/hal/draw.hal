@@ -1,8 +1,0 @@
-(ns studio.draw
-  (:require [studio.node :as node]))
-
-(defn next-frame [canvas]
-  (host/call "studio.canvas" "next-frame" (node/current-id) canvas))
-
-(defn render [canvas frame]
-  (host/call "studio.canvas" "render" (node/current-id) canvas frame))

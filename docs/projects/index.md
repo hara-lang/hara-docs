@@ -28,7 +28,7 @@ my-project/
 ```
 
 `workspace.edn` then names `src/main.hal` as a document and places it in an
-editor/output layout. Open **Starter** in [Studio](../studio.md) to inspect a
+editor/output layout. Open **Starter** in [Playground](https://playground.hara-lang.org/) to inspect a
 complete directly loadable pair.
 
 Use [Hara Chrome](../create/chrome-project.md) when the project belongs near a

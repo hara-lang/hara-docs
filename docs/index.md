@@ -13,11 +13,11 @@ hide:
   </div>
 
   <div class="hara-outcome-grid">
-    <a class="hara-outcome-card hara-outcome-card--primary" href="studio/">
+    <a class="hara-outcome-card hara-outcome-card--primary" href="https://playground.hara-lang.org/">
       <span class="hara-card-kicker">No installation · Browser</span>
       <h2>Try Hara live</h2>
       <p>Open a real Hara workspace, evaluate forms, edit source, and see visual output without leaving the browser.</p>
-      <small>Open the Studio <b>↗</b></small>
+      <small>Open Playground <b>↗</b></small>
     </a>
     <a class="hara-outcome-card" href="create/first-game/">
       <span class="hara-card-kicker">Create · Beginner</span>
@@ -57,7 +57,7 @@ hide:
     <p class="hara-label">See Hara in action</p>
     <h2>Write. Evaluate. See what changed.</h2>
     <p>Hara keeps the program running while you work. Evaluate one form, inspect the result, and keep useful changes in the project.</p>
-    <a class="hara-inline-link" href="studio/">Open this workflow in the Studio <b>↗</b></a>
+    <a class="hara-inline-link" href="https://playground.hara-lang.org/">Open this workflow in Playground <b>↗</b></a>
   </div>
 
   <div class="hara-code-card hara-live-card" data-hara-live aria-label="An editable Hara form changing live state">
@@ -92,8 +92,8 @@ hide:
     <h2>One project, different surfaces.</h2>
   </div>
   <div class="hara-surface-grid">
-    <a href="studio/">
-      <span>01 / Browser Studio</span>
+    <a href="https://playground.hara-lang.org/">
+      <span>01 / Browser Playground</span>
       <h3>Start immediately</h3>
       <p>Edit, evaluate, and see visual output without installing an editor.</p>
     </a>

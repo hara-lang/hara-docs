@@ -16,7 +16,7 @@ Hara workspaces use these roles:
 | Inspector | Examine the selected form, object, link, or runtime value. |
 | REPL and output | Evaluate a form and retain the feedback trail. |
 
-The Studio and Hara Chrome already provide files, editor, REPL, kernel, and
+The browser [Playground](https://playground.hara-lang.org/) and Hara Chrome already provide files, editor, REPL, kernel, and
 space controls. Visual patches and source↔visual linking are the shared
 workspace direction; where a host does not yet expose a visual editor, use the
 source and REPL as the stable project representation.

@@ -28,8 +28,7 @@ extra_css:
 extra_javascript:
   - javascripts/hara.js
   - javascripts/demo.js
-  - javascripts/console.js
-  - javascripts/page-host.js
+  - javascripts/kernel.js
   - javascripts/home-live.js
 markdown_extensions:
   - admonition
@@ -65,7 +64,6 @@ nav:
       - Decisions and repetition: learn-programming/decisions-and-repetition.md
       - Functions and changing state: learn-programming/functions-and-state.md
   - Work visually:
-      - Studio: studio.md
       - Workspace model: work-visually.md
   - Projects & sharing:
       - Project structure: projects/index.md

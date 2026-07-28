@@ -2,16 +2,6 @@
    Detail-driven UI: hairlines, corner ticks, bracketed labels, numbered
    indices, neon glow on near-black. Dark-only. */
 
-/* The --hara-* tokens, the detail primitives (.hara-kicker, .hara-index,
-   .hara-frame, .hara-strip, .hara-tty-*) and the .hara-studio-* block live in
-   rust/web/studio/studio.css (deployed at /rust/studio/studio.css), shared
-   with the hara-chrome panel — edit them there, not here. The relative
-   @import resolves against this file's URL in the deployed site; a local
-   `mkdocs serve` without the rust artifacts 404s it (studio page unstyled
-   locally, build unaffected). */
-@import url("../rust/studio/studio.css");
-@import url("../rust/ui/studio.css");
-
 /* The shared Hara UI kit is loaded by MkDocs before this adapter. Keep
    Material-specific structure here; new docs components consume the canonical
    --hara-* tokens and primitive classes from vendor/hara-ui. */
@@ -447,8 +437,7 @@ body {
 
 /* -------------------------------------------------------- detail widgets */
 
-/* .hara-kicker, .hara-index, .hara-frame, .hara-strip and .hara-tty-* moved
-   to rust/web/studio/studio.css (see the @import at the top of this file). */
+/* Docs owns its detail widgets; Playground owns the Studio layout. */
 
 /* -------------------------------------------------------------- buttons */
 
@@ -1901,8 +1890,3 @@ body.is-palette-open .hara-system-palette-sheet {
     padding-inline: .55rem;
   }
 }
-
-/* ------------------------------------------------------------------ studio
-   The .hara-studio-* block moved to rust/web/studio/studio.css (shared with
-   the hara-chrome panel) and is pulled in by the @import at the top of this
-   file. */
