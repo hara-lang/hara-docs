@@ -1,21 +1,43 @@
-# Docs
+# Hara reference
 
-Reference documentation for the HARA language, runtime flavors, extension system, and developer workflows.
+Use this section to confirm a language rule, runtime boundary, or public API.
+Start with the user guides when you want a tutorial.
 
-- [L0 language](l0-language.md)
-- [Builtins](../builtins.md)
-- [Namespace catalog](namespaces.md)
-- [Runtime libraries](runtime-libraries.md)
-- [Extensions contract](extensions-contract.md)
-- [Extension overview](extensions.md)
-- [REPL UX](repl.md)
-- [RESP protocol](resp-protocol.md)
-- [Native flavors](native-flavors.md)
-- [JVM flavor](jvm-flavor.md)
-- [Xtalk equivalence](xtalk-equivalence.md)
-- [Rust/WASM runtime](rust-runtime.md)
+## Language
+
+| Reference | Use it to |
+| --- | --- |
+| [L0 language contract](l0-language.md) | Confirm reader, evaluator, value, collection, protocol, namespace, and host-boundary rules. |
+| [Builtins](../builtins.md) | Find a core function, macro, or special form. |
+| [Runtime libraries](runtime-libraries.md) | Confirm portable string, byte, promise, file, socket, block, zip, task, and test operations. |
+| [Namespace catalog](namespaces.md) | Find a shipped namespace and its load mode or capability. |
+
+## Runtime and tools
+
+| Reference | Use it to |
+| --- | --- |
+| [REPL UX](repl.md) | Confirm interactive session, history, completion, documentation, and command behavior. |
+| [RESP protocol](resp-protocol.md) | Build or debug a client connection to a Hara runtime. |
+| [Native runtime flavors](native-flavors.md) | Confirm provider selection, host authority, and JVM interop. |
+| [Rust and WASM runtime](rust-runtime.md) | Inspect the Rust value model, host providers, target profiles, and conformance status. |
+
+## Extensions
+
+[Hara extensions](extensions-contract.md) starts with the application-facing
+workflow. It then defines discovery, package manifests, HTA, provider
+lifecycle, and installation.
+
+## Development and APIs
+
+The [developer guide](../development.md) covers repository changes and tests.
+The [Java and Rust API guide](../javadocs.md) maps the generated implementation
+references.
+
+## Implementation notes
+
+These pages record compatibility, porting, and measured implementation data:
+
+- [Hara and Xtalk equivalence](xtalk-equivalence.md)
 - [Clojure core compatibility](clojure-core-compatibility.md)
 - [Runtime benchmarks](runtime-benchmarks.md)
-- [Developer guide](../development.md)
 - [Foundation porting](../foundation-porting.md)
-- [Java API](../javadocs.md)

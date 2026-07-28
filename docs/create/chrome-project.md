@@ -49,4 +49,4 @@ tool: any local process that connects can evaluate code with the panel's Chrome
 capabilities.
 
 Next, build a [first browser game](first-game.md) or learn the shared
-[workspace model](../work-visually.md).
+[workspace model](../projects/index.md#work-visually).

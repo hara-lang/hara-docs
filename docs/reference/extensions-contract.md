@@ -1,7 +1,39 @@
-# Hara extension contract
+# Hara extensions
 
-This document describes the WASM provider boundary behind ordinary `:require` forms. A Hara
-program does not construct transport messages or call a WASM engine directly.
+Hara loads an extension through an ordinary `:require` form. The program does
+not create an engine or send transport messages.
+
+## Use an extension
+
+Require the extension namespace and call its Vars:
+
+```hara
+(ns app
+  (:require [crypto.hash :as hash]))
+
+(deref (hash/sha256 data))
+```
+
+The project stores each installed extension under its `extensions/` directory.
+The runtime reads the package manifest, selects a provider, and creates the
+namespace. Extension namespaces are generated at runtime. They are not `.hal`
+source files.
+
+Loading a package does not grant host authority. The host checks each requested
+capability and resource limit. It keeps separate errors for unsupported
+providers, denied capabilities, invalid manifests, crashes, timeouts,
+cancellation, and remote failures.
+
+Package authors can validate and install built artifacts with these commands:
+
+```text
+hara extension check BUILT-PACKAGE
+hara --allow-process extension build SOURCE-PACKAGE
+hara extension install BUILT-PACKAGE
+hara --allow-process extension test BUILT-PACKAGE
+```
+
+Use the rest of this page when you build an extension or implement a provider.
 
 ## Discovery
 

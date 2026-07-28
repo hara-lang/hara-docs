@@ -22,7 +22,7 @@ and rendering are small forms you can inspect and replace independently.
 ## Make one visible change
 
 Duplicate a scene into your own project, then change one visible value: a
-colour, movement speed, starting position, or score. Evaluate the changed form
+color, movement speed, starting position, or score. Evaluate the changed form
 in the active REPL and compare the result in the canvas.
 
 Use the normal live-development rhythm:
@@ -40,7 +40,7 @@ useful, save it in the project file rather than leaving it only in the REPL.
 
 ## Turn the scene into a game
 
-For a first game, add one behaviour at a time:
+For a first game, add one behavior at a time:
 
 - a player-controlled value such as direction or position;
 - an event that changes it;
@@ -49,7 +49,7 @@ For a first game, add one behaviour at a time:
 
 The HAL program owns game state, timing, input handling, and complete frame
 generation. JavaScript only schedules frames, captures normalized input, and
-executes the declared canvas commands. The [workspace model](../work-visually.md)
+executes the declared canvas commands. The [workspace model](../projects/index.md#work-visually)
 explains how the code, REPL, and visual surfaces relate.
 
 ## Continue

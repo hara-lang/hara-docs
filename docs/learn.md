@@ -1,11 +1,11 @@
-# Learn
+---
+title: Learn Hara
+hide:
+  - navigation
+---
 
-Get started with HARA, learn how namespaces and modules fit together, and follow walkthroughs for real projects.
+<script>window.location.replace("../user-guide/");</script>
 
-- [User guide](user-guide.md)
-- [Getting started](getting-started.md)
-- [Namespaces and modules](namespaces.md)
-- Walkthroughs
-  - [Namespace project](walkthroughs/service-project.md)
-  - [Library namespaces](walkthroughs/libraries.md)
-  - [Testing namespaces](walkthroughs/testing.md)
+Start with the [Hara language guide](user-guide.md). Continue with
+[Namespaces, libraries, and tests](namespaces.md) when you want to build a
+multi-file project.

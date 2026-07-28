@@ -33,7 +33,7 @@ Require project code or opt-in providers explicitly. Aliases are local to the de
 ```
 
 The loader resolves project modules, packaged HAL, library providers, and extension manifests while
-keeping capability grants separate. Read [Namespaces and modules](namespaces.md), follow the
+keeping capability grants separate. Read [Namespaces, libraries, and tests](namespaces.md), follow the
 [namespace project walkthrough](walkthroughs/service-project.md), or browse the
 [namespace catalog](reference/namespaces.md).
 

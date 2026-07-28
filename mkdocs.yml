@@ -52,48 +52,37 @@ plugins:
   - search
   - monorepo
 nav:
-  - Create:
+  - Start:
       - Start with Hara: index.md
-      - Choose your workspace: getting-started.md
+      - Install and choose a workspace: getting-started.md
       - Your first browser game: create/first-game.md
+  - Learn Hara:
+      - Learn to program: learn-programming/index.md
+      - Language guide: user-guide.md
+      - Namespaces, libraries, and tests: namespaces.md
+      - Namespace project walkthrough: walkthroughs/service-project.md
+  - Build projects:
+      - Projects and visual workspaces: projects/index.md
       - Hara Chrome project: create/chrome-project.md
       - Hara VS Code project: create/vscode-project.md
-  - Learn to program:
-      - Start programming: learn-programming/index.md
-      - Values and data: learn-programming/values-and-data.md
-      - Decisions and repetition: learn-programming/decisions-and-repetition.md
-      - Functions and changing state: learn-programming/functions-and-state.md
-  - Work visually:
-      - Workspace model: work-visually.md
-  - Projects & sharing:
-      - Project structure: projects/index.md
-      - Publish to Greenways Spaces: projects/publish-greenways.md
-  - Learn the language:
-      - Overview: learn.md
-      - User guide: user-guide.md
-      - Namespaces and modules: namespaces.md
-      - Walkthroughs:
-          - Namespace project: walkthroughs/service-project.md
-          - Library namespaces: walkthroughs/libraries.md
-          - Testing namespaces: walkthroughs/testing.md
-  - Build & integrate:
-      - Kernel and REPL: kernel.md
-      - Rust and WASM runtime: reference/rust-runtime.md
-      - Java API: javadocs.md
-      - Developer guide: development.md
-  - Reference & specifications:
-      - Overview: reference/index.md
-      - L0 language: reference/l0-language.md
-      - Builtins: builtins.md
-      - Namespace catalog: reference/namespaces.md
-      - Runtime libraries: reference/runtime-libraries.md
-      - Extensions: reference/extensions-contract.md
-      - Extension overview: reference/extensions.md
-      - REPL UX: reference/repl.md
-      - RESP protocol: reference/resp-protocol.md
-      - Native flavors: reference/native-flavors.md
-      - JVM flavor: reference/jvm-flavor.md
-      - Xtalk equivalence: reference/xtalk-equivalence.md
-      - Clojure core compatibility: reference/clojure-core-compatibility.md
-      - Runtime benchmarks: reference/runtime-benchmarks.md
-      - Foundation porting: foundation-porting.md
+  - Reference:
+      - Reference map: reference/index.md
+      - Language:
+          - L0 language contract: reference/l0-language.md
+          - Builtins: builtins.md
+          - Runtime libraries: reference/runtime-libraries.md
+          - Namespace catalog: reference/namespaces.md
+      - Runtime and tools:
+          - REPL UX: reference/repl.md
+          - RESP protocol: reference/resp-protocol.md
+          - Native runtime flavors: reference/native-flavors.md
+          - Rust and WASM runtime: reference/rust-runtime.md
+      - Extension system: reference/extensions-contract.md
+      - Development and APIs:
+          - Developer guide: development.md
+          - Java and Rust APIs: javadocs.md
+      - Implementation notes:
+          - Xtalk equivalence: reference/xtalk-equivalence.md
+          - Clojure core compatibility: reference/clojure-core-compatibility.md
+          - Runtime benchmarks: reference/runtime-benchmarks.md
+          - Foundation porting: foundation-porting.md

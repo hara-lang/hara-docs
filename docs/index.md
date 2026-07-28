@@ -25,7 +25,7 @@ hide:
       <p>Start with a running scene and change its state, rules, and rendering while it stays open.</p>
       <small>Start building <b>→</b></small>
     </a>
-    <a class="hara-outcome-card" href="work-visually/">
+    <a class="hara-outcome-card" href="projects/#work-visually">
       <span class="hara-card-kicker">Visual · Workspace</span>
       <h2>Make a visual workspace</h2>
       <p>Connect source, canvas, REPL, inspector, and node views around one project.</p>
@@ -138,9 +138,9 @@ hide:
     <h2>Build and understand Hara.</h2>
   </div>
   <nav class="hara-explore-grid" aria-label="Hara documentation">
-    <a href="learn/">Language guide <b>→</b></a>
-    <a href="projects/">Project structure <b>→</b></a>
-    <a href="kernel/">Kernel and REPL <b>→</b></a>
+    <a href="user-guide/">Language guide <b>→</b></a>
+    <a href="projects/">Projects and visual workspaces <b>→</b></a>
+    <a href="reference/repl/">REPL and sessions <b>→</b></a>
     <a href="reference/rust-runtime/">Rust and WebAssembly <b>→</b></a>
     <a href="reference/runtime-libraries/">Runtime libraries <b>→</b></a>
     <a href="reference/">Specifications and reference <b>→</b></a>
