@@ -9,3 +9,6 @@ __pycache__/
 # IDE
 .idea/
 .vscode/
+
+# Local desktop metadata
+.DS_Store
