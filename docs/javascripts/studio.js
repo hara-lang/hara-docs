@@ -73,12 +73,16 @@ try {
     { createBrowserBroker },
     { createHostServices },
     { mountStudio },
-    { CanvasRuntime }
+    { CanvasRuntime },
+    { GraphHost },
+    { SessionRouter }
   ] = await Promise.all([
     import(asset("rust/studio/broker.js").href),
     import(asset("rust/studio/host-services.js").href),
     import(asset("rust/studio/ui.js").href),
-    import(asset("rust/studio/canvas-runtime.js").href)
+    import(asset("rust/studio/canvas-runtime.js").href),
+    import(asset("rust/studio/graph-host.js").href),
+    import(asset("rust/studio/session-router.js").href)
   ]);
 
   const [{ version: runtimeVersion, projects }, wasmResponse] = await Promise.all([
@@ -89,7 +93,7 @@ try {
   const moduleBytes = new Uint8Array(await wasmResponse.arrayBuffer());
 
   const resources = {};
-  for (const name of ["store", "fs", "space", "boot", "node", "draw"]) {
+  for (const name of ["store", "fs", "space", "boot", "node", "draw", "program", "graph", "session"]) {
     resources[`studio.${name}`] = await fetchText(asset(`rust/studio/hal/${name}.hal`));
   }
   resources["std.substrate"] = await fetchText(asset("rust/studio/hal/substrate.hal"));
@@ -97,11 +101,24 @@ try {
   resources["std.substrate.protocol"] = await fetchText(asset("rust/studio/hal/substrate-protocol.hal"));
 
   const canvasRuntime = new CanvasRuntime();
+  const sessionRouter = new SessionRouter();
+  const graphHost = new GraphHost({
+    workerUrl: asset("rust/studio/program-worker.js"),
+    sessionRouter
+  });
   const broker = createBrowserBroker({
     workerUrl: asset("rust/hta-worker.js"),
     moduleBytes,
-    hostCalls: createHostServices({ canvasRuntime }),
-    resources
+    hostCalls: createHostServices({
+      canvasRuntime,
+      graphHost,
+      graphHostOptions: { sessionRouter }
+    }),
+    resources,
+    onKernelCreated: async (kernel) => sessionRouter.register(kernel.name, kernel.context, {
+      onRelease: (sessionId) => graphHost.releaseSession(sessionId)
+    }),
+    onKernelClosed: (kernel) => sessionRouter.unregister(kernel.name)
   });
 
   mountStudio(mount, { broker, projects, runtimeVersion, canvasRuntime });
