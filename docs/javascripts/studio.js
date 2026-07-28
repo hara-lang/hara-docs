@@ -20,6 +20,36 @@ const asset = (path) => new URL(path, siteRoot);
 
 const mount = document.getElementById("hara-studio-mount");
 
+let loadingDetail = null;
+
+function showLoading(detail) {
+  if (!loadingDetail) {
+    const shell = document.createElement("div");
+    shell.className = "hara-studio";
+    const head = document.createElement("div");
+    head.className = "hara-studio-head";
+    head.append(Object.assign(document.createElement("span"), {
+      className: "hara-kicker", textContent: "HARA STUDIO"
+    }), Object.assign(document.createElement("span"), {
+      className: "hara-index", textContent: "BOOTING"
+    }));
+    const panel = document.createElement("section");
+    panel.className = "hara-studio-chooser";
+    const title = document.createElement("h1");
+    title.textContent = "Starting your local Hara runtime";
+    loadingDetail = document.createElement("p");
+    loadingDetail.className = "hara-index";
+    panel.append(
+      Object.assign(document.createElement("p"), { className: "hara-kicker", textContent: "LOCAL · BROWSER · WASM" }),
+      title,
+      loadingDetail
+    );
+    shell.append(head, panel);
+    mount.replaceChildren(shell);
+  }
+  loadingDetail.textContent = detail;
+}
+
 function fail(error) {
   const message = String(error?.message ?? error);
   const shell = document.createElement("div");
@@ -73,16 +103,21 @@ async function loadWasm() {
   // generated gzip sidecar keeps cold Studio starts near the compressed size
   // while retaining the ordinary wasm asset as a compatibility fallback.
   if (typeof DecompressionStream === "function") {
+    showLoading("Downloading compressed runtime · 365 KB");
     const compressed = await fetch(asset("rust/hara.wasm.gz"));
     if (compressed.ok && compressed.body) {
+      showLoading("Unpacking local runtime");
       const stream = compressed.body.pipeThrough(new DecompressionStream("gzip"));
       return new Uint8Array(await new Response(stream).arrayBuffer());
     }
   }
+  showLoading("Downloading compatible runtime · 1.4 MB");
   const response = await fetch(asset("rust/hara.wasm"));
   if (!response.ok) throw new Error(`fetch hara.wasm failed: ${response.status}`);
   return new Uint8Array(await response.arrayBuffer());
 }
+
+showLoading("Preparing Studio services");
 
 try {
   const [
@@ -109,6 +144,7 @@ try {
     loadWasm()
   ]);
 
+  showLoading("Loading Hara libraries");
   const resources = {};
   for (const name of ["store", "fs", "space", "boot", "node", "draw", "program", "graph", "session"]) {
     resources[`studio.${name}`] = await fetchText(asset(`rust/studio/hal/${name}.hal`));
@@ -126,6 +162,7 @@ try {
   const graphHost = graphModule ? new graphModule.GraphHost({
     workerUrl: asset("rust/studio/program-worker.js"), sessionRouter, capabilityRegistry
   }) : null;
+  showLoading("Starting local kernel");
   const broker = createBrowserBroker({
     workerUrl: asset("rust/hta-worker.js"),
     moduleBytes,
