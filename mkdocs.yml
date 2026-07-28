@@ -7,7 +7,7 @@ theme:
   custom_dir: overrides
   language: en
   font: false
-  favicon: assets/favicon-48.svg
+  favicon: assets/favicon-48.svg?v=2
   logo: assets/logo-white.svg
   features:
     - navigation.tabs
@@ -24,12 +24,12 @@ theme:
 extra_css:
   - vendor/hara-ui/tokens.css
   - vendor/hara-ui/components.css
-  - stylesheets/hara.css
+  - stylesheets/hara.css?v=29
 extra_javascript:
   - javascripts/hara.js
   - javascripts/demo.js
-  - javascripts/kernel.js
   - javascripts/home-live.js
+  - javascripts/live-examples.js
 markdown_extensions:
   - admonition
   - attr_list
@@ -51,16 +51,27 @@ markdown_extensions:
 plugins:
   - search
   - monorepo
+hooks:
+  - scripts/copy-hara-ui.py
 nav:
   - Start:
-      - Start with Hara: index.md
-      - Install and choose a workspace: getting-started.md
+      - "01 — Why Hara": start/orientation.md
+      - "02 — Small, Fast, Web Native": getting-started.md
+      - "03 — Hara for Clojurists": start/clojure.md
+      - "04 — Hara for Web Devs": start/web-developers.md
       - Your first browser game: create/first-game.md
   - Learn Hara:
-      - Learn to program: learn-programming/index.md
-      - Language guide: user-guide.md
-      - Namespaces, libraries, and tests: namespaces.md
-      - Namespace project walkthrough: walkthroughs/service-project.md
+      - Introductory:
+          - Language guide: user-guide.md
+      - Systems and Wasm:
+          - Namespaces, libraries, and tests: namespaces.md
+          - Namespace project walkthrough: walkthroughs/service-project.md
+          - Rust and WASM runtime: reference/rust-runtime.md
+      - HTA and Substrate:
+          - Hara kernel: kernel.md
+          - Substrate application architecture: start/react.md
+      - The little book of Hara:
+          - Learn to program: learn-programming/index.md
   - Build projects:
       - Projects and visual workspaces: projects/index.md
       - Hara Chrome project: create/chrome-project.md
@@ -74,6 +85,7 @@ nav:
           - Namespace catalog: reference/namespaces.md
       - Runtime and tools:
           - REPL UX: reference/repl.md
+          - Substrate application architecture: start/react.md
           - RESP protocol: reference/resp-protocol.md
           - Native runtime flavors: reference/native-flavors.md
           - Rust and WASM runtime: reference/rust-runtime.md

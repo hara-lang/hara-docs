@@ -14,7 +14,7 @@ Canonical exhaustive grouping for Clojure 1.12.5 and Hara L0 plus `std.lib.found
 
 | Clojure | Hara | Contract |
 |---|---|---|
-| `map` | `map` | Direct calls are lazy in both; Hara's one-argument transform is eager on ordinary collections and returns a vector, while preserving arrays and existing lazy sources. |
+| `map` | `map` | Direct `(map f concrete)` is eager and preserves the first collection's shape. Curried `((map f) source)` and `(map f (seq source))` are lazy. |
 | `seq` | `seq` | Hara exposes the iterator boundary explicitly and also supports applying a transform lazily as (seq transform source); it does not require Clojure ISeq. |
 | `rest` | `rest` | Hara returns nil when no values remain; Clojure rest returns an empty sequence. |
 | `partition` | `partition` | Hara direct calls are lazy, while its one-argument transform is eager and returns a vector (or array for array input); Clojure's one-argument form is a transducer. |
@@ -54,3 +54,15 @@ Canonical exhaustive grouping for Clojure 1.12.5 and Hara L0 plus `std.lib.found
 | truffle | 0 | 0 |
 | rust-native | 164 | 2 |
 | wasm | 164 | 2 |
+
+## Parity and transport notes
+
+The Java/Truffle and Rust runtimes share the same Foundation mapping contract.
+Parity coverage includes `odd?`, `update`, and direct/curried/lazy mapping
+semantics. If an older packaged runtime disagrees, rebuild it from the current
+Foundation source: stale embedded artifacts are the usual cause.
+
+`HTA1` transports portable values only. It explicitly rejects `Seq` and raw
+iterator values; materialize them with `vec` before sending them across an HTA
+boundary. Internal `iter-*` helpers remain implementation-level cleanup work,
+not the recommended public data-transport surface.

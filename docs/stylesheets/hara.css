@@ -43,9 +43,9 @@
 /* mkdocs-material slate scheme -> noir */
 [data-md-color-scheme="slate"] {
   --md-default-bg-color: var(--hara-bg);
-  --md-default-fg-color: var(--hara-panel);
-  --md-default-fg-color--light: var(--hara-raised);
-  --md-default-fg-color--lightest: var(--hara-overlay);
+  --md-default-fg-color: var(--hara-text);
+  --md-default-fg-color--light: var(--hara-muted);
+  --md-default-fg-color--lightest: var(--hara-faint);
   --md-primary-fg-color: var(--hara-abyss);
   --md-primary-fg-color--light: var(--hara-panel);
   --md-accent-fg-color: var(--hara-cyan);
@@ -61,6 +61,120 @@
   --md-shadow-z2: 0 .2rem .5rem rgba(0, 0, 0, .5), 0 0 .05rem rgba(65, 245, 228, .12);
   --hsl-cyan: 174 90% 61%;
   --md-accent-fg-color--transparent: hsla(174, 90%, 61%, .12);
+}
+
+html[data-hara-theme="light"] {
+  color-scheme: light;
+  --hara-abyss: #e7ecec;
+  --hara-bg: #e7ecec;
+  --hara-panel: rgba(248, 250, 247, .94);
+  --hara-raised: #dce6e4;
+  --hara-overlay: #f8faf7;
+  --hara-cyan: #d51f5c;
+  --hara-cyan-bright: #a91544;
+  --hara-text: #142938;
+  --hara-muted: #506573;
+  --hara-faint: #71828b;
+  --hara-line: rgba(20, 41, 56, .2);
+  --hara-line-strong: rgba(20, 41, 56, .38);
+  --hara-glow-cyan: 0 0 12px rgba(213, 31, 92, .14);
+}
+
+html[data-hara-theme="light"] .md-main::before {
+  background:
+    linear-gradient(rgba(213, 31, 92, .055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 41, 56, .035) 1px, transparent 1px),
+    radial-gradient(circle at 76% 12%, rgba(156, 123, 255, .08), transparent 34rem),
+    linear-gradient(rgba(231, 236, 236, .88), rgba(231, 236, 236, .94));
+  background-size: 32px 32px, 32px 32px, auto, auto;
+}
+
+html[data-hara-theme="light"] .md-typeset .admonition,
+html[data-hara-theme="light"] .md-typeset details {
+  background: rgba(248, 250, 247, .9);
+}
+
+/* The live editor has its own layered surfaces, so it needs a complete light
+   palette instead of inheriting only the page tokens. */
+html[data-hara-theme="light"] .hara-live-example {
+  background: #f8faf7;
+  border-color: rgba(213, 31, 92, .48);
+  box-shadow: 0 14px 30px rgba(20, 41, 56, .13);
+}
+
+html[data-hara-theme="light"] .hara-live-toolbar,
+html[data-hara-theme="light"] .hara-live-example .window-status {
+  color: #506573;
+  background: #e4ebea;
+  border-color: rgba(20, 41, 56, .18);
+}
+
+html[data-hara-theme="light"] .hara-live-source {
+  background: #fbfcfa;
+}
+
+html[data-hara-theme="light"] .hara-live-source .line-numbers {
+  color: #597080;
+  background: #edf3f1;
+  border-right-color: rgba(20, 41, 56, .14);
+}
+
+html[data-hara-theme="light"] .md-typeset .hara-live-highlight {
+  color: #182d3d;
+}
+
+html[data-hara-theme="light"] .hara-live-highlight .comment {
+  color: #6b7f8d;
+}
+
+/* Keep the light editor legible on paper-like surfaces: use the manual's red
+   family for structural marks instead of the dark UI's luminous cyan/green. */
+html[data-hara-theme="light"] .hara-live-highlight .paren-0 { color: #d51f5c; }
+html[data-hara-theme="light"] .hara-live-highlight .paren-1 { color: #a85f0a; }
+html[data-hara-theme="light"] .hara-live-highlight .paren-2 { color: #a41c61; }
+html[data-hara-theme="light"] .hara-live-highlight .paren-3 { color: #7142a8; }
+html[data-hara-theme="light"] .hara-live-highlight .paren-4 { color: #8c3145; }
+html[data-hara-theme="light"] .hara-live-highlight .paren-5 { color: #7e5240; }
+html[data-hara-theme="light"] .hara-live-highlight .string { color: #9a6200; }
+html[data-hara-theme="light"] .hara-live-highlight .keyword { color: #7139a4; }
+html[data-hara-theme="light"] .hara-live-highlight .unmatched {
+  color: #bd124b;
+  background: rgba(213, 31, 92, .11);
+}
+html[data-hara-theme="light"] .hara-live-highlight .eval-target {
+  background: rgba(213, 31, 92, .09);
+  box-shadow: inset 0 -1px 0 rgba(213, 31, 92, .36);
+}
+html[data-hara-theme="light"] .hara-live-editor {
+  caret-color: #d51f5c;
+}
+html[data-hara-theme="light"] .hara-live-editor::selection {
+  background: rgba(213, 31, 92, .18);
+}
+
+html[data-hara-theme="light"] .hara-live-output {
+  color: #bafff8;
+  background: #102d32;
+  border-color: rgba(213, 31, 92, .6);
+}
+
+html[data-hara-theme="light"] .hara-live-completions {
+  color: #182d3d;
+  background: #f8faf7;
+  border-color: rgba(213, 31, 92, .5);
+  box-shadow: 0 10px 28px rgba(20, 41, 56, .18);
+}
+
+html[data-hara-theme="light"] .hara-fs-drawer {
+  color: #142938;
+  background: #f8faf7;
+  border-left-color: #d51f5c;
+  box-shadow: -24px 0 70px rgba(20, 41, 56, .18);
+}
+
+html[data-hara-theme="light"] .hara-fs-editor input,
+html[data-hara-theme="light"] .hara-fs-editor textarea {
+  color: #182d3d;
 }
 
 body {
@@ -109,6 +223,120 @@ body {
   height: auto;
 }
 
+/* The regular docs use the same compact masthead as the landing page. */
+.hara-docs-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(2, 4, 8, .96);
+  border-top: 3px solid var(--hara-cyan);
+  border-bottom: 1px solid var(--hara-line-strong);
+}
+
+.hara-docs-header__inner {
+  width: min(calc(100% - 40px), 1180px);
+  min-height: 68px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.hara-docs-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--hara-text);
+  font-family: var(--hara-mono);
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.hara-docs-brand img {
+  width: 30px;
+  height: 30px;
+}
+
+.hara-docs-nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  margin-left: auto;
+}
+
+.hara-docs-nav a {
+  color: var(--hara-muted);
+  font-family: var(--hara-mono);
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.hara-docs-nav a:hover,
+.hara-docs-nav a[aria-current="page"] {
+  color: var(--hara-cyan);
+}
+
+.hara-theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: var(--hara-cyan);
+  background: transparent;
+  border: 1px solid var(--hara-line);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.hara-theme-toggle:hover {
+  border-color: var(--hara-cyan);
+}
+
+.hara-theme-icon {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.hara-theme-icon--moon { display: none; }
+html[data-hara-theme="light"] .hara-theme-icon--sun { display: none; }
+html[data-hara-theme="light"] .hara-theme-icon--moon { display: block; }
+
+html[data-hara-theme="light"] .hara-docs-header {
+  background: rgba(231, 236, 236, .97);
+  border-top-color: #d51f5c;
+  border-bottom-color: rgba(20, 41, 56, .35);
+}
+
+html[data-hara-theme="light"] .hara-docs-brand img {
+  filter: brightness(0) saturate(100%) invert(13%) sepia(19%) saturate(1404%) hue-rotate(158deg);
+}
+
+.hara-docs-menu {
+  display: none;
+  width: 30px;
+  color: var(--hara-text);
+  cursor: pointer;
+}
+
+.hara-docs-menu span {
+  display: block;
+  height: 2px;
+  margin: 5px 0;
+  background: currentColor;
+}
+
 /* fixed grid background sits below the veil; the veil is a fixed ::before
    layer so stacking order is: scene (-2) -> veil (-1) -> content */
 .md-main {
@@ -122,7 +350,12 @@ body {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(rgba(5, 7, 13, .88), rgba(5, 7, 13, .94));
+  background:
+    linear-gradient(rgba(65, 245, 228, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(65, 245, 228, .028) 1px, transparent 1px),
+    radial-gradient(circle at 76% 12%, rgba(156, 123, 255, .1), transparent 34rem),
+    linear-gradient(rgba(5, 7, 13, .88), rgba(5, 7, 13, .94));
+  background-size: 32px 32px, 32px 32px, auto, auto;
 }
 
 .md-main:has(.hara-home)::before {
@@ -172,9 +405,10 @@ body {
 }
 
 .md-nav__link {
+  position: relative;
   color: var(--hara-muted);
-  border-left: 1px solid transparent;
-  transition: color .15s, border-color .15s, text-shadow .15s;
+  border-left: 0;
+  transition: color .15s, text-shadow .15s;
 }
 
 .md-nav__link:hover {
@@ -184,8 +418,18 @@ body {
 .md-nav__link--active,
 .md-nav__link[aria-current="page"] {
   color: var(--hara-cyan);
-  border-left-color: var(--hara-cyan);
   text-shadow: 0 0 10px rgba(65, 245, 228, .35);
+}
+
+.md-nav__link--active::before,
+.md-nav__link[aria-current="page"]::before {
+  content: '';
+  position: absolute;
+  top: .17em;
+  bottom: .17em;
+  left: -.42rem;
+  width: 2px;
+  background: var(--hara-cyan);
 }
 
 .md-nav__title {
@@ -198,6 +442,101 @@ body {
 
 .md-nav--secondary .md-nav__link {
   font-size: .68rem;
+}
+
+/* Material's primary sidebar becomes an off-canvas drawer below its desktop
+   breakpoint. Keep that surface fully opaque: the docs backdrop and article
+   must never show through nested navigation levels. */
+@media screen and (max-width: 76.234375em) {
+  .hara-docs-header__inner {
+    min-height: 56px;
+    gap: 14px;
+  }
+
+  .hara-docs-menu {
+    display: block;
+    flex: 0 0 30px;
+  }
+
+  .hara-docs-brand img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .hara-docs-nav {
+    display: none;
+  }
+
+  .md-header {
+    min-height: 3.5rem;
+    background: rgba(2, 4, 8, .96);
+    border-top: 3px solid var(--hara-cyan);
+    border-bottom: 1px solid var(--hara-line-strong);
+  }
+
+  .md-header__title {
+    font-family: var(--hara-mono);
+    font-size: .76rem;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .md-header__topic[data-md-component="header-topic"] {
+    display: none;
+  }
+
+  .md-logo img {
+    width: 1.45rem;
+    height: 1.45rem;
+  }
+  .md-sidebar--primary,
+  .md-sidebar--primary .md-sidebar__scrollwrap,
+  .md-sidebar--primary .md-sidebar__inner,
+  .md-sidebar--primary .md-nav--primary,
+  .md-sidebar--primary .md-nav {
+    background: var(--hara-abyss);
+  }
+
+  .md-sidebar--primary {
+    z-index: 100 !important;
+    border-right: 1px solid var(--hara-line-strong);
+    box-shadow: 18px 0 48px rgba(0, 0, 0, .72);
+    isolation: isolate;
+  }
+
+  .md-sidebar--primary .md-sidebar__scrollwrap {
+    border-right: 0;
+  }
+
+  .md-nav--primary .md-nav__title {
+    color: var(--hara-muted);
+    background: var(--hara-abyss);
+    border-bottom: 1px solid var(--hara-line);
+  }
+
+  .md-nav--primary .md-nav__link {
+    color: var(--hara-text);
+    line-height: 1.35;
+  }
+
+  /* Material places a table-of-contents toggle beside the current page in
+     the primary drawer. In the compact Hara drawer it reads as a second
+     hamburger, so keep the page link and remove that redundant control. */
+  .md-sidebar--primary .md-nav__link[for="__toc"] {
+    display: none;
+  }
+
+  .md-sidebar--primary .md-nav__link--active,
+  .md-sidebar--primary .md-nav__link[aria-current="page"] {
+    color: var(--hara-cyan) !important;
+  }
+
+  .md-overlay {
+    z-index: 90 !important;
+    background-color: rgba(0, 0, 0, .82);
+    backdrop-filter: none;
+  }
 }
 
 /* footer */
@@ -328,6 +667,48 @@ body {
   line-height: 1.7;
 }
 
+html[data-hara-theme="light"] .md-typeset blockquote {
+  color: #385364;
+  background: #eef4f2;
+  border-left: 3px solid #d51f5c;
+  box-shadow: inset 0 0 0 1px rgba(213, 31, 92, .12);
+}
+
+html[data-hara-theme="light"] .md-typeset code {
+  color: #a91544;
+  background: #dce6e4;
+  border-color: rgba(20, 41, 56, .16);
+}
+
+html[data-hara-theme="light"] .md-typeset pre {
+  background: #f8faf7;
+  border-color: rgba(20, 41, 56, .3);
+  box-shadow: 0 8px 18px rgba(20, 41, 56, .1);
+}
+
+html[data-hara-theme="light"] .md-typeset pre:hover {
+  border-color: rgba(213, 31, 92, .55);
+  box-shadow: 0 8px 18px rgba(20, 41, 56, .13);
+}
+
+html[data-hara-theme="light"] .md-typeset pre > code {
+  color: #183044;
+  background: transparent;
+}
+
+html[data-hara-theme="light"] .md-nav a.md-nav__link--active,
+html[data-hara-theme="light"] .md-nav a.md-nav__link[aria-current="page"],
+html[data-hara-theme="light"] .md-nav a.md-nav__link:focus,
+html[data-hara-theme="light"] .md-nav a.md-nav__link:hover {
+  color: var(--hara-cyan) !important;
+}
+
+html[data-hara-theme="light"] .md-nav a.md-nav__link--active,
+html[data-hara-theme="light"] .md-nav a.md-nav__link[aria-current="page"] {
+  border-left: 0;
+  text-shadow: 0 0 10px rgba(213, 31, 92, .18);
+}
+
 /* syntax accents inside highlighted blocks */
 .md-typeset .highlight .c,
 .md-typeset .highlight .c1,
@@ -353,6 +734,38 @@ body {
   color: var(--hara-cyan);
 }
 
+/* Material's clipboard control belongs to the code block, not the card system.
+   Keep it as a compact corner affordance in both themes. */
+.md-typeset .highlight .md-code__nav {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  padding: 0;
+  place-items: center;
+  background: transparent;
+}
+
+.md-typeset .highlight .md-code__button {
+  box-sizing: border-box;
+  display: grid;
+  width: 1.8rem !important;
+  height: 1.8rem !important;
+  padding: .35rem !important;
+  place-items: center;
+  color: var(--hara-muted);
+  background: var(--hara-raised) !important;
+  border: 1px solid var(--hara-line) !important;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.md-typeset .highlight .md-code__button:hover,
+.md-typeset .highlight .md-code__button:focus-visible {
+  color: var(--hara-cyan);
+  border-color: var(--hara-cyan) !important;
+  outline: 0;
+}
+
 .md-typeset .highlight .mi,
 .md-typeset .highlight .mf,
 .md-typeset .highlight .no {
@@ -362,6 +775,415 @@ body {
 /* hara.js adds this on first click into a code block */
 .hara-code-touched {
   box-shadow: inset 0 0 0 1px var(--hara-line-strong);
+}
+
+.hara-live-example {
+  margin: 1em 0;
+  overflow: hidden;
+  background: var(--hara-abyss);
+  border: 1px solid var(--hara-line-strong);
+  border-radius: 3px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .34), var(--hara-glow-cyan);
+}
+
+.hara-live-example:focus-within {
+  border-color: var(--hara-cyan);
+}
+
+.hara-live-toolbar {
+  display: flex;
+  min-height: 32px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 12.8px;
+  border-bottom: 1px solid var(--hara-line);
+  color: var(--hara-faint);
+  background: rgba(2, 5, 10, .54);
+  font-size: 8px;
+  letter-spacing: .12em;
+}
+
+.hara-live-toolbar button {
+  padding: 4.8px 7.2px;
+  color: var(--hara-muted);
+  background: transparent;
+  border: 0;
+  font: 8px/normal var(--hara-mono);
+  letter-spacing: .1em;
+  cursor: pointer;
+}
+
+.hara-live-toolbar button:hover:not(:disabled) {
+  color: var(--hara-cyan);
+}
+
+.hara-live-toolbar .hara-live-files {
+  margin-right: auto;
+  color: var(--hara-violet);
+}
+
+.hara-live-toolbar .paredit-button {
+  margin-right: auto;
+  color: var(--hara-violet);
+}
+
+.hara-live-toolbar .paredit-button[aria-pressed="false"] {
+  color: var(--hara-faint);
+}
+
+.hara-live-toolbar .run-button {
+  margin-left: 8px;
+  padding: 5.6px 11.2px;
+  color: #031112;
+  background: var(--hara-cyan);
+  border-radius: 2px;
+}
+
+.hara-live-toolbar .run-button:hover:not(:disabled) {
+  color: #031112;
+  background: var(--hara-cyan-bright);
+}
+
+.hara-live-toolbar button:disabled {
+  cursor: wait;
+  opacity: .3;
+}
+
+.hara-live-source {
+  position: relative;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  min-height: 88px;
+  overflow: hidden;
+  background: rgba(1, 3, 7, .42);
+}
+
+.hara-live-source .line-numbers {
+  grid-column: 1;
+  grid-row: 1;
+  padding: 14.4px 10.4px;
+  overflow: hidden;
+  color: #31485b;
+  border-right: 1px solid rgba(65, 245, 228, .08);
+  font: 10.88px/1.65 var(--hara-mono);
+  text-align: right;
+  white-space: pre;
+  user-select: none;
+}
+
+.hara-live-source .hara-live-highlight,
+.hara-live-source .hara-live-editor {
+  grid-column: 2;
+  grid-row: 1;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 88px;
+  margin: 0;
+  padding: 14.4px 16px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  font: 10.88px/1.65 var(--hara-mono);
+  tab-size: 2;
+  white-space: pre;
+}
+
+.md-typeset .hara-live-highlight {
+  z-index: 0;
+  min-width: 0;
+  pointer-events: none;
+  color: #c9d8e6;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hara-live-editor {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  resize: none;
+  color: transparent;
+  background: transparent;
+  outline: 0;
+  caret-color: var(--hara-cyan);
+}
+
+.hara-live-editor::selection {
+  color: transparent;
+  background: rgba(65, 245, 228, .22);
+}
+
+.hara-live-status {
+  color: var(--hara-faint);
+}
+
+.hara-live-status[data-state="loading"] {
+  color: var(--hara-amber);
+}
+
+.hara-live-status[data-state="ready"] {
+  color: var(--hara-cyan);
+}
+
+.hara-live-status[data-state="error"],
+.hara-live-output.is-error {
+  color: var(--hara-magenta);
+  border-color: rgba(255, 46, 136, .4);
+}
+
+.hara-live-output {
+  position: absolute;
+  z-index: 3;
+  max-width: min(42%, 340px);
+  overflow: hidden;
+  padding: 1px 6px;
+  color: var(--hara-cyan);
+  background: rgba(2, 12, 16, .94);
+  border: 1px solid rgba(65, 245, 228, .28);
+  font: 9.76px/1.35 var(--hara-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.hara-live-output[hidden] {
+  display: none;
+}
+
+.hara-live-completions {
+  position: fixed;
+  z-index: 5;
+  min-width: 180px;
+  max-width: min(360px, calc(100% - 72px));
+  margin: 0;
+  padding: 4px;
+  overflow: hidden;
+  color: #c9d8e6;
+  background: rgba(2, 7, 13, .98);
+  border: 1px solid rgba(65, 245, 228, .32);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .55), 0 0 18px rgba(65, 245, 228, .08);
+  font: 10.88px/1.55 var(--hara-mono);
+  list-style: none;
+}
+
+.hara-live-completions[hidden] {
+  display: none;
+}
+
+.hara-live-completions li {
+  margin: 0;
+  padding: 2px 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.hara-live-completions li[aria-selected="true"] {
+  color: #031112;
+  background: var(--hara-cyan);
+}
+
+.hara-live-highlight .paren-0 { color: #41f5e4; }
+.hara-live-highlight .paren-1 { color: #f5d742; }
+.hara-live-highlight .paren-2 { color: #ff2e88; }
+.hara-live-highlight .paren-3 { color: #9c7bff; }
+.hara-live-highlight .paren-4 { color: #6ee7ff; }
+.hara-live-highlight .paren-5 { color: #a6ff6e; }
+.hara-live-highlight .comment { color: #53677a; }
+.hara-live-highlight .string { color: #f5d742; }
+.hara-live-highlight .keyword { color: #9c7bff; }
+.hara-live-highlight .unmatched { color: #ff2e88; background: rgba(255, 46, 136, .15); }
+.hara-live-highlight .eval-target {
+  background: rgba(65, 245, 228, .12);
+  box-shadow: inset 0 -1px 0 rgba(65, 245, 228, .34);
+}
+
+/* Shared browser-persistent filesystem drawer. */
+.hara-fs-drawer {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(760px, calc(100vw - 48px));
+  color: var(--hara-text);
+  background: rgba(2, 5, 10, .985);
+  border-left: 1px solid var(--hara-cyan);
+  box-shadow: -24px 0 70px rgba(0, 0, 0, .7), var(--hara-glow-cyan);
+  font-family: var(--hara-mono);
+}
+
+.hara-fs-drawer[hidden] {
+  display: none;
+}
+
+.hara-fs-drawer > header {
+  display: flex;
+  min-height: 64px;
+  padding: 0 18px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--hara-line-strong);
+  letter-spacing: .12em;
+}
+
+.hara-fs-drawer > header div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hara-fs-drawer > header small {
+  color: var(--hara-faint);
+  font-size: 9px;
+  letter-spacing: .08em;
+}
+
+.hara-fs-drawer button {
+  padding: 7px 10px;
+  color: var(--hara-cyan);
+  background: transparent;
+  border: 1px solid var(--hara-line-strong);
+  font: 10px/1 var(--hara-mono);
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+
+.hara-fs-drawer button:hover {
+  background: rgba(65, 245, 228, .1);
+}
+
+.hara-fs-drawer > header button {
+  border: 0;
+  font-size: 22px;
+}
+
+.hara-fs-body {
+  display: grid;
+  height: calc(100% - 65px);
+  grid-template-columns: 210px minmax(0, 1fr);
+}
+
+.hara-fs-body nav {
+  min-width: 0;
+  padding: 12px;
+  overflow: auto;
+  border-right: 1px solid var(--hara-line);
+}
+
+.hara-fs-nav-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.hara-fs-body nav ul {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hara-fs-body nav li {
+  margin: 0;
+  padding: 7px 8px;
+  overflow: hidden;
+  color: var(--hara-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.hara-fs-body nav li:hover,
+.hara-fs-body nav li[aria-current="true"] {
+  color: var(--hara-cyan);
+  background: rgba(65, 245, 228, .08);
+}
+
+.hara-fs-editor {
+  display: grid;
+  min-width: 0;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.hara-fs-editor label {
+  display: grid;
+  padding: 12px 16px;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  color: var(--hara-faint);
+  border-bottom: 1px solid var(--hara-line);
+  font-size: 9px;
+}
+
+.hara-fs-editor input,
+.hara-fs-editor textarea {
+  box-sizing: border-box;
+  width: 100%;
+  color: #c9d8e6;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font: 12px/1.6 var(--hara-mono);
+}
+
+.hara-fs-editor textarea {
+  min-height: 0;
+  padding: 18px;
+  resize: none;
+}
+
+.hara-fs-editor footer {
+  display: flex;
+  min-height: 52px;
+  padding: 0 14px;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--hara-line);
+}
+
+.hara-fs-editor footer span {
+  margin-right: auto;
+  color: var(--hara-cyan);
+  font-size: 9px;
+  letter-spacing: .1em;
+}
+
+.hara-fs-editor footer span[data-state="error"] {
+  color: var(--hara-magenta);
+}
+
+@media (max-width: 620px) {
+  .hara-fs-drawer {
+    width: 100vw;
+  }
+
+  .hara-fs-body {
+    grid-template-columns: 132px minmax(0, 1fr);
+  }
+}
+
+.hara-live-example .window-status {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12.8px;
+  color: var(--hara-faint);
+  background: rgba(2, 5, 10, .54);
+  border-top: 1px solid var(--hara-line);
+  font: 8px/normal var(--hara-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  .hara-live-example .window-status > :last-child {
+    display: none;
+  }
 }
 
 .md-typeset table:not([class]) {
@@ -1889,4 +2711,1163 @@ body.is-palette-open .hara-system-palette-sheet {
     min-width: 72px;
     padding-inline: .55rem;
   }
+}
+
+/* Manual diagrams: compact, theme-aware alternatives to raw ASCII diagrams. */
+.md-typeset .hara-workflow-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.6rem 0 2rem;
+}
+
+.md-typeset .hara-workflow {
+  min-width: 0;
+  padding: 1rem 1.1rem 1.15rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  border-top: 3px solid var(--hara-line-strong);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-workflow--kernel {
+  border-top-color: var(--hara-cyan);
+}
+
+.md-typeset .hara-diagram-label {
+  display: block;
+  margin-bottom: .8rem;
+  color: var(--hara-muted);
+  font: 700 .62rem var(--hara-mono);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.md-typeset .hara-workflow--kernel .hara-diagram-label {
+  color: var(--hara-cyan);
+}
+
+.md-typeset .hara-workflow ol {
+  display: grid;
+  gap: .45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.md-typeset .hara-workflow li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: .6rem;
+  align-items: center;
+  min-height: 3.15rem;
+  padding: .5rem .6rem;
+  margin: 0;
+  color: var(--hara-text);
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+  font: .66rem/1.22 var(--hara-mono);
+}
+
+.md-typeset .hara-workflow li > span {
+  display: grid;
+  gap: .1rem;
+}
+
+.md-typeset .hara-workflow li b {
+  color: var(--hara-text);
+  font-size: .72rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.md-typeset .hara-workflow li small {
+  color: var(--hara-muted);
+  font: .61rem/1.3 var(--hara-sans);
+}
+
+.md-typeset .hara-step-picture {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  color: var(--hara-faint);
+  border: 1px solid currentColor;
+  font: 1rem var(--hara-mono);
+  font-style: normal;
+}
+
+.md-typeset .hara-step-picture::before { content: '·'; }
+.md-typeset .hara-step-picture--edit::before { content: '✎'; }
+.md-typeset .hara-step-picture--build::before { content: '▦'; }
+.md-typeset .hara-step-picture--reload::before { content: '↻'; }
+.md-typeset .hara-step-picture--reproduce::before { content: '◎'; }
+.md-typeset .hara-step-picture--infer::before { content: '⌕'; }
+.md-typeset .hara-step-picture--inspect::before { content: '◉'; }
+.md-typeset .hara-step-picture--evaluate::before { content: 'λ'; }
+.md-typeset .hara-step-picture--observe::before { content: '◫'; }
+.md-typeset .hara-step-picture--trace::before { content: '⌘'; }
+.md-typeset .hara-step-picture--keep::before { content: '▣'; }
+
+.md-typeset .hara-workflow li:not(:last-child)::after {
+  content: '↓';
+  position: absolute;
+  z-index: 1;
+  bottom: -.67rem;
+  left: 1.48rem;
+  color: var(--hara-faint);
+  background: var(--hara-panel);
+  font: .72rem var(--hara-mono);
+}
+
+.md-typeset .hara-workflow--kernel li {
+  border-color: rgba(65, 245, 228, .26);
+}
+
+.md-typeset .hara-workflow--kernel .hara-step-picture {
+  color: var(--hara-cyan);
+}
+
+.md-typeset .hara-host-topology {
+  position: relative;
+  margin: 1.6rem 0 2rem;
+  padding: 1.2rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-host-topology__hosts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .7rem;
+}
+
+.md-typeset .hara-host-topology__hosts span {
+  position: relative;
+  display: grid;
+  min-height: 3.7rem;
+  padding: .65rem;
+  place-items: center;
+  color: var(--hara-text);
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+  font: .68rem/1.35 var(--hara-mono);
+  text-align: center;
+}
+
+.md-typeset .hara-host-topology__hosts span::after {
+  content: '';
+  position: absolute;
+  /* Continue into the kernel border.  A sub-pixel gap was visible when the
+     host grid and the following margin rounded differently. */
+  bottom: calc(-1.3rem - 2px);
+  width: 1px;
+  height: calc(1.3rem + 2px);
+  background: var(--hara-line-strong);
+}
+
+.md-typeset .hara-host-topology__kernel {
+  position: relative;
+  width: min(20rem, 70%);
+  margin: 1.3rem auto 0;
+  padding: .7rem 1rem;
+  color: var(--hara-cyan-bright);
+  background: rgba(65, 245, 228, .08);
+  border: 1px solid var(--hara-cyan);
+  font: 700 .8rem var(--hara-mono);
+  letter-spacing: .08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.md-typeset .hara-host-topology__kernel small {
+  display: block;
+  margin-top: .25rem;
+  color: var(--hara-muted);
+  font: .58rem var(--hara-mono);
+  letter-spacing: .1em;
+}
+
+.md-typeset .hara-safety-callout {
+  position: relative;
+  margin: 1.6rem 0 2rem;
+  padding: 1rem 1.1rem 1rem 1.35rem;
+  background: linear-gradient(90deg, rgba(255, 46, 136, .13), rgba(10, 15, 24, .45));
+  border: 1px solid rgba(255, 46, 136, .55);
+  border-left: .28rem solid var(--hara-magenta);
+  box-shadow: 0 0 20px rgba(255, 46, 136, .12);
+}
+
+.md-typeset .hara-safety-callout > span {
+  display: block;
+  margin-bottom: .42rem;
+  color: var(--hara-magenta);
+  font: 700 .66rem var(--hara-mono);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.md-typeset .hara-safety-callout p {
+  margin: 0;
+  color: var(--hara-text);
+  font-size: 1.03rem;
+  font-weight: 600;
+}
+
+/* Illustrated replacements for prose lists in the orientation manual. */
+.md-typeset .hara-syntax-primer,
+.md-typeset .hara-kernel-capabilities,
+.md-typeset .hara-evidence-loop,
+.md-typeset .hara-next-routes {
+  display: grid;
+  gap: .65rem;
+  margin: 1.45rem 0 2rem;
+}
+
+.md-typeset .hara-syntax-primer { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.md-typeset .hara-kernel-capabilities { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.md-typeset .hara-evidence-loop { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.md-typeset .hara-next-routes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.md-typeset .hara-syntax-primer > div,
+.md-typeset .hara-kernel-capabilities > div,
+.md-typeset .hara-evidence-loop > div,
+.md-typeset .hara-next-routes a {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  padding: .75rem;
+  color: var(--hara-text);
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+  text-decoration: none;
+}
+
+.md-typeset .hara-syntax-primer code {
+  display: block;
+  margin-bottom: .6rem;
+  padding: .45rem .5rem;
+  color: var(--hara-cyan-bright);
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+  font: .68rem var(--hara-mono);
+  white-space: nowrap;
+}
+
+.md-typeset .hara-syntax-primer b,
+.md-typeset .hara-kernel-capabilities b,
+.md-typeset .hara-evidence-loop b,
+.md-typeset .hara-next-routes b {
+  color: var(--hara-text);
+  font: 700 .66rem var(--hara-mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.md-typeset .hara-syntax-primer small,
+.md-typeset .hara-kernel-capabilities small,
+.md-typeset .hara-evidence-loop small,
+.md-typeset .hara-next-routes small {
+  margin-top: .25rem;
+  color: var(--hara-muted);
+  font: .64rem/1.32 var(--hara-sans);
+}
+
+.md-typeset .hara-kernel-capabilities {
+  padding: .8rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+}
+
+.md-typeset .hara-kernel-capabilities > div {
+  grid-template-columns: 1.55rem minmax(0, 1fr);
+  column-gap: .5rem;
+  box-shadow: none;
+}
+
+.md-typeset .hara-kernel-capabilities i,
+.md-typeset .hara-evidence-loop i,
+.md-typeset .hara-next-routes i {
+  grid-row: span 2;
+  display: grid;
+  width: 1.45rem;
+  height: 1.45rem;
+  place-items: center;
+  color: var(--hara-cyan);
+  border: 1px solid currentColor;
+  font: .76rem var(--hara-mono);
+  font-style: normal;
+}
+
+.md-typeset .hara-evidence-loop > div {
+  min-height: 6rem;
+  align-content: center;
+  text-align: center;
+}
+
+.md-typeset .hara-evidence-loop i {
+  grid-row: auto;
+  margin: 0 auto .45rem;
+}
+
+.md-typeset .hara-evidence-loop > div:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: -.95rem;
+  color: var(--hara-cyan);
+  background: var(--hara-bg);
+  font: 700 .85rem var(--hara-mono);
+}
+
+.md-typeset .hara-next-routes a {
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: .65rem;
+  align-items: start;
+  transition: border-color .15s ease, transform .15s ease;
+}
+
+.md-typeset .hara-next-routes a > span {
+  display: grid;
+  gap: .25rem;
+  min-width: 0;
+}
+
+.md-typeset .hara-next-routes a:hover {
+  border-color: var(--hara-cyan);
+  transform: translateY(-2px);
+}
+
+.md-typeset .hara-next-routes i {
+  width: 2rem;
+  height: 2rem;
+}
+
+html[data-hara-theme="light"] .md-typeset .hara-workflow,
+html[data-hara-theme="light"] .md-typeset .hara-host-topology {
+  background: rgba(248, 250, 247, .84);
+}
+
+html[data-hara-theme="light"] .md-typeset .hara-host-topology__kernel {
+  background: rgba(213, 31, 92, .07);
+}
+
+html[data-hara-theme="light"] .md-typeset .hara-safety-callout {
+  background: linear-gradient(90deg, rgba(213, 31, 92, .12), rgba(248, 250, 247, .9));
+  border-color: rgba(213, 31, 92, .45);
+}
+
+@media (max-width: 720px) {
+  .md-typeset .hara-workflow-compare {
+    grid-template-columns: 1fr;
+  }
+
+  .md-typeset .hara-host-topology__hosts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .md-typeset .hara-host-topology__kernel {
+    width: auto;
+  }
+
+  .md-typeset .hara-syntax-primer { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .md-typeset .hara-kernel-capabilities,
+  .md-typeset .hara-next-routes { grid-template-columns: 1fr; }
+
+  .md-typeset .hara-evidence-loop { grid-template-columns: 1fr; }
+
+  .md-typeset .hara-evidence-loop > div:not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -.75rem;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+  }
+}
+
+/* Chapter 02 — one project, several hosts. */
+.md-typeset .hara-project-path,
+.md-typeset .hara-host-result,
+.md-typeset .hara-surface-choice,
+.md-typeset .hara-chrome-panel,
+.md-typeset .hara-surface-map,
+.md-typeset .hara-portability-evidence {
+  margin: 1.45rem 0 2rem;
+}
+
+.md-typeset .hara-project-path {
+  display: grid;
+  justify-items: center;
+  gap: .4rem;
+  padding: 1rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-project-path > div,
+.md-typeset .hara-host-result > div {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: .15rem .6rem;
+  width: min(22rem, 100%);
+  padding: .65rem .75rem;
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+}
+
+.md-typeset .hara-project-path i,
+.md-typeset .hara-host-result i,
+.md-typeset .hara-surface-choice i,
+.md-typeset .hara-chrome-panel i {
+  grid-row: span 2;
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  color: var(--hara-cyan);
+  border: 1px solid currentColor;
+  font: .76rem var(--hara-mono);
+  font-style: normal;
+}
+
+.md-typeset .hara-project-path b,
+.md-typeset .hara-host-result b,
+.md-typeset .hara-surface-choice b,
+.md-typeset .hara-chrome-panel b {
+  color: var(--hara-text);
+  font: 700 .66rem var(--hara-mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.md-typeset .hara-project-path small,
+.md-typeset .hara-host-result small,
+.md-typeset .hara-surface-choice small,
+.md-typeset .hara-chrome-panel small {
+  color: var(--hara-muted);
+  font: .65rem/1.35 var(--hara-sans);
+}
+
+.md-typeset .hara-project-path > span {
+  color: var(--hara-cyan);
+  font: 700 .9rem var(--hara-mono);
+}
+
+.md-typeset .hara-project-path--horizontal {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.md-typeset .hara-project-path--horizontal > div { width: 100%; }
+
+.md-typeset .hara-host-result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(9rem, 1.2fr) minmax(0, 1fr);
+  gap: .65rem;
+  align-items: center;
+  padding: 1rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-host-result > div { width: 100%; }
+
+.md-typeset .hara-host-result .hara-host-result__source,
+.md-typeset .hara-host-result .hara-host-result__value {
+  grid-template-columns: 1fr;
+  text-align: center;
+}
+
+.md-typeset .hara-host-result .hara-host-result__value {
+  grid-column: 1 / -1;
+  grid-template-columns: auto 1fr;
+  width: min(19rem, 100%);
+  justify-self: center;
+  align-items: center;
+}
+
+.md-typeset .hara-host-result .hara-host-result__value i { grid-row: auto; }
+
+.md-typeset .hara-surface-choice {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
+}
+
+.md-typeset .hara-surface-choice > a,
+.md-typeset .hara-surface-choice > div {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: .6rem;
+  min-width: 0;
+  padding: .75rem;
+  color: var(--hara-text);
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+  text-decoration: none;
+}
+
+.md-typeset .hara-surface-choice > a:hover {
+  border-color: var(--hara-cyan);
+  transform: translateY(-2px);
+}
+
+.md-typeset .hara-surface-choice > a > span,
+.md-typeset .hara-surface-choice > div > span {
+  display: grid;
+  align-content: start;
+  gap: .22rem;
+}
+
+.md-typeset .hara-chrome-panel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+  padding: .8rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+}
+
+.md-typeset .hara-chrome-panel > div {
+  display: grid;
+  grid-template-columns: 1.8rem minmax(0, 1fr);
+  gap: .15rem .6rem;
+  min-width: 0;
+  padding: .65rem;
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+}
+
+.md-typeset .hara-surface-map {
+  padding: 1rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-surface-map__hosts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .55rem;
+}
+
+.md-typeset .hara-surface-map__hosts span {
+  position: relative;
+  display: grid;
+  min-height: 3rem;
+  padding: .5rem;
+  place-items: center;
+  color: var(--hara-text);
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+  font: .62rem/1.25 var(--hara-mono);
+  text-align: center;
+}
+
+.md-typeset .hara-surface-map__hosts span::after {
+  content: '';
+  position: absolute;
+  /* Overlap the target border so the connection remains continuous under
+     browser zoom and fractional rem rounding. */
+  bottom: calc(-1.15rem - 2px);
+  width: 1px;
+  height: calc(1.15rem + 2px);
+  background: var(--hara-line-strong);
+}
+
+.md-typeset .hara-surface-map__kernel {
+  width: min(28rem, 82%);
+  margin: 1.15rem auto 0;
+  padding: .7rem;
+  color: var(--hara-cyan-bright);
+  background: rgba(65, 245, 228, .08);
+  border: 1px solid var(--hara-cyan);
+  font: 700 .7rem var(--hara-mono);
+  letter-spacing: .08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.md-typeset .hara-surface-map__kernel small {
+  display: block;
+  margin-top: .25rem;
+  color: var(--hara-muted);
+  font: .59rem var(--hara-mono);
+  letter-spacing: .04em;
+}
+
+.md-typeset .hara-portability-evidence {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .55rem;
+  padding: .8rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+}
+
+.md-typeset .hara-portability-evidence span {
+  display: grid;
+  min-height: 2.5rem;
+  padding: .45rem;
+  place-items: center;
+  color: var(--hara-text);
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+  font: .61rem/1.25 var(--hara-mono);
+  text-align: center;
+}
+
+html[data-hara-theme="light"] .md-typeset .hara-project-path,
+html[data-hara-theme="light"] .md-typeset .hara-host-result,
+html[data-hara-theme="light"] .md-typeset .hara-surface-map,
+html[data-hara-theme="light"] .md-typeset .hara-portability-evidence,
+html[data-hara-theme="light"] .md-typeset .hara-chrome-panel {
+  background: rgba(248, 250, 247, .86);
+}
+
+html[data-hara-theme="light"] .md-typeset .hara-surface-map__kernel {
+  background: rgba(213, 31, 92, .07);
+}
+
+@media (max-width: 720px) {
+  .md-typeset .hara-project-path--horizontal,
+  .md-typeset .hara-host-result { grid-template-columns: 1fr; }
+
+  .md-typeset .hara-project-path--horizontal > span { transform: rotate(90deg); }
+
+  .md-typeset .hara-host-result .hara-host-result__value { grid-column: auto; }
+
+  .md-typeset .hara-surface-choice,
+  .md-typeset .hara-chrome-panel { grid-template-columns: 1fr; }
+
+  .md-typeset .hara-surface-map__hosts,
+  .md-typeset .hara-portability-evidence { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Audience chapters — Clojure and React. */
+.md-typeset .hara-clojure-flow,
+.md-typeset .hara-clojure-rhythm,
+.md-typeset .hara-state-distinction,
+.md-typeset .hara-react-relationship,
+.md-typeset .hara-react-loop {
+  margin: 1.45rem 0 2rem;
+}
+
+.md-typeset .hara-clojure-flow {
+  display: grid;
+  justify-items: center;
+  gap: .3rem;
+  padding: 1rem;
+  color: var(--hara-cyan-bright);
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-clojure-flow span {
+  width: min(28rem, 100%);
+  padding: .65rem;
+  color: var(--hara-text);
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+  font: 700 .68rem var(--hara-mono);
+  letter-spacing: .06em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.md-typeset .hara-clojure-flow > b {
+  color: var(--hara-cyan);
+  font: 700 .9rem var(--hara-mono);
+}
+
+.md-typeset .hara-clojure-flow--horizontal {
+  grid-template-columns: repeat(5, auto);
+  align-items: center;
+  justify-content: center;
+}
+
+.md-typeset .hara-clojure-flow--horizontal span { width: auto; }
+
+.md-typeset .hara-clojure-rhythm,
+.md-typeset .hara-react-relationship {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: .7rem;
+  align-items: center;
+}
+
+/* A comparison should read as a balanced pair even when one description wraps
+   to more lines than the other. */
+.md-typeset .hara-react-relationship { align-items: stretch; }
+
+.md-typeset .hara-clojure-rhythm > div,
+.md-typeset .hara-react-relationship section {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: .18rem .65rem;
+  padding: .8rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-react-relationship section {
+  box-sizing: border-box;
+  min-height: 100%;
+}
+
+.md-typeset .hara-clojure-rhythm > span,
+.md-typeset .hara-react-relationship > b {
+  color: var(--hara-cyan);
+  font: 700 1rem var(--hara-mono);
+}
+
+.md-typeset .hara-clojure-rhythm i,
+.md-typeset .hara-react-relationship i {
+  grid-row: span 2;
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  color: var(--hara-cyan);
+  border: 1px solid currentColor;
+  font: .8rem var(--hara-mono);
+  font-style: normal;
+}
+
+.md-typeset .hara-clojure-rhythm b,
+.md-typeset .hara-react-relationship b,
+.md-typeset .hara-state-distinction b {
+  color: var(--hara-text);
+  font: 700 .66rem var(--hara-mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.md-typeset .hara-clojure-rhythm small,
+.md-typeset .hara-react-relationship small,
+.md-typeset .hara-state-distinction small {
+  color: var(--hara-muted);
+  font: .65rem/1.35 var(--hara-sans);
+}
+
+.md-typeset .hara-state-distinction {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: .7rem;
+}
+
+.md-typeset .hara-state-distinction section {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: .2rem .65rem;
+  min-width: 0;
+  padding: .85rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-state-distinction i {
+  grid-row: span 2;
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  color: var(--hara-cyan);
+  border: 1px solid currentColor;
+  font: .8rem var(--hara-mono);
+  font-style: normal;
+}
+
+.md-typeset .hara-state-distinction code {
+  grid-column: 1 / -1;
+  margin-top: .55rem;
+  padding: .45rem;
+  color: var(--hara-cyan-bright);
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+  font: .62rem var(--hara-mono);
+  text-align: center;
+}
+
+.md-typeset .hara-clojure-checks span {
+  align-content: center;
+  gap: .25rem;
+}
+
+.md-typeset .hara-clojure-checks b {
+  color: var(--hara-text);
+  font: 700 .61rem var(--hara-mono);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.md-typeset .hara-clojure-checks small {
+  color: var(--hara-muted);
+  font: .59rem/1.25 var(--hara-sans);
+}
+
+.md-typeset .hara-react-loop {
+  display: grid;
+  grid-template-columns: repeat(7, auto);
+  gap: .45rem;
+  align-items: center;
+  padding: 1rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-react-loop > span {
+  padding: .6rem;
+  color: var(--hara-text);
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+  font: .63rem var(--hara-mono);
+  text-align: center;
+}
+
+.md-typeset .hara-react-loop > b { color: var(--hara-cyan); }
+
+.md-typeset .hara-react-loop > div {
+  grid-column: 1 / -1;
+  margin-top: .35rem;
+  padding: .65rem;
+  color: var(--hara-text);
+  background: rgba(65, 245, 228, .08);
+  border: 1px solid var(--hara-cyan);
+  font: .66rem/1.35 var(--hara-sans);
+  text-align: center;
+}
+
+.md-typeset .hara-react-loop i {
+  margin-right: .4rem;
+  color: var(--hara-cyan);
+  font-style: normal;
+}
+
+html[data-hara-theme="light"] .md-typeset .hara-clojure-flow,
+html[data-hara-theme="light"] .md-typeset .hara-react-loop > div {
+  background: rgba(248, 250, 247, .86);
+}
+
+html[data-hara-theme="light"] .md-typeset .hara-react-loop > div {
+  background: rgba(213, 31, 92, .07);
+}
+
+@media (max-width: 720px) {
+  .md-typeset .hara-clojure-flow--horizontal,
+  .md-typeset .hara-clojure-rhythm,
+  .md-typeset .hara-react-relationship,
+  .md-typeset .hara-react-loop { grid-template-columns: 1fr; }
+
+  .md-typeset .hara-clojure-flow--horizontal > b { transform: rotate(90deg); }
+
+  .md-typeset .hara-clojure-rhythm > span,
+  .md-typeset .hara-react-relationship > b,
+  .md-typeset .hara-react-loop > b { justify-self: center; transform: rotate(90deg); }
+
+  .md-typeset .hara-react-loop > div { grid-column: auto; }
+}
+
+.md-typeset .hara-inspection-lanes {
+  display: grid;
+  gap: .75rem;
+  margin: 1.6rem 0 2rem;
+  padding: 1rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-inspection-lane {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .6rem;
+}
+
+.md-typeset .hara-inspection-lane span,
+.md-typeset .hara-runtime-chain span {
+  position: relative;
+  display: grid;
+  min-height: 3.4rem;
+  padding: .55rem;
+  place-items: center;
+  color: var(--hara-text);
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+  font: .67rem/1.3 var(--hara-mono);
+  text-align: center;
+}
+
+.md-typeset .hara-inspection-lane span:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: -.86rem;
+  width: 1.15rem;
+  color: var(--hara-cyan);
+  background: var(--hara-panel);
+  font: 700 .9rem var(--hara-mono);
+  text-align: center;
+  transform: translateY(-50%);
+}
+
+.md-typeset .hara-inspection-lane:nth-child(2) span {
+  border-color: rgba(156, 123, 255, .42);
+}
+
+.md-typeset .hara-inspection-lane:nth-child(3) span {
+  border-color: rgba(245, 215, 66, .45);
+}
+
+.md-typeset .hara-inspection-evidence {
+  padding: .8rem 1rem;
+  color: var(--hara-cyan-bright);
+  background: rgba(65, 245, 228, .08);
+  border: 1px solid var(--hara-cyan);
+  font: .68rem/1.45 var(--hara-mono);
+  letter-spacing: .04em;
+  text-align: center;
+}
+
+.md-typeset .hara-inspection-evidence b {
+  margin: 0 .45rem;
+  color: var(--hara-cyan);
+}
+
+.md-typeset .hara-runtime-chain {
+  display: grid;
+  grid-template-columns: 1.2fr auto 1.2fr 1.2fr 1.2fr;
+  align-items: center;
+  gap: .65rem;
+  margin: 1.6rem 0 2rem;
+  padding: 1rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-runtime-chain span:nth-child(2) {
+  min-width: auto;
+  padding: 0;
+  color: var(--hara-cyan);
+  background: transparent;
+  border: 0;
+  font-weight: 700;
+}
+
+.md-typeset .hara-runtime-chain span:nth-child(3)::before,
+.md-typeset .hara-runtime-chain span:nth-child(4)::before,
+.md-typeset .hara-runtime-chain span:nth-child(5)::before {
+  content: '→';
+  position: absolute;
+  top: 50%;
+  left: -.85rem;
+  color: var(--hara-cyan);
+  background: var(--hara-panel);
+  transform: translateY(-50%);
+}
+
+.md-typeset .hara-runtime-chain span:nth-child(3) { border-color: rgba(156, 123, 255, .42); }
+.md-typeset .hara-runtime-chain span:nth-child(4) { border-color: rgba(245, 215, 66, .45); }
+.md-typeset .hara-runtime-chain span:nth-child(5) { border-color: var(--hara-cyan); }
+
+html[data-hara-theme="light"] .md-typeset .hara-inspection-lanes,
+html[data-hara-theme="light"] .md-typeset .hara-runtime-chain {
+  background: rgba(248, 250, 247, .86);
+}
+
+html[data-hara-theme="light"] .md-typeset .hara-inspection-evidence {
+  background: rgba(213, 31, 92, .07);
+}
+
+@media (max-width: 720px) {
+  .md-typeset .hara-inspection-lane {
+    grid-template-columns: 1fr;
+  }
+
+  .md-typeset .hara-inspection-lane span:not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -.85rem;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+  }
+
+  .md-typeset .hara-runtime-chain {
+    grid-template-columns: 1fr;
+  }
+
+  .md-typeset .hara-runtime-chain span:nth-child(2) {
+    min-height: auto;
+  }
+
+  .md-typeset .hara-runtime-chain span:nth-child(n + 3)::before {
+    top: -.85rem;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+  }
+}
+
+/* Chapter 04 — React and Substrate */
+.md-typeset .hara-web-native-path {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) auto minmax(0, 1.2fr) auto minmax(0, 1.1fr) auto minmax(0, .95fr);
+  align-items: center;
+  gap: .5rem;
+  margin: 1.6rem 0 2rem;
+  padding: 1rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-web-native-path span {
+  display: grid;
+  min-height: 3.4rem;
+  padding: .45rem;
+  place-items: center;
+  color: var(--hara-text);
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+  font: 700 .65rem/1.25 var(--hara-mono);
+  letter-spacing: .04em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.md-typeset .hara-web-native-path > b { color: var(--hara-cyan); font: 700 1rem var(--hara-mono); }
+
+html[data-hara-theme="light"] .md-typeset .hara-web-native-path { background: rgba(248, 250, 247, .86); }
+
+.md-typeset .hara-react-escalation,
+.md-typeset .hara-substrate-hub,
+.md-typeset .hara-request-path,
+.md-typeset .hara-stream-contrast,
+.md-typeset .hara-react-adapters,
+.md-typeset .hara-react-ordering {
+  display: grid;
+  align-items: stretch;
+  gap: .55rem;
+  margin: 1.6rem 0 2rem;
+  padding: 1rem;
+  background: var(--hara-panel);
+  border: 1px solid var(--hara-line);
+  box-shadow: var(--hara-glow-cyan);
+}
+
+.md-typeset .hara-react-escalation {
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+}
+
+.md-typeset .hara-react-escalation span,
+.md-typeset .hara-substrate-hub span,
+.md-typeset .hara-request-path span,
+.md-typeset .hara-react-adapters > div,
+.md-typeset .hara-react-adapters section,
+.md-typeset .hara-stream-contrast section,
+.md-typeset .hara-react-ordering section {
+  display: grid;
+  min-height: 3.3rem;
+  padding: .55rem .65rem;
+  place-items: center;
+  color: var(--hara-text);
+  background: var(--hara-raised);
+  border: 1px solid var(--hara-line);
+  font: 700 .71rem/1.3 var(--hara-mono);
+  letter-spacing: .025em;
+  text-align: center;
+}
+
+.md-typeset .hara-react-escalation small,
+.md-typeset .hara-substrate-hub small,
+.md-typeset .hara-request-path small,
+.md-typeset .hara-react-adapters small,
+.md-typeset .hara-stream-contrast small { color: var(--hara-text-muted); font: .61rem/1.3 var(--hara-sans); letter-spacing: 0; }
+
+.md-typeset .hara-react-escalation > b,
+.md-typeset .hara-substrate-hub > b,
+.md-typeset .hara-request-path > b,
+.md-typeset .hara-react-adapters > b { align-self: center; color: var(--hara-cyan); font: 700 1rem var(--hara-mono); }
+
+.md-typeset .hara-substrate-hub { grid-template-columns: minmax(10rem, 1fr) auto minmax(10rem, 1fr) auto minmax(8rem, .8fr); }
+.md-typeset .hara-substrate-hub__inputs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .38rem; }
+.md-typeset .hara-substrate-hub__inputs span { min-height: 2.5rem; padding: .35rem; font-size: .61rem; }
+.md-typeset .hara-substrate-hub__node,
+.md-typeset .hara-substrate-hub__adapter { display: grid; min-height: 100%; padding: .8rem; place-items: center; color: var(--hara-cyan-bright); background: rgba(65, 245, 228, .08); border: 1px solid var(--hara-cyan); font: 700 .76rem/1.25 var(--hara-mono); text-align: center; }
+.md-typeset .hara-substrate-hub__node small,
+.md-typeset .hara-substrate-hub__adapter small { display: block; margin-top: .35rem; }
+
+.md-typeset .hara-substrate-spaces { display: grid; grid-template-columns: minmax(16rem, 1fr) minmax(12rem, .8fr); gap: 1rem; align-items: center; margin: 1.6rem 0 2rem; padding: 1rem; background: var(--hara-panel); border: 1px solid var(--hara-line); box-shadow: var(--hara-glow-cyan); }
+.md-typeset .hara-substrate-spaces__node { display: grid; gap: .48rem; padding: .8rem; border: 1px solid var(--hara-cyan); background: rgba(65, 245, 228, .06); }
+.md-typeset .hara-substrate-spaces__node > b { color: var(--hara-cyan-bright); font: 700 .75rem var(--hara-mono); letter-spacing: .08em; text-transform: uppercase; }
+.md-typeset .hara-substrate-spaces section { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; padding: .52rem .6rem; background: var(--hara-raised); border: 1px solid var(--hara-line); }
+.md-typeset .hara-substrate-spaces strong { color: var(--hara-text); font: 700 .7rem var(--hara-mono); }
+.md-typeset .hara-substrate-spaces small { color: var(--hara-text-muted); font: .61rem var(--hara-sans); text-align: right; }
+.md-typeset .hara-substrate-spaces p { margin: 0; color: var(--hara-text-muted); font: .83rem/1.55 var(--hara-sans); }
+.md-typeset .hara-substrate-spaces--compact section { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.md-typeset .hara-substrate-spaces--compact strong { padding: .25rem; color: var(--hara-cyan-bright); border: 1px solid var(--hara-line); text-align: center; }
+
+.md-typeset .hara-request-path { grid-template-columns: 1fr auto 1.25fr auto 1.25fr auto 1fr; align-items: center; }
+.md-typeset .hara-request-path span { min-height: 4.1rem; }
+.md-typeset .hara-request-path span:nth-of-type(2) { border-color: var(--hara-cyan); color: var(--hara-cyan-bright); }
+
+.md-typeset .hara-stream-contrast { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.md-typeset .hara-stream-contrast section { grid-template-columns: auto 1fr; column-gap: .65rem; text-align: left; }
+.md-typeset .hara-stream-contrast i { grid-row: span 3; align-self: center; color: var(--hara-cyan); font: 700 1.25rem var(--hara-mono); font-style: normal; }
+.md-typeset .hara-stream-contrast section > b { color: var(--hara-cyan-bright); font: 700 .75rem var(--hara-mono); }
+.md-typeset .hara-stream-contrast code { color: var(--hara-text-muted); background: transparent; font: .58rem/1.3 var(--hara-mono); white-space: normal; }
+
+.md-typeset .hara-react-adapters { grid-template-columns: minmax(10rem, .8fr) auto minmax(14rem, 1.2fr); align-items: center; }
+.md-typeset .hara-react-adapters section { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .35rem; min-height: auto; padding: .45rem; }
+.md-typeset .hara-react-adapters section span { padding: .48rem .2rem; color: var(--hara-text); border: 1px solid var(--hara-line); font: 700 .61rem var(--hara-mono); }
+
+.md-typeset .hara-react-ordering { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.md-typeset .hara-react-ordering section { display: grid; grid-template-columns: 1fr; gap: .3rem; padding: .8rem; }
+.md-typeset .hara-react-ordering section > b { color: var(--hara-cyan-bright); font: 700 .75rem var(--hara-mono); }
+.md-typeset .hara-react-ordering span { padding: .4rem; border: 1px solid var(--hara-line); font: .62rem/1.3 var(--hara-mono); }
+.md-typeset .hara-react-ordering i { color: var(--hara-cyan); font-style: normal; }
+
+html[data-hara-theme="light"] .md-typeset .hara-react-escalation,
+html[data-hara-theme="light"] .md-typeset .hara-substrate-hub,
+html[data-hara-theme="light"] .md-typeset .hara-request-path,
+html[data-hara-theme="light"] .md-typeset .hara-stream-contrast,
+html[data-hara-theme="light"] .md-typeset .hara-react-adapters,
+html[data-hara-theme="light"] .md-typeset .hara-react-ordering,
+html[data-hara-theme="light"] .md-typeset .hara-substrate-spaces { background: rgba(248, 250, 247, .86); }
+html[data-hara-theme="light"] .md-typeset .hara-substrate-hub__node,
+html[data-hara-theme="light"] .md-typeset .hara-substrate-hub__adapter,
+html[data-hara-theme="light"] .md-typeset .hara-substrate-spaces__node { background: rgba(213, 31, 92, .07); }
+
+@media (max-width: 720px) {
+  .md-typeset .hara-react-escalation,
+  .md-typeset .hara-web-native-path,
+  .md-typeset .hara-substrate-hub,
+  .md-typeset .hara-request-path,
+  .md-typeset .hara-react-adapters,
+  .md-typeset .hara-substrate-spaces,
+  .md-typeset .hara-stream-contrast,
+  .md-typeset .hara-react-ordering { grid-template-columns: 1fr; }
+
+  .md-typeset .hara-react-escalation > b,
+  .md-typeset .hara-web-native-path > b,
+  .md-typeset .hara-substrate-hub > b,
+  .md-typeset .hara-request-path > b,
+  .md-typeset .hara-react-adapters > b { justify-self: center; transform: rotate(90deg); }
+
+  .md-typeset .hara-substrate-hub__inputs,
+  .md-typeset .hara-react-adapters section { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
