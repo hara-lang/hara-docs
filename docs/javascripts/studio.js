@@ -80,10 +80,13 @@ try {
     import(asset("rust/studio/ui.js").href),
     import(asset("rust/studio/canvas-runtime.js").href)
   ]);
-  const [graphModule, sessionModule] = await Promise.all([
+  const [graphModule, sessionModule, registryModule, canvasModule, clockModule] = await Promise.all([
     import(asset("rust/studio/graph-host.js").href),
-    import(asset("rust/studio/session-router.js").href)
-  ]).catch(() => [null, null]);
+    import(asset("rust/studio/session-router.js").href),
+    import(asset("rust/studio/capability-registry.js").href),
+    import(asset("rust/studio/capabilities/canvas.js").href),
+    import(asset("rust/studio/capabilities/clock.js").href)
+  ]).catch(() => [null, null, null, null, null]);
 
   const [{ version: runtimeVersion, projects }, wasmResponse] = await Promise.all([
     loadProjects(),
@@ -102,8 +105,12 @@ try {
 
   const canvasRuntime = new CanvasRuntime();
   const sessionRouter = sessionModule ? new sessionModule.SessionRouter() : null;
+  const capabilityRegistry = registryModule ? new registryModule.CapabilityRegistry({ adapters: {
+    "surface/canvas-2d": canvasModule.createCanvasCapability(canvasRuntime),
+    "clock/frame": clockModule.createClockCapability()
+  } }) : null;
   const graphHost = graphModule ? new graphModule.GraphHost({
-    workerUrl: asset("rust/studio/program-worker.js"), sessionRouter
+    workerUrl: asset("rust/studio/program-worker.js"), sessionRouter, capabilityRegistry
   }) : null;
   const broker = createBrowserBroker({
     workerUrl: asset("rust/hta-worker.js"),
