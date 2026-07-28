@@ -72,7 +72,9 @@ hide:
   (atom {:x 40 :score 0}))
 
 (defn move-right [amount]
-  (swap! player update :x + amount))
+  (swap! player
+         (fn [state]
+           (assoc state :x (+ (get state :x) amount)))))
 
 (move-right 2)</textarea>
     </label>
