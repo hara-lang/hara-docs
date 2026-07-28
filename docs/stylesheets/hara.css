@@ -10,6 +10,7 @@
    `mkdocs serve` without the rust artifacts 404s it (studio page unstyled
    locally, build unaffected). */
 @import url("../rust/studio/studio.css");
+@import url("../rust/ui/studio.css");
 
 /* The shared Hara UI kit is loaded by MkDocs before this adapter. Keep
    Material-specific structure here; new docs components consume the canonical
