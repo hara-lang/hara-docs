@@ -30,3 +30,8 @@ fi
 
 tar -xzf "$ARCHIVE" -C "$DEST"
 node "$ROOT/scripts/verify-runtime.mjs" "$DEST"
+
+# GitHub Pages serves the raw .wasm file without content compression. Keep a
+# gzip sidecar so the browser bootstrap can transfer the much smaller payload
+# and decompress it with the platform DecompressionStream API.
+gzip -9 -n -c "$DEST/rust/hara.wasm" > "$DEST/rust/hara.wasm.gz"

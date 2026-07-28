@@ -68,6 +68,22 @@ async function loadProjects() {
   return { version: index.version, projects };
 }
 
+async function loadWasm() {
+  // Pages does not apply Content-Encoding to application/wasm. Fetching the
+  // generated gzip sidecar keeps cold Studio starts near the compressed size
+  // while retaining the ordinary wasm asset as a compatibility fallback.
+  if (typeof DecompressionStream === "function") {
+    const compressed = await fetch(asset("rust/hara.wasm.gz"));
+    if (compressed.ok && compressed.body) {
+      const stream = compressed.body.pipeThrough(new DecompressionStream("gzip"));
+      return new Uint8Array(await new Response(stream).arrayBuffer());
+    }
+  }
+  const response = await fetch(asset("rust/hara.wasm"));
+  if (!response.ok) throw new Error(`fetch hara.wasm failed: ${response.status}`);
+  return new Uint8Array(await response.arrayBuffer());
+}
+
 try {
   const [
     { createBrowserBroker },
@@ -88,12 +104,10 @@ try {
     import(asset("rust/studio/capabilities/clock.js").href)
   ]).catch(() => [null, null, null, null, null]);
 
-  const [{ version: runtimeVersion, projects }, wasmResponse] = await Promise.all([
+  const [{ version: runtimeVersion, projects }, moduleBytes] = await Promise.all([
     loadProjects(),
-    fetch(asset("rust/hara.wasm"))
+    loadWasm()
   ]);
-  if (!wasmResponse.ok) throw new Error(`fetch hara.wasm failed: ${wasmResponse.status}`);
-  const moduleBytes = new Uint8Array(await wasmResponse.arrayBuffer());
 
   const resources = {};
   for (const name of ["store", "fs", "space", "boot", "node", "draw", "program", "graph", "session"]) {
