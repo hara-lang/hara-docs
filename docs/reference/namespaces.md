@@ -12,6 +12,8 @@ Var metadata and the REPL for exact documentation and arglists.
 | `std.foundation.bytes` | `bytes/` | Mutable byte buffers with explicit signed and unsigned conversion | `count`, `get`, `set`, `slice`, `u8` |
 | `std.foundation.promise` | `promise/` | Native asynchronous settlement and composition | `run`, `all`, `then`, `catch`, `finally` |
 | `std.foundation.file` | `file/` | Capability-gated path resolution and asynchronous byte I/O | `resolve`, `read`, `write` |
+| `std.foundation.socket` | `socket/` | Capability-gated asynchronous socket operations | `connect`, `send`, `close` |
+| `std.foundation.json` | `json/` | Strict JSON parsing and encoding | `parse`, `stringify` |
 | `std.foundation.coroutine` | explicit `require` | Lua-style coroutines with bidirectional yield and promise await | `create`, `resume`, `yield`, `status`, `close`, `await` |
 
 `(ns app)` and `(ns app (:config {:intrinsics :all}))` install the same default aliases. Intrinsic
