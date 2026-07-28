@@ -179,6 +179,10 @@ try {
     } : {})
   });
 
+  // mountStudio appends its shell so it can be embedded in other hosts. This
+  // page owns the temporary boot screen, therefore remove it immediately
+  // before handing the mount point to the live Studio shell.
+  mount.replaceChildren();
   mountStudio(mount, { broker, projects, runtimeVersion, canvasRuntime });
 } catch (error) {
   fail(error);
