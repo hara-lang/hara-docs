@@ -7,7 +7,7 @@ const required = [
   "rust/hara.wasm", "rust/hta.js", "rust/hta-worker.js",
   "rust/studio/broker.js", "rust/studio/host-services.js",
   "rust/studio/ui.js", "rust/studio/studio.css",
-  "rust/ui/tokens.css", "rust/ui/components.css", "rust/ui/studio.css",
+  "rust/ui/tokens.css", "rust/ui/components.css", "rust/ui/studio.css", "rust/ui/studio-shell.js",
   "rust/studio/hal/store.hal", "rust/studio/hal/fs.hal",
   "rust/studio/hal/space.hal", "rust/studio/hal/boot.hal",
   "examples/index.json"
