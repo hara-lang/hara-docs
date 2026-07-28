@@ -30,6 +30,7 @@ extra_javascript:
   - javascripts/demo.js
   - javascripts/console.js
   - javascripts/page-host.js
+  - javascripts/home-live.js
 markdown_extensions:
   - admonition
   - attr_list

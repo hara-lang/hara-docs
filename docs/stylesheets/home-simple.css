@@ -88,6 +88,50 @@ body:has(.hara-landing) .md-main::before {
 .hara-code-muted { color: #667b82; }
 .hara-code-result { color: var(--home-cyan); }
 
+.hara-live-card__source { display: block; }
+.hara-live-card textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 330px;
+  resize: vertical;
+  display: block;
+  margin: 0;
+  padding: 32px 24px 18px;
+  overflow: auto;
+  color: var(--home-text);
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-family: var(--hara-mono, ui-monospace, monospace);
+  font-size: .86rem;
+  line-height: 1.9;
+  tab-size: 2;
+}
+.hara-live-card textarea:focus { box-shadow: inset 3px 0 var(--home-cyan); }
+.hara-live-card__result {
+  min-height: 3.2rem;
+  display: block;
+  padding: 0 24px 22px;
+  color: var(--home-cyan);
+  font-family: var(--hara-mono, ui-monospace, monospace);
+  font-size: .86rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.hara-live-card__result.is-error { color: #ff7f9f; }
+.hara-code-card__foot button {
+  padding: 0;
+  color: var(--home-text);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+.hara-code-card__foot button:hover,
+.hara-code-card__foot button:focus-visible { color: var(--home-cyan); outline: 0; }
+
 .hara-home-content { max-width: none !important; padding: 0 !important; }
 
 .hara-launch {
@@ -341,6 +385,8 @@ body:has(.hara-landing) .md-main::before {
   .hara-outcome-card--primary { grid-column: auto; }
   .hara-outcome-card { min-height: 270px; }
   .hara-section { padding: 78px 0; }
+  .hara-live-card textarea { min-height: 300px; padding-inline: 18px; }
+  .hara-live-card__result { padding-inline: 18px; }
   .hara-surface-grid a,
   .hara-fact-grid article { min-height: 210px; }
   .hara-explore-grid a:nth-child(odd),

@@ -73,17 +73,17 @@ try {
     { createBrowserBroker },
     { createHostServices },
     { mountStudio },
-    { CanvasRuntime },
-    { GraphHost },
-    { SessionRouter }
+    { CanvasRuntime }
   ] = await Promise.all([
     import(asset("rust/studio/broker.js").href),
     import(asset("rust/studio/host-services.js").href),
     import(asset("rust/studio/ui.js").href),
-    import(asset("rust/studio/canvas-runtime.js").href),
+    import(asset("rust/studio/canvas-runtime.js").href)
+  ]);
+  const [graphModule, sessionModule] = await Promise.all([
     import(asset("rust/studio/graph-host.js").href),
     import(asset("rust/studio/session-router.js").href)
-  ]);
+  ]).catch(() => [null, null]);
 
   const [{ version: runtimeVersion, projects }, wasmResponse] = await Promise.all([
     loadProjects(),
@@ -101,24 +101,24 @@ try {
   resources["std.substrate.protocol"] = await fetchText(asset("rust/studio/hal/substrate-protocol.hal"));
 
   const canvasRuntime = new CanvasRuntime();
-  const sessionRouter = new SessionRouter();
-  const graphHost = new GraphHost({
-    workerUrl: asset("rust/studio/program-worker.js"),
-    sessionRouter
-  });
+  const sessionRouter = sessionModule ? new sessionModule.SessionRouter() : null;
+  const graphHost = graphModule ? new graphModule.GraphHost({
+    workerUrl: asset("rust/studio/program-worker.js"), sessionRouter
+  }) : null;
   const broker = createBrowserBroker({
     workerUrl: asset("rust/hta-worker.js"),
     moduleBytes,
     hostCalls: createHostServices({
       canvasRuntime,
-      graphHost,
-      graphHostOptions: { sessionRouter }
+      ...(graphHost ? { graphHost, graphHostOptions: { sessionRouter } } : {})
     }),
     resources,
-    onKernelCreated: async (kernel) => sessionRouter.register(kernel.name, kernel.context, {
-      onRelease: (sessionId) => graphHost.releaseSession(sessionId)
-    }),
-    onKernelClosed: (kernel) => sessionRouter.unregister(kernel.name)
+    ...(sessionRouter ? {
+      onKernelCreated: async (kernel) => sessionRouter.register(kernel.name, kernel.context, {
+        onRelease: (sessionId) => graphHost.releaseSession(sessionId)
+      }),
+      onKernelClosed: (kernel) => sessionRouter.unregister(kernel.name)
+    } : {})
   });
 
   mountStudio(mount, { broker, projects, runtimeVersion, canvasRuntime });

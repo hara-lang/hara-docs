@@ -60,23 +60,26 @@ hide:
     <a class="hara-inline-link" href="studio/">Open this workflow in the Studio <b>↗</b></a>
   </div>
 
-  <div class="hara-code-card" aria-label="A Hara form changing live state">
+  <div class="hara-code-card hara-live-card" data-hara-live aria-label="An editable Hara form changing live state">
     <div class="hara-code-card__head">
       <span>player.hal</span>
-      <span>Live kernel</span>
+      <span data-hara-live-status>WASM · booting</span>
     </div>
-    <pre><code><span class="hara-code-muted">; source remains editable</span>
+    <label class="hara-live-card__source">
+      <span class="visually-hidden">Editable Hara source</span>
+      <textarea data-hara-live-source spellcheck="false" aria-label="Editable Hara source">; source remains editable
 (def player
   (atom {:x 40 :score 0}))
 
 (defn move-right [amount]
   (swap! player update :x + amount))
 
-(move-right 2)
-<span class="hara-code-result">=&gt; {:x 42 :score 0}</span></code></pre>
+(move-right 2)</textarea>
+    </label>
+    <output class="hara-live-card__result" data-hara-live-result aria-live="polite">⇒ waiting for the live kernel…</output>
     <div class="hara-code-card__foot">
-      <span>evaluate · observe · adjust</span>
-      <span>Ctrl-E</span>
+      <button type="button" data-hara-live-run>Evaluate</button>
+      <span>Ctrl-E · evaluates as you edit</span>
     </div>
   </div>
 </section>
