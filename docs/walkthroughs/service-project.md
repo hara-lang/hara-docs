@@ -5,15 +5,23 @@ from a worker implementation, loads them by namespace, and returns persistent Ha
 
 ## 1. Describe the project
 
-`lib/examples/services/project.hal` defines the roots searched by `require`:
+Current projects define the roots searched by `require` in `project.edn`:
 
-```hara
-(defproject services
-  {:source-paths ["src"]
-   :test-paths ["test"]})
+```clojure
+{:hara/type :project
+ :hara/version "1.0.0"
+ :project/id services
+ :project/version "0.1.0"
+ :project/source-paths ["src"]
+ :project/test-paths ["test"]
+ :project/extension-paths ["extensions"]
+ :project/main services.api
+ :project/capabilities #{}}
 ```
 
 Run project commands from this directory so Hara discovers the descriptor by walking upward.
+The checked-in services fixture still includes a legacy `project.hal` while it
+is migrated; new projects should not copy that descriptor.
 
 ## 2. Define the worker
 

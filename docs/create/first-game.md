@@ -6,9 +6,9 @@ observe the result.
 
 ## Start with a runnable scene
 
-Open the [Studio](../studio.md) and choose the **Tron** scene. It is a running
-browser game with a canvas, game state, and an update loop. The source lives in
-the Hara repository at `docs/scenes/tron.hal`.
+Open the [Studio](../studio.md) and choose **Browser Game**. The packaged
+project loads `project.edn` first, then `workspace.edn`, which connects the
+anonymous `src/tron.hal` document to its canvas and input node.
 
 Read the scene in three passes:
 
@@ -47,10 +47,10 @@ For a first game, add one behaviour at a time:
 - a rule for scoring, collision, or completion; and
 - a rendered signal that makes the rule clear.
 
-The exact host APIs depend on the workspace. Hara's browser examples use the
-explicit browser canvas host, so rendering stays visible in source rather than
-being an ambient effect. The [workspace model](../work-visually.md) explains
-how the code, REPL, and visual surfaces relate.
+The HAL program owns game state, timing, input handling, and complete frame
+generation. JavaScript only schedules frames, captures normalized input, and
+executes the declared canvas commands. The [workspace model](../work-visually.md)
+explains how the code, REPL, and visual surfaces relate.
 
 ## Continue
 

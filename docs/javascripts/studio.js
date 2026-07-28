@@ -50,30 +50,61 @@ async function fetchText(url) {
   return response.text();
 }
 
+async function loadProjects() {
+  const response = await fetch(asset("examples/index.json"));
+  if (!response.ok) throw new Error(`fetch examples/index.json failed: ${response.status}`);
+  const index = await response.json();
+  const projects = await Promise.all(index.projects.map(async (project) => {
+    const root = project.project.slice(0, project.project.lastIndexOf("/") + 1);
+    const entries = await Promise.all(project.files.map(async (path) => {
+      const source = await fetchText(asset(path));
+      return [path.startsWith(root) ? path.slice(root.length) : path, source];
+    }));
+    const projectMain = entries.map(([path]) => path).find((path) =>
+      path.startsWith("src/") && path.endsWith("main.hal")
+    ) ?? entries.map(([path]) => path).find((path) => path.endsWith(".hal"));
+    return { ...project, files: Object.fromEntries(entries), main: projectMain };
+  }));
+  return { version: index.version, projects };
+}
+
 try {
-  const [{ createBrowserBroker }, { createHostServices }, { mountStudio }] = await Promise.all([
+  const [
+    { createBrowserBroker },
+    { createHostServices },
+    { mountStudio },
+    { CanvasRuntime }
+  ] = await Promise.all([
     import(asset("rust/studio/broker.js").href),
     import(asset("rust/studio/host-services.js").href),
-    import(asset("rust/studio/ui.js").href)
+    import(asset("rust/studio/ui.js").href),
+    import(asset("rust/studio/canvas-runtime.js").href)
   ]);
 
-  const wasmResponse = await fetch(asset("rust/hara.wasm"));
+  const [{ version: runtimeVersion, projects }, wasmResponse] = await Promise.all([
+    loadProjects(),
+    fetch(asset("rust/hara.wasm"))
+  ]);
   if (!wasmResponse.ok) throw new Error(`fetch hara.wasm failed: ${wasmResponse.status}`);
   const moduleBytes = new Uint8Array(await wasmResponse.arrayBuffer());
 
   const resources = {};
-  for (const name of ["store", "fs", "space", "boot"]) {
+  for (const name of ["store", "fs", "space", "boot", "node", "draw"]) {
     resources[`studio.${name}`] = await fetchText(asset(`rust/studio/hal/${name}.hal`));
   }
+  resources["std.substrate"] = await fetchText(asset("rust/studio/hal/substrate.hal"));
+  resources["std.substrate.frame"] = await fetchText(asset("rust/studio/hal/substrate-frame.hal"));
+  resources["std.substrate.protocol"] = await fetchText(asset("rust/studio/hal/substrate-protocol.hal"));
 
+  const canvasRuntime = new CanvasRuntime();
   const broker = createBrowserBroker({
     workerUrl: asset("rust/hta-worker.js"),
     moduleBytes,
-    hostCalls: createHostServices(),
+    hostCalls: createHostServices({ canvasRuntime }),
     resources
   });
 
-  mountStudio(mount, { broker });
+  mountStudio(mount, { broker, projects, runtimeVersion, canvasRuntime });
 } catch (error) {
   fail(error);
 }

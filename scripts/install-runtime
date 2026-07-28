@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+LOCK="$ROOT/runtime.lock.json"
+DEST="$ROOT/docs"
+ARCHIVE=${HARA_STUDIO_RUNTIME_ARCHIVE:-}
+
+read_lock() {
+  node -e 'const x=require(process.argv[1]); console.log(x[process.argv[2]])' "$LOCK" "$1"
+}
+
+VERSION=$(read_lock version)
+EXPECTED=$(read_lock sha256)
+if [ -z "$ARCHIVE" ]; then
+  URL=$(read_lock url)
+  ARCHIVE="$RUNNER_TEMP/hara-studio-runtime-$VERSION.tar.gz"
+  curl --fail --location --retry 3 --output "$ARCHIVE" "$URL"
+fi
+
+if command -v sha256sum >/dev/null 2>&1; then
+  ACTUAL=$(sha256sum "$ARCHIVE" | cut -d ' ' -f 1)
+else
+  ACTUAL=$(shasum -a 256 "$ARCHIVE" | cut -d ' ' -f 1)
+fi
+[ "$ACTUAL" = "$EXPECTED" ] || {
+  echo "Studio runtime checksum mismatch: expected $EXPECTED, got $ACTUAL" >&2
+  exit 1
+}
+
+tar -xzf "$ARCHIVE" -C "$DEST"
+node "$ROOT/scripts/verify-runtime.mjs" "$DEST"

@@ -34,8 +34,9 @@ idea is ready to keep.
 
 Use the same project boundaries as other Hara hosts: source files should be
 stored in the repository and the live session is a fast feedback loop, not the
-only copy of your work. Add `project.hal` when your project has multiple source
-paths or namespaces.
+only copy of your work. Keep the required `project.edn` and `workspace.edn` at
+the workspace root so VS Code, Chrome, and browser Studio discover the same
+source roots and workspace.
 
 For browser-oriented projects, pair this workflow with the
 [first browser game](first-game.md) guide. The Chrome panel offers the more

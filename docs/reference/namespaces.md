@@ -44,7 +44,7 @@ required namespaces.
 ## Project namespaces
 
 Project namespaces come from `.hal` files beneath source or test roots declared by the nearest
-`project.hal`. Hara resolves `services.api-test` to `services/api_test.hal`. The file must declare
+`project.edn`. Hara resolves `services.api-test` to `services/api_test.hal`. The file must declare
 the requested namespace; mismatches fail instead of installing definitions under a surprising name.
 
 ## Extension namespaces

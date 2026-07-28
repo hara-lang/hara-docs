@@ -83,9 +83,11 @@ considered.
 
 ## Project convention
 
-The nearest `project.hal` is discovered by walking upward from the working
-directory. Runnable project fixtures use
-`lib/bench/<NUM>-<GROUP>/{project.hal,src,test}`. A descriptor has this form:
+This section documents the legacy Foundation fixture convention. Its nearest
+`project.hal` is discovered by walking upward from the working directory, and
+runnable fixtures use `lib/bench/<NUM>-<GROUP>/{project.hal,src,test}`. New
+portable projects use root `project.edn` and `workspace.edn` instead. A legacy
+descriptor has this form:
 
 ```hara
 (defproject project.name

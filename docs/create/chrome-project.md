@@ -17,18 +17,17 @@ Make a directory with a project file and a source directory:
 
 ```text
 orbit-game/
-  project.hal
+  project.edn
+  workspace.edn
   src/
     game.hal
 ```
 
-```hara
-; project.hal
-(defproject orbit-game {:source-paths ["src"]})
-```
-
-`project.hal` tells the panel where to resolve required namespaces. If it is
-absent, the panel uses the chosen directory itself as the source path.
+`project.edn` tells the panel where to resolve required namespaces and which
+capabilities the project requests. `workspace.edn` declares its files, areas,
+nodes, and connections. Both manifests are required for new projects; the
+legacy executable `project.hal` descriptor is supported only by the migration
+bridge.
 
 ## Connect the panel to the project
 

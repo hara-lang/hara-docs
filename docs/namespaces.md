@@ -18,12 +18,18 @@ function named `process-job`, `services.worker/process-job`.
 
 ## Map names to files
 
-The nearest `project.hal` declares source and test roots:
+The nearest `project.edn` declares source and test roots:
 
-```hara
-(defproject services
-  {:source-paths ["src"]
-   :test-paths ["test"]})
+```clojure
+{:hara/type :project
+ :hara/version "1.0.0"
+ :project/id services
+ :project/version "0.1.0"
+ :project/source-paths ["src"]
+ :project/test-paths ["test"]
+ :project/extension-paths ["extensions"]
+ :project/main services.api
+ :project/capabilities #{}}
 ```
 
 Within those roots, dots become directories, hyphens become underscores, and the module extension
@@ -113,7 +119,7 @@ lists the symbols visible from the active namespace, including aliases and refer
 
 ## Common loading errors
 
-- **Cannot require missing namespace**: check `project.hal`, the source root, and the dot/hyphen path mapping.
+- **Cannot require missing namespace**: check `project.edn`, the source root, and the dot/hyphen path mapping.
 - **Namespace source did not declare requested namespace**: make the file's `ns` name match the required symbol.
 - **Namespace alias already refers to ...**: choose a distinct alias; aliases cannot silently replace one another.
 - **Cannot refer missing var**: use a public Var that actually exists in the required namespace.

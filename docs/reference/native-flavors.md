@@ -13,6 +13,7 @@ qualified-symbol resolution, construction, member reads/writes/calls, indexed st
 matching. Providers must normalize failures into stable native-flavor errors while preserving the
 original cause. Unsupported providers and denied capabilities must fail deterministically.
 
-Executable Hara source uses `.hal`. `.hara` is retained only for historical descriptors; current
-projects use executable `project.hal` descriptors. `.hrl` and `.hara` are not executable module
-extensions.
+Executable Hara source uses `.hal`. Current projects use data manifests named
+`project.edn` and `workspace.edn`. The executable `project.hal` descriptor and
+`.hara` spelling are legacy migration inputs; `.hrl` and `.hara` are not
+executable module extensions.
