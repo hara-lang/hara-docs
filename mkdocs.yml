@@ -7,7 +7,7 @@ theme:
   custom_dir: overrides
   language: en
   font: false
-  favicon: assets/favicon.svg
+  favicon: assets/favicon-48.svg
   logo: assets/logo-white.svg
   features:
     - navigation.tabs
