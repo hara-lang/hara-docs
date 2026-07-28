@@ -80,6 +80,7 @@ nav:
       - Extension system: reference/extensions-contract.md
       - Development and APIs:
           - Developer guide: development.md
+          - Development tracing: development-tracing.md
           - Java and Rust APIs: javadocs.md
       - Implementation notes:
           - Xtalk equivalence: reference/xtalk-equivalence.md
