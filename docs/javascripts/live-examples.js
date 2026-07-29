@@ -133,10 +133,10 @@
   };
 
   const createKernel = () =>
-    import(asset("kernel.js?v=20260728-completion").href)
+    import(asset("kernel.js?v=20260729-session-resources").href)
       .then(({ createDocsKernel }) => createDocsKernel({
-        wasmUrl: asset("../rust/hara.wasm?v=20260728-completion-2"),
-        workerUrl: asset("../rust/hta-worker.js"),
+        wasmUrl: asset("../rust/hara.wasm?v=20260729-session-resources"),
+        workerUrl: asset("../rust/hta-worker.js?v=20260729-session-resources"),
         resources: {
           "studio.store": asset("../rust/studio/hal/store.hal"),
           "studio.fs": asset("../rust/studio/hal/fs.hal"),

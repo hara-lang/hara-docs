@@ -1,4 +1,4 @@
-import { HtaContext } from "../rust/hta.js";
+import { HtaContext } from "../rust/hta.js?v=20260729-session-resources";
 import { createHostServices } from "../rust/studio/host-services.js";
 
 export function prepareDocsEval(source) {
