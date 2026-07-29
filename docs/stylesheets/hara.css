@@ -408,6 +408,26 @@ html[data-hara-theme="light"] .hara-docs-brand img {
   max-width: 980px;
 }
 
+.hara-page-identity {
+  display: flex;
+  gap: .45rem;
+  align-items: center;
+  margin: 0 0 1rem;
+  color: var(--hara-faint);
+  font-family: var(--hara-mono);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.hara-page-identity a {
+  color: var(--hara-muted);
+}
+
+.hara-page-identity a:hover {
+  color: var(--hara-cyan);
+}
+
 /* sidebar + toc: hairline structure, cyan active state */
 .md-sidebar {
   background: transparent;

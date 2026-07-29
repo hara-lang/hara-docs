@@ -1,5 +1,5 @@
 ---
-title: Hara — Documentation
+title: Docs
 template: home.html
 hide:
   - navigation
@@ -10,7 +10,7 @@ hide:
   <div class="hara-launch__head">
     <p class="hara-label">Documentation</p>
     <h1>Hara</h1>
-    <p>Operating instructions, language learning, developer guides, and a concise Clojure API reference.</p>
+    <p>Operating instructions, HAL learning, developer guides, and concise kernel and runtime references.</p>
   </div>
 
   <div class="hara-outcome-grid hara-docs-grid">
@@ -37,8 +37,8 @@ hide:
 
     <a class="hara-outcome-card" href="reference/">
       <span class="hara-card-kicker">04 · Reference</span>
-      <h2>Clojure API</h2>
-      <p>Look up builtins, runtime libraries, namespaces, and Clojure compatibility details.</p>
+      <h2>Language and runtime API</h2>
+      <p>Look up builtins, runtime libraries, namespaces, kernel architecture, and compatibility details.</p>
       <small>Open Reference <b>→</b></small>
     </a>
   </div>

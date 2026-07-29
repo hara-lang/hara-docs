@@ -36,15 +36,15 @@ environment. The kernel gives a person—and an AI agent—a structured way to
 inspect application state, evaluate a bounded change, and observe the result
 while the system is running.
 
-Lisp forms are the interface to that kernel. They are a compact, inspectable
-way to ask the system questions and make bounded changes; they are not the
-entire product story.
+HAL (Hara Lisp) is an EDN-compatible, host-neutral notation and data format
+for communicating with that kernel. HAL forms provide a compact, inspectable
+way to ask the system questions and make bounded changes.
 
-## Lisp is how you talk to the kernel
+## HAL is how you talk to the kernel
 
-Hara's kernel interface uses Lisp forms. Lisp is the notation through which
-you describe computations, inspect values, and change the running system; the
-kernel and its runtime interfaces are the larger system.
+The kernel reads HAL forms that describe computations, inspect values, and
+change the running system. The notation stays portable while the kernel and
+its host interfaces determine what can execute and which effects are allowed.
 
 For now, only four rules are needed:
 
@@ -62,11 +62,11 @@ For now, only four rules are needed:
 (get user :name)
 ```
 
-Later chapters can go deeper into reading Hara forms, evaluation and
-macroexpansion, the Clojure relationship, and why Hara uses Lisp notation.
-For this manual, keep the positioning simple:
+Later chapters go deeper into reading HAL forms, evaluation, macroexpansion,
+and the relationship to Clojure and other Lisp traditions. For this manual,
+keep the positioning simple:
 
-> Hara is a kernel. Lisp forms are how you talk to it.
+> Hara is a programmable kernel. HAL forms are how you talk to it.
 
 ## Work with the running system
 
@@ -192,7 +192,7 @@ contract shared by people, editors, visual tools, and agents.
 > The console is one possible front end to Hara. The kernel is the persistent,
 > inspectable runtime that the console connects to.
 
-There is an important caveat. If Hara only evaluates Lisp expressions and
+There is an important caveat. If Hara only evaluates HAL forms and
 prints results, then the JavaScript developer is right: it is effectively
 another console. The documentation must demonstrate the difference early—by
 showing the same kernel from multiple surfaces, named state, bounded changes,

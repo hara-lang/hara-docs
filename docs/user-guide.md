@@ -9,8 +9,9 @@
 (greet "Ada")
 ```
 
-Hara uses Lisp forms: the first item is normally the operation and the remaining items are its
-arguments. Vectors, maps, sets, strings, numbers, keywords, and `nil` are data values.
+HAL uses list forms for evaluation: the first item is normally the operation
+and the remaining items are its arguments. Vectors, maps, sets, strings,
+numbers, keywords, and `nil` are data values.
 
 ## Namespaces and libraries
 

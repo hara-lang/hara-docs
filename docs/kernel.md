@@ -1,6 +1,7 @@
 # Kernel
 
-HARA is not only a language — it is a small Lisp kernel that runs in the browser.
+Hara is a programmable kernel that runs in the browser. HAL forms provide its
+portable interface for evaluation and structured data.
 
 ## Sessions
 

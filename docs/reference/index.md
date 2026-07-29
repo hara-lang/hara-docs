@@ -1,8 +1,8 @@
-# Clojure API reference
+# Language and runtime API reference
 
-This reference is the concise lookup surface for Hara's Clojure-shaped API.
-Use the guides for concepts, host runtimes, protocols, extensions, and project
-workflows.
+This reference is the concise lookup surface for HAL, the Hara kernel, and its
+runtime APIs. Use the guides for concepts, host runtimes, protocols,
+extensions, and project workflows.
 
 | Reference | Use it to |
 | --- | --- |

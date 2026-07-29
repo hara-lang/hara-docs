@@ -1,16 +1,24 @@
 {# Site-wide metadata and subtle documentation background. #}
 {% extends "base.html" %}
+{% block htmltitle %}
+  <title>{% if page.is_homepage %}Hara / Docs{% else %}Hara / Docs / {{ page.title | striptags }}{% endif %}</title>
+{% endblock %}
 {% block extrahead %}
   {{ super() }}
+  {% if page.is_homepage %}
+    {% set hara_page_title = "Hara / Docs" %}
+  {% else %}
+    {% set hara_page_title = "Hara / Docs / " ~ (page.title | striptags) %}
+  {% endif %}
   <script src="{{ 'javascripts/home-theme.js' | url }}?v=3" defer></script>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Hara Documentation">
+  <meta property="og:title" content="{{ hara_page_title }}">
   <meta property="og:description" content="Build live, across every host.">
   <meta property="og:image" content="https://docs.hara-lang.org/assets/og-hara-docs.png">
   <meta property="og:image:width" content="1731">
   <meta property="og:image:height" content="909">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Hara Documentation">
+  <meta name="twitter:title" content="{{ hara_page_title }}">
   <meta name="twitter:description" content="Build live, across every host.">
   <meta name="twitter:image" content="https://docs.hara-lang.org/assets/og-hara-docs.png">
 {% endblock %}

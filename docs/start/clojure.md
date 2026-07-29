@@ -7,7 +7,7 @@ current state.
 
 Hara builds on that tradition, but gives it a different centre. It is an
 **embeddable live kernel** for building, inspecting, and changing running
-systems. Lisp forms are how you communicate with that kernel.
+systems. HAL forms are how you communicate with that kernel.
 
 It is not intended to reproduce all of Clojure on another runtime. Hara is
 deliberately stripped down: small enough to embed in a browser, compile to

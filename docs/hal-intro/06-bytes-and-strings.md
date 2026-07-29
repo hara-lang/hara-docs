@@ -23,7 +23,7 @@ By the end of this lesson, you can:
 Create a string literal:
 
 ```hara
-"Hara Lisp"
+"HAL"
 ```
 
 Combine values with `str`:
@@ -42,8 +42,8 @@ The result is a new string. Existing strings do not change.
 Use `str/trim` to remove leading and trailing whitespace:
 
 ```hara
-(str/trim "  Hara Lisp  ")
-; => "Hara Lisp"
+(str/trim "  HAL  ")
+; => "HAL"
 ```
 
 Store the result when later code needs the cleaned value:
@@ -157,7 +157,7 @@ Use `str/decode` to decode UTF-8 bytes:
 Round-trip text through UTF-8:
 
 ```hara
-(def original "Hara Lisp")
+(def original "HAL")
 (def round-trip
   (str/decode (str/encode original)))
 

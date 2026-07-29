@@ -73,7 +73,7 @@ Check the result in your current runtime before you build numeric rules around i
 A string contains text:
 
 ```hara
-"Hara Lisp"
+"HAL"
 "line one\nline two"
 ```
 
@@ -142,7 +142,8 @@ Quote a list when you want list data:
 '(north east south west)
 ```
 
-Use lists for forms and list-shaped data. Do not use a list only because Lisp uses parentheses.
+Use lists for forms and list-shaped data. Do not use a list only because HAL
+uses parentheses for evaluation forms.
 
 ### Vectors
 

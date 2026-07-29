@@ -60,7 +60,7 @@ typed prefix
 ```
 
 Completion appears as a cursor-level ghost suggestion while typing, including immediately after `/`.
-Tab accepts and cycles matching slash commands or symbols. Completion understands Lisp delimiters: `(`, `)`, `[`, `]`, `{`, `}`, and whitespace. Symbol
+Tab accepts and cycles matching slash commands or symbols. Completion understands HAL delimiters: `(`, `)`, `[`, `]`, `{`, `}`, and whitespace. Symbol
 completion comes from the runtime-visible namespace. Host Java classes are not ambient language
 completion candidates.
 

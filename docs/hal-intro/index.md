@@ -1,6 +1,8 @@
-# Hara Lisp — Intro
+# HAL — Intro
 
-Hara is a small Lisp for live, portable programs. This tutorial teaches the language through the values and runtime services that Hara programs use every day.
+HAL is the portable notation used to communicate with the Hara kernel. This
+tutorial teaches it through the values and runtime services that Hara programs
+use every day.
 
 The tutorial does not assume Clojure knowledge. It starts with plain data and builds toward asynchronous file work.
 

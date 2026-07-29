@@ -6,7 +6,9 @@ The goal is not to pretend that every thing is identical. A function, an atom, a
 
 ## Code is structured data
 
-Hara inherits a central Lisp idea: source code is represented with the same kinds of lists, symbols, numbers, strings, maps, vectors, and sets that programs already manipulate.
+HAL preserves a central idea from Lisp: source code is represented with the
+same kinds of lists, symbols, numbers, strings, maps, vectors, and sets that
+programs already manipulate.
 
 ```hara
 (+ 1 2)
@@ -120,7 +122,8 @@ evaluation
 runtime value
 ```
 
-Each stage can be inspected or visualised. This is particularly useful for teaching, debugging macros, and showing how a small Lisp evaluates its programs.
+Each stage can be inspected or visualised. This is particularly useful for
+teaching, debugging macros, and showing how the kernel evaluates HAL programs.
 
 ## Benefits for AI-assisted development
 
