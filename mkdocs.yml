@@ -76,10 +76,13 @@ nav:
           - Part V — Rendering: create/tictactoe/rendering.md
           - Part VI — Make it live: create/tictactoe/live.md
       - Getting Started:
-          - On the Web: getting-started.md
-          - On Native: reference/rust-runtime.md
-          - On the JVM: reference/jvm-flavor.md
-          - Hara CLI: start/cli.md
+          - With the CLI: getting-started/cli.md
+          - With the JVM: getting-started/jvm.md
+          - With the Web: getting-started/web.md
+          - With Playground: getting-started/playground.md
+          - With Emacs: getting-started/emacs.md
+          - With VS Code: getting-started/vscode.md
+          - With Greenways OS: getting-started/greenways-os.md
       - Concepts:
           - Concepts overview: concepts/index.md
           - Runtime-driven development: concepts/runtime-driven-development.md
@@ -87,16 +90,14 @@ nav:
           - Unified representation: concepts/unified-representation.md
   - Learn Hara:
       - Introductory:
-          - HAL — Intro:
-              - Course map: hal-intro/index.md
-              - 01 — Basic data and immutable collections: hal-intro/01-basic-data.md
-              - 02 — Functions and atoms: hal-intro/02-functions-and-atoms.md
-              - 03 — Iterators and streaming: hal-intro/03-iterators-and-streaming.md
-              - 04 — Coroutines and promises: hal-intro/04-coroutines-and-promises.md
-              - 05 — Array and object: hal-intro/05-array-and-object.md
-              - 06 — Bytes and strings: hal-intro/06-bytes-and-strings.md
-              - 07 — I/O and files: hal-intro/07-io-and-files.md
-          - Language guide: user-guide.md
+          - Course map: hara-lisp-intro/index.md
+          - 01 — Basic data and immutable collections: hara-lisp-intro/01-basic-data.md
+          - 02 — Functions and atoms: hara-lisp-intro/02-functions-and-atoms.md
+          - 03 — Iterators and streaming: hara-lisp-intro/03-iterators-and-streaming.md
+          - 04 — Coroutines and promises: hara-lisp-intro/04-coroutines-and-promises.md
+          - 05 — Array and object: hara-lisp-intro/05-array-and-object.md
+          - 06 — Bytes and strings: hara-lisp-intro/06-bytes-and-strings.md
+          - 07 — I/O and files: hara-lisp-intro/07-io-and-files.md
       - Systems and Wasm:
           - Namespaces, libraries, and tests: namespaces.md
           - Namespace project walkthrough: walkthroughs/service-project.md
@@ -113,10 +114,10 @@ nav:
       - Hara VS Code project: create/vscode-project.md
   - Guides:
       - For developers:
-          - Hara for Clojurists: start/clojure.md
-          - Hara for Web Devs: start/web-developers.md
-          - Hara for Data Scientists: start/data-scientists.md
-          - Hara for Game Developers: start/game-developers.md
+          - For Clojurists: start/clojure.md
+          - For Web Devs: start/web-developers.md
+          - For Data Scientists: start/data-scientists.md
+          - For Game Developers: start/game-developers.md
       - Language and runtime:
           - Language contract: reference/l0-language.md
           - Kernel architecture: reference/runtime/kernel-architecture/index.md
