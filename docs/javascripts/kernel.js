@@ -20,10 +20,15 @@ export async function createDocsKernel({ wasmUrl, workerUrl, resources = {} }) {
   const response = await fetch(wasmUrl);
   if (!response.ok) throw new Error(`hara.wasm: ${response.status}`);
   const worker = new Worker(workerUrl, { type: "module" });
+  const canvasRuntimes = new Map();
   const context = new HtaContext({
     worker,
     moduleBytes: await response.arrayBuffer(),
-    hostCalls: createHostServices({ dbName: "hara-docs" })
+    kernelId: `docs-${Math.random().toString(36).slice(2)}`,
+    hostCalls: createHostServices({
+      dbName: "hara-docs",
+      canvasRuntimeForSession: (sessionId) => canvasRuntimes.get(sessionId)
+    })
   });
   await context.ready;
   for (const [name, url] of Object.entries(resources)) {
@@ -31,31 +36,40 @@ export async function createDocsKernel({ wasmUrl, workerUrl, resources = {} }) {
     if (!resourceResponse.ok) throw new Error(`${name}: ${resourceResponse.status}`);
     await context.call("register-resource", [name, await resourceResponse.text()]);
   }
-  const fsEval = async (form) =>
-    context.call("eval", [`(do (require [studio.fs :as fs]) ${form})`]);
   const string = (value) => JSON.stringify(String(value));
   return {
-    async eval(source) {
-      const prepared = prepareDocsEval(source);
+    context,
+    async createSession(name, { filesystem = `memory:${name}` } = {}) {
+      const session = await context.createSession(name);
+      await session.attachFilesystem(filesystem);
+      const fsEval = async (form) =>
+        session.eval(`(do (require [studio.fs :as fs]) ${form})`);
       return {
-        value: await context.call("eval", [prepared.source]),
-        label: prepared.label
+        id: name,
+        filesystem,
+        async eval(source) {
+          const prepared = prepareDocsEval(source);
+          return { value: await session.eval(prepared.source), label: prepared.label };
+        },
+        evalRaw: (source) => session.eval(source),
+        evalBound: (source, bindings = []) => session.evalBound(source, bindings),
+        complete: (prefix) => session.complete(prefix),
+        listFiles: (space = "guide") => fsEval(`(fs/list ${string(space)} "/")`),
+        readFile: (path, space = "guide") =>
+          fsEval(`(fs/read ${string(space)} ${string(path)})`),
+        writeFile: (path, content, space = "guide") =>
+          fsEval(`(fs/write! ${string(space)} ${string(path)} ${string(content)})`),
+        deleteFile: (path, space = "guide") =>
+          fsEval(`(fs/delete! ${string(space)} ${string(path)})`),
+        registerCanvas(runtime) {
+          canvasRuntimes.set(name, runtime);
+          return () => canvasRuntimes.delete(name);
+        },
+        async close() {
+          canvasRuntimes.delete(name);
+          return session.close();
+        }
       };
-    },
-    async complete(prefix) {
-      return context.call("complete", [prefix]);
-    },
-    async listFiles(space = "guide") {
-      return fsEval(`(fs/list ${string(space)} "/")`);
-    },
-    async readFile(path, space = "guide") {
-      return fsEval(`(fs/read ${string(space)} ${string(path)})`);
-    },
-    async writeFile(path, content, space = "guide") {
-      return fsEval(`(fs/write! ${string(space)} ${string(path)} ${string(content)})`);
-    },
-    async deleteFile(path, space = "guide") {
-      return fsEval(`(fs/delete! ${string(space)} ${string(path)})`);
     },
     close() {
       context.close();

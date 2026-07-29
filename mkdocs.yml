@@ -65,6 +65,7 @@ nav:
           - Part IV — Pointer input: create/tictactoe/input.md
           - Part V — Rendering: create/tictactoe/rendering.md
           - Part VI — Make it live: create/tictactoe/live.md
+<<<<<<< HEAD
       - Getting Started:
           - On the Web: getting-started.md
           - On Native: reference/rust-runtime.md
