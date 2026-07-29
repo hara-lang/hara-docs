@@ -54,7 +54,14 @@ plugins:
 nav:
   - Start:
       - Start with Hara: index.md
-      - Install and choose a workspace: getting-started.md
+      - Getting Started:
+          - With the CLI: getting-started/cli.md
+          - With the JVM: getting-started/jvm.md
+          - With the Web: getting-started/web.md
+          - With Playground: getting-started/playground.md
+          - With Emacs: getting-started/emacs.md
+          - With VS Code: getting-started/vscode.md
+          - With Greenways OS: getting-started/greenways-os.md
       - Your first browser game: create/first-game.md
   - Learn Hara:
       - Learn to program: learn-programming/index.md
