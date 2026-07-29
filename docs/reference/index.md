@@ -12,10 +12,12 @@ Start with the user guides when you want a tutorial.
 | [Runtime libraries](runtime-libraries.md) | Confirm portable string, byte, promise, file, socket, block, zip, task, and test operations. |
 | [Namespace catalog](namespaces.md) | Find a shipped namespace and its load mode or capability. |
 
-## Runtime and tools
+## Runtime
 
 | Reference | Use it to |
 | --- | --- |
+| [Kernel architecture](runtime/kernel-architecture/index.md) | Inspect kernel and session ownership, isolation boundaries, host capabilities, and accepted architecture targets. |
+| [Multi-session kernels with attachable filesystems](runtime/kernel-architecture/multi-session-kernels.md) | Confirm the target multi-session lifecycle, filesystem attachment contract, compatibility rules, browser embedding behavior, and test requirements. |
 | [REPL UX](repl.md) | Confirm interactive session, history, completion, documentation, and command behavior. |
 | [RESP protocol](resp-protocol.md) | Build or debug a client connection to a Hara runtime. |
 | [Native runtime flavors](native-flavors.md) | Confirm provider selection, host authority, and JVM interop. |
