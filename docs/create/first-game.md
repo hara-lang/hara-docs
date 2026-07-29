@@ -1,60 +1,26 @@
-# Your first browser game
+# Building Tic Tac Toe
 
-This is the visual-first path through Hara. You will make a small live scene,
-then use the same loop for a game: change a form, evaluate it, and immediately
-observe the result.
+Build a complete Hara game in six small pages. Each page introduces one idea,
+then gives you a choice: try a focused practical exercise or continue directly
+to the next piece. The runnable panels use a real browser-hosted Hara kernel
+and canvas—no Studio UI and no iframe.
 
-## Start with a runnable scene
+<div class="hara-tictactoe-sketches" aria-label="Tic Tac Toe tutorial construction storyboard">
+  <section><small>01 · DRAW</small><div class="hara-tictactoe-flow" aria-hidden="true"><b>blank canvas</b><em>↓</em><b>line commands</b><em>↓</em><b>board</b></div><p>Make pixels from visible command data.</p></section>
+  <section><small>02–04 · DESCRIBE</small><div class="hara-tictactoe-flow" aria-hidden="true"><b>files</b><em>↓</em><b>state + rules</b><em>↓</em><b>pointer</b></div><p>Keep the game understandable as it grows.</p></section>
+  <section><small>05–06 · RUN</small><div class="hara-tictactoe-flow" aria-hidden="true"><b>commands</b><em>↓</em><b>next frame</b><em>↓</em><b>play</b></div><p>Render the game and connect it to the browser.</p></section>
+</div>
 
-Open [Playground](https://playground.hara-lang.org/) and choose **Browser Game**. The packaged
-project loads `project.edn` first, then `workspace.edn`, which connects the
-anonymous `src/tron.hal` document to its canvas and input node.
+## Choose a part
 
-Read the scene in three passes:
+<div class="hara-tutorial-next">
+  <a href="tictactoe/board/"><b>Part I</b><strong>Draw the board</strong><small>Canvas commands and a drawing practical.</small></a>
+  <a href="tictactoe/files/"><b>Part II</b><strong>Organise the game</strong><small>Three small files with clear responsibilities.</small></a>
+  <a href="tictactoe/state/"><b>Part III</b><strong>State and rules</strong><small>Immutable game data and legal moves.</small></a>
+  <a href="tictactoe/input/"><b>Part IV</b><strong>Pointer input</strong><small>Turn a local event into one possible move.</small></a>
+  <a href="tictactoe/rendering/"><b>Part V</b><strong>Rendering</strong><small>Translate the game into canvas commands.</small></a>
+  <a href="tictactoe/live/"><b>Part VI</b><strong>Make it live</strong><small>Frames, reset, touch input, and the finished game.</small></a>
+</div>
 
-1. Find the state that changes while the game runs.
-2. Find the function that advances that state on each tick.
-3. Find the drawing calls that turn state into pixels.
-
-That is the useful first model for an interactive Hara program: state, update,
-and rendering are small forms you can inspect and replace independently.
-
-## Make one visible change
-
-Duplicate a scene into your own project, then change one visible value: a
-color, movement speed, starting position, or score. Evaluate the changed form
-in the active REPL and compare the result in the canvas.
-
-Use the normal live-development rhythm:
-
-```hara
-; change one form
-(def speed 2)
-
-; evaluate it in the active kernel
-speed
-```
-
-Keep changes small enough that you can tell what changed. When a change is
-useful, save it in the project file rather than leaving it only in the REPL.
-
-## Turn the scene into a game
-
-For a first game, add one behavior at a time:
-
-- a player-controlled value such as direction or position;
-- an event that changes it;
-- a rule for scoring, collision, or completion; and
-- a rendered signal that makes the rule clear.
-
-The HAL program owns game state, timing, input handling, and complete frame
-generation. JavaScript only schedules frames, captures normalized input, and
-executes the declared canvas commands. The [workspace model](../projects/index.md#work-visually)
-explains how the code, REPL, and visual surfaces relate.
-
-## Continue
-
-Put the game in a project with [Hara Chrome](chrome-project.md), or develop it
-against a local runtime with [Hara VS Code](vscode-project.md). Publishing to
-Greenways Spaces is planned; see the [publishing roadmap](../projects/publish-greenways.md)
-for its intended handoff.
+Follow them in order for the full construction, or jump to the question you are
+trying to answer.

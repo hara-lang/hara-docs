@@ -1,16 +1,15 @@
-# Hara reference
+# Clojure API reference
 
-Use this section to confirm a language rule, runtime boundary, or public API.
-Start with the user guides when you want a tutorial.
-
-## Language
+This reference is the concise lookup surface for Hara's Clojure-shaped API.
+Use the guides for concepts, host runtimes, protocols, extensions, and project
+workflows.
 
 | Reference | Use it to |
 | --- | --- |
-| [L0 language contract](l0-language.md) | Confirm reader, evaluator, value, collection, protocol, namespace, and host-boundary rules. |
 | [Builtins](../builtins.md) | Find a core function, macro, or special form. |
-| [Runtime libraries](runtime-libraries.md) | Confirm portable string, byte, promise, file, socket, block, zip, task, and test operations. |
+| [Runtime libraries](runtime-libraries.md) | Find portable string, byte, promise, file, socket, block, zip, task, and test operations. |
 | [Namespace catalog](namespaces.md) | Find a shipped namespace and its load mode or capability. |
+| [Clojure core compatibility](clojure-core-compatibility.md) | Check deliberate compatibility and semantic differences. |
 
 ## Runtime
 
@@ -43,3 +42,6 @@ These pages record compatibility, porting, and measured implementation data:
 - [Clojure core compatibility](clojure-core-compatibility.md)
 - [Runtime benchmarks](runtime-benchmarks.md)
 - [Foundation porting](../foundation-porting.md)
+
+For help choosing Hara from a Clojure perspective, start with the
+[Clojurists guide](../start/clojure.md).

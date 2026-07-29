@@ -21,15 +21,14 @@ string, bytes, promise, file, socket, block, and zip libraries:
 (ns app)
 
 (str/trim "  ready  ")
-(bytes/count (str/encode "ready"))
+(str/upper "ready")
 ```
 
 Require project code or opt-in providers explicitly. Aliases are local to the declaring namespace:
 
 ```hara
 (ns app.api
-  (:require [app.worker :as worker]
-            [std.lib.task :as task]))
+  (:require [studio.fs :as fs]))
 ```
 
 The loader resolves project modules, packaged HAL, library providers, and extension manifests while
@@ -54,9 +53,10 @@ The marker value makes the mutability boundary visible at construction time.
 Promises model native completable asynchronous work:
 
 ```hara
-(promise/then
-  (promise/run (fn [] (file/read "data.bin")))
-  (fn [bytes] (bytes/count bytes)))
+(deref
+  (promise/then
+    (promise/run (fn [] 21))
+    (fn [n] (* n 2))))
 ```
 
 Use `promise/catch` for recovery and `promise/finally` for cleanup. Sockets remain callback-based;
@@ -65,12 +65,17 @@ they do not grow separate socket-promise method families.
 ## Files, sockets, and capabilities
 
 ```hara
-(file/read "notes.txt")
-(file/write "notes.txt" (str/encode "hello"))
+(do
+  (require [studio.fs :as fs])
+  (fs/write! "guide" "/notes.txt" "hello from Hara")
+  {:content (fs/read "guide" "/notes.txt")
+   :files (fs/list "guide" "/")})
 ```
 
-File and socket operations may be unsupported or denied by the embedding runtime. Hara keeps those
-errors distinct so applications can respond correctly.
+This uses the web Studio's browser-persistent virtual filesystem. The first argument scopes files
+to a space, so projects do not share paths accidentally. Native file and socket operations still
+depend on capabilities granted by the embedding runtime; Hara keeps unsupported and denied errors
+distinct so applications can respond correctly.
 
 ## REPL workflow
 
