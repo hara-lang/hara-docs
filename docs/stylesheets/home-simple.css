@@ -489,6 +489,15 @@ html[data-hara-home-theme="light"] .hara-outcome-card:hover {
   .hara-outcome-grid { grid-template-columns: 1fr 1fr; }
   .hara-outcome-card--primary { grid-column: span 2; }
   .hara-docs-grid .hara-outcome-card--primary { grid-column: auto; }
+  .hara-outcome-card {
+    min-height: 0;
+    padding: 22px;
+  }
+  .hara-outcome-card h2 {
+    margin: 34px 0 10px;
+    padding: 0;
+  }
+  .hara-outcome-card small { margin-top: 18px; }
   .hara-section { grid-template-columns: 1fr; }
   .hara-section__head { max-width: 760px; }
 }

@@ -31,16 +31,16 @@ hide:
 
     <a class="hara-outcome-card" href="reference/">
       <span class="hara-card-kicker">Look up · Reference</span>
-      <h2>Find a reference</h2>
-      <p>Look up builtins, runtime libraries, namespaces, REPL commands, protocols, and APIs.</p>
-      <small>Open the reference map <b>→</b></small>
+      <h2>Find the Clojure API</h2>
+      <p>Look up builtins, runtime libraries, namespaces, and Clojure compatibility details.</p>
+      <small>Open the API reference <b>→</b></small>
     </a>
 
-    <a class="hara-outcome-card" href="development/">
-      <span class="hara-card-kicker">Deep dive · Platform</span>
-      <h2>Understand the platform</h2>
-      <p>Explore language contracts, runtimes, extensions, implementation notes, and Hara development.</p>
-      <small>Explore the platform <b>→</b></small>
+    <a class="hara-outcome-card" href="start/clojure/">
+      <span class="hara-card-kicker">Explore · Guides</span>
+      <h2>Find a guide</h2>
+      <p>Explore Hara from Clojure, web, data science, and game development perspectives.</p>
+      <small>Explore the guides <b>→</b></small>
     </a>
   </div>
 </section>
