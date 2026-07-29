@@ -10,9 +10,22 @@
   };
   setTheme(stored === "light" || stored === "dark" ? stored : preferred());
 
+  const currentSection = () => {
+    const path = window.location.pathname.replace(/^\/+|\/+$/g, "");
+    if (/^(reference|builtins)/.test(path)) return "reference";
+    if (/^(start\/(clojure|web-developers|data-scientists|game-developers|react)|development|javadocs|foundation-porting|web-specific|walkthroughs|projects|create\/(chrome-project|vscode-project))/.test(path)) return "guides";
+    if (/^(learn-programming|user-guide|namespaces)/.test(path)) return "learn";
+    if (/^(start|create|getting-started)/.test(path)) return "start";
+    return null;
+  };
+
   window.addEventListener("DOMContentLoaded", () => {
     const button = document.querySelector("[data-hara-theme-toggle]");
     const menu = document.querySelector("[data-hara-home-menu]");
+    const section = currentSection();
+    document.querySelectorAll("[data-hara-section]").forEach((link) => {
+      link.classList.toggle("is-section-active", link.dataset.haraSection === section);
+    });
     const render = () => {
       const theme = root.dataset.haraTheme;
       button?.setAttribute("aria-label", `Switch to ${theme === "dark" ? "light" : "dark"} theme`);

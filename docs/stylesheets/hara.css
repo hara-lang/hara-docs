@@ -282,6 +282,19 @@ body {
   color: var(--hara-cyan);
 }
 
+/* The selected top-level section is marked, rather than recoloured: cyan in
+   dark mode and the Hara red equivalent in light mode. */
+.hara-docs-nav a.is-section-active {
+  color: var(--hara-muted);
+}
+
+.hara-docs-nav a.is-section-active::before {
+  content: '|';
+  display: inline-block;
+  margin-right: .5em;
+  color: var(--hara-cyan);
+}
+
 .hara-theme-toggle {
   display: inline-grid;
   place-items: center;
