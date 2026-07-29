@@ -12,9 +12,18 @@ async function markdownFiles(root) {
 }
 
 const failures = [];
+const deprecatedBranding = [
+  ["A Modern Lisp", /A Modern Lisp/i],
+  ["small Lisp", /\bsmall Lisp\b/i],
+  ["Lisp kernel", /\bLisp kernel\b/i],
+  ["Hara Lisp — Intro", /Hara Lisp\s+[—-]\s+Intro/i]
+];
 for (const path of await markdownFiles(new URL("../docs", import.meta.url).pathname)) {
   const source = await readFile(path, "utf8");
   if (source.includes("docs/scenes/tron.hal")) failures.push(`${path}: stale Tron scene path`);
+  for (const [label, pattern] of deprecatedBranding) {
+    if (pattern.test(source)) failures.push(`${path}: deprecated product branding: ${label}`);
+  }
   const lines = source.split("\n");
   lines.forEach((line, index) => {
     if (!line.includes("project.hal")) return;
