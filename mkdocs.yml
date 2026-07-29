@@ -66,39 +66,47 @@ hooks:
   - scripts/copy-hara-ui.py
 nav:
   - Start:
-      - Start with Hara: index.md
-      - Install and choose a workspace: getting-started.md
-      - Your first browser game: create/first-game.md
-      - Building Tic Tac Toe:
+      - Overview:
+          - Why Hara?: start/orientation.md
+          - Building Tic Tac Toe: create/first-game.md
           - Part I — Draw the board: create/tictactoe/board.md
           - Part II — Organise the game: create/tictactoe/files.md
           - Part III — State and rules: create/tictactoe/state.md
           - Part IV — Pointer input: create/tictactoe/input.md
           - Part V — Rendering: create/tictactoe/rendering.md
           - Part VI — Make it live: create/tictactoe/live.md
+      - Getting Started:
+          - On the Web: getting-started.md
+          - On Native: reference/rust-runtime.md
+          - On the JVM: reference/jvm-flavor.md
+          - Hara CLI: start/cli.md
       - Concepts:
           - Concepts overview: concepts/index.md
           - Runtime-driven development: concepts/runtime-driven-development.md
           - Live coding: concepts/live-coding.md
           - Unified representation: concepts/unified-representation.md
   - Learn Hara:
-      - Learn to program: learn-programming/index.md
-      - HAL — Intro:
-          - Course map: hal-intro/index.md
-          - 01 — Basic data and immutable collections: hal-intro/01-basic-data.md
-          - 02 — Functions and atoms: hal-intro/02-functions-and-atoms.md
-          - 03 — Iterators and streaming: hal-intro/03-iterators-and-streaming.md
-          - 04 — Coroutines and promises: hal-intro/04-coroutines-and-promises.md
-          - 05 — Array and object: hal-intro/05-array-and-object.md
-          - 06 — Bytes and strings: hal-intro/06-bytes-and-strings.md
-          - 07 — I/O and files: hal-intro/07-io-and-files.md
-      - Language guide: user-guide.md
-      - Namespaces, libraries, and tests: namespaces.md
-      - Namespace project walkthrough: walkthroughs/service-project.md
+      - Introductory:
+          - HAL — Intro:
+              - Course map: hal-intro/index.md
+              - 01 — Basic data and immutable collections: hal-intro/01-basic-data.md
+              - 02 — Functions and atoms: hal-intro/02-functions-and-atoms.md
+              - 03 — Iterators and streaming: hal-intro/03-iterators-and-streaming.md
+              - 04 — Coroutines and promises: hal-intro/04-coroutines-and-promises.md
+              - 05 — Array and object: hal-intro/05-array-and-object.md
+              - 06 — Bytes and strings: hal-intro/06-bytes-and-strings.md
+              - 07 — I/O and files: hal-intro/07-io-and-files.md
+          - Language guide: user-guide.md
+      - Systems and Wasm:
+          - Namespaces, libraries, and tests: namespaces.md
+          - Namespace project walkthrough: walkthroughs/service-project.md
+          - Rust and WASM runtime: reference/rust-runtime.md
       - Web Specific:
           - Browser HTA: web-specific/browser-hta.md
           - Hara kernel: kernel.md
           - Substrate application architecture: start/react.md
+      - The little book of Hara:
+          - Learn to program: learn-programming/index.md
   - Build projects:
       - Projects and visual workspaces: projects/index.md
       - Hara Chrome project: create/chrome-project.md
@@ -111,6 +119,8 @@ nav:
           - Hara for Game Developers: start/game-developers.md
       - Language and runtime:
           - Language contract: reference/l0-language.md
+          - Kernel architecture: reference/runtime/kernel-architecture/index.md
+          - Multi-session kernels: reference/runtime/kernel-architecture/multi-session-kernels.md
           - REPL workflow: reference/repl.md
           - Native runtime flavors: reference/native-flavors.md
           - Rust and WASM runtime: reference/rust-runtime.md
@@ -128,19 +138,4 @@ nav:
           - Builtins: builtins.md
           - Runtime libraries: reference/runtime-libraries.md
           - Namespace catalog: reference/namespaces.md
-      - Runtime:
-          - Kernel Architecture:
-              - Architecture map: reference/runtime/kernel-architecture/index.md
-              - Multi-session kernels with attachable filesystems: reference/runtime/kernel-architecture/multi-session-kernels.md
-          - REPL UX: reference/repl.md
-          - RESP protocol: reference/resp-protocol.md
-          - Native runtime flavors: reference/native-flavors.md
-          - Rust and WASM runtime: reference/rust-runtime.md
-      - Extension system: reference/extensions-contract.md
-      - Development and APIs:
-          - Developer guide: development.md
-          - Development tracing: development-tracing.md
-          - Java and Rust APIs: javadocs.md
-      - Implementation notes:
-          - Xtalk equivalence: reference/xtalk-equivalence.md
           - Clojure core compatibility: reference/clojure-core-compatibility.md

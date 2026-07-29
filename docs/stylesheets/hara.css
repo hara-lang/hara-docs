@@ -454,6 +454,13 @@ html[data-hara-theme="light"] .hara-docs-brand img {
   text-shadow: 0 0 10px rgba(65, 245, 228, .35);
 }
 
+/* Material assigns an accent colour to some reference links with a more
+   specific selector. Keep every selected docs-nav label on the Hara accent. */
+.md-nav .md-nav__link.md-nav__link--active,
+.md-nav .md-nav__link[aria-current="page"] {
+  color: var(--hara-cyan) !important;
+}
+
 .md-nav__link--active::before,
 .md-nav__link[aria-current="page"]::before {
   content: '';
