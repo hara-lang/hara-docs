@@ -1,6 +1,6 @@
-# 02 — Small, Fast, Web Native
+# On the Web
 
-In [Chapter 01](start/orientation.md), you opened a Hara kernel in the browser,
+In [Why Hara?](start/orientation.md), you opened a Hara kernel in the browser,
 evaluated a form, and saved the result as source.
 
 You can continue using Hara entirely in the browser. This chapter shows how the
@@ -8,9 +8,9 @@ same project can also be opened through the CLI, VS Code, and Chrome DevTools.
 Each route is optional: choose the tools that are useful to you, or continue
 directly to the next chapter.
 
-## The project from Chapter 01
+## The project from Why Hara?
 
-At the end of Chapter 01, your source looked like this:
+At the end of Why Hara?, your source looked like this:
 
 ```hara
 (ns getting-started.main)
@@ -71,7 +71,7 @@ getting-started/
     main.hal
 ```
 
-Copy the source from Chapter 01 into `src/main.hal`, then run it:
+Copy the source from Why Hara? into `src/main.hal`, then run it:
 
 ```shell
 hara run src/main.hal

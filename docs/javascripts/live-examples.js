@@ -393,6 +393,7 @@
   const evaluate = (cell, form = null) => {
     const target = form ?? { source: cell.editor.value, start: 0, end: cell.editor.value.length };
     if (!target?.source.trim()) return Promise.resolve();
+    if (cell.evaluateForm) return cell.evaluateForm(target);
 
     cell.run.disabled = true;
     cell.output.hidden = false;
@@ -492,6 +493,7 @@
     original.replaceWith(cell);
 
     const record = {
+      cell,
       editor,
       highlight: syntax,
       lines,
@@ -506,6 +508,16 @@
     };
     cells.push(record);
     syncEditor(record);
+
+    // A tutorial can opt into a stage-local canvas runtime by wrapping its
+    // fence in .hara-canvas-stage.  The separate adapter installs runFile;
+    // normal documentation examples retain the shared page kernel.
+    const stage = cell.closest(".hara-canvas-stage");
+    if (stage) {
+      document.dispatchEvent(new CustomEvent("hara:live-cell", {
+        detail: { stage, record, source: editor.value }
+      }));
+    }
 
     editor.addEventListener("input", () => {
       output.hidden = true;
@@ -548,7 +560,7 @@
       }
       if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
         event.preventDefault();
-        evaluate(record);
+        (record.runFile ?? (() => evaluate(record)))();
         return;
       }
       if (event.ctrlKey && !event.metaKey && !event.altKey &&
@@ -576,7 +588,7 @@
         else structuralAlign(editor);
       }
     });
-    run.addEventListener("click", () => evaluate(record));
+    run.addEventListener("click", () => (record.runFile ?? (() => evaluate(record)))());
     files.addEventListener("click", openFsDrawer);
   }
 })();

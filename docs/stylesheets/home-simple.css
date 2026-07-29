@@ -244,7 +244,6 @@ html[data-hara-home-theme="light"] .hara-home-brand img {
 
 .hara-docs-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  counter-reset: manual-plate;
 }
 
 .hara-docs-grid .hara-outcome-card--primary {
@@ -253,7 +252,6 @@ html[data-hara-home-theme="light"] .hara-home-brand img {
 
 .hara-outcome-card {
   position: relative;
-  counter-increment: manual-plate;
   min-height: 300px;
   display: flex;
   flex-direction: column;
@@ -265,18 +263,6 @@ html[data-hara-home-theme="light"] .hara-home-brand img {
   text-decoration: none !important;
   box-shadow: inset 0 0 0 1px rgba(65, 245, 228, .04), var(--hara-glow-cyan);
   transition: background .12s ease, color .12s ease;
-}
-
-.hara-outcome-card::before {
-  content: "PLATE 0" counter(manual-plate);
-  position: absolute;
-  top: 24px;
-  right: 26px;
-  color: var(--hara-faint);
-  font-family: var(--hara-mono, ui-monospace, monospace);
-  font-size: .56rem;
-  font-weight: 700;
-  letter-spacing: .14em;
 }
 
 .hara-outcome-card--primary {

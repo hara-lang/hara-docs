@@ -1,4 +1,4 @@
-# 03 — Hara for Clojurists
+# Hara for Clojurists
 
 Clojure developers already understand one of Hara’s central ideas: a program
 does not have to stop before you can work on it. You can inspect a running
@@ -232,5 +232,5 @@ operation, and write to Hara’s portable kernel contract.
   <span>Source explains intent</span><b>→</b><span>Runtime shows reality</span><b>→</b><span>Inspection connects the two</span>
 </div>
 
-Choose a host in [Chapter 02](../getting-started.md), or continue with the
+Choose a host in [On the Web](../getting-started.md), or continue with the
 [browser playground](../learn-programming/index.md).

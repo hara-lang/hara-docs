@@ -1,4 +1,4 @@
-# 04 — Hara for Web Devs
+# Hara for Web Devs
 
 ## Use Hara when your web application is hard to inspect
 

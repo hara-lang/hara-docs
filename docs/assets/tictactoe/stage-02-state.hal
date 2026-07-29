@@ -1,0 +1,27 @@
+(ns+
+  (:require [studio.draw :as draw]))
+
+;; Stage 02 — the drawing now reads a game value, but has no input yet.
+(defn new-game []
+  {:board {:p1 #{:aa} :p2 #{:bb}}
+   :turn :p1
+   :status :active})
+
+(defn board-commands [game]
+  [[:grid 48 "rgba(67,247,231,.12)" 1]
+   [:line 220 170 220 470 "#386779" 2 1]
+   [:line 380 170 380 470 "#386779" 2 1]
+   [:line 60 270 540 270 "#386779" 2 1]
+   [:line 60 370 540 370 "#386779" 2 1]
+   [:text "STATE: :p1 TO MOVE" 60 120 "#dffeff" 16]
+   [:text "×" 118 248 "#ff78b3" 64]
+   [:text "○" 278 348 "#7dfff3" 64]])
+
+(node/start
+  (fn []
+    (loop [game (new-game)]
+      (let [frame (co/await (draw/next-frame "canvas/background"))]
+        (co/await (draw/render "canvas/background"
+          {:type :canvas-2d :background "#03070d"
+           :commands (board-commands game)}))
+        (recur game)))))

@@ -24,12 +24,13 @@ theme:
 extra_css:
   - vendor/hara-ui/tokens.css
   - vendor/hara-ui/components.css
-  - stylesheets/hara.css?v=29
+  - stylesheets/hara.css?v=30
 extra_javascript:
   - javascripts/hara.js
   - javascripts/demo.js
   - javascripts/home-live.js
   - javascripts/live-examples.js
+  - javascripts/live-canvas.js
 markdown_extensions:
   - admonition
   - attr_list
@@ -55,11 +56,21 @@ hooks:
   - scripts/copy-hara-ui.py
 nav:
   - Start:
-      - "01 — Why Hara": start/orientation.md
-      - "02 — Small, Fast, Web Native": getting-started.md
-      - "03 — Hara for Clojurists": start/clojure.md
-      - "04 — Hara for Web Devs": start/web-developers.md
-      - Your first browser game: create/first-game.md
+      - Overview:
+          - Why Hara?: start/orientation.md
+          - Building Tic Tac Toe:
+              - Overview: create/first-game.md
+              - Part I — Draw the board: create/tictactoe/board.md
+              - Part II — Organise the game: create/tictactoe/files.md
+              - Part III — State and rules: create/tictactoe/state.md
+              - Part IV — Pointer input: create/tictactoe/input.md
+              - Part V — Rendering: create/tictactoe/rendering.md
+              - Part VI — Make it live: create/tictactoe/live.md
+      - Getting Started:
+          - On the Web: getting-started.md
+          - On Native: reference/rust-runtime.md
+          - On the JVM: reference/jvm-flavor.md
+          - Hara CLI: start/cli.md
   - Learn Hara:
       - Introductory:
           - Language guide: user-guide.md
@@ -67,7 +78,8 @@ nav:
           - Namespaces, libraries, and tests: namespaces.md
           - Namespace project walkthrough: walkthroughs/service-project.md
           - Rust and WASM runtime: reference/rust-runtime.md
-      - HTA and Substrate:
+      - Web Specific:
+          - Browser HTA: web-specific/browser-hta.md
           - Hara kernel: kernel.md
           - Substrate application architecture: start/react.md
       - The little book of Hara:
@@ -76,26 +88,29 @@ nav:
       - Projects and visual workspaces: projects/index.md
       - Hara Chrome project: create/chrome-project.md
       - Hara VS Code project: create/vscode-project.md
+  - Guides:
+      - For developers:
+          - Hara for Clojurists: start/clojure.md
+          - Hara for Web Devs: start/web-developers.md
+          - Hara for Data Scientists: start/data-scientists.md
+          - Hara for Game Developers: start/game-developers.md
+      - Language and runtime:
+          - Language contract: reference/l0-language.md
+          - REPL workflow: reference/repl.md
+          - Native runtime flavors: reference/native-flavors.md
+          - Rust and WASM runtime: reference/rust-runtime.md
+          - RESP protocol: reference/resp-protocol.md
+      - Building and extending:
+          - Developer guide: development.md
+          - Development tracing: development-tracing.md
+          - Extension system: reference/extensions-contract.md
+          - Java and Rust APIs: javadocs.md
+          - Xtalk equivalence: reference/xtalk-equivalence.md
+          - Runtime benchmarks: reference/runtime-benchmarks.md
+          - Foundation porting: foundation-porting.md
   - Reference:
-      - Reference map: reference/index.md
-      - Language:
-          - L0 language contract: reference/l0-language.md
+      - Clojure API:
           - Builtins: builtins.md
           - Runtime libraries: reference/runtime-libraries.md
           - Namespace catalog: reference/namespaces.md
-      - Runtime and tools:
-          - REPL UX: reference/repl.md
-          - Substrate application architecture: start/react.md
-          - RESP protocol: reference/resp-protocol.md
-          - Native runtime flavors: reference/native-flavors.md
-          - Rust and WASM runtime: reference/rust-runtime.md
-      - Extension system: reference/extensions-contract.md
-      - Development and APIs:
-          - Developer guide: development.md
-          - Development tracing: development-tracing.md
-          - Java and Rust APIs: javadocs.md
-      - Implementation notes:
-          - Xtalk equivalence: reference/xtalk-equivalence.md
           - Clojure core compatibility: reference/clojure-core-compatibility.md
-          - Runtime benchmarks: reference/runtime-benchmarks.md
-          - Foundation porting: foundation-porting.md

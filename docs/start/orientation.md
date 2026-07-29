@@ -1,8 +1,8 @@
 ---
-title: "01 — Why Hara"
+title: "Why Hara?"
 ---
 
-# 01 — Why Hara
+# Why Hara?
 
 Start with the system, not the theory. This page is connected to a
 browser-hosted Hara kernel. Put the cursor in the form below and press

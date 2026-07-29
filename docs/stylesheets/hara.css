@@ -498,6 +498,13 @@ html[data-hara-theme="light"] .hara-docs-brand img {
     background: var(--hara-abyss);
   }
 
+  /* The drawer lives inside .md-main.  The desktop grid treatment gives
+     that element z-index: 1, which would otherwise trap the drawer below
+     Material's root-level overlay regardless of the drawer's own z-index. */
+  .md-main {
+    z-index: auto;
+  }
+
   .md-sidebar--primary {
     z-index: 100 !important;
     border-right: 1px solid var(--hara-line-strong);
@@ -707,6 +714,14 @@ html[data-hara-theme="light"] .md-nav a.md-nav__link--active,
 html[data-hara-theme="light"] .md-nav a.md-nav__link[aria-current="page"] {
   border-left: 0;
   text-shadow: 0 0 10px rgba(213, 31, 92, .18);
+}
+
+/* Keep navigation emphasis in the light manual on the Hara red: the parent
+   title/back control and nested-page disclosure are interactive wayfinding,
+   not body copy. */
+html[data-hara-theme="light"] .md-sidebar--primary .md-nav--primary .md-nav__title,
+html[data-hara-theme="light"] .md-sidebar--primary .md-nav__item--nested > .md-nav__link .md-nav__icon {
+  color: var(--hara-cyan) !important;
 }
 
 /* syntax accents inside highlighted blocks */
@@ -3852,6 +3867,52 @@ html[data-hara-theme="light"] .md-typeset .hara-substrate-hub__node,
 html[data-hara-theme="light"] .md-typeset .hara-substrate-hub__adapter,
 html[data-hara-theme="light"] .md-typeset .hara-substrate-spaces__node { background: rgba(213, 31, 92, .07); }
 
+/* Docs-native canvas tutorial: same manual surface as the editor, without
+   importing the Studio chrome or any iframe. */
+.md-typeset .hara-canvas-stage { margin: 1.35rem 0 2.35rem; }
+.md-typeset .hara-tictactoe-sketches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 1.5rem 0 2.25rem; border: 1px solid var(--hara-line); background: var(--hara-line); box-shadow: var(--hara-glow-cyan); }
+.md-typeset .hara-tictactoe-sketches section { min-height: 15rem; padding: 1rem; background: var(--hara-raised); }
+.md-typeset .hara-tictactoe-sketches small { display: block; margin-bottom: .85rem; color: var(--hara-cyan-bright); font: 700 .68rem var(--hara-mono); letter-spacing: .1em; }
+.md-typeset .hara-tictactoe-sketches p { margin: .9rem 0 0; color: var(--hara-text-muted); font-size: .82rem; }
+.md-typeset .hara-tictactoe-board { display: grid; grid-template-columns: repeat(3, 2.7rem); grid-template-rows: repeat(3, 2.7rem); width: max-content; border: 1px solid var(--hara-cyan); }
+.md-typeset .hara-tictactoe-board i { display: grid; place-items: center; min-width: 0; color: var(--hara-pink); border-right: 1px solid var(--hara-line); border-bottom: 1px solid var(--hara-line); font: 1.6rem var(--hara-mono); font-style: normal; }
+.md-typeset .hara-tictactoe-board i:nth-child(3n) { border-right: 0; }
+.md-typeset .hara-tictactoe-board i:nth-child(n+7) { border-bottom: 0; }
+.md-typeset .hara-tictactoe-board i:nth-child(3n) { color: var(--hara-cyan-bright); }
+.md-typeset .hara-tictactoe-flow { display: grid; gap: .32rem; align-content: center; min-height: 8.2rem; }
+.md-typeset .hara-tictactoe-flow b { padding: .35rem .5rem; color: var(--hara-text); border: 1px solid var(--hara-line); font: 700 .72rem var(--hara-mono); text-align: center; }
+.md-typeset .hara-tictactoe-flow em { color: var(--hara-cyan); font: 700 1rem var(--hara-mono); font-style: normal; text-align: center; }
+.md-typeset .hara-tutorial-next { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 1.5rem 0 2.25rem; border: 1px solid var(--hara-line); background: var(--hara-line); }
+.md-typeset .hara-tutorial-next a { display: grid; gap: .45rem; min-height: 10rem; padding: 1rem; color: var(--hara-text); background: var(--hara-raised); text-decoration: none; }
+.md-typeset .hara-tutorial-next a:hover { background: var(--hara-panel); }
+.md-typeset .hara-tutorial-next b { color: var(--hara-pink); font: 700 .66rem var(--hara-mono); letter-spacing: .12em; }
+.md-typeset .hara-tutorial-next strong { color: var(--hara-text); font: 700 .95rem var(--hara-sans); }
+.md-typeset .hara-tutorial-next small { color: var(--hara-text-muted); font: .76rem/1.45 var(--hara-sans); }
+html[data-hara-theme="light"] .md-typeset .hara-tictactoe-sketches { box-shadow: 0 .5rem 1.6rem rgba(67,17,37,.14); }
+html[data-hara-theme="light"] .md-typeset .hara-tictactoe-sketches small,
+html[data-hara-theme="light"] .md-typeset .hara-tictactoe-flow em { color: #ad174a; }
+.md-typeset .hara-live-canvas-panel { overflow: hidden; border: 1px solid var(--hara-line); border-top: 0; background: #03070d; box-shadow: var(--hara-glow-cyan); }
+.md-typeset .hara-live-canvas-meta { display: flex; justify-content: space-between; gap: 1rem; padding: .5rem .8rem; color: var(--hara-cyan-bright); border-bottom: 1px solid rgba(65,245,228,.28); font: 700 .64rem var(--hara-mono); letter-spacing: .09em; }
+.md-typeset .hara-live-canvas-meta output { margin-left: auto; color: var(--hara-text-muted); font: inherit; text-align: right; }
+.md-typeset .hara-live-canvas-meta output[data-state="ready"] { color: var(--hara-cyan-bright); }
+.md-typeset .hara-live-canvas-meta output[data-state="error"] { color: var(--hara-pink); }
+.md-typeset .hara-live-canvas { display: block; width: 100%; min-height: 18rem; max-height: 34rem; aspect-ratio: 16 / 9; touch-action: none; background: #03070d; cursor: crosshair; }
+.md-typeset .hara-board-annotations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: -1.25rem 0 2.4rem; border: 1px solid var(--hara-line); background: var(--hara-line); }
+.md-typeset .hara-board-annotations section { padding: .85rem 1rem; background: var(--hara-raised); }
+.md-typeset .hara-board-annotations b { color: var(--hara-cyan-bright); font: 700 .68rem var(--hara-mono); letter-spacing: .1em; }
+.md-typeset .hara-board-annotations p,
+.md-typeset .hara-board-annotations ol { margin: .6rem 0 0; color: var(--hara-text-muted); font-size: .8rem; }
+.md-typeset .hara-board-annotations ol { padding-left: 1.2rem; }
+.md-typeset .hara-board-annotations code { font-size: .72rem; }
+.md-typeset .hara-canvas-command-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 1.4rem 0 2.1rem; border: 1px solid var(--hara-line); background: var(--hara-line); }
+.md-typeset .hara-canvas-command-cards section { min-height: 8.4rem; padding: .8rem; background: var(--hara-raised); }
+.md-typeset .hara-canvas-command-cards b { display: block; margin-bottom: .48rem; color: var(--hara-cyan-bright); font: 700 .76rem var(--hara-mono); }
+.md-typeset .hara-canvas-command-cards code { display: block; overflow-x: auto; padding: .3rem; color: var(--hara-text); background: var(--hara-panel); font: .62rem/1.35 var(--hara-mono); white-space: nowrap; }
+.md-typeset .hara-canvas-command-cards p { margin: .58rem 0 0; color: var(--hara-text-muted); font-size: .75rem; }
+html[data-hara-theme="light"] .md-typeset .hara-live-canvas-panel { border-color: rgba(213,31,92,.52); box-shadow: 0 .5rem 1.6rem rgba(67,17,37,.14); }
+html[data-hara-theme="light"] .md-typeset .hara-live-canvas-meta { color: #ad174a; border-bottom-color: rgba(213,31,92,.3); }
+html[data-hara-theme="light"] .md-typeset .hara-live-canvas-meta output[data-state="ready"] { color: #ad174a; }
+
 @media (max-width: 720px) {
   .md-typeset .hara-react-escalation,
   .md-typeset .hara-web-native-path,
@@ -3861,6 +3922,11 @@ html[data-hara-theme="light"] .md-typeset .hara-substrate-spaces__node { backgro
   .md-typeset .hara-substrate-spaces,
   .md-typeset .hara-stream-contrast,
   .md-typeset .hara-react-ordering { grid-template-columns: 1fr; }
+
+  .md-typeset .hara-tictactoe-sketches { grid-template-columns: 1fr; }
+  .md-typeset .hara-tutorial-next { grid-template-columns: 1fr; }
+  .md-typeset .hara-board-annotations,
+  .md-typeset .hara-canvas-command-cards { grid-template-columns: 1fr; }
 
   .md-typeset .hara-react-escalation > b,
   .md-typeset .hara-web-native-path > b,

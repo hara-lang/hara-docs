@@ -172,5 +172,5 @@ point is that the interface should not have to invent the entire application
 layer as it renders it.
 
 Use the [browser playground](../learn-programming/index.md) for a contained
-live environment, or [Chapter 02](../getting-started.md) to choose a host for
+live environment, or [On the Web](../getting-started.md) to choose a host for
 a project.
