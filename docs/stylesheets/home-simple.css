@@ -117,6 +117,13 @@ html[data-hara-home-theme="light"] .hara-home-brand img {
   text-transform: uppercase;
 }
 .hara-home-nav a:hover { color: var(--home-cyan); }
+.hara-home-nav a.is-section-active { color: var(--home-muted); }
+.hara-home-nav a.is-section-active::before {
+  content: '|';
+  display: inline-block;
+  margin-right: .5em;
+  color: var(--home-cyan);
+}
 
 .hara-home-theme {
   padding: .32rem .52rem;

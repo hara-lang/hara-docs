@@ -22,6 +22,7 @@
     structuralAlign
   } = await import(asset("www-editor.js").href);
   let kernelPromise = null;
+  const isolatedKernels = new Set();
   let evaluationQueue = Promise.resolve();
   const cells = [];
 
@@ -131,18 +132,24 @@
     }
   };
 
+  const createKernel = () =>
+    import(asset("kernel.js?v=20260728-completion").href)
+      .then(({ createDocsKernel }) => createDocsKernel({
+        wasmUrl: asset("../rust/hara.wasm?v=20260728-completion-2"),
+        workerUrl: asset("../rust/hta-worker.js"),
+        resources: {
+          "studio.store": asset("../rust/studio/hal/store.hal"),
+          "studio.fs": asset("../rust/studio/hal/fs.hal"),
+          "studio.node": asset("../rust/studio/hal/node.hal"),
+          "studio.draw": asset("../rust/studio/hal/draw.hal"),
+          "std.substrate.frame": asset("../rust/studio/hal/std/substrate/frame.hal")
+        }
+      }));
+
   const getKernel = () => {
     if (!kernelPromise) {
       setKernelStatus("kernel loading", "loading");
-      kernelPromise = import(asset("kernel.js?v=20260728-completion").href)
-        .then(({ createDocsKernel }) => createDocsKernel({
-          wasmUrl: asset("../rust/hara.wasm?v=20260728-completion-2"),
-          workerUrl: asset("../rust/hta-worker.js"),
-          resources: {
-            "studio.store": asset("../rust/studio/hal/store.hal"),
-            "studio.fs": asset("../rust/studio/hal/fs.hal")
-          }
-        }))
+      kernelPromise = createKernel()
         .then((kernel) => {
           setKernelStatus("kernel ready", "ready");
           return kernel;
@@ -154,6 +161,26 @@
         });
     }
     return kernelPromise;
+  };
+
+  const sessionFor = (record) => {
+    record.sessionPromise ??= (async () => {
+      const isolated = record.kernelMode === "isolated";
+      const kernel = isolated ? await createKernel() : await getKernel();
+      if (isolated) isolatedKernels.add(kernel);
+      const filesystem = record.filesystemKey
+        ? `indexeddb:${record.filesystemKey}`
+        : `memory:${location.pathname}:${record.sessionId}`;
+      const session = await kernel.createSession(record.sessionId, { filesystem });
+      record.kernel = kernel;
+      record.session = session;
+      record.status.textContent = isolated
+        ? `isolated kernel · session ${record.sessionId}`
+        : `page kernel · session ${record.sessionId}`;
+      record.status.dataset.state = "ready";
+      return session;
+    })();
+    return record.sessionPromise;
   };
 
   const syncEditor = (cell, targetRange = null) => {
@@ -217,8 +244,8 @@
       return;
     }
     try {
-      const kernel = await getKernel();
-      const candidates = (await kernel.complete(token.value))
+      const session = await sessionFor(cell);
+      const candidates = (await session.complete(token.value))
         .filter((candidate) => candidate !== token.value)
         .slice(0, 8);
       if (request !== cell.completionRequest) return;
@@ -264,7 +291,7 @@
   fsDrawer.hidden = true;
   fsDrawer.innerHTML = `
     <header>
-      <div><span>FILESYSTEM</span><small>guide space · browser persistent</small></div>
+      <div><span>FILESYSTEM</span><small data-fs-scope>session memory · transient</small></div>
       <button type="button" data-fs-close aria-label="Close filesystem">×</button>
     </header>
     <div class="hara-fs-body">
@@ -291,7 +318,9 @@
   const fsPath = fsDrawer.querySelector("[data-fs-path]");
   const fsContent = fsDrawer.querySelector("[data-fs-content]");
   const fsStatus = fsDrawer.querySelector("[data-fs-status]");
+  const fsScope = fsDrawer.querySelector("[data-fs-scope]");
   let selectedFile = null;
+  let fileSession = null;
 
   const setFsStatus = (message, error = false) => {
     fsStatus.textContent = message;
@@ -301,8 +330,7 @@
   const openFile = async (path) => {
     setFsStatus("LOADING");
     try {
-      const kernel = await getKernel();
-      const value = await kernel.readFile(path);
+      const value = await fileSession.readFile(path);
       selectedFile = path;
       fsPath.value = path;
       fsContent.value = value ?? "";
@@ -318,8 +346,7 @@
   const refreshFiles = async () => {
     setFsStatus("REFRESHING");
     try {
-      const kernel = await getKernel();
-      const files = await kernel.listFiles();
+      const files = await fileSession.listFiles();
       fsList.replaceChildren(...files.map((path) => {
         const item = document.createElement("li");
         item.dataset.path = path;
@@ -338,7 +365,11 @@
     }
   };
 
-  const openFsDrawer = async () => {
+  const openFsDrawer = async (record) => {
+    fileSession = await sessionFor(record);
+    fsScope.textContent = record.filesystemKey
+      ? `${record.filesystemKey} · browser persistent`
+      : `${record.sessionId} · session memory`;
     fsDrawer.hidden = false;
     document.body.classList.add("hara-fs-open");
     await refreshFiles();
@@ -365,8 +396,7 @@
     }
     setFsStatus("SAVING");
     try {
-      const kernel = await getKernel();
-      await kernel.writeFile(path, fsContent.value);
+      await fileSession.writeFile(path, fsContent.value);
       selectedFile = path;
       await refreshFiles();
       setFsStatus("SAVED");
@@ -379,8 +409,7 @@
     if (!path) return;
     setFsStatus("DELETING");
     try {
-      const kernel = await getKernel();
-      await kernel.deleteFile(path);
+      await fileSession.deleteFile(path);
       selectedFile = null;
       fsContent.value = "";
       await refreshFiles();
@@ -405,8 +434,8 @@
 
     const task = async () => {
       try {
-        const kernel = await getKernel();
-        const result = await kernel.eval(target.source);
+        const session = await sessionFor(cell);
+        const result = await session.eval(target.source);
         cell.output.textContent = `=> ${result.label ?? print(result.value)}`;
         cell.output.classList.remove("is-pending");
       } catch (error) {
@@ -423,7 +452,7 @@
     return evaluationQueue;
   };
 
-  for (const code of examples) {
+  for (const [exampleIndex, code] of examples.entries()) {
     const original = code.closest(".highlight");
     if (!original) continue;
 
@@ -438,7 +467,7 @@
     run.className = "run-button hara-live-run";
     run.type = "button";
     run.textContent = "▶ RUN FILE";
-    run.setAttribute("aria-label", "Run this entire example in the shared Hara kernel");
+    run.setAttribute("aria-label", "Run this entire example in its Hara session");
 
     const files = document.createElement("button");
     files.className = "hara-live-files";
@@ -504,18 +533,21 @@
       completionItems: [],
       completionIndex: 0,
       completionRequest: 0,
-      completionToken: null
+      completionToken: null,
+      sessionId: `example-${exampleIndex + 1}`,
+      kernelMode: cell.closest("[data-hara-kernel]")?.dataset.haraKernel ?? "page",
+      filesystemKey: cell.closest("[data-hara-filesystem]")?.dataset.haraFilesystem ?? null,
+      sessionPromise: null
     };
     cells.push(record);
     syncEditor(record);
 
-    // A tutorial can opt into a stage-local canvas runtime by wrapping its
-    // fence in .hara-canvas-stage.  The separate adapter installs runFile;
-    // normal documentation examples retain the shared page kernel.
+    // Every fence owns a session. Canvas stages add a session-scoped surface;
+    // data-hara-kernel="isolated" moves the same session API to its own worker.
     const stage = cell.closest(".hara-canvas-stage");
     if (stage) {
       document.dispatchEvent(new CustomEvent("hara:live-cell", {
-        detail: { stage, record, source: editor.value }
+        detail: { stage, record, source: editor.value, getSession: () => sessionFor(record) }
       }));
     }
 
@@ -589,6 +621,12 @@
       }
     });
     run.addEventListener("click", () => (record.runFile ?? (() => evaluate(record)))());
-    files.addEventListener("click", openFsDrawer);
+    files.addEventListener("click", () => openFsDrawer(record));
   }
+
+  window.addEventListener("pagehide", () => {
+    for (const record of cells) record.session?.close().catch(() => {});
+    kernelPromise?.then((kernel) => kernel.close()).catch(() => {});
+    for (const kernel of isolatedKernels) kernel.close();
+  }, { once: true });
 })();

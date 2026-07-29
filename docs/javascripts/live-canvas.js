@@ -18,15 +18,10 @@ const localPointer = (event, canvas) => {
 
 const message = (error) => String(error?.message ?? error).replace(/^Error: /, "");
 
-async function stageKernel(asset, canvas, onDiagnostic) {
-  const [{ createBrowserBroker }, { CanvasRuntime }, { createHostServices }, module] = await Promise.all([
+async function stageRuntime(asset, canvas, onDiagnostic) {
+  const [{ compileAnonymousDocument }, { CanvasRuntime }] = await Promise.all([
     import(asset("../rust/studio/broker.js").href),
-    import(asset("../rust/studio/canvas-runtime.js").href),
-    import(asset("../rust/studio/host-services.js").href),
-    fetch(asset("../rust/hara.wasm")).then((response) => {
-      if (!response.ok) throw new Error(`unable to load Hara runtime (${response.status})`);
-      return response.arrayBuffer();
-    })
+    import(asset("../rust/studio/canvas-runtime.js").href)
   ]);
   const runtime = new CanvasRuntime({
     // Pointer listeners are intentionally local to this canvas.  A docs page
@@ -37,22 +32,11 @@ async function stageKernel(asset, canvas, onDiagnostic) {
   });
   const canvasId = "canvas/background";
   runtime.register(canvasId, canvas);
-  const resources = Object.fromEntries(await Promise.all([
-    ["studio.node", "../rust/studio/hal/node.hal"],
-    ["studio.draw", "../rust/studio/hal/draw.hal"],
-    ["std.substrate.frame", "../rust/studio/hal/std/substrate/frame.hal"]
-  ].map(async ([name, path]) => [name, await fetch(asset(path)).then((response) => response.text())])));
-  const broker = createBrowserBroker({
-    workerUrl: asset("../rust/hta-worker.js"),
-    moduleBytes: module,
-    hostCalls: createHostServices({ canvasRuntime: runtime }),
-    resources
-  });
-  return { broker, runtime, canvasId };
+  return { runtime, canvasId, compileAnonymousDocument };
 }
 
 document.addEventListener("hara:live-cell", ({ detail }) => {
-  const { stage, record, source } = detail;
+  const { stage, record, source, getSession } = detail;
   if (!stage.matches("[data-hara-canvas-stage]")) return;
 
   const script = [...document.scripts].find((node) => node.src.endsWith("/javascripts/live-canvas.js"));
@@ -69,7 +53,7 @@ document.addEventListener("hara:live-cell", ({ detail }) => {
   panel.className = "hara-live-canvas-panel";
   const meta = document.createElement("div");
   meta.className = "hara-live-canvas-meta";
-  meta.innerHTML = "<span>CANVAS · STAGE-LOCAL KERNEL</span><output aria-live=\"polite\">loading</output>";
+  meta.innerHTML = "<span>PAGE KERNEL · PRIVATE SESSION · MEMORY FS</span><output aria-live=\"polite\">loading</output>";
   panel.append(meta, canvas);
   record.cell.after(panel);
 
@@ -93,7 +77,8 @@ document.addEventListener("hara:live-cell", ({ detail }) => {
     if (closed) return;
     closed = true;
     service?.runtime.close();
-    active && service?.broker.releaseDocument("ROOT", "tictactoe");
+    active?.unregisterCanvas?.();
+    active?.session?.close().catch(() => {});
   };
   record.evaluateForm = async (target) => {
     // `ns+` is document syntax, not an isolated expression.  Evaluating it
@@ -105,7 +90,7 @@ document.addEventListener("hara:live-cell", ({ detail }) => {
     record.output.textContent = "=> evaluating…";
     try {
       if (!active) throw new Error("run this stage before evaluating a form");
-      const result = await service.broker.evalForm("ROOT", "tictactoe", target.source);
+      const result = await active.session.evalRaw(target.source);
       record.output.textContent = `=> ${String(result)}`;
     } catch (error) {
       record.output.classList.add("is-error");
@@ -126,27 +111,54 @@ document.addEventListener("hara:live-cell", ({ detail }) => {
     if (closed) return;
     record.run.disabled = true;
     const generation = ++sequence;
+    let candidateSession = null;
+    let candidateCanvas = null;
+    let candidateNode = null;
     setStatus("loading", "loading");
     try {
-      service ??= await stageKernel(asset, canvas, (error) => setStatus(message(error), "error"));
+      const baseSession = await getSession();
+      service ??= await stageRuntime(asset, canvas, (error) => setStatus(message(error), "error"));
       const nodeId = `docs-tictactoe-${generation}`;
+      candidateNode = nodeId;
+      const documentSession = candidateSession = await record.kernel.createSession(
+        `${record.sessionId}-document-${generation}`,
+        { filesystem: baseSession.filesystem }
+      );
+      const unregisterCanvas = candidateCanvas = documentSession.registerCanvas(service.runtime);
       service.runtime.stage(nodeId, service.canvasId);
-      const candidate = await service.broker.prepareDocument("ROOT", "tictactoe", record.editor.value || await program(), { nodeId });
+      const candidate = service.compileAnonymousDocument(
+        record.editor.value || await program(),
+        { documentId: `${record.sessionId}/document`, nodeId }
+      );
+      const taskId = await documentSession.evalRaw(candidate.source);
       const rendered = service.runtime.waitForFirstRender(nodeId, service.canvasId, 5000);
       // A node/start task is intentionally infinite. Start it without waiting
       // for its completion; first render is the activation handshake.
-      service.broker.evalPreparedDocument(candidate, `(studio.node/run-task ${JSON.stringify(candidate.value)})`)
+      documentSession.evalRaw(`(studio.node/run-task ${JSON.stringify(taskId)})`)
         .catch((error) => setStatus(message(error), "error"));
       await rendered;
       if (generation !== sequence) {
-        service.broker.discardDocument(candidate);
+        unregisterCanvas();
+        await documentSession.close();
         return;
       }
       service.runtime.commit(nodeId, service.canvasId);
-      service.broker.commitDocument(candidate);
-      active = candidate;
+      const previous = active;
+      active = { session: documentSession, nodeId, unregisterCanvas };
+      candidateSession = null;
+      candidateCanvas = null;
+      candidateNode = null;
+      previous?.unregisterCanvas?.();
+      previous?.session?.close().catch(() => {});
+      const kernelLabel = record.kernelMode === "isolated" ? "ISOLATED KERNEL" : "PAGE KERNEL";
+      const filesystemLabel = record.filesystemKey ? `PERSISTENT FS ${record.filesystemKey}` : "MEMORY FS";
+      meta.querySelector("span").textContent =
+        `${kernelLabel} · SESSION ${record.sessionId} · ${filesystemLabel}`;
       setStatus("live · first frame rendered", "ready");
     } catch (error) {
+      if (candidateNode) service?.runtime.discard(candidateNode, service.canvasId);
+      candidateCanvas?.();
+      candidateSession?.close().catch(() => {});
       setStatus(message(error), "error");
     } finally {
       record.run.disabled = false;
