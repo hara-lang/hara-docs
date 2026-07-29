@@ -1,92 +1,51 @@
-# Install Hara and choose a workspace
+# Getting Started
 
-The quickest path is to install the CLI, evaluate one form, and then choose the
-workspace that fits what you want to make.
+Hara can be entered through several hosts and work surfaces. They use the same
+`.hal` source language and the same live evaluate, inspect, change, and keep
+workflow, but each surface provides a different set of tools and host
+capabilities.
 
-## Install the Hara CLI
+Choose the path that matches where you want to work:
 
-Linux (x86_64) and macOS (arm64, x86_64):
+| Path | Start here when you want to |
+| --- | --- |
+| [With the CLI](getting-started/cli.md) | install Hara locally, evaluate forms, run files, and use the REPL |
+| [With the JVM](getting-started/jvm.md) | use the Truffle runtime, Java classes, Maven, or JVM contributor tools |
+| [With the Web](getting-started/web.md) | build a browser project, use Hara Chrome, or embed the WASM kernel |
+| [With Playground](getting-started/playground.md) | try Hara immediately with no local installation |
+| [With Emacs](getting-started/emacs.md) | edit `.hal` files and evaluate regions or files from Emacs |
+| [With VS Code](getting-started/vscode.md) | connect a source workspace to a running named Hara session |
+| [With Greenways OS](getting-started/greenways-os.md) | use Hara as a live kernel inside an integrated visual and AI workspace |
 
-```shell
-curl -fsSL https://www.hara-lang.org/install.sh | sh -- --rust --truffle
-```
+## One project, several surfaces
 
-This installs `hara` and the native-image `hara-truffle` to `~/.local/bin`; neither needs a
-JVM at runtime. GitHub Releases is the publishing authority for the downloaded packages and
-checksums. Install only one runtime with `--rust` or `--truffle`.
-Override the location with `HARA_INSTALL_DIR`, or pin a release with `HARA_VERSION=v0.1.0`.
-
-## Evaluate a form
-
-```shell
-hara eval '(let [x 19] (+ x 23))'
-```
-
-Expected result:
+A normal project keeps its source and workspace description together:
 
 ```text
-42
+my-project/
+  project.edn
+  workspace.edn
+  src/
+    app.hal
 ```
 
-## Start the REPL
+`project.edn` describes project roots and requested capabilities.
+`workspace.edn` describes files, areas, nodes, controllers, visualisers, and
+connections. Executable source uses `.hal`.
 
-```shell
-hara
+The live session is a feedback environment, not the only copy of the work. Keep
+successful definitions in source so the project can be reopened from another
+surface or loaded into a fresh session.
 
-# ROOT REPL without a RESP listener
-hara --offline
-```
+## Choose by outcome
 
-The REPL opens with large alien-abduction Hara art, a clear-to-blue-to-black gradient, the
-`Journey Within` tagline, and a spaced command menu.
-It supports multiline forms, persistent history, cursor-level slash and symbol completion, inline documentation,
-and RESP listener control through `/resp`. The left prompt shows only the current namespace; the
-header identifies session `ROOT`, and the right prompt shows live listener status. See [`User guide`](user-guide.md) and [`REPL specification`](reference/repl.md).
+Use Playground for the shortest first experience. Use the CLI when you need
+local files, scripts, tests, or a runtime for an editor. Use the Web path when
+the program lives in a browser. Use the JVM path for Java interop and Truffle
+work. Use Emacs or VS Code when the source tree should be your main surface.
+Use Greenways OS when the project should open as a connected workspace of
+state, controllers, visualisers, host services, and AI collaborators.
 
-## Run a file or stdin
-
-```shell
-hara run lib/examples/hello.hal
-cat lib/examples/hello.hal | hara stdin
-```
-
-## Choose where to work
-
-Every surface uses the same `.hal` source and live evaluate–inspect–keep rhythm.
-Choose based on the thing you are making:
-
-| Workspace | Best for | Start here |
-| --- | --- | --- |
-| Browser Playground | Trying Hara immediately and making visual browser projects | [Open Playground](https://playground.hara-lang.org/) |
-| Hara Chrome | Programming a page from Chrome DevTools and using Chrome APIs | [Create a Chrome project](create/chrome-project.md) |
-| Hara VS Code | Working from a local source tree with named runtime sessions | [Create a VS Code project](create/vscode-project.md) |
-| CLI and REPL | Running files, automating tests, and integrating Hara with other tools | Continue below |
-
-Projects remain portable between these surfaces. Keep `project.edn`,
-`workspace.edn`, and source together; the live session is feedback, not the
-only copy of the work. Read [Projects and visual workspaces](projects/index.md)
-for the shared project model.
-
-## Build the Truffle runtime from source
-
-Contributors need JDK 21 and Maven:
-
-```shell
-java -version
-mvn -version
-mvn -f java/pom.xml -Ptruffle package
-```
-
-This produces `java/target/hara-truffle.jar`. From the repository root, use
-the checked-in `./hara` launcher for the examples above.
-
-## Run the JVM tests
-
-```shell
-mvn -q -f java/pom.xml test
-mvn -q -f java/pom.xml -Ptruffle -Dtest=hara.truffle.HaraL0ConformanceTest test
-```
-
-For contributor workflows, test slices, native-image builds, and troubleshooting, read the
-[developer guide](development.md). To build a multi-file project, continue with
-[Namespaces, libraries, and tests](namespaces.md).
+You do not need to choose permanently. A well-structured Hara project can move
+between these surfaces while keeping host-specific operations at explicit
+provider boundaries.
