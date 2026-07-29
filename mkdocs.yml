@@ -24,7 +24,7 @@ theme:
 extra_css:
   - vendor/hara-ui/tokens.css
   - vendor/hara-ui/components.css
-  - stylesheets/hara.css?v=30
+  - stylesheets/hara.css?v=31
 extra_javascript:
   - javascripts/hara.js
   - javascripts/demo.js

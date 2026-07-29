@@ -488,6 +488,13 @@ html[data-hara-theme="light"] .hara-docs-brand img {
    breakpoint. Keep that surface fully opaque: the docs backdrop and article
    must never show through nested navigation levels. */
 @media screen and (max-width: 76.234375em) {
+  /* Keep the page identity visible when a narrow-screen page is restored at
+     a non-zero scroll position. A sticky masthead otherwise overlays the
+     breadcrumb band as it scrolls beneath the header. */
+  .hara-docs-header {
+    position: static;
+  }
+
   .hara-docs-header__inner {
     min-height: 56px;
     gap: 14px;
