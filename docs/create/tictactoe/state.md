@@ -3,7 +3,7 @@
 The grid now has a precise value behind it. The game state is deliberately
 small: played cells, whose turn it is, and whether play is active or done.
 
-<div class="hara-canvas-stage" data-hara-canvas-stage="2" data-hara-canvas-program="../../assets/tictactoe/stage-02-state.hal">
+<div class="hara-canvas-stage" data-hara-canvas-stage="2" data-hara-canvas-program="../../../assets/tictactoe/stage-02-state.hal">
 
 ```hara
 (ns+

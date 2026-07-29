@@ -4,7 +4,7 @@ Rendering takes a game value and a layout and returns ordinary canvas command
 data. Canvas objects do not enter the game rules. That lets you inspect the
 picture before the browser draws it.
 
-<div class="hara-canvas-stage" data-hara-canvas-stage="4" data-hara-canvas-program="../../assets/tictactoe/tictactoe.hal">
+<div class="hara-canvas-stage" data-hara-canvas-stage="4" data-hara-canvas-program="../../../assets/tictactoe/tictactoe.hal">
 
 ```hara
 (defn render-commands [game layout]

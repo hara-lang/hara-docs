@@ -4,7 +4,7 @@
 the command data through the declared canvas capability. The loop carries the
 new immutable game state into the next frame.
 
-<div class="hara-canvas-stage" data-hara-canvas-stage="5" data-hara-canvas-program="../../assets/tictactoe/tictactoe.hal">
+<div class="hara-canvas-stage" data-hara-canvas-stage="5" data-hara-canvas-program="../../../assets/tictactoe/tictactoe.hal">
 
 ```hara
 (let [frame (co/await (draw/next-frame "canvas/background"))
@@ -24,7 +24,7 @@ The finished program has reset, draw detection, a winning line, mouse input,
 and touch input. Play a short game, use reset, then rerun the file to see that
 the old running generation is replaced.
 
-<div class="hara-canvas-stage" data-hara-canvas-stage="6" data-hara-canvas-program="../../assets/tictactoe/tictactoe.hal">
+<div class="hara-canvas-stage" data-hara-canvas-stage="6" data-hara-canvas-program="../../../assets/tictactoe/tictactoe.hal">
 
 ```hara
 (node/start

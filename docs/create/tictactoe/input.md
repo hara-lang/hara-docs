@@ -4,7 +4,7 @@ The browser contributes only a local pointer event. `position-at` converts that
 event into a board cell; the pure game rules decide whether that cell changes
 the game. Browser coordinates do not leak into `next-move`.
 
-<div class="hara-canvas-stage" data-hara-canvas-stage="3" data-hara-canvas-program="../../assets/tictactoe/tictactoe.hal">
+<div class="hara-canvas-stage" data-hara-canvas-stage="3" data-hara-canvas-program="../../../assets/tictactoe/tictactoe.hal">
 
 ```hara
 (defn apply-pointer-event [game event layout]

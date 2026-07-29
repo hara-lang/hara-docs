@@ -58,14 +58,13 @@ nav:
   - Start:
       - Overview:
           - Why Hara?: start/orientation.md
-          - Building Tic Tac Toe:
-              - Overview: create/first-game.md
-              - Part I — Draw the board: create/tictactoe/board.md
-              - Part II — Organise the game: create/tictactoe/files.md
-              - Part III — State and rules: create/tictactoe/state.md
-              - Part IV — Pointer input: create/tictactoe/input.md
-              - Part V — Rendering: create/tictactoe/rendering.md
-              - Part VI — Make it live: create/tictactoe/live.md
+          - Building Tic Tac Toe: create/first-game.md
+          - Part I — Draw the board: create/tictactoe/board.md
+          - Part II — Organise the game: create/tictactoe/files.md
+          - Part III — State and rules: create/tictactoe/state.md
+          - Part IV — Pointer input: create/tictactoe/input.md
+          - Part V — Rendering: create/tictactoe/rendering.md
+          - Part VI — Make it live: create/tictactoe/live.md
       - Getting Started:
           - On the Web: getting-started.md
           - On Native: reference/rust-runtime.md
