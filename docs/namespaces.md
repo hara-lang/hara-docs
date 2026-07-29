@@ -124,8 +124,11 @@ The default aliases are available in every namespace:
 This form returns `{:size 4 :text "hara"}`. Strings and bytes are portable
 values. The code does not use JVM interop.
 
-The other intrinsic aliases are `promise/`, `file/`, `socket/`, `block/`, and
-`zip/`. The last two libraries support source blocks and tree navigation:
+The other intrinsic aliases include `promise/`, `file/`, `socket/`, and `edn/`.
+Native descriptors such as `Maths`, `Edn`, and `Json` and protocol descriptors such as
+`ICount` are also referred by default while retaining their canonical
+`std.native/*` and `std.protocol.*` identities. Source blocks and tree
+navigation use the additional `block/` and `zip/` libraries:
 
 ```hara
 (block/parse-first "(+ 1 2)")

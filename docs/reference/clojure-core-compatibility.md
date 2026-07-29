@@ -58,7 +58,7 @@ Canonical exhaustive grouping for Clojure 1.12.5 and Hara L0 plus `std.foundatio
 
 ## Hara protocols
 
-`IApplicable`, `IAssoc`, `IColl`, `IComponent`, `IComponentOptions`, `IComponentProps`, `IComponentQuery`, `IComponentTrack`, `IConj`, `ICons`, `IContext`, `ICount`, `IDeref`, `IDerefTimeout`, `IDisplay`, `IDissoc`, `IEmpty`, `IEquality`, `IExInfo`, `IFind`, `IFn`, `IHasRuntime`, `IHash`, `IIndexed`, `IIndexedKV`, `IInvokeIn`, `ILookup`, `IMetadata`, `INamespaced`, `INavigation`, `INth`, `IObjType`, `IPair`, `IPointer`, `IRealize`, `IReset`, `ISpace`, `IToMutable`, `IToPersistent`, `IValidate`, `IWatch`
+`IApplicable`, `IAssoc`, `IComponent`, `IConj`, `ICons`, `IContext`, `ICount`, `IDeref`, `IDerefTimeout`, `IDisplay`, `IDissoc`, `IEmpty`, `IEquality`, `IExInfo`, `IFind`, `IFn`, `IHash`, `IIndexed`, `IIndexedKV`, `IInvokeIn`, `ILookup`, `INamespaced`, `INavigation`, `INth`, `IObjType`, `IPair`, `IPointer`, `IRealize`, `IReset`, `ISpace`, `IToMutable`, `IToPersistent`, `IWatch`
 
 ## Hara namespaced libraries
 
@@ -69,7 +69,8 @@ Canonical exhaustive grouping for Clojure 1.12.5 and Hara L0 plus `std.foundatio
 | `co` | `co/await`, `co/close`, `co/coroutine?`, `co/create`, `co/resume`, `co/status`, `co/yield` |
 | `promise` | `promise/all`, `promise/cancel`, `promise/catch`, `promise/delay`, `promise/finally`, `promise/from`, `promise/new`, `promise/state`, `promise/then`, `promise/value` |
 | `file` | `file/delete`, `file/exists?`, `file/list`, `file/mkdir`, `file/read`, `file/resolve`, `file/write` |
-| `json` | `json/read`, `json/write`, `json/write-pp` |
+| `edn` | `edn/pretty`, `edn/read`, `edn/write` |
+| `json` | `json/pretty`, `json/read`, `json/write` |
 | `os` | `os/arch`, `os/cwd`, `os/env`, `os/getenv`, `os/platform`, `os/process-alive?`, `os/process-close-input`, `os/process-kill`, `os/process-stderr`, `os/process-stdout`, `os/process-wait`, `os/process-write`, `os/process?`, `os/spawn` |
 | `socket` | `socket/close`, `socket/connect`, `socket/send` |
 | `set` | `set/difference`, `set/intersection`, `set/select`, `set/subset?`, `set/superset?`, `set/union` |

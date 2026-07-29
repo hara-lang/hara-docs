@@ -1,7 +1,7 @@
-# Talo Foundation `.hal` Port
+# Tahto Foundation `.hal` Port
 
 This ledger tracks semantic decisions while porting `foundation-base/src/hara`
-to the `talo.*` transpiler library.
+to the `tahto.*` transpiler library.
 An entry marked `pending` must not be implemented with changed behavior until it
 has been reviewed.
 
@@ -11,23 +11,25 @@ has been reviewed.
 |---|---|---|
 | Project and namespace loader | complete | Self-contained examples live under `lib/bench/<NUM>-<GROUP>` |
 | Common grammar foundation | complete | Grammar specification, macros, xtalk profiles/system, and aggregate grammar have translated facts |
-| `talo.typed` | pending | Does not include `hara.model` |
+| `tahto.protocol.*` | in progress | Portable compiler contracts for grammar/emission, book data, preprocessing, and pointers |
+| `std.lib.walk` | in progress | Persistent Hara traversal needed by portable preprocessing; no JVM sequence compatibility |
+| `tahto.typed` | pending | Does not include `hara.model` |
 | Common preprocess and emit | in progress | `preprocess-base` is complete; `emit-rewrite` follows the typed slice |
-| `talo.common.book*` | in progress | `book-entry` and `book-meta` are dependency-complete record slices |
-| Remaining `talo.lang` | pending | Split by library, rewrite, compiler, and runtime layers |
+| `tahto.common.book*` | in progress | `book-entry` and `book-meta` are dependency-complete record slices |
+| Remaining `tahto.lang` | pending | Split by library, rewrite, compiler, and runtime layers |
 
 ## Source convention
 
-Talo is a self-contained Hara project under `lib/`. Production
-namespaces live under `lib/src/talo`; translated tests live under
-`lib/test/talo`. Namespace roots are mapped predictably:
+Tahto is a self-contained Hara project under `lib/`. Production
+namespaces live under `lib/src/tahto`; translated tests live under
+`lib/test/tahto`. Namespace roots are mapped predictably:
 
 | Foundation | Talo |
 |---|---|
-| `hara.common.*` | `talo.common.*` |
-| `hara.typed.*` | `talo.typed.*` |
-| `hara.lang.book*` | `talo.common.book*` |
-| transpiler-focused `hara.lang.*` | `talo.lang.*` |
+| `hara.common.*` | `tahto.common.*` |
+| `hara.typed.*` | `tahto.typed.*` |
+| `hara.lang.book*` | `tahto.common.book*` |
+| transpiler-focused `hara.lang.*` | `tahto.lang.*` |
 
 Benchmarks consume these packaged namespaces and do not contain substitute
 implementations.
@@ -70,7 +72,7 @@ the portable Hara runtime:
 | Metadata-bearing symbol equality | Symbol equality and hashing ignore metadata | Matches Clojure/Foundation value semantics and allows copied metadata assertions to compare unchanged |
 | Macro parameter destructuring | Bind the vector parameter and select its first value inside `with:macro-opts` | Hara macro parameters currently support symbols and `&`, so the public call shape remains unchanged while the implementation avoids nested parameter destructuring |
 | `std.lib.walk` | Lazy Java-backed static library over persistent Hara collections | Supplies the Foundation traversal contract without mutable host collections escaping; map/set implementations and metadata are preserved |
-| `volatile!` used as a local traversal flag | Hara `atom`, `reset!`, and `deref` | `talo.common.preprocess-input` needs local mutable state only while checking whether a template expression can be evaluated |
+| `volatile!` used as a local traversal flag | Hara `atom`, `reset!`, and `deref` | `tahto.common.preprocess-input` needs local mutable state only while checking whether a template expression can be evaluated |
 | Host form `eval` during preprocessing | Core Hara `eval` evaluates the readable Hara form in the active namespace | Preserves persisted template behavior while keeping evaluation inside the Hara runtime rather than invoking Clojure/JVM evaluation |
 | Foundation `std.lib.impl/defimpl` for `BookEntry` | Native Hara `defstruct` with the same fields and constructors | Preserves lookup, construction, and type checks without introducing an implementation-only compatibility namespace; custom Foundation record printing remains unavailable |
 | `std.lib.template/$` in copied record-construction facts | Explicit persistent target forms assembled with `list` | Hara does not ship the Foundation template namespace; the test functions retain the same generated forms without adding a compatibility-only public namespace |
