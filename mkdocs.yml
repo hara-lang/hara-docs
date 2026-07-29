@@ -58,6 +58,15 @@ nav:
       - Your first browser game: create/first-game.md
   - Learn Hara:
       - Learn to program: learn-programming/index.md
+      - Hara Lisp — Intro:
+          - Course map: hara-lisp-intro/index.md
+          - 01 — Basic data and immutable collections: hara-lisp-intro/01-basic-data.md
+          - 02 — Functions and atoms: hara-lisp-intro/02-functions-and-atoms.md
+          - 03 — Iterators and streaming: hara-lisp-intro/03-iterators-and-streaming.md
+          - 04 — Coroutines and promises: hara-lisp-intro/04-coroutines-and-promises.md
+          - 05 — Array and object: hara-lisp-intro/05-array-and-object.md
+          - 06 — Bytes and strings: hara-lisp-intro/06-bytes-and-strings.md
+          - 07 — I/O and files: hara-lisp-intro/07-io-and-files.md
       - Language guide: user-guide.md
       - Namespaces, libraries, and tests: namespaces.md
       - Namespace project walkthrough: walkthroughs/service-project.md
@@ -72,7 +81,10 @@ nav:
           - Builtins: builtins.md
           - Runtime libraries: reference/runtime-libraries.md
           - Namespace catalog: reference/namespaces.md
-      - Runtime and tools:
+      - Runtime:
+          - Kernel Architecture:
+              - Architecture map: reference/runtime/kernel-architecture/index.md
+              - Multi-session kernels with attachable filesystems: reference/runtime/kernel-architecture/multi-session-kernels.md
           - REPL UX: reference/repl.md
           - RESP protocol: reference/resp-protocol.md
           - Native runtime flavors: reference/native-flavors.md
