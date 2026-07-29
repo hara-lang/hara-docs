@@ -1,0 +1,193 @@
+# Get started with the CLI
+
+The command line is the most direct way to install Hara, evaluate a form, run a
+source file, and keep a REPL open while you work. Use this path when you want a
+small local setup, a scriptable workflow, or a runtime that can later be
+connected to an editor.
+
+## Install Hara
+
+Linux on x86_64 and macOS on arm64 or x86_64 can use the installer:
+
+```shell
+curl -fsSL https://www.hara-lang.org/install.sh | sh -- --rust --truffle
+```
+
+The installer places `hara` and the native-image `hara-truffle` in
+`~/.local/bin`. GitHub Releases is the publishing authority for the downloaded
+packages and checksums.
+
+Install only the Rust runtime:
+
+```shell
+curl -fsSL https://www.hara-lang.org/install.sh | sh -- --rust
+```
+
+Install only the Truffle native image:
+
+```shell
+curl -fsSL https://www.hara-lang.org/install.sh | sh -- --truffle
+```
+
+Use `HARA_INSTALL_DIR` to choose another destination, or set `HARA_VERSION` to
+pin a release:
+
+```shell
+HARA_INSTALL_DIR="$HOME/bin" \
+HARA_VERSION=v0.1.0 \
+  curl -fsSL https://www.hara-lang.org/install.sh | sh -- --rust
+```
+
+Make sure the installation directory is on `PATH`, then check that the command
+is available:
+
+```shell
+hara --help
+```
+
+## Evaluate one form
+
+Run a complete Hara form with `eval`:
+
+```shell
+hara eval '(let [x 19] (+ x 23))'
+```
+
+Expected result:
+
+```text
+42
+```
+
+This is useful for shell scripts, smoke tests, and checking a small expression
+without opening an interactive session. Quote the form so the shell does not
+interpret its parentheses, spaces, or symbols.
+
+Try a persistent collection:
+
+```shell
+hara eval '(assoc {:name "Hara"} :ready true)'
+```
+
+Then change one part of the form and run it again. The quickest learning loop is
+predict, run, change, and explain.
+
+## Start the REPL
+
+Start an interactive ROOT session:
+
+```shell
+hara
+```
+
+Start the REPL without a RESP listener:
+
+```shell
+hara --offline
+```
+
+The REPL is the normal place to explore a namespace one form at a time. It
+supports multiline forms, persistent history, slash and symbol completion,
+inline documentation, and listener control through `/resp`.
+
+Use the REPL for experiments, but keep durable work in `.hal` files. The live
+session is feedback; the source tree remains the project record.
+
+## Run a source file
+
+Create `hello.hal`:
+
+```hara
+(ns hello)
+
+(defn greeting [name]
+  (str "Hello, " name))
+
+(greeting "Hara")
+```
+
+Run it:
+
+```shell
+hara run hello.hal
+```
+
+You can also pipe source through standard input:
+
+```shell
+cat hello.hal | hara stdin
+```
+
+The stdin path is useful for editor integrations and generated source because
+the source does not need to be written to a temporary file first.
+
+## Start a project directory
+
+A Hara project keeps executable source and workspace data together:
+
+```text
+my-project/
+  project.edn
+  workspace.edn
+  src/
+    app.hal
+```
+
+Use `.hal` for executable Hara source. `project.edn` describes project roots and
+requested capabilities. `workspace.edn` describes the files, areas, nodes, and
+connections used by visual workspaces. The older executable `project.hal`
+descriptor is a migration input rather than the format for new projects.
+
+A useful first routine is:
+
+1. Open a terminal in the project root.
+2. Start `hara` and leave the session running.
+3. Edit a `.hal` file.
+4. Evaluate a small form while the program remains alive.
+5. Keep the useful change in source and run the file again.
+
+## Choose a runtime deliberately
+
+The Rust CLI and Truffle runtime implement the same portable Hara language
+surface, but they connect to different host environments.
+
+Use the Rust runtime for a small native CLI, server work, and the runtime core
+shared with WebAssembly. Use the Truffle runtime when you need the JVM provider,
+Java classes, Maven-based contributor tests, or the GraalVM/Truffle host.
+
+Portable code should not depend on a host merely because it runs on that host.
+Files, sockets, Java reflection, browser APIs, and other host operations cross
+explicit provider and capability boundaries.
+
+## Connect an editor later
+
+The CLI can remain the runtime while an editor becomes the source surface.
+Hara VS Code connects to the listener exposed by the running server. Emacs can
+send a region through `hara stdin`. Both approaches preserve the same project
+and source files.
+
+## Troubleshooting
+
+If `hara` is not found, confirm the installation directory is on `PATH`:
+
+```shell
+printf '%s\n' "$PATH"
+ls -la "$HOME/.local/bin"
+```
+
+If an editor cannot connect, start the ordinary `hara` command rather than
+`hara --offline`, then inspect the listener status in the REPL. The standard
+editor endpoint is `127.0.0.1:4164`, although a runtime or deployment may use a
+different address.
+
+If host operations return `unsupported` or `denied`, distinguish two cases:
+`unsupported` means the current host has no provider for the operation;
+`denied` means the provider exists but the session has not been granted the
+required capability.
+
+## Continue
+
+Read the [user guide](../user-guide.md) for the language surface, the
+[REPL reference](../reference/repl.md) for interactive behavior, and
+[projects and visual workspaces](../projects/index.md) for the shared project
+model.
