@@ -7,14 +7,17 @@ Var metadata and the REPL for exact documentation and arglists.
 
 | Namespace | Default access | Purpose | Representative Vars |
 | --- | --- | --- | --- |
-| `std.foundation` | Core names are referred eagerly | Portable L0 functions, collections, sequences, protocols, and macros | `map`, `reduce`, `take`, `comp2` |
+| `std.foundation` | Core names are referred eagerly | Portable L0 functions, collections, sequences, protocols, and macros | `map`, `reduce`, `take`, `comp` |
 | `std.foundation.string` | `str/` | String comparison, slicing, joining, case conversion, trimming, and UTF-8 conversion | `trim`, `join`, `to-lower`, `encode` |
 | `std.foundation.bytes` | `bytes/` | Mutable byte buffers with explicit signed and unsigned conversion | `count`, `get`, `set`, `slice`, `u8` |
-| `std.foundation.promise` | `promise/` | Native asynchronous settlement and composition | `run`, `all`, `then`, `catch`, `finally` |
+| `std.foundation.promise` | `promise/` | Native asynchronous settlement and composition | `new`, `from`, `all`, `then`, `catch`, `finally` |
 | `std.foundation.file` | `file/` | Capability-gated path resolution and asynchronous byte I/O | `resolve`, `read`, `write` |
+| `std.foundation.os` | `os/` | Capability-gated environment and process operations | `platform`, `cwd`, `spawn`, `process-wait` |
 | `std.foundation.socket` | `socket/` | Capability-gated asynchronous socket operations | `connect`, `send`, `close` |
-| `std.foundation.json` | `json/` | Strict JSON parsing and encoding | `parse`, `stringify` |
-| `std.foundation.coroutine` | explicit `require` | Lua-style coroutines with bidirectional yield and promise await | `create`, `resume`, `yield`, `status`, `close`, `await` |
+| `std.foundation.json` | `json/` | Strict JSON parsing and encoding | `read`, `write`, `write-pp` |
+| `std.foundation.coroutine` | `co/` | Lua-style coroutines with bidirectional yield and promise await | `create`, `resume`, `yield`, `status`, `close`, `await` |
+| `std.foundation.set` | `set/` | Portable immutable set algebra | `union`, `intersection`, `difference`, `subset?`, `select` |
+| `std.pretty` | `pretty/` | Portable readable formatting | `pprint-str` |
 
 `(ns app)` and `(ns app (:config {:intrinsics :all}))` install the same default aliases. Intrinsic
 aliases can be excluded or renamed through `(:config {:intrinsics ...})` without removing their
