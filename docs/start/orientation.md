@@ -1,5 +1,6 @@
 ---
 title: "Why Hara?"
+hara_kernel_loading: auto
 ---
 
 # Why Hara?

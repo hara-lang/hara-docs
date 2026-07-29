@@ -534,7 +534,17 @@ Canvas, pointer, filesystem, and extension adapters remain local to the embed. H
 
 ## Documentation embedding defaults
 
-A documentation page creates one kernel lazily.
+A documentation page creates one kernel lazily by default. An author can warm
+the shared page kernel as soon as live examples hydrate by adding this Markdown
+front matter:
+
+```yaml
+hara_kernel_loading: auto
+```
+
+Use `hara_kernel_loading: deferred` (or omit the setting) to retain first-eval
+loading. `auto` starts the worker and registers its resources early; it still
+creates a private session only when an individual example evaluates.
 
 Each generated live fence or canvas stage creates a unique private session with an ephemeral memory filesystem.
 

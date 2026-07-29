@@ -624,6 +624,12 @@
     files.addEventListener("click", () => openFsDrawer(record));
   }
 
+  // Pages may warm the shared worker before an evaluation. Deferred loading
+  // remains the default so ordinary reference pages do not pay that cost.
+  if (content.dataset.haraKernelLoading === "auto") {
+    queueMicrotask(() => getKernel().catch(() => {}));
+  }
+
   window.addEventListener("pagehide", () => {
     for (const record of cells) record.session?.close().catch(() => {});
     kernelPromise?.then((kernel) => kernel.close()).catch(() => {});

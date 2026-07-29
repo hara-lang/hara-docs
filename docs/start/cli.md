@@ -33,14 +33,33 @@ as requested capabilities. Dependency coordinates can be declared under
 `:project/dependencies`.
 
 ```sh
-hara package check .
+hara new hello-hara
+cd hello-hara
+hara check
+hara run
+hara test
 ```
 
-`check` validates the project manifest, including its required paths, identity,
-version, and dependency-version ranges. It does not fetch or install packages:
-registry-backed `add`, `remove`, `update`, `sync`, and `publish` are reserved
-until the registry and identity client are configured. That keeps project
-metadata useful today without implying a package service that is not available.
+`hara run` without a file evaluates the declared `:project/main`; `hara run
+FILE` remains the direct file command. `check`, `run`, and `test` discover the
+nearest ancestor `project.edn`, or accept `--project PATH` when the project is
+elsewhere. `test` runs every `.hal` file under `:project/test-paths` and uses
+the standard `test/check` and `test/print-results` result contract.
+
+Dependencies are project intent, rather than evaluator input:
+
+```sh
+hara add hara/graph@^1.2.0
+hara sync
+hara remove hara/graph
+```
+
+`add` and `remove` edit `:project/dependencies`. `sync` owns
+`project.lock.edn`; it currently writes and validates dependency-free locks,
+including `--offline`, `--locked`, and `--frozen` validation. A project with
+declared remote dependencies deliberately fails sync until the reviewed
+registry and identity client can verify its release assets and signatures.
+The evaluator never downloads a package while resolving `require`.
 
 ## Package source and WASM artifacts
 

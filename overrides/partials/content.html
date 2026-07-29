@@ -9,7 +9,8 @@
 {% if "\u003ch1" not in page.content %}
   <h1>{{ page.title | d(config.site_name, true)}}</h1>
 {% endif %}
-<div data-hara-live-content>
+<div data-hara-live-content
+     data-hara-kernel-loading="{{ page.meta.hara_kernel_loading | default('deferred', true) }}">
   {{ page.content }}
 </div>
 {% include "partials/source-file.html" %}
