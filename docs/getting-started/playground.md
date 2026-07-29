@@ -263,5 +263,5 @@ transitions, controls, and a visual representation.
 Use [Get started with the Web](web.md) when you are ready to turn the experiment
 into a browser project. Follow the
 [first browser game](../create/first-game.md) for a complete walkthrough, or
-start the [HAL — Intro](../hara-lisp-intro/index.md) course for a deeper
+start the [HAL — Intro](../hal-intro/index.md) course for a deeper
 language sequence.
