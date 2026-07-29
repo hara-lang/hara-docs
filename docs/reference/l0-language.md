@@ -67,13 +67,12 @@ and iterator operations. `rest` returns a lazy `Seq`, or nil when no values
 remain. There is no separate `next` operation.
 
 The same bootstrap provides ordinary names `map`, `filter`, `take`, `drop`,
-`mapcat`, `keep`, `cycle`, `zip`, and `partition-pair`; these return lazy
-`Seq` values. Their `iter-*` counterparts return raw one-shot iterators.
-`map` is also a transform constructor: `((map f) collection)` is eager for
-ordinary collections and lazy for an existing `Seq` or iterator. `seq` makes
-the boundary explicit, so `(seq transform source)` is always lazy. Predicate
-reductions `every?` and `any?` consume an iterator lazily until their result is
-known.
+`mapcat`, `keep`, `cycle`, `zip`, and `partition-pair`; their `iter-*`
+counterparts return raw one-shot iterators. Direct `(map f concrete)` eagerly
+materializes and preserves the first collection's shape. Curried `((map f)
+source)` is lazy, as is `(map f (seq source))`; `seq` makes that lazy boundary
+explicit. Predicate reductions `every?` and `any?` consume an iterator lazily
+until their result is known.
 
 The bootstrap also provides `get-in`, `assoc-in`, `update`, and `update-in` for
 persistent nested values. These are ordinary `.hal` functions built on the

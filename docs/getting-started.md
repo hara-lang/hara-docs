@@ -49,3 +49,37 @@ state, controllers, visualisers, host services, and AI collaborators.
 You do not need to choose permanently. A well-structured Hara project can move
 between these surfaces while keeping host-specific operations at explicit
 provider boundaries.
+
+# On the Web
+
+In [Why Hara?](start/orientation.md), you opened a Hara kernel in the browser,
+evaluated a form, and saved the result as source.
+
+You can continue using Hara entirely in the browser. This chapter shows how the
+same project can also be opened through the CLI, VS Code, and Chrome DevTools.
+Each route is optional: choose the tools that are useful to you, or continue
+directly to the next chapter.
+
+## The project from Why Hara?
+
+At the end of Why Hara?, your source looked like this:
+
+```hara
+(ns getting-started.main)
+
+(defn answer []
+  (+ 19 23))
+
+(answer)
+```
+
+Evaluating the final form returned `42`.
+
+The source does not belong to the Playground. It belongs to the project. The
+Playground was simply the first host through which you accessed a Hara kernel.
+
+<div class="hara-project-path" role="img" aria-label="Project source flows through a Hara kernel to the result 42">
+  <div><i>▤</i><b>Project source</b><small>Durable `.hal` forms.</small></div><span>↓</span>
+  <div><i>◉</i><b>Hara kernel</b><small>Reads and evaluates forms.</small></div><span>↓</span>
+  <div><i>42</i><b>Result</b><small>Inspectable value.</small></div>
+</div>

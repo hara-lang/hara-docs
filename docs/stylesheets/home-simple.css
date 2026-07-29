@@ -1,12 +1,32 @@
 :root {
-  --home-bg: #06090d;
-  --home-panel: #0b1118;
-  --home-panel-2: #0f1720;
-  --home-text: #edf7f5;
-  --home-muted: #8fa2a8;
-  --home-cyan: #63f5e5;
-  --home-line: rgba(99, 245, 229, .16);
+  --home-bg: var(--hara-abyss);
+  --home-panel: var(--hara-panel);
+  --home-panel-2: var(--hara-raised);
+  --home-text: var(--hara-text);
+  --home-muted: var(--hara-muted);
+  --home-cyan: var(--hara-cyan);
+  --home-line: var(--hara-line);
   --home-max: 1180px;
+}
+
+html[data-hara-home-theme="light"] {
+  color-scheme: light;
+  --home-bg: #e7ecec;
+  --home-panel: rgba(248, 250, 247, .94);
+  --home-panel-2: #dce6e4;
+  --home-text: #142938;
+  --home-muted: #506573;
+  --home-cyan: #d51f5c;
+  --home-line: rgba(20, 41, 56, .2);
+}
+
+html[data-hara-home-theme="light"] body:has(.hara-landing) .md-main::before {
+  background:
+    linear-gradient(rgba(213, 31, 92, .055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 41, 56, .035) 1px, transparent 1px),
+    radial-gradient(circle at 76% 12%, rgba(156, 123, 255, .08), transparent 34rem),
+    linear-gradient(var(--home-bg), var(--home-bg));
+  background-size: 32px 32px, 32px 32px, auto, auto;
 }
 
 body:has(.hara-landing) {
@@ -15,17 +35,27 @@ body:has(.hara-landing) {
 
 body:has(.hara-landing) .md-main::before {
   background:
-    radial-gradient(circle at 75% 10%, rgba(99, 245, 229, .08), transparent 34rem),
+    linear-gradient(rgba(65, 245, 228, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(65, 245, 228, .028) 1px, transparent 1px),
+    radial-gradient(circle at 76% 12%, rgba(156, 123, 255, .1), transparent 34rem),
     linear-gradient(var(--home-bg), var(--home-bg));
+  background-size: 32px 32px, 32px 32px, auto, auto;
 }
 
 .hara-home-header {
   position: sticky;
   top: 0;
   z-index: 30;
-  background: rgba(6, 9, 13, .86);
-  border-bottom: 1px solid var(--home-line);
-  backdrop-filter: blur(18px);
+  background: rgba(2, 4, 8, .96);
+  border-top: 3px solid var(--hara-cyan);
+  border-bottom: 1px solid var(--hara-line-strong);
+  backdrop-filter: none;
+}
+
+html[data-hara-home-theme="light"] .hara-home-header {
+  background: rgba(231, 236, 236, .97);
+  border-top-color: #d51f5c;
+  border-bottom-color: rgba(20, 41, 56, .35);
 }
 
 .hara-home-header__inner {
@@ -38,30 +68,78 @@ body:has(.hara-landing) .md-main::before {
   gap: 28px;
 }
 
+.hara-home-menu {
+  display: none;
+  width: 30px;
+  padding: 0;
+  color: var(--home-text);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.hara-home-menu span {
+  display: block;
+  height: 2px;
+  margin: 5px 0;
+  background: currentColor;
+}
+
 .hara-home-brand {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   color: var(--home-text);
   font-family: var(--hara-mono, ui-monospace, monospace);
-  font-size: .82rem;
+  font-size: .76rem;
   font-weight: 800;
   letter-spacing: .16em;
   text-decoration: none;
   text-transform: uppercase;
 }
 
-.hara-home-brand img { width: 30px; height: 30px; }
+.hara-home-brand img {
+  width: 30px;
+  height: 30px;
+}
+
+html[data-hara-home-theme="light"] .hara-home-brand img {
+  filter: brightness(0) saturate(100%) invert(13%) sepia(19%) saturate(1404%) hue-rotate(158deg);
+}
 .hara-home-nav { display: flex; align-items: center; gap: 26px; }
 .hara-home-nav a {
   color: var(--home-muted);
   font-family: var(--hara-mono, ui-monospace, monospace);
-  font-size: .62rem;
+  font-size: .6rem;
+  font-weight: 700;
   letter-spacing: .12em;
   text-decoration: none;
   text-transform: uppercase;
 }
 .hara-home-nav a:hover { color: var(--home-cyan); }
+.hara-home-nav a.is-section-active { color: var(--home-muted); }
+.hara-home-nav a.is-section-active::before {
+  content: '|';
+  display: inline-block;
+  margin-right: .5em;
+  color: var(--home-cyan);
+}
+
+.hara-home-theme {
+  padding: .32rem .52rem;
+  color: var(--home-cyan);
+  background: transparent;
+  border: 1px solid var(--home-line);
+  border-radius: 2px;
+  font: 700 .58rem var(--hara-mono, ui-monospace, monospace);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.hara-home-theme:hover {
+  border-color: var(--home-cyan);
+}
 
 .hara-landing {
   width: min(calc(100% - 40px), var(--home-max));
@@ -146,10 +224,14 @@ body:has(.hara-landing) .md-main::before {
 .hara-launch h1 {
   margin: 0;
   color: var(--home-text);
-  font-size: clamp(3rem, 6.4vw, 6.2rem);
-  font-weight: 620;
-  letter-spacing: -.065em;
-  line-height: .94;
+  max-width: 940px;
+  font-family: var(--hara-display);
+  font-size: clamp(3rem, 6.1vw, 5.8rem);
+  font-stretch: condensed;
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: .9;
+  text-transform: uppercase;
 }
 
 .hara-launch__head > p:last-child,
@@ -167,31 +249,62 @@ body:has(.hara-landing) .md-main::before {
   gap: 12px;
 }
 
+.hara-docs-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.hara-docs-grid .hara-outcome-card--primary {
+  grid-column: auto;
+}
+
 .hara-outcome-card {
+  position: relative;
   min-height: 300px;
   display: flex;
   flex-direction: column;
   padding: 26px;
   color: var(--home-text) !important;
   background: var(--home-panel);
-  border: 1px solid var(--home-line);
-  border-radius: 9px;
+  border: 1px solid var(--hara-line-strong);
+  border-radius: 7px 2px;
   text-decoration: none !important;
-  transition: background .16s ease, border-color .16s ease, transform .16s ease;
+  box-shadow: inset 0 0 0 1px rgba(65, 245, 228, .04), var(--hara-glow-cyan);
+  transition: background .12s ease, color .12s ease;
 }
 
 .hara-outcome-card--primary {
   grid-column: span 2;
-  background:
-    radial-gradient(circle at 82% 20%, rgba(99, 245, 229, .16), transparent 19rem),
-    var(--home-panel-2);
-  border-color: rgba(99, 245, 229, .38);
+  background: var(--hara-spectrum-soft), var(--home-panel);
+  border-color: var(--hara-line-strong);
 }
 
 .hara-outcome-card:hover {
-  transform: translateY(-3px);
-  background-color: var(--home-panel-2);
-  border-color: rgba(99, 245, 229, .46);
+  background: rgba(65, 245, 228, .07);
+  color: var(--hara-cyan-bright) !important;
+  border-color: var(--hara-cyan);
+}
+
+.hara-outcome-card:hover h2,
+.hara-outcome-card:hover p,
+.hara-outcome-card:hover small,
+.hara-outcome-card:hover::before {
+  color: var(--hara-cyan-bright);
+}
+
+html[data-hara-home-theme="light"] .hara-outcome-card {
+  box-shadow: inset 0 0 0 1px rgba(213, 31, 92, .04);
+}
+
+html[data-hara-home-theme="light"] .hara-outcome-card--primary {
+  background:
+    linear-gradient(120deg, rgba(213, 31, 92, .1), rgba(156, 123, 255, .06)),
+    var(--home-panel);
+}
+
+html[data-hara-home-theme="light"] .hara-outcome-card:hover {
+  color: #f5fbfa !important;
+  background: #142938;
+  border-color: #d51f5c;
 }
 
 .hara-card-kicker,
@@ -209,9 +322,12 @@ body:has(.hara-landing) .md-main::before {
   padding: 54px 0 0;
   color: var(--home-text);
   border: 0;
+  font-family: var(--hara-display);
   font-size: clamp(1.55rem, 2.4vw, 2.25rem);
-  letter-spacing: -.035em;
-  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -.015em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .hara-outcome-card p {
@@ -219,6 +335,15 @@ body:has(.hara-landing) .md-main::before {
   margin: 0;
   color: var(--home-muted);
   line-height: 1.55;
+}
+
+.hara-card-paths {
+  margin-top: 18px;
+  color: var(--home-cyan);
+  font-family: var(--hara-mono, ui-monospace, monospace);
+  font-size: .62rem;
+  letter-spacing: .035em;
+  line-height: 1.7;
 }
 
 .hara-outcome-card small {
@@ -370,12 +495,43 @@ body:has(.hara-landing) .md-main::before {
 @media (max-width: 900px) {
   .hara-outcome-grid { grid-template-columns: 1fr 1fr; }
   .hara-outcome-card--primary { grid-column: span 2; }
+  .hara-docs-grid .hara-outcome-card--primary { grid-column: auto; }
+  .hara-outcome-card {
+    min-height: 0;
+    padding: 22px;
+  }
+  .hara-outcome-card h2 {
+    margin: 34px 0 10px;
+    padding: 0;
+  }
+  .hara-outcome-card small { margin-top: 18px; }
   .hara-section { grid-template-columns: 1fr; }
   .hara-section__head { max-width: 760px; }
 }
 
 @media (max-width: 680px) {
-  .hara-home-nav a:not(:last-child) { display: none; }
+  .hara-home-header__inner { min-height: 56px; gap: 14px; }
+  .hara-home-menu { display: block; flex: 0 0 30px; }
+  .hara-home-brand img { width: 24px; height: 24px; }
+  .hara-home-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 10px 20px 18px;
+    background: var(--home-bg);
+    border-bottom: 1px solid var(--home-line);
+  }
+  .hara-home-header.is-menu-open .hara-home-nav { display: flex; }
+  .hara-home-nav a {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--home-line);
+  }
+  .hara-theme-toggle { align-self: flex-start; margin-top: 12px; }
   .hara-launch { padding: 54px 0 78px; }
   .hara-launch h1 { font-size: clamp(2.8rem, 14vw, 4.5rem); }
   .hara-outcome-grid,

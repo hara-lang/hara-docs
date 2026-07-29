@@ -7,7 +7,7 @@ theme:
   custom_dir: overrides
   language: en
   font: false
-  favicon: assets/favicon-48.svg
+  favicon: assets/favicon-48.svg?v=2
   logo: assets/logo-white.svg
   features:
     - navigation.tabs
@@ -24,12 +24,13 @@ theme:
 extra_css:
   - vendor/hara-ui/tokens.css
   - vendor/hara-ui/components.css
-  - stylesheets/hara.css
+  - stylesheets/hara.css?v=30
 extra_javascript:
   - javascripts/hara.js
   - javascripts/demo.js
-  - javascripts/kernel.js
   - javascripts/home-live.js
+  - javascripts/live-examples.js
+  - javascripts/live-canvas.js
 markdown_extensions:
   - admonition
   - attr_list
@@ -51,9 +52,19 @@ markdown_extensions:
 plugins:
   - search
   - monorepo
+hooks:
+  - scripts/copy-hara-ui.py
 nav:
   - Start:
-      - Start with Hara: index.md
+      - Overview:
+          - Why Hara?: start/orientation.md
+          - Building Tic Tac Toe: create/first-game.md
+          - Part I — Draw the board: create/tictactoe/board.md
+          - Part II — Organise the game: create/tictactoe/files.md
+          - Part III — State and rules: create/tictactoe/state.md
+          - Part IV — Pointer input: create/tictactoe/input.md
+          - Part V — Rendering: create/tictactoe/rendering.md
+          - Part VI — Make it live: create/tictactoe/live.md
       - Getting Started:
           - With the CLI: getting-started/cli.md
           - With the JVM: getting-started/jvm.md
@@ -62,10 +73,13 @@ nav:
           - With Emacs: getting-started/emacs.md
           - With VS Code: getting-started/vscode.md
           - With Greenways OS: getting-started/greenways-os.md
-      - Your first browser game: create/first-game.md
+      - Concepts:
+          - Concepts overview: concepts/index.md
+          - Runtime-driven development: concepts/runtime-driven-development.md
+          - Live coding: concepts/live-coding.md
+          - Unified representation: concepts/unified-representation.md
   - Learn Hara:
-      - Learn to program: learn-programming/index.md
-      - Hara Lisp — Intro:
+      - Introductory:
           - Course map: hara-lisp-intro/index.md
           - 01 — Basic data and immutable collections: hara-lisp-intro/01-basic-data.md
           - 02 — Functions and atoms: hara-lisp-intro/02-functions-and-atoms.md
@@ -74,35 +88,45 @@ nav:
           - 05 — Array and object: hara-lisp-intro/05-array-and-object.md
           - 06 — Bytes and strings: hara-lisp-intro/06-bytes-and-strings.md
           - 07 — I/O and files: hara-lisp-intro/07-io-and-files.md
-      - Language guide: user-guide.md
-      - Namespaces, libraries, and tests: namespaces.md
-      - Namespace project walkthrough: walkthroughs/service-project.md
+      - Systems and Wasm:
+          - Namespaces, libraries, and tests: namespaces.md
+          - Namespace project walkthrough: walkthroughs/service-project.md
+          - Rust and WASM runtime: reference/rust-runtime.md
+      - Web Specific:
+          - Browser HTA: web-specific/browser-hta.md
+          - Hara kernel: kernel.md
+          - Substrate application architecture: start/react.md
+      - The little book of Hara:
+          - Learn to program: learn-programming/index.md
   - Build projects:
       - Projects and visual workspaces: projects/index.md
       - Hara Chrome project: create/chrome-project.md
       - Hara VS Code project: create/vscode-project.md
+  - Guides:
+      - For developers:
+          - For Clojurists: start/clojure.md
+          - For Web Devs: start/web-developers.md
+          - For Data Scientists: start/data-scientists.md
+          - For Game Developers: start/game-developers.md
+      - Language and runtime:
+          - Language contract: reference/l0-language.md
+          - Kernel architecture: reference/runtime/kernel-architecture/index.md
+          - Multi-session kernels: reference/runtime/kernel-architecture/multi-session-kernels.md
+          - REPL workflow: reference/repl.md
+          - Native runtime flavors: reference/native-flavors.md
+          - Rust and WASM runtime: reference/rust-runtime.md
+          - RESP protocol: reference/resp-protocol.md
+      - Building and extending:
+          - Developer guide: development.md
+          - Development tracing: development-tracing.md
+          - Extension system: reference/extensions-contract.md
+          - Java and Rust APIs: javadocs.md
+          - Xtalk equivalence: reference/xtalk-equivalence.md
+          - Runtime benchmarks: reference/runtime-benchmarks.md
+          - Foundation porting: foundation-porting.md
   - Reference:
-      - Reference map: reference/index.md
-      - Language:
-          - L0 language contract: reference/l0-language.md
+      - Clojure API:
           - Builtins: builtins.md
           - Runtime libraries: reference/runtime-libraries.md
           - Namespace catalog: reference/namespaces.md
-      - Runtime:
-          - Kernel Architecture:
-              - Architecture map: reference/runtime/kernel-architecture/index.md
-              - Multi-session kernels with attachable filesystems: reference/runtime/kernel-architecture/multi-session-kernels.md
-          - REPL UX: reference/repl.md
-          - RESP protocol: reference/resp-protocol.md
-          - Native runtime flavors: reference/native-flavors.md
-          - Rust and WASM runtime: reference/rust-runtime.md
-      - Extension system: reference/extensions-contract.md
-      - Development and APIs:
-          - Developer guide: development.md
-          - Development tracing: development-tracing.md
-          - Java and Rust APIs: javadocs.md
-      - Implementation notes:
-          - Xtalk equivalence: reference/xtalk-equivalence.md
           - Clojure core compatibility: reference/clojure-core-compatibility.md
-          - Runtime benchmarks: reference/runtime-benchmarks.md
-          - Foundation porting: foundation-porting.md

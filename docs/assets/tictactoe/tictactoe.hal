@@ -1,0 +1,348 @@
+(ns+
+  (:require [studio.draw :as draw]))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;; TIC TAC TOE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Pure game rules + a browser Canvas2D view transported through HTA.
+;; Click a square to play. Click RESET to begin a new game.
+
+(def +positions+
+  [[:aa :ab :ac]
+   [:ba :bb :bc]
+   [:ca :cb :cc]])
+
+(def +winning-conditions+
+  [#{:aa :ab :ac}
+   #{:ba :bb :bc}
+   #{:ca :cb :cc}
+
+   #{:aa :ba :ca}
+   #{:ab :bb :cb}
+   #{:ac :bc :cc}
+
+   #{:aa :bb :cc}
+   #{:ac :bb :ca}])
+
+(defn smaller [a b]
+  (if (< a b) a b))
+
+(defn larger [a b]
+  (if (> a b) a b))
+
+(defn new-game
+  "Creates a new game."
+  []
+  {:board {:bg #{:aa :ab :ac
+                 :ba :bb :bc
+                 :ca :cb :cc}
+           :p1 #{}
+           :p2 #{}}
+   :turn :p1
+   :status :active
+   :winner nil
+   :winning-line nil})
+
+(defn subset-of?
+  "Returns true when every cell in condition belongs to positions."
+  [condition positions]
+  (let [cells (vec condition)]
+    (loop [index 0]
+      (if (< index (count cells))
+        (if (contains? positions (nth cells index))
+          (recur (inc index))
+          false)
+        true))))
+
+(defn winning-condition
+  "Returns the completed winning condition, or nil."
+  [positions]
+  (loop [index 0]
+    (if (< index (count +winning-conditions+))
+      (let [condition (nth +winning-conditions+ index)]
+        (if (subset-of? condition positions)
+          condition
+          (recur (inc index))))
+      nil)))
+
+(defn check-win
+  "Checks whether a set of pieces contains a winning line."
+  [positions]
+  (not (nil? (winning-condition positions))))
+
+(defn next-move
+  "Transitions from one game state to the next."
+  [game move]
+  (let [[side pos] move
+        board (get game :board)
+        turn (get game :turn)
+        status (get game :status)]
+    (do
+      (when (not= status :active)
+        (throw (ex-info "Game has finished." {:game game :move move})))
+      (when (not= turn side)
+        (throw (ex-info (str "Not " side "'s turn.") {:game game :move move})))
+      (when (not (contains? (get board :bg) pos))
+        (throw (ex-info "Position already taken." {:game game :move move})))
+      (let [new-board
+            (assoc
+              (assoc board :bg (disj (get board :bg) pos))
+              side
+              (conj (get board side) pos))
+            line (winning-condition (get new-board side))
+            is-winner (not (nil? line))
+            is-full (= 0 (count (get new-board :bg)))]
+        {:board new-board
+         :turn (if (= side :p1) :p2 :p1)
+         :status (if is-winner :done (if is-full :done :active))
+         :winner (if is-winner side (if is-full :draw nil))
+         :winning-line line}))))
+
+(defn try-move
+  "Applies a legal click and ignores clicks that cannot change the game."
+  [game pos]
+  (let [board (get game :board)]
+    (if (= (get game :status) :active)
+      (if (not (nil? pos))
+        (if (contains? (get board :bg) pos)
+          (next-move game [(get game :turn) pos])
+          game)
+        game)
+      game)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;; Layout ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn game-layout [width height]
+  (let [raw-size (smaller (- width 72) (- height 190))
+        size (larger 210 (smaller 540 raw-size))
+        left (/ (- width size) 2)
+        top (/ (- height size) 2)
+        reset-width 148
+        reset-height 36]
+    {:width width
+     :height height
+     :board-left left
+     :board-top top
+     :board-size size
+     :cell-size (/ size 3)
+     :reset-left (/ (- width reset-width) 2)
+     :reset-top (+ top size 24)
+     :reset-width reset-width
+     :reset-height reset-height}))
+
+(defn inside?
+  [x y left top width height]
+  (if (>= x left)
+    (if (<= x (+ left width))
+      (if (>= y top)
+        (<= y (+ top height))
+        false)
+      false)
+    false))
+
+(defn axis-index [value start size]
+  (let [offset (- value start)
+        cell (/ size 3)]
+    (if (< offset cell)
+      0
+      (if (< offset (* cell 2)) 1 2))))
+
+(defn position-at [layout x y]
+  (let [left (get layout :board-left)
+        top (get layout :board-top)
+        size (get layout :board-size)]
+    (if (inside? x y left top size size)
+      (let [column (axis-index x left size)
+            row (axis-index y top size)]
+        (nth (nth +positions+ row) column))
+      nil)))
+
+(defn reset-hit? [layout x y]
+  (inside? x
+           y
+           (get layout :reset-left)
+           (get layout :reset-top)
+           (get layout :reset-width)
+           (get layout :reset-height)))
+
+(defn apply-pointer-event [game event layout]
+  (let [event-type (get event "type")
+        phase (get event "phase")]
+    (if (= event-type "pointer")
+      (if (= phase "down")
+        (let [x (get event "x")
+              y (get event "y")]
+          (if (reset-hit? layout x y)
+            (new-game)
+            (try-move game (position-at layout x y))))
+        game)
+      game)))
+
+(defn apply-events [game events layout]
+  (loop [index 0 state game]
+    (if (< index (count events))
+      (recur (inc index) (apply-pointer-event state (nth events index) layout))
+      state)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;; Rendering ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn append-commands [commands additions]
+  (loop [index 0 result commands]
+    (if (< index (count additions))
+      (recur (inc index) (conj result (nth additions index)))
+      result)))
+
+(defn cell-grid [position]
+  (cond
+    (= position :aa) [0 0]
+    (= position :ab) [0 1]
+    (= position :ac) [0 2]
+    (= position :ba) [1 0]
+    (= position :bb) [1 1]
+    (= position :bc) [1 2]
+    (= position :ca) [2 0]
+    (= position :cb) [2 1]
+    :else [2 2]))
+
+(defn cell-center [layout position]
+  (let [[row column] (cell-grid position)
+        cell (get layout :cell-size)]
+    [(+ (get layout :board-left) (* column cell) (/ cell 2))
+     (+ (get layout :board-top) (* row cell) (/ cell 2))]))
+
+(defn x-commands [layout position]
+  (let [[x y] (cell-center layout position)
+        radius (/ (get layout :cell-size) 4)
+        left (- x radius)
+        right (+ x radius)
+        top (- y radius)
+        bottom (+ y radius)]
+    (list
+      [:mist x y (* radius 2) "#ff3f8f" 1]
+      [:line left top right bottom "#ff78b3" 4 1]
+      [:line right top left bottom "#ff78b3" 4 1])))
+
+(defn o-commands [layout position]
+  (let [[x y] (cell-center layout position)
+        radius (/ (get layout :cell-size) 4)
+        inner (/ (* radius 2) 3)]
+    (list
+      [:mist x y (* radius 2) "#43f7e7" 1]
+      [:circle x y radius "#7dfff3" 1]
+      [:circle x y inner "#08111d" 1])))
+
+(defn add-pieces [commands layout positions side]
+  (let [cells (vec positions)]
+    (loop [index 0 result commands]
+      (if (< index (count cells))
+        (let [position (nth cells index)
+              piece (if (= side :p1)
+                      (x-commands layout position)
+                      (o-commands layout position))]
+          (recur (inc index) (append-commands result piece)))
+        result))))
+
+(defn board-lines [layout]
+  (let [left (get layout :board-left)
+        top (get layout :board-top)
+        size (get layout :board-size)
+        cell (get layout :cell-size)
+        right (+ left size)
+        bottom (+ top size)
+        x1 (+ left cell)
+        x2 (+ left (* cell 2))
+        y1 (+ top cell)
+        y2 (+ top (* cell 2))]
+    (list
+      [:line x1 top x1 bottom "#386779" 2 1]
+      [:line x2 top x2 bottom "#386779" 2 1]
+      [:line left y1 right y1 "#386779" 2 1]
+      [:line left y2 right y2 "#386779" 2 1])))
+
+(defn winning-endpoints [line]
+  (cond
+    (= line #{:aa :ab :ac}) [:aa :ac]
+    (= line #{:ba :bb :bc}) [:ba :bc]
+    (= line #{:ca :cb :cc}) [:ca :cc]
+    (= line #{:aa :ba :ca}) [:aa :ca]
+    (= line #{:ab :bb :cb}) [:ab :cb]
+    (= line #{:ac :bc :cc}) [:ac :cc]
+    (= line #{:aa :bb :cc}) [:aa :cc]
+    (= line #{:ac :bb :ca}) [:ac :ca]
+    :else nil))
+
+(defn winner-commands [game layout]
+  (let [line (get game :winning-line)
+        endpoints (winning-endpoints line)]
+    (if (nil? endpoints)
+      (list)
+      (let [[start end] endpoints
+            [x1 y1] (cell-center layout start)
+            [x2 y2] (cell-center layout end)
+            color (if (= (get game :winner) :p1) "#ff3f8f" "#43f7e7")]
+        (list
+          [:line x1 y1 x2 y2 color 5 1])))))
+
+(defn status-label [game]
+  (let [winner (get game :winner)]
+    (cond
+      (= winner :p1) "PLAYER X WINS"
+      (= winner :p2) "PLAYER O WINS"
+      (= winner :draw) "DRAW // PERFECT DEADLOCK"
+      (= (get game :turn) :p1) "PLAYER X // SELECT A CELL"
+      :else "PLAYER O // SELECT A CELL")))
+
+(defn status-color [game]
+  (let [winner (get game :winner)]
+    (cond
+      (= winner :p1) "#ff78b3"
+      (= winner :p2) "#7dfff3"
+      (= winner :draw) "#ffe66b"
+      (= (get game :turn) :p1) "#ff78b3"
+      :else "#7dfff3")))
+
+(defn chrome-commands [game layout]
+  (let [width (get layout :width)
+        left (get layout :board-left)
+        top (get layout :board-top)
+        size (get layout :board-size)
+        reset-left (get layout :reset-left)
+        reset-top (get layout :reset-top)
+        reset-width (get layout :reset-width)
+        reset-height (get layout :reset-height)]
+    (list
+      [:grid 48 "rgba(67,247,231,.045)" 1]
+      [:mist (/ width 2) (+ top (/ size 2)) size "#43f7e7" 1]
+      [:rect (- left 10) (- top 10) (+ size 20) (+ size 20) "#03070d" 1]
+      [:rect left top size size "#08111d" 1]
+      [:text "TIC // TAC // TOE.HAL" left (- top 38) "#dffeff" 16]
+      [:text (status-label game) left (- top 15) (status-color game) 13]
+      [:rect reset-left reset-top reset-width reset-height "#102332" 1]
+      [:text "RESET GAME" (+ reset-left 27) (+ reset-top 23) "#dffeff" 13]
+      [:text "HARA STATE  ->  HTA  ->  CANVAS" left (+ reset-top reset-height 24) "#637d8f" 11])))
+
+(defn render-commands [game layout]
+  (let [base (chrome-commands game layout)
+        board (append-commands base (board-lines layout))
+        p1 (add-pieces board layout (get (get game :board) :p1) :p1)
+        p2 (add-pieces p1 layout (get (get game :board) :p2) :p2)]
+    (append-commands p2 (winner-commands game layout))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;; Browser loop ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(node/start
+  (fn []
+    (loop [game (new-game)]
+      (let [frame (co/await (draw/next-frame "canvas/background"))
+            ;; Until the host frame is normalized, draw a fixed first pass.
+            ;; The next tutorial revision can make these dimensions responsive.
+            width 960
+            height 600
+            layout (game-layout width height)
+            next-game (apply-events game (get frame "input/events") layout)]
+        (do
+          (co/await
+            (draw/render
+              "canvas/background"
+              {:type :canvas-2d
+               :background "#03070d"
+               :commands (render-commands next-game layout)}))
+          (recur next-game))))))

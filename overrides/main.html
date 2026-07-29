@@ -2,6 +2,7 @@
 {% extends "base.html" %}
 {% block extrahead %}
   {{ super() }}
+  <script src="{{ 'javascripts/home-theme.js' | url }}?v=3" defer></script>
   <meta property="og:type" content="website">
   <meta property="og:title" content="Hara Documentation">
   <meta property="og:description" content="Build live, across every host.">
@@ -13,6 +14,30 @@
   <meta name="twitter:description" content="Build live, across every host.">
   <meta name="twitter:image" content="https://docs.hara-lang.org/assets/og-hara-docs.png">
 {% endblock %}
+{% block header %}
+<header class="hara-docs-header" data-md-component="header">
+  <div class="hara-docs-header__inner">
+    <label class="hara-docs-menu" for="__drawer" aria-label="Open navigation">
+      <span></span><span></span><span></span>
+    </label>
+    <a class="hara-docs-brand" href="{{ nav.homepage.url | url }}" aria-label="Hara documentation home">
+      <img src="{{ config.theme.logo | url }}" alt="">
+      <span>Hara</span>
+    </a>
+    <nav class="hara-docs-nav" aria-label="Primary navigation">
+      <a href="{{ 'getting-started/' | url }}" data-hara-section="start">Start</a>
+      <a href="{{ 'learn-programming/' | url }}" data-hara-section="learn">Learn</a>
+      <a href="{{ 'start/clojure/' | url }}" data-hara-section="guides">Guides</a>
+      <a href="{{ 'reference/' | url }}" data-hara-section="reference">Reference</a>
+      <button class="hara-theme-toggle" type="button" data-hara-theme-toggle aria-label="Switch color theme">
+        <svg class="hara-theme-icon hara-theme-icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="hara-theme-icon hara-theme-icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 15.1A8.5 8.5 0 0 1 8.9 3.3 8.5 8.5 0 1 0 20.7 15.1Z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+{% endblock %}
+{% block tabs %}{% endblock %}
 {% block site_nav %}
 <div class="hara-bg" data-hara-component="parallax" data-hara-fixed aria-hidden="true">
 </div>

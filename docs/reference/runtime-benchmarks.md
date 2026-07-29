@@ -2,7 +2,10 @@
 
 Generated: `2026-07-24T14:18:51.332929+00:00` on `Linux-6.17.0-40-generic-x86_64-with-glibc2.39`.
 
-Values are machine-specific evidence, not regression thresholds.
+Values are machine-specific evidence, not regression thresholds. `Peak RSS MiB`
+is the maximum resident memory observed for the process. `Payload MiB` is an
+opaque harness field in the current export: its artifact collection rule is not
+documented here, so do not interpret it as download, install, or memory size.
 The Truffle/JVM row used the fallback interpreter because this Temurin JVM has no JVMCI compiler.
 
 ## Startup
@@ -57,4 +60,8 @@ The Truffle/JVM row used the fallback interpreter because this Temurin JVM has n
 | hara-wasm-node / persistent-map | 7.522 | 1.234 | 810.3 | 4 |
 | hara-wasm-node / sequence-navigation | 2.924 | 0.617 | 1620.1 | 27 |
 
-Warm samples are per-call nanoseconds. Convergence is the first five-window run within ±5% of the final ten-window median with CV ≤10%.
+Warm values above are per-call milliseconds (the raw samples are stored as
+nanoseconds). **Lower is better.** Each adapter re-reads, evaluates, and checks
+the same source form, but this is an implementation snapshot rather than a
+source-normalized language shootout. Convergence is the first five-window run
+within ±5% of the final ten-window median with CV ≤10%.

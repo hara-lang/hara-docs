@@ -43,6 +43,10 @@
    :class :compiler
    :source "(do (defn inc [x] (+ x 1)) (inc 41))"
    :expect {:value 42 :type :integer}}
+  {:id :compiler/defn-var
+   :class :compiler
+   :source "(defn rank [score] score)"
+   :expect {:value "#'rank" :type :var}}
   {:id :runtime/loop-recur
    :class :runtime
    :source "(loop [x 41] (if x (recur nil) 42))"
@@ -55,6 +59,10 @@
    :class :runtime
    :source "(cond (= 1 2) 0 (= 2 2) 42 :else 99)"
    :expect {:value 42 :type :integer}}
+  {:id :runtime/cond-defined-function
+   :class :runtime
+   :source "(do (defn rank [score] (cond (>= score 100) \"gold\" (>= score 50) \"silver\" :else \"bronze\")) (rank 70))"
+   :expect {:value "silver" :type :string}}
   {:id :runtime/threading
    :class :runtime
    :source "(->> 3 (+ 2) (* 3))"
@@ -85,6 +93,18 @@
    :class :runtime
    :source "(do (def answer 1) (set! answer 42) answer)"
    :expect {:value 42 :type :integer}}
+  {:id :runtime/atom-value
+   :class :runtime
+   :source "(atom {:x 10 :score 0})"
+   :expect {:value "#atom <{:x 10 :score 0}>" :type :atom}}
+  {:id :runtime/array-value
+   :class :runtime
+   :source "(array 1 2 3)"
+   :expect {:value "(array 1 2 3)" :type :array}}
+  {:id :runtime/object-value
+   :class :runtime
+   :source "(object \"score\" 10)"
+   :expect {:value "(object \"score\" 10)" :type :object}}
   {:id :iterator/core
    :class :iterator
    :source "(let [it (iter [1 2])] (iter-next it))"
@@ -345,6 +365,10 @@
    :class :namespace
    :source "(ns std.foundation (:config {:builtins [count]})) (std.foundation/count [41 42])"
    :expect {:value 2 :type :integer}}
+  {:id :binding/multiple-body
+   :class :binding
+   :source "(let [a (array 1 2 3)] (. a (push-last 4)) (. a (get 3)))"
+   :expect {:value 4 :type :integer}}
   {:id :unsupported/ratio
    :class :unsupported
    :source "1/2"

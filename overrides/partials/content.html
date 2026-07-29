@@ -1,0 +1,12 @@
+{# Site-wide hydration boundary for live Hara code fences. #}
+{% include "partials/tags.html" %}
+{% include "partials/actions.html" %}
+{% if "\u003ch1" not in page.content %}
+  <h1>{{ page.title | d(config.site_name, true)}}</h1>
+{% endif %}
+<div data-hara-live-content>
+  {{ page.content }}
+</div>
+{% include "partials/source-file.html" %}
+{% include "partials/feedback.html" %}
+{% include "partials/comments.html" %}
