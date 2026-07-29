@@ -37,7 +37,7 @@ implementations.
 | Area | Original behavior | Missing or different facility | Proposed direction | Decision |
 |---|---|---|---|---|
 | Typed records | Five Clojure records represent typed declarations | Native Hara record declaration was missing | Native `defstruct`, `->Record`, and `map->Record` constructors | implemented |
-| Namespace analysis | Uses `ns-publics`, `ns-aliases`, `ns-name`, and `requiring-resolve` | Hara exposed only part of this introspection | Narrow deterministic namespace primitives; publics exclude referred Vars | implemented |
+| Namespace analysis | Uses `ns-publics`, `ns-aliases`, `ns-name`, and `resolve` | Hara exposed only part of this introspection | Narrow deterministic namespace primitives; publics exclude referred Vars | implemented |
 | Source analysis | Uses tools.reader with file, line, and column metadata | Hara parser did not expose a multi-form analysis API | Capability-checked `read-forms` preserving file and source spans | implemented |
 | Parallel work | Some later language/runtime paths use futures and parallel task processing | Hara promises differ from Clojure futures | No sequential fallback until separately approved | pending |
 | Host integrations | Later language paths use filesystem, process, network, and JVM APIs | Hara uses explicit capabilities and runtime flavors | Keep operations unavailable until a capability-safe mapping is reviewed | pending |

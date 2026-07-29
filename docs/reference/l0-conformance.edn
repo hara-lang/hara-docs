@@ -147,7 +147,7 @@
    :expect {:value 42 :type :integer}}
   {:id :module/core-bootstrap
    :class :module
-   :source "(load-resource \"std/foundation.hal\") ((comp2 inc inc) 40)"
+   :source "(load-resource \"std/foundation.hal\") ((comp inc inc) 40)"
    :expect {:value 42 :type :integer}}
   {:id :module/core-collection-helpers
    :class :module
@@ -203,7 +203,7 @@
    :expect {:value 7 :type :integer}}
   {:id :module/classpath-require
    :class :module
-   :source "(require \"std/foundation.hal\") ((comp2 inc inc) 40)"
+   :source "(require \"std/foundation.hal\") ((comp inc inc) 40)"
    :expect {:value 42 :type :integer}}
   {:id :collection/bytes
    :class :collection
