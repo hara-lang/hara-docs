@@ -56,6 +56,11 @@ nav:
       - Start with Hara: index.md
       - Install and choose a workspace: getting-started.md
       - Your first browser game: create/first-game.md
+      - Concepts:
+          - Concepts overview: concepts/index.md
+          - Runtime-driven development: concepts/runtime-driven-development.md
+          - Live coding: concepts/live-coding.md
+          - Unified representation: concepts/unified-representation.md
   - Learn Hara:
       - Learn to program: learn-programming/index.md
       - Hara Lisp — Intro:
