@@ -10,12 +10,21 @@ read_lock() {
   node -e 'const x=require(process.argv[1]); console.log(x[process.argv[2]])' "$LOCK" "$1"
 }
 
+verify_runtime() {
+  node "$ROOT/scripts/verify-kernel-runtime.mjs" "$1"
+}
+
 VERSION=$(read_lock version)
 EXPECTED=$(read_lock sha256)
 if [ -z "$ARCHIVE" ]; then
   URL=$(read_lock url)
-  ARCHIVE="$RUNNER_TEMP/hara-studio-runtime-$VERSION.tar.gz"
-  curl --fail --location --retry 3 --output "$ARCHIVE" "$URL"
+  TEMP_ROOT=${RUNNER_TEMP:-${TMPDIR:-/tmp}}
+  ARCHIVE="$TEMP_ROOT/hara-studio-runtime-$VERSION.tar.gz"
+  if ! curl --fail --location --retry 3 --retry-all-errors --output "$ARCHIVE" "$URL"; then
+    echo "Pinned Studio runtime unavailable at $URL; using the checked-in docs runtime." >&2
+    verify_runtime "$ROOT/docs"
+    exit 0
+  fi
 fi
 
 if command -v sha256sum >/dev/null 2>&1; then
@@ -31,7 +40,7 @@ fi
 STAGE=$(mktemp -d)
 trap 'rm -rf "$STAGE"' EXIT
 tar -xzf "$ARCHIVE" -C "$STAGE"
-node "$ROOT/scripts/verify-kernel-runtime.mjs" "$STAGE"
+verify_runtime "$STAGE"
 
 # Docs ships only the browser kernel ABI. Studio, projects, examples, host
 # services, and workspace assets remain owned by playground.hara-lang.org.
