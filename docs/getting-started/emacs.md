@@ -70,9 +70,10 @@ Add this function to your configuration:
 
 ```elisp
 (defun hara-eval-region (begin end)
-  "Evaluate the active Hara region from BEGIN to END."
+  "Evaluate Hara source from BEGIN to END."
   (interactive "r")
-  (unless (use-region-p)
+  (when (and (called-interactively-p 'interactive)
+             (not (use-region-p)))
     (user-error "Select a complete Hara form first"))
   (let ((result-buffer (get-buffer-create "*Hara Result*")))
     (with-current-buffer result-buffer
