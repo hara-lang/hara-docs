@@ -42,8 +42,11 @@ trap 'rm -rf "$STAGE"' EXIT
 tar -xzf "$ARCHIVE" -C "$STAGE"
 verify_runtime "$STAGE"
 
-# Docs ships only the browser kernel ABI. Studio, projects, examples, host
-# services, and workspace assets remain owned by playground.hara-lang.org.
+# Docs ships the browser kernel ABI and current Studio host/resource set used
+# by the interactive examples. Projects, examples, and workspace assets remain
+# owned by playground.hara-lang.org.
 rm -rf "$DEST"
-mkdir -p "$DEST"
+mkdir -p "$DEST/std/substrate"
 cp "$STAGE/rust/hara.wasm" "$STAGE/rust/hta.js" "$STAGE/rust/hta-worker.js" "$DEST/"
+cp -R "$STAGE/rust/studio" "$DEST/"
+cp "$STAGE/rust/studio/hal/substrate-frame.hal" "$DEST/std/substrate/frame.hal"

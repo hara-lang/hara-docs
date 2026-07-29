@@ -12,9 +12,9 @@ def on_post_build(config, **_kwargs):
     for name in ("tokens.css", "components.css"):
         copy2(source / name, target / name)
 
-    # The inline tutorial uses Studio's browser host without exposing Studio.
-    repository = project.parent
-    studio = repository / "rust" / "web" / "studio"
+    # The inline tutorials use a small subset of Studio's browser host.
+    studio = project / "docs" / "rust" / "studio"
+    substrate_source = project / "docs" / "rust" / "std" / "substrate" / "frame.hal"
     runtime = Path(config.site_dir) / "rust" / "studio"
     (runtime / "hal").mkdir(parents=True, exist_ok=True)
     for name in ("broker.js", "canvas-runtime.js"):
@@ -23,5 +23,4 @@ def on_post_build(config, **_kwargs):
         copy2(studio / "hal" / name, runtime / "hal" / name)
     substrate = runtime / "hal" / "std" / "substrate"
     substrate.mkdir(parents=True, exist_ok=True)
-    copy2(repository / "lib" / "src" / "std" / "substrate" / "frame.hal",
-          substrate / "frame.hal")
+    copy2(substrate_source, substrate / "frame.hal")
