@@ -19,9 +19,8 @@ Current projects define the roots searched by `require` in `project.edn`:
  :project/capabilities #{}}
 ```
 
-Run project commands from this directory so Hara discovers the descriptor by walking upward.
-The checked-in services fixture still includes a legacy `project.hal` while it
-is migrated; new projects should not copy that descriptor.
+Run project commands from this directory so Hara discovers `project.edn` by
+walking upward.
 
 ## 2. Define the worker
 

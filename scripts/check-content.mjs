@@ -24,14 +24,6 @@ for (const path of await markdownFiles(new URL("../docs", import.meta.url).pathn
   for (const [label, pattern] of deprecatedBranding) {
     if (pattern.test(source)) failures.push(`${path}: deprecated product branding: ${label}`);
   }
-  const lines = source.split("\n");
-  lines.forEach((line, index) => {
-    if (!line.includes("project.hal")) return;
-    const context = lines.slice(Math.max(0, index - 2), index + 3).join(" ").toLowerCase();
-    if (!context.includes("legacy") && !context.includes("migration")) {
-      failures.push(`${path}:${index + 1}: project.hal must be labelled legacy or migration`);
-    }
-  });
 }
 if (failures.length) throw new Error(failures.join("\n"));
 console.log("docs project guidance is current");

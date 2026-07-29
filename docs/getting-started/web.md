@@ -54,8 +54,7 @@ orbit-game/
 
 `project.edn` describes source roots and requested capabilities.
 `workspace.edn` describes the files, areas, nodes, visualisers, controllers, and
-connections that make up the workspace. New projects should use these data
-manifests rather than the older executable `project.hal` descriptor.
+connections that make up the workspace. New projects use these data manifests.
 
 Create `src/game.hal`:
 

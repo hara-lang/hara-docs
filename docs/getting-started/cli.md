@@ -135,8 +135,7 @@ my-project/
 
 Use `.hal` for executable Hara source. `project.edn` describes project roots and
 requested capabilities. `workspace.edn` describes the files, areas, nodes, and
-connections used by visual workspaces. The older executable `project.hal`
-descriptor is a migration input rather than the format for new projects.
+connections used by visual workspaces.
 
 A useful first routine is:
 

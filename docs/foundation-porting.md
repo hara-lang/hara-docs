@@ -83,16 +83,16 @@ considered.
 
 ## Project convention
 
-This section documents the legacy Foundation fixture convention. Its nearest
-`project.hal` is discovered by walking upward from the working directory, and
-runnable fixtures use `lib/bench/<NUM>-<GROUP>/{project.hal,src,test}`. New
-portable projects use root `project.edn` and `workspace.edn` instead. A legacy
-descriptor has this form:
+The nearest `project.edn` is discovered by walking upward from the working
+directory, and runnable fixtures use
+`lib/bench/<NUM>-<GROUP>/{project.edn,src,test}`. A project manifest has this
+form:
 
-```hara
-(defproject project.name
-  {:source-paths ["src"]
-   :test-paths ["test"]})
+```clojure
+{:hara/type :project
+ :project/id project.name
+ :project/source-paths ["src"]
+ :project/test-paths ["test"]}
 ```
 
 Namespace paths replace dots with directories and hyphens with underscores.

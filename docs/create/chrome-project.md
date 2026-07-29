@@ -25,9 +25,7 @@ orbit-game/
 
 `project.edn` tells the panel where to resolve required namespaces and which
 capabilities the project requests. `workspace.edn` declares its files, areas,
-nodes, and connections. Both manifests are required for new projects; the
-legacy executable `project.hal` descriptor is supported only by the migration
-bridge.
+nodes, and connections. Both manifests are required for new projects.
 
 ## Connect the panel to the project
 
