@@ -12,3 +12,6 @@ __pycache__/
 
 # Local desktop metadata
 .DS_Store
+
+# Generated Hara UI assets copied during site builds
+vendor/hara-ui/
