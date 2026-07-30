@@ -3,6 +3,10 @@
 The Truffle runtime listens on `127.0.0.1:1311` by default. RESP is the external control-plane
 protocol; HTA is the internal Truffle/WASM ABI.
 
+The native Rust [Fabric service](fabric-service.md) also uses RESP4, with a
+separate Hara-specific command surface for spaces, WASM modules, reports,
+retention, and analytics. It is not a Redis key-command implementation.
+
 ## Sessions
 
 The Hara process owns sessions. Each session contains one isolated Hara kernel, while the RESP
@@ -86,6 +90,7 @@ hara                         # ROOT JLine REPL + RESP on 127.0.0.1:1311
 hara --offline               # ROOT JLine REPL, listener initially disabled
 hara headless                # ROOT RESP listener without terminal UI
 hara server                  # compatibility alias for headless
+hara fabric                  # Rust session fabric + reports + analytics
 hara standalone              # compatibility alias for --offline
 hara remote HOST:PORT        # remote client mode
 ```
