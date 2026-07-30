@@ -5,7 +5,7 @@ state models give web developers an excellent way to divide an interface,
 co-locate behaviour, and turn state changes into new views.
 
 That strength has a gravitational pull: application structure can begin to
-follow the component tree. Hara's `std.substrate` starts one layer earlier. It
+follow the component tree. Hara's `std.lib.substrate` starts one layer earlier. It
 gives the application a structured, live connection layer; React remains the
 excellent renderer and interaction surface above it.
 

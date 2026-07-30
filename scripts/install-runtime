@@ -62,10 +62,10 @@ fi
 # by the interactive examples. Projects, examples, and workspace assets remain
 # owned by playground.hara-lang.org.
 rm -rf "$DEST"
-mkdir -p "$DEST/std/substrate"
+mkdir -p "$DEST/std/lib/substrate"
 cp "$STAGE/rust/hara.wasm" "$STAGE/rust/hta.js" "$STAGE/rust/hta-worker.js" "$DEST/"
 cp -R "$STAGE/rust/studio" "$DEST/"
-cp "$STAGE/rust/studio/hal/substrate-frame.hal" "$DEST/std/substrate/frame.hal"
+cp "$STAGE/rust/studio/hal/substrate-frame.hal" "$DEST/std/lib/substrate/frame.hal"
 if [ -n "$CURRENT" ]; then
   cp "$CURRENT/hara.wasm" "$CURRENT/hta.js" "$CURRENT/hta-worker.js" "$DEST/"
   cp "$CURRENT/studio/host-services.js" "$DEST/studio/"

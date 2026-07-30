@@ -142,7 +142,7 @@
           "studio.fs": asset("../rust/studio/hal/fs.hal"),
           "studio.node": asset("../rust/studio/hal/node.hal"),
           "studio.draw": asset("../rust/studio/hal/draw.hal"),
-          "std.substrate.frame": asset("../rust/studio/hal/std/substrate/frame.hal")
+          "std.lib.substrate.frame": asset("../rust/std/lib/substrate/frame.hal")
         }
       }));
 
