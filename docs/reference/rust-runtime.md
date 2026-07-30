@@ -225,9 +225,9 @@ Promises are first-class Rust values backed by a single-settlement state machine
 The evaluator exposes protocol dispatch without requiring a host registry for the core collection protocols:
 
 ```text
-(protocol-call ICount count value)
-(protocol-call INth nth value index)
-(protocol-call ILookup lookup value key [default])
+(ICount/count value)
+(INth/nth value index)
+(ILookup/lookup value key [default])
 ```
 
 Byte `INth` returns signed stored values while `bytes/get` remains unsigned. Unknown protocol/method pairs return a stable missing-method error; host extensions continue to use the separate `ProtocolRegistry`.

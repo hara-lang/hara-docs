@@ -81,7 +81,7 @@
    :expect {:value 42 :type :integer}}
   {:id :runtime/metadata
    :class :runtime
-   :source "(protocol-call ILookup lookup (protocol-call IObjType meta (protocol-call IObjType with-meta (Person \"Ada\") {:doc \"person\"})) :doc)"
+   :source "(ILookup/lookup (IObjType/meta (IObjType/with-meta (Person \"Ada\") {:doc \"person\"})) :doc)"
    :setup "(defstruct Person [name])"
    :expect {:value "person" :type :string}}
   {:id :runtime/dynamic-binding
@@ -159,7 +159,7 @@
    :expect {:value 11 :type :integer}}
   {:id :module/core-predicate-reductions
    :class :module
-   :source "(load-resource \"std/foundation.hal\") (+ (if (every? (fn [x] (> x 0)) [1 2]) 1 0) (if (any? (fn [x] (= x 2)) [1 2]) 2 0) (if (protocol-call IFind has? {:a nil} :a) 2 0))"
+   :source "(load-resource \"std/foundation.hal\") (+ (if (every? (fn [x] (> x 0)) [1 2]) 1 0) (if (any? (fn [x] (= x 2)) [1 2]) 2 0) (if (IFind/has? {:a nil} :a) 2 0))"
    :expect {:value 5 :type :integer}}
   {:id :module/core-nested-updates
    :class :module
@@ -167,7 +167,7 @@
    :expect {:value 4 :type :integer}}
   {:id :module/core-navigation
    :class :module
-   :source "(load-resource \"std/foundation.hal\") (+ (last [1 2 3]) (first (vals {:a 1})) (if (protocol-call IFind has? {:a nil} :a) 1 0))"
+   :source "(load-resource \"std/foundation.hal\") (+ (last [1 2 3]) (first (vals {:a 1})) (if (IFind/has? {:a nil} :a) 1 0))"
    :expect {:value 5 :type :integer}}
   {:id :collection/ordinary-dissoc-navigation
    :class :collection
@@ -207,7 +207,7 @@
    :expect {:value 42 :type :integer}}
   {:id :collection/bytes
    :class :collection
-   :source "(protocol-call INth nth (bytes 1 2 -3) 2)"
+   :source "(INth/nth (bytes 1 2 -3) 2)"
    :expect {:value -3 :type :byte}}
   {:id :collection/core-functions
    :class :collection
@@ -267,7 +267,7 @@
    :expect {:value 11 :type :integer}}
   {:id :protocol/struct-extension
    :class :protocol
-   :source "(protocol-call ICount count (Box 4))"
+   :source "(ICount/count (Box 4))"
    :setup "(defstruct Box [size]) (extend-type Box ICount (count [self] (field self :size)))"
    :expect {:value 4 :type :integer}}
   {:id :protocol/multimethod

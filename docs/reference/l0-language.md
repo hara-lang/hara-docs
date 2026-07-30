@@ -39,15 +39,15 @@ The core special forms are `quote`, `if`, `do`, `when`, `when-not`, `and`,
 `or`, `cond`, `let`, `letfn`, `binding`, `loop`, `recur`, `fn`, `def`,
 `defn`, `defn-`, `declare`, `defmulti`, `defmethod`, `var`, `deref`, `set!`,
 `throw`, `try`, `ns`, `in-ns`, `require`, `refer`, `use`, `alias`,
-`defstruct`, `defprotocol`, `extend-type`, `protocol-call`, `field`, and
+`defstruct`, `defprotocol`, `extend-type`, `field`, and
 `apply`. `defn` is the only function-definition form; there is no `defn.xt`.
 
 The ordinary collection functions `count`, `get`, `assoc`, `conj`, `cons`,
 `nth`, and `empty` are protocol-backed language functions. `cons` follows the
 public `(cons item collection)` argument order; the other update/lookup
-functions place the collection first. These functions use the same context-
-local protocol registry as `protocol-call`, so language-defined extensions are
-visible without requiring Java interface implementation.
+functions place the collection first. Protocol method Vars dispatch through
+the same context-local registry, so language-defined extensions are visible
+without requiring Java interface implementation.
 
 `let` initializers are evaluated in parallel against the enclosing lexical
 environment. `letfn` installs all local function bindings before evaluating
@@ -239,8 +239,8 @@ transducers, `transduce`, or `eduction` semantics.
 
 Protocols are language descriptors with context-local dispatch registries.
 Java interfaces are optional adapters and fast paths, not the language
-definition. `defprotocol` declares methods; `extend-type` installs language
-implementations; `protocol-call` performs dispatch. Dispatch supports Hara
+definition. `defprotocol` declares direct namespace method Vars; `extend-type`
+installs language implementations; calling the method Var performs dispatch. Dispatch supports Hara
 values, adapted Java values, primitives, nil, and foreign values. Replacing a
 method or extension invalidates affected dispatch assumptions.
 

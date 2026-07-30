@@ -53,7 +53,7 @@ the portable Hara runtime:
 |---|---|---|
 | Nested argument destructuring in helper definitions | Explicit `first`, `second`, `drop`, and indexed access | Hara does not yet support every nested Clojure binding pattern |
 | `list` and syntax-quoted generated forms | Persistent lists assembled with `cons` | Hara does not expose Clojure's `list`, and syntax quote is not a runtime function |
-| `with-meta` | `IObjType/with-meta` through `protocol-call` | Metadata mutation is intentionally protocol-based |
+| `with-meta` | Direct `IObjType/with-meta` method call | Metadata mutation is intentionally protocol-based |
 | Repeated traversal of lazy collection operations | Materialize once with `vec` | Hara lazy iterators are one-shot |
 | Dynamic values consumed by lazy transforms | Materialize inside the dynamic binding | Deferred iteration must not escape the binding extent |
 | Arbitrary `eval` in grammar mixins | Qualified symbol resolution plus a narrow form evaluator | Portable HAL code must not depend on host evaluation |

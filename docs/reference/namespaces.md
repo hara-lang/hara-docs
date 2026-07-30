@@ -26,8 +26,10 @@ underlying provider namespaces.
 
 Startup namespaces also refer protocol descriptors (`ICount`, `IFn`, and the other public
 `I*` values) and native-type descriptors (`Maths`, `String`, `Edn`, `Json`, and the other
-`std.native/*` values). These short names retain the identity and metadata of their canonical
-descriptor Vars; for example, `(= Maths std.native/Maths std.foundation/Maths)` is true.
+`std.native.<Type>` values). These short names retain the identity and metadata of their canonical
+objects in every namespace, including blank namespaces; for example,
+`(= Maths std.native.Maths)` is true. The same short name is also the method
+namespace alias, so native calls use `Maths/sin`, `Json/read`, and `Iter/iter-map`.
 
 ## Native JVM flavor
 
