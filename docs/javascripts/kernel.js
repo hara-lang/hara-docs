@@ -16,14 +16,40 @@ export function prepareDocsEval(source) {
  * Studio's persistent browser store and virtual filesystem, but no workspace
  * UI or ambient device capabilities.
  */
-export async function createDocsKernel({ wasmUrl, workerUrl, resources = {} }) {
-  const response = await fetch(wasmUrl);
+async function loadKernelAssets(wasmUrl, resources, fetchAsset) {
+  const entries = Object.entries(resources);
+  const [response, ...resourceResponses] = await Promise.all([
+    fetchAsset(wasmUrl),
+    ...entries.map(([, url]) => fetchAsset(url))
+  ]);
   if (!response.ok) throw new Error(`hara.wasm: ${response.status}`);
-  const worker = new Worker(workerUrl, { type: "module" });
+  const moduleBytes = await response.arrayBuffer();
+  const loadedResources = await Promise.all(resourceResponses.map(async (resourceResponse, index) => {
+    const [name] = entries[index];
+    if (!resourceResponse.ok) throw new Error(`${name}: ${resourceResponse.status}`);
+    return [name, await resourceResponse.text()];
+  }));
+  return { moduleBytes, loadedResources };
+}
+
+export async function createDocsKernel({
+  wasmUrl,
+  workerUrl,
+  resources = {},
+  fetchAsset = fetch,
+  WorkerClass = Worker,
+  ContextClass = HtaContext
+}) {
+  // Fetch every startup dependency before constructing the worker. This keeps
+  // the kernel from becoming observable while its require resources are still
+  // in flight on a cold page load.
+  const { moduleBytes, loadedResources } =
+    await loadKernelAssets(wasmUrl, resources, fetchAsset);
+  const worker = new WorkerClass(workerUrl, { type: "module" });
   const canvasRuntimes = new Map();
-  const context = new HtaContext({
+  const context = new ContextClass({
     worker,
-    moduleBytes: await response.arrayBuffer(),
+    moduleBytes,
     kernelId: `docs-${Math.random().toString(36).slice(2)}`,
     hostCalls: createHostServices({
       dbName: "hara-docs",
@@ -31,10 +57,8 @@ export async function createDocsKernel({ wasmUrl, workerUrl, resources = {} }) {
     })
   });
   await context.ready;
-  for (const [name, url] of Object.entries(resources)) {
-    const resourceResponse = await fetch(url);
-    if (!resourceResponse.ok) throw new Error(`${name}: ${resourceResponse.status}`);
-    await context.call("register-resource", [name, await resourceResponse.text()]);
+  if (loadedResources.length > 0) {
+    await context.call("register-resources", [loadedResources]);
   }
   const string = (value) => JSON.stringify(String(value));
   return {
