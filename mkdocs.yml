@@ -126,7 +126,6 @@ nav:
           - Native runtime flavors: reference/native-flavors.md
           - Rust and WASM runtime: reference/rust-runtime.md
           - RESP protocol: reference/resp-protocol.md
-          - Fabric coordination service: reference/fabric-service.md
       - Building and extending:
           - Developer guide: development.md
           - Development tracing: development-tracing.md
