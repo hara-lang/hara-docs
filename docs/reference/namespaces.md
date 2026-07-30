@@ -18,7 +18,13 @@ Var metadata and the REPL for exact documentation and arglists.
 | `std.foundation.json` | `json/` | Strict JSON parsing and encoding | `read`, `write`, `pretty` |
 | `std.foundation.coroutine` | `co/` | Lua-style coroutines with bidirectional yield and promise await | `create`, `resume`, `yield`, `status`, `close`, `await` |
 | `std.foundation.set` | `set/` | Portable immutable set algebra | `union`, `intersection`, `difference`, `subset?`, `select` |
+| `std.foundation.pretty` | `pretty/` | Portable readable formatting façade | `pprint-str` |
+| `std.foundation.pretty.engine` | Through `std.foundation.pretty` | Document layout and rendering engine | Internal formatting primitives |
 | `std.pretty` | `pretty/` | Portable readable formatting | `pprint-str` |
+| `std.lib.block` | Explicit `require` | Structured source blocks | Block construction and traversal |
+| `std.lib.task` | Explicit `require` | Portable task construction and execution | Task composition and execution |
+| `std.lib.zip` | Explicit `require` | Persistent zipper navigation and editing | Location, movement, and editing |
+| `code.test` | Explicit `require` | Fact lifecycle and structured test execution | Test registration and execution |
 
 `(ns app)` and `(ns app (:config {:intrinsics :all}))` install the same default aliases. Intrinsic
 aliases can be excluded or renamed through `(:config {:intrinsics ...})` without removing their
