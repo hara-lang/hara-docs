@@ -8,6 +8,21 @@ Hara separates three related concepts:
 - A lazy `Seq` produces values on demand.
 - A raw iterator is a one-shot source that advances.
 
+These values have different roles even when they expose no elements. `nil`
+means that no non-empty sequence cell exists, `[]` is a reusable empty vector,
+and an exhausted iterator is a one-shot cursor at its end. Hara does not have
+an empty `Seq` object: every value satisfying `seq?` has a first item.
+
+```hara
+(seq [])           ; => nil
+(rest [1])         ; => nil
+(seq? (rest [1 2])); => true
+(vec (rest [1]))   ; => []
+```
+
+This is why Hara needs only `rest`, not separate `rest` and `next` operations.
+Use `vec` when a reusable persistent result is required.
+
 ## Learning goals
 
 By the end of this lesson, you can:
@@ -163,6 +178,10 @@ Check whether it has another item:
 (iter-has? line-iterator)
 ; => true
 ```
+
+This check does not logically consume the item. Repeated checks return the same
+answer, and the following `iter-next` returns the item that was observed.
+Exhaustion returns `false`; an iterator failure is still an error.
 
 Advance it:
 

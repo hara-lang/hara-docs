@@ -262,6 +262,12 @@ use_namespace("user") -> user bindings
 
 The Rust evaluator includes the host-neutral bootstrap operations used by `std/lib/foundation`: `not`, numeric comparisons, `mod`, `first`, `rest`, `last`, and `empty?`. They operate over persistent collections, byte buffers, marker arrays, and iterators without invoking host APIs.
 
+Rust implements the same nil-terminated sequence algebra as the JVM:
+`HaraSeq(A) = Option(NonEmptyLazySeq(A))`. A sequence-tagged iterator is
+returned only after exact lookahead proves that a head exists. Empty sources
+produce `nil`; a non-empty `rest` produces a `Seq`; materializing either `nil`
+or an exhausted finite iterator produces `[]`.
+
 ## Iterator aliases and combinators
 
 The Rust core exposes the bootstrap iterator aliases and bounded combinators:
@@ -274,7 +280,12 @@ cycle            -> replayable closeable iterator
 concat           -> sequential iterator over sources
 ```
 
-All returned values remain closeable iterator handles. `iter-next` preserves the stable exhaustion error, and callbacks are evaluated through the same captured-function mechanism as ordinary calls.
+All returned values remain closeable iterator handles. Iterator state keeps at
+most one lookahead item so `iter-has?` is exact and non-logically-consuming.
+`iter-next` consumes that buffered item or preserves the stable exhaustion
+error, and callback failures propagate instead of being treated as
+exhaustion. Shortest-source combinators such as `iter-zip` and
+`iter-interleave` are finite when any source is finite.
 
 ## Namespace aliases
 

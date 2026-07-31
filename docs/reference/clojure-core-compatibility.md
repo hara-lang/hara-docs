@@ -27,6 +27,11 @@ Canonical exhaustive grouping for Clojure 1.12.5 and Hara L0 plus `std.foundatio
 | `defrecord` | `defstruct` | Hara has no Clojure JVM record/class contract; portable immutable domain values use defstruct and protocols. |
 | `eval` | `eval` | Hara evaluates through its context-local language runtime and does not expose Clojure compiler/JVM eval semantics. |
 
+Hara deliberately has no separate `next`. Its sequence model is
+`Option(NonEmptyLazySeq)`: both `seq` and `rest` return `nil` when no
+non-empty cell exists, and every `Seq` has a first element. `vec` accepts that
+`nil` result as an empty source, so `(vec (rest [1]))` is `[]`.
+
 ## same-renamed
 
 | Clojure | Hara | Contract |

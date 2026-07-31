@@ -66,6 +66,29 @@ The packaged `std/foundation.hal` bootstrap defines `nil?`, `false?`, `true?`,
 and iterator operations. `rest` returns a lazy `Seq`, or nil when no values
 remain. There is no separate `next` operation.
 
+A `Seq` is a guaranteed non-empty lazy cell. Mathematically, Hara uses
+`HaraSeq(A) = Option(NonEmptyLazySeq(A))`: `nil` is the empty option, while a
+value satisfying `seq?` has a head and a lazy tail that eventually yields
+another `Seq` or `nil`. An empty vector and an exhausted iterator are not
+identical to `nil`, but all three expose the empty element stream through
+their conversions:
+
+```hara
+(seq nil)          ; => nil
+(seq [])           ; => nil
+(rest [])          ; => nil
+(rest [1])         ; => nil
+(seq? (rest [1 2])); => true
+(vec nil)          ; => []
+(vec (rest [1]))   ; => []
+(vec (rest [1 2])) ; => [2]
+```
+
+`iter-has?` observes the next iterator step exactly and buffers a discovered
+item. Calling it repeatedly does not logically advance the cursor; the next
+`iter-next` returns that item. Exhaustion returns `false`, while other iterator
+failures propagate.
+
 The same bootstrap provides ordinary names `map`, `filter`, `take`, `drop`,
 `mapcat`, `keep`, `cycle`, `zip`, and `partition-pair`; their `iter-*`
 counterparts return raw one-shot iterators. Direct `(map f concrete)` eagerly

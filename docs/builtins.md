@@ -226,10 +226,16 @@ Sets the value of atom to new value without regard for the current value. Return
 (rest ...)
 ```
 
+Returns a non-empty lazy `Seq` containing the values after the first, or `nil`
+when no values remain. Hara has no separate `next` operation.
+
 ### `seq`
 ```hara
 (seq ...)
 ```
+
+Returns a non-empty lazy `Seq` over the source, or `nil` when the source is
+empty. Every value satisfying `seq?` is guaranteed to have a first item.
 
 ### `vals`
 ```hara
