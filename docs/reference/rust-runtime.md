@@ -266,7 +266,9 @@ Rust implements the same nil-terminated sequence algebra as the JVM:
 `HaraSeq(A) = Option(NonEmptyLazySeq(A))`. A sequence-tagged iterator is
 returned only after exact lookahead proves that a head exists. Empty sources
 produce `nil`; a non-empty `rest` produces a `Seq`; materializing either `nil`
-or an exhausted finite iterator produces `[]`.
+or an exhausted iterator produces `[]`. A `Seq` satisfies both `seq?` and
+`iter?`. `cons` prepends through a lazy iterator cell, while `conj` rejects a
+`Seq`.
 
 ## Iterator aliases and combinators
 
@@ -280,12 +282,14 @@ cycle            -> replayable closeable iterator
 concat           -> sequential iterator over sources
 ```
 
-All returned values remain closeable iterator handles. Iterator state keeps at
-most one lookahead item so `iter-has?` is exact and non-logically-consuming.
+All returned values remain closeable iterator handles. `cycle` proves its
+source non-empty and rejects an empty source before returning. Iterator state
+keeps at most one lookahead item so `iter-has?` is exact and
+non-logically-consuming.
 `iter-next` consumes that buffered item or preserves the stable exhaustion
 error, and callback failures propagate instead of being treated as
-exhaustion. Shortest-source combinators such as `iter-zip` and
-`iter-interleave` are finite when any source is finite.
+exhaustion. Terminal consumers drain until actual exhaustion; callers must
+bound infinite streams explicitly with `take`.
 
 ## Namespace aliases
 

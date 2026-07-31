@@ -235,7 +235,8 @@ when no values remain. Hara has no separate `next` operation.
 ```
 
 Returns a non-empty lazy `Seq` over the source, or `nil` when the source is
-empty. Every value satisfying `seq?` is guaranteed to have a first item.
+empty. Every value satisfying `seq?` is guaranteed to have a first item and
+also satisfies `iter?`.
 
 ### `vals`
 ```hara

@@ -5,7 +5,7 @@ A collection can hold values that already exist. A stream produces values as a c
 Hara separates three related concepts:
 
 - A persistent collection is an immutable value.
-- A lazy `Seq` produces values on demand.
+- A lazy `Seq` is a proven non-empty, one-shot iterator.
 - A raw iterator is a one-shot source that advances.
 
 These values have different roles even when they expose no elements. `nil`
@@ -17,11 +17,22 @@ an empty `Seq` object: every value satisfying `seq?` has a first item.
 (seq [])           ; => nil
 (rest [1])         ; => nil
 (seq? (rest [1 2])); => true
+(iter? (rest [1 2])); => true
 (vec (rest [1]))   ; => []
 ```
 
 This is why Hara needs only `rest`, not separate `rest` and `next` operations.
 Use `vec` when a reusable persistent result is required.
+
+Use `iter` for explicit conversion at the empty boundary:
+
+```hara
+(iter-has? (iter nil)); => false
+(iter-has? nil)       ; => error
+```
+
+`cons` prepends lazily to a `Seq`; `conj` does not accept a `Seq`. `cycle`
+also requires at least one source item, so `(cycle [])` is an error.
 
 ## Learning goals
 

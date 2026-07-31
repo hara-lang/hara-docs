@@ -69,8 +69,9 @@ remain. There is no separate `next` operation.
 A `Seq` is a guaranteed non-empty lazy cell. Mathematically, Hara uses
 `HaraSeq(A) = Option(NonEmptyLazySeq(A))`: `nil` is the empty option, while a
 value satisfying `seq?` has a head and a lazy tail that eventually yields
-another `Seq` or `nil`. An empty vector and an exhausted iterator are not
-identical to `nil`, but all three expose the empty element stream through
+another `Seq` or `nil`. A `Seq` is also a one-shot iterator, so both `seq?`
+and `iter?` return true for it. An empty vector and an exhausted iterator are
+not identical to `nil`, but all three expose the empty element stream through
 their conversions:
 
 ```hara
@@ -79,6 +80,7 @@ their conversions:
 (rest [])          ; => nil
 (rest [1])         ; => nil
 (seq? (rest [1 2])); => true
+(iter? (rest [1 2])); => true
 (vec nil)          ; => []
 (vec (rest [1]))   ; => []
 (vec (rest [1 2])) ; => [2]
@@ -88,6 +90,11 @@ their conversions:
 item. Calling it repeatedly does not logically advance the cursor; the next
 `iter-next` returns that item. Exhaustion returns `false`, while other iterator
 failures propagate.
+
+Iterator operations remain strict about representation: `(iter nil)` creates
+an exhausted cursor, while `(iter-has? nil)` is an error. `cons` can prepend
+to a `Seq` without realizing its tail; `conj` is not defined for `Seq`.
+`cycle` requires a non-empty source and rejects an empty one.
 
 The same bootstrap provides ordinary names `map`, `filter`, `take`, `drop`,
 `mapcat`, `keep`, `cycle`, `zip`, and `partition-pair`; their `iter-*`
