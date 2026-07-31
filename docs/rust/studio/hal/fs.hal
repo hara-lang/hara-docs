@@ -31,7 +31,7 @@
     (loop [it (iter keys)
            acc (quote ())]
       (if (iter-has? it)
-        (let [path (str/substring (iter-next it) (str/count prefix))]
+        (let [path (str/slice (iter-next it) (str/length prefix))]
           (if (str/starts-with? path dir-prefix)
             (recur it (conj acc path))
             (recur it acc)))

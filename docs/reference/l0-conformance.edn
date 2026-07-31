@@ -291,11 +291,11 @@
             :message "Unbound symbol: host-call"}}
   {:id :namespace/config-intrinsics-all
    :class :namespace
-   :source "(ns app (:config {:intrinsics :all})) (bytes/count (str/encode \"x\"))"
+   :source "(ns app (:config {:intrinsics :all})) (bytes/count (str/encode-utf8 \"x\"))"
    :expect {:value 1 :type :integer}}
   {:id :namespace/config-exclude-and-alias
    :class :namespace
-   :source "(ns app (:config {:intrinsics {:exclude [bytes] :alias {string text}}})) (text/to-upper \"hara\")"
+   :source "(ns app (:config {:intrinsics {:exclude [bytes] :alias {string text}}})) (text/upper \"hara\")"
    :expect {:value "HARA" :type :string}}
   {:id :namespace/config-exclude-removes-alias
    :class :namespace
@@ -349,7 +349,7 @@
             :message "Unbound symbol: inc"}}
   {:id :namespace/blank-keeps-special-forms-and-aliases
    :class :namespace
-   :source "(ns app (:config {:blank true})) (if true (bytes/count (str/encode \"xy\")) 0)"
+   :source "(ns app (:config {:blank true})) (if true (bytes/count (str/encode-utf8 \"xy\")) 0)"
    :expect {:value 2 :type :integer}}
   {:id :namespace/builtins-require-registered-exports
    :class :namespace
