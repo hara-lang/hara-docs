@@ -7,11 +7,11 @@ exit codes while retaining independent native implementations.
 
 The normative sources live in the Hara specification repository:
 
-- `specs/cli/draft/hal-cli-app-metaspec.edn` defines the document model for CLI
+- `specs/00-unsorted/cli/draft/hal-cli-app-metaspec.edn` defines the document model for CLI
   applications.
-- `specs/cli/draft/hara-cli.edn` inventories Hara's public routes and closed
+- `specs/00-unsorted/cli/draft/hara-cli.edn` inventories Hara's public routes and closed
   handler identifiers.
-- `specs/cli/draft/conformance/` defines shared routing, option, and outcome
+- `specs/00-unsorted/cli/draft/conformance/` defines shared routing, option, and outcome
   cases consumed by both native test suites.
 
 Route matching is deterministic and uses the longest matching path. For
