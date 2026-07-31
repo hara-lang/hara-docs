@@ -14,7 +14,7 @@ def on_post_build(config, **_kwargs):
 
     # The inline tutorials use a small subset of Studio's browser host.
     studio = project / "docs" / "rust" / "studio"
-    substrate_source = project / "docs" / "rust" / "std" / "substrate" / "frame.hal"
+    substrate_source = project / "docs" / "rust" / "std" / "lib" / "substrate" / "frame.hal"
     runtime = Path(config.site_dir) / "rust" / "studio"
     (runtime / "hal").mkdir(parents=True, exist_ok=True)
     for name in ("broker.js", "canvas-runtime.js"):
