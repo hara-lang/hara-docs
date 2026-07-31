@@ -484,7 +484,7 @@ The [RESP protocol](../../resp-protocol.md) remains the transport reference. Thi
 
 ## Truffle mapping
 
-In Truffle, each `HaraSession` creates a Graal `Context` with its selected filesystem provider.
+In Truffle, each `Session` creates a Graal `Context` with its selected filesystem provider.
 
 This mapping provides a direct isolation boundary for:
 
