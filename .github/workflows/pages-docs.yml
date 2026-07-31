@@ -21,6 +21,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Checkout Hara UI assets
+        uses: actions/checkout@v4
+        with:
+          repository: hara-lang/hara-ui
+          path: vendor/hara-ui
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
