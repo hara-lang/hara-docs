@@ -147,8 +147,21 @@ A useful first routine is:
 
 ## Choose a runtime deliberately
 
-The Rust CLI and Truffle runtime implement the same portable Hara language
-surface, but they connect to different host environments.
+The installed `hara` Rust binary and `hara-truffle` native image expose the
+same public CLI applications and route hierarchy. Choose the runtime by
+executable name; commands are not silently delegated between runtimes.
+
+The canonical project routes are grouped:
+
+```shell
+hara project check
+hara project run
+hara project test
+```
+
+The existing flat project verbs remain compatibility aliases during the draft
+CLI contract. Package, specification, and extension operations use their own
+top-level application groups.
 
 Use the Rust runtime for a small native CLI, server work, and the runtime core
 shared with WebAssembly. Use the Truffle runtime when you need the JVM provider,

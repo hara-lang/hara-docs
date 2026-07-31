@@ -137,6 +137,7 @@ nav:
   - Reference:
       - Language and runtime API:
           - Builtins: builtins.md
+          - CLI application contract: reference/cli-contract.md
           - Runtime libraries: reference/runtime-libraries.md
           - Namespace catalog: reference/namespaces.md
           - Clojure core compatibility: reference/clojure-core-compatibility.md

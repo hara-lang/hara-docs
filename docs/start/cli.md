@@ -33,25 +33,27 @@ as requested capabilities. Dependency coordinates can be declared under
 `:project/dependencies`.
 
 ```sh
-hara new hello-hara
+hara project new hello-hara
 cd hello-hara
-hara check
-hara run
-hara test
+hara project check
+hara project run
+hara project test
 ```
 
-`hara run` without a file evaluates the declared `:project/main`; `hara run
-FILE` remains the direct file command. `check`, `run`, and `test` discover the
-nearest ancestor `project.edn`, or accept `--project PATH` when the project is
-elsewhere. `test` runs every `.hal` file under `:project/test-paths` and uses
-the standard `test/check` and `test/print-results` result contract.
+The historical flat project verbs remain compatibility aliases. `hara run`
+without a file therefore still evaluates the declared `:project/main`, while
+`hara run FILE` is the direct file command. The grouped form removes that
+ambiguity for new scripts. Project commands discover the nearest ancestor
+`project.edn`, or accept `--project PATH` when the project is elsewhere.
+`project test FILE` selects one test file; a directory or omitted operand
+discovers every `.hal` file under `:project/test-paths`.
 
 Dependencies are project intent, rather than evaluator input:
 
 ```sh
-hara add hara/graph@^1.2.0
-hara sync
-hara remove hara/graph
+hara project add hara/graph@^1.2.0
+hara project sync
+hara project remove hara/graph
 ```
 
 `add` and `remove` edit `:project/dependencies`. `sync` owns
@@ -82,7 +84,7 @@ for how a packaged provider is loaded in a browser worker.
 Run a kernel with no terminal UI when another tool owns the interface:
 
 ```sh
-hara headless --host 127.0.0.1 --port 1311
+hara --host 127.0.0.1 --port 1311 server
 ```
 
 This starts a persistent `ROOT` session and RESP listener. Connect a local or
@@ -102,8 +104,9 @@ running kernel rather than separate ad-hoc REPLs. The full wire protocol is in
 | Mode | Use |
 |---|---|
 | `hara repl` | Start an interactive local REPL and RESP listener. |
-| `hara standalone` | Start the REPL without the listener. |
-| `hara server` | Compatibility alias for `headless`. |
+| `hara repl --offline` | Start the REPL without the listener. |
+| `hara headless` | Compatibility alias for `server`. |
+| `hara standalone` | Compatibility alias for an offline REPL. |
 | `hara --history PATH` | Store REPL history at a chosen location. |
 | `hara --no-color --no-splash` | Make terminal output suitable for scripts and logs. |
 
