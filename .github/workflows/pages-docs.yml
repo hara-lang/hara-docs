@@ -1,4 +1,4 @@
-name: Deploy docs.hara-long.org
+name: Deploy docs.hara-lang.org
 
 on:
   push:
@@ -46,14 +46,14 @@ jobs:
       - name: Build MkDocs site
         run: mkdocs build --strict
 
-      - name: Deploy main to docs.testing.hara-long.org
+      - name: Deploy main to docs.testing.hara-lang.org
         if: github.ref_name == 'main'
         run: npx --yes netlify-cli deploy --prod --dir site --message "main ${GITHUB_SHA}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_TESTING_SITE_ID }}
 
-      - name: Deploy production to docs.hara-long.org
+      - name: Deploy production to docs.hara-lang.org
         if: github.ref_name == 'production'
         run: npx --yes netlify-cli deploy --prod --dir site --message "production ${GITHUB_SHA}"
         env:
