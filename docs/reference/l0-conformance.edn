@@ -46,7 +46,7 @@
   {:id :compiler/defn-var
    :class :compiler
    :source "(defn rank [score] score)"
-   :expect {:value "#'rank" :type :var}}
+   :expect {:value "#'user/rank" :type :var}}
   {:id :runtime/loop-recur
    :class :runtime
    :source "(loop [x 41] (if x (recur nil) 42))"
