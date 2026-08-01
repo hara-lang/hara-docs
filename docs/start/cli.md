@@ -29,8 +29,9 @@ root, while `--native-sockets` enables the native socket provider.
 
 Current Hara projects use a root `project.edn` plus `workspace.edn`. The
 project manifest declares source, test, extension, and artifact paths, as well
-as requested capabilities. Dependency coordinates can be declared under
-`:project/dependencies`.
+as requested capabilities. Portable Hara package coordinates live under
+`:project/dependencies`; Maven libraries live separately under
+`:jvm/dependencies`.
 
 ```sh
 hara project new hello-hara
@@ -57,11 +58,19 @@ hara project remove hara/graph
 ```
 
 `add` and `remove` edit `:project/dependencies`. `sync` owns
-`project.lock.edn`; it currently writes and validates dependency-free locks,
-including `--offline`, `--locked`, and `--frozen` validation. A project with
-declared remote dependencies deliberately fails sync until the reviewed
-registry and identity client can verify its release assets and signatures.
-The evaluator never downloads a package while resolving `require`.
+`project.lock.edn` for portable Hara packages. A project with declared remote
+Hara dependencies deliberately fails sync until the reviewed registry and
+identity client can verify its release assets and signatures. The evaluator
+never downloads a Hara package while resolving `require`.
+
+On the JVM, the same `sync` command also resolves `:jvm/dependencies` through
+the embedded Maven resolver. Exact Maven versions use the standard local cache;
+`--offline` and `--frozen` prohibit network resolution. `project run` and
+`project test` prepare that JVM graph automatically and compile declared Java
+source paths. A REPL started inside the project (or with `--project PATH`) uses
+the same prepared graph, so a JVM project does not need a wrapper `pom.xml`. See
+[Get started with the JVM](../getting-started/jvm.md) for the manifest keys and
+security boundary.
 
 ## Package source and WASM artifacts
 

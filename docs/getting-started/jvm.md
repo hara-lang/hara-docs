@@ -128,25 +128,67 @@ When a call fails, check the boundary in this order:
 
 ## Work with Java libraries
 
-A library must be present on the runtime classpath before Hara can import its
-classes. Classpath changes are separate from ordinary reflection and should be
-made by the project or embedding host, not hidden inside portable source.
+A Hara JVM project can declare Maven libraries directly in `project.edn`. The
+shape deliberately follows Leiningen's coordinate-and-version vectors while
+keeping JVM libraries separate from portable Hara packages:
+
+```clojure
+{:hara/type :project
+ :hara/version "1.0.0"
+ :project/id example.jvm-app
+ :project/version "0.1.0"
+ :project/source-paths ["src"]
+ :project/test-paths ["test"]
+ :project/extension-paths []
+ :project/main example.app
+ :project/dependencies {}
+ :project/capabilities #{:jvm/reflection}
+
+ :jvm/dependencies
+ [[org.apache.commons/commons-lang3 "3.12.0"]
+  [org.chipsalliance/chisel_2.13 "6.7.0"]]
+ :jvm/source-paths ["src-java"]
+ :jvm/target-path "target/classes"}
+```
+
+Versions are exact Maven versions, not ranges. `:jvm/reflection` grants the
+project's explicitly selected JVM namespaces permission to import and call
+host classes. Merely declaring a dependency does not grant reflection.
+
+Run the normal project commands—no project `pom.xml` is required:
+
+```shell
+hara project sync
+hara project run
+hara project test
+hara --offline repl
+```
+
+`sync` resolves the direct and transitive graph from Maven Central into the
+standard local Maven cache. `run`, `test`, and a REPL started in the project
+resolve the same graph automatically, compile every `.java` file under
+`:jvm/source-paths` with the JDK 21 compiler, and add both the artifacts and
+`:jvm/target-path` to a project-scoped classloader. Use
+`hara project sync --offline`, `hara --offline project run`, or
+`hara --offline repl` to require already-cached artifacts.
 
 A practical project boundary is:
 
 ```text
 my-jvm-project/
-  pom.xml
   project.edn
   workspace.edn
   src/
     example/
       app.hal
+  src-java/
+    example/
+      NativeBridge.java
 ```
 
-Use Maven to declare and resolve Java dependencies. Use Hara namespaces to
-express the program. Keep host-specific interop in a small boundary namespace
-so the rest of the project can remain portable and testable on another runtime.
+Use Hara namespaces to express the program. Keep host-specific interop and any
+Java/Scala adaptation in a small boundary namespace and Java bridge so the rest
+of the project remains portable and testable on another runtime.
 
 For example:
 
@@ -161,6 +203,12 @@ For example:
 
 Code outside `example.clock.jvm` can call `now-string` without needing to know
 how the host obtained the value.
+
+This is a focused Lein-style project path, not an implementation of every
+Leiningen feature. The current contract supports Maven Central,
+`group/artifact` plus exact version coordinates, Java source compilation, the
+standard local cache, and offline reuse. Custom repositories, classifiers,
+dependency exclusions, profiles, and publishing remain future additions.
 
 ## Run the JVM tests
 

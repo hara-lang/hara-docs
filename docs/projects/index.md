@@ -27,6 +27,11 @@ my-project/
  :project/capabilities #{:studio/eval}}
 ```
 
+JVM-hosted projects may additionally declare Lein-style Maven coordinates,
+Java boundary sources, and the explicit `:jvm/reflection` capability. The Hara
+CLI then resolves, compiles, runs, and tests the project without a separate
+Maven wrapper. See [Get started with the JVM](../getting-started/jvm.md).
+
 `workspace.edn` then names `src/main.hal` as a document and places it in an
 editor/output layout. Open **Starter** in [Playground](https://playground.hara-lang.org/) to inspect a
 complete directly loadable pair.
