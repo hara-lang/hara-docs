@@ -1,67 +1,41 @@
-# Runtime benchmark reference
-
-Generated: `2026-07-24T14:18:51.332929+00:00` on `Linux-6.17.0-40-generic-x86_64-with-glibc2.39`.
-
-Values are machine-specific evidence, not regression thresholds. `Peak RSS MiB`
-is the maximum resident memory observed for the process. `Payload MiB` is an
-opaque harness field in the current export: its artifact collection rule is not
-documented here, so do not interpret it as download, install, or memory size.
-The Truffle/JVM row used the fallback interpreter because this Temurin JVM has no JVMCI compiler.
-
-## Startup
-
-| Runtime | p50 ms | p95 ms | Peak RSS MiB | Payload MiB |
-|---|---:|---:|---:|---:|
-| clojure | 463.67 | 488.21 | 110.1 | 4.6 |
-| bb | 12.65 | 19.39 | 36.2 | 65.5 |
-| hara-truffle | 310.99 | 328.15 | 95.8 | 33.7 |
-| hara-native-image | 11.98 | 15.88 | 38.3 | 59.7 |
-| hara-rust-native | 4.73 | 8.97 | 5.0 | 8.7 |
-| hara-wasm-node | 37.00 | 39.36 | 62.9 | 1.2 |
-
-## Warm evaluation
-
-| Runtime / workload | First ms | Steady ms | calls/s | Converged window |
-|---|---:|---:|---:|---:|
-| clojure / noop | 0.181 | 0.022 | 46377.9 | — |
-| clojure / arithmetic | 3.712 | 0.892 | 1120.7 | 41 |
-| clojure / function-call | 4.243 | 0.813 | 1230.4 | 41 |
-| clojure / persistent-vector | 3.320 | 0.507 | 1974.1 | 52 |
-| clojure / persistent-map | 1.371 | 0.452 | 2213.5 | 52 |
-| clojure / sequence-navigation | 2.505 | 0.450 | 2222.2 | 55 |
-| bb / noop | 0.020 | 0.009 | 112555.6 | 40 |
-| bb / arithmetic | 1.492 | 0.477 | 2094.7 | 22 |
-| bb / function-call | 0.394 | 0.227 | 4409.5 | 25 |
-| bb / persistent-vector | 0.171 | 0.119 | 8400.0 | 46 |
-| bb / persistent-map | 0.221 | 0.110 | 9076.3 | 34 |
-| bb / sequence-navigation | 0.162 | 0.086 | 11674.3 | 41 |
-| hara-truffle / noop | 83.823 | 0.014 | 73182.3 | 53 |
-| hara-truffle / arithmetic | 95.989 | 4.057 | 246.5 | 13 |
-| hara-truffle / function-call | 110.891 | 1.943 | 514.8 | 29 |
-| hara-truffle / persistent-vector | 109.479 | 1.438 | 695.3 | 21 |
-| hara-truffle / persistent-map | 96.661 | 1.352 | 739.5 | 28 |
-| hara-truffle / sequence-navigation | 109.354 | 1.099 | 909.8 | 35 |
-| hara-native-image / noop | 6.051 | 0.001 | 1362397.8 | — |
-| hara-native-image / arithmetic | 13.188 | 4.566 | 219.0 | 50 |
-| hara-native-image / function-call | 11.186 | 2.415 | 414.2 | 22 |
-| hara-native-image / persistent-vector | 7.991 | 2.286 | 437.4 | 1 |
-| hara-native-image / persistent-map | 7.037 | 1.927 | 519.0 | 10 |
-| hara-native-image / sequence-navigation | 7.974 | 1.667 | 599.9 | 33 |
-| hara-rust-native / noop | 0.120 | 0.040 | 24794.2 | 10 |
-| hara-rust-native / arithmetic | 4.144 | 3.655 | 273.6 | 8 |
-| hara-rust-native / function-call | 29.413 | 29.627 | 33.8 | 31 |
-| hara-rust-native / persistent-vector | 1.015 | 0.927 | 1078.6 | 3 |
-| hara-rust-native / persistent-map | 1.255 | 1.087 | 919.7 | 7 |
-| hara-rust-native / sequence-navigation | 0.604 | 0.563 | 1775.8 | 0 |
-| hara-wasm-node / noop | 0.329 | 0.042 | 23667.2 | 43 |
-| hara-wasm-node / arithmetic | 8.940 | 4.174 | 239.6 | 3 |
-| hara-wasm-node / function-call | 27.543 | 19.903 | 50.2 | 0 |
-| hara-wasm-node / persistent-vector | 3.568 | 0.962 | 1039.0 | 20 |
-| hara-wasm-node / persistent-map | 7.522 | 1.234 | 810.3 | 4 |
-| hara-wasm-node / sequence-navigation | 2.924 | 0.617 | 1620.1 | 27 |
-
-Warm values above are per-call milliseconds (the raw samples are stored as
-nanoseconds). **Lower is better.** Each adapter re-reads, evaluates, and checks
-the same source form, but this is an implementation snapshot rather than a
-source-normalized language shootout. Convergence is the first five-window run
-within ±5% of the final ten-window median with CV ≤10%.
+<div class="hara-benchmark-page">
+<h1>Hara runtime benchmarks</h1>
+<p class="hara-benchmark-lede">VM and compiled tiers measured with checksum-verified workloads. Lower prepared-call time is better.</p>
+<p><strong>Evidence profile:</strong> smoke. Standard-profile runs are required before publishing reference thresholds.</p>
+<div class="hara-benchmark-hosts">
+<section class="hara-benchmark-host"><h2>Rust</h2>
+<article class="hara-benchmark-card "><h3>hara-rust-vm</h3><strong>1.360 ms</strong><dl><dt>Host</dt><dd>Native</dd><dt>Engine</dt><dd>Rust bytecode VM</dd><dt>Tier</dt><dd>bytecode</dd><dt>Artifact</dt><dd><code>hara eval --engine vm</code></dd><dt>Size</dt><dd>Recorded by a standard publication run</dd></dl><table><thead><tr><th>Workload</th><th>Prepared</th><th>First</th></tr></thead><tbody><tr><td>arithmetic-branch-mix</td><td>1.3596 ms</td><td>1.3528 ms</td></tr><tr><td>mutable-array-update</td><td>0.6570 ms</td><td>0.6430 ms</td></tr><tr><td>mutable-object-counters</td><td>0.5965 ms</td><td>0.6118 ms</td></tr><tr><td>persistent-nested-transform</td><td>2.2788 ms</td><td>2.7002 ms</td></tr><tr><td>recursive-tree-eval</td><td>2.2694 ms</td><td>2.2929 ms</td></tr></tbody></table></article>
+<article class="hara-benchmark-card "><h3>hara-rust-full</h3><strong>0.019 ms</strong><dl><dt>Host</dt><dd>Native</dd><dt>Engine</dt><dd>Rust whole-function compiler</dd><dt>Tier</dt><dd>compiled Wasm</dd><dt>Artifact</dt><dd><code>hara eval --engine whole-wasm</code></dd><dt>Size</dt><dd>Recorded by a standard publication run</dd></dl><table><thead><tr><th>Workload</th><th>Prepared</th><th>First</th></tr></thead><tbody><tr><td>arithmetic-branch-mix</td><td>0.0207 ms</td><td>0.0450 ms</td></tr><tr><td>mutable-array-update</td><td>0.0060 ms</td><td>0.0328 ms</td></tr><tr><td>mutable-object-counters</td><td>0.0078 ms</td><td>0.0341 ms</td></tr><tr><td>persistent-nested-transform</td><td>0.0512 ms</td><td>0.0974 ms</td></tr><tr><td>recursive-tree-eval</td><td>0.0195 ms</td><td>0.0417 ms</td></tr></tbody></table></article>
+</section>
+<section class="hara-benchmark-host"><h2>WebAssembly</h2>
+<article class="hara-benchmark-card "><h3>hara-wasm-vm</h3><strong>3.362 ms</strong><dl><dt>Host</dt><dd>Browser</dd><dt>Engine</dt><dd>Rust bytecode VM in Wasm</dd><dt>Tier</dt><dd>bytecode</dd><dt>Artifact</dt><dd><code>@hara-lang/browser/vm</code></dd><dt>Size</dt><dd>3.04 MB ESM · 876 KB gzip</dd></dl><table><thead><tr><th>Workload</th><th>Prepared</th><th>First</th></tr></thead><tbody><tr><td>arithmetic-branch-mix</td><td>3.3625 ms</td><td>—</td></tr><tr><td>mutable-array-update</td><td>1.8923 ms</td><td>—</td></tr><tr><td>mutable-object-counters</td><td>1.7857 ms</td><td>—</td></tr><tr><td>persistent-nested-transform</td><td>3.9571 ms</td><td>—</td></tr><tr><td>recursive-tree-eval</td><td>3.6143 ms</td><td>—</td></tr></tbody></table></article>
+<article class="hara-benchmark-card "><h3>hara-wasm-full</h3><strong>0.028 ms</strong><dl><dt>Host</dt><dd>Browser</dd><dt>Engine</dt><dd>Whole-function Wasm compiler</dd><dt>Tier</dt><dd>compiled Wasm</dd><dt>Artifact</dt><dd><code>@hara-lang/browser/full</code></dd><dt>Size</dt><dd>3.30 MB ESM · 954 KB gzip</dd></dl><table><thead><tr><th>Workload</th><th>Prepared</th><th>First</th></tr></thead><tbody><tr><td>arithmetic-branch-mix</td><td>0.0222 ms</td><td>—</td></tr><tr><td>mutable-array-update</td><td>0.0054 ms</td><td>—</td></tr><tr><td>mutable-object-counters</td><td>0.0335 ms</td><td>—</td></tr><tr><td>persistent-nested-transform</td><td>0.2940 ms</td><td>—</td></tr><tr><td>recursive-tree-eval</td><td>0.0283 ms</td><td>—</td></tr></tbody></table></article>
+</section>
+<section class="hara-benchmark-host"><h2>Truffle</h2>
+<article class="hara-benchmark-card "><h3>hara-truffle-jvm</h3><strong>2.881 ms</strong><dl><dt>Host</dt><dd>JVM</dd><dt>Engine</dt><dd>Graal/Truffle interpreter</dd><dt>Tier</dt><dd>optimizing VM</dd><dt>Artifact</dt><dd><code>java … hara.truffle.Main</code></dd><dt>Size</dt><dd>Recorded by a standard publication run</dd></dl><table><thead><tr><th>Workload</th><th>Prepared</th><th>First</th></tr></thead><tbody><tr><td>arithmetic</td><td>10.9614 ms</td><td>99.3926 ms</td></tr><tr><td>branchy-loop</td><td>10.9389 ms</td><td>94.1287 ms</td></tr><tr><td>function-call</td><td>5.0374 ms</td><td>90.5256 ms</td></tr><tr><td>noop</td><td>0.0206 ms</td><td>79.2935 ms</td></tr><tr><td>persistent-map</td><td>1.7895 ms</td><td>84.3275 ms</td></tr><tr><td>persistent-vector</td><td>2.2175 ms</td><td>83.7090 ms</td></tr><tr><td>sequence-navigation</td><td>2.8805 ms</td><td>88.8175 ms</td></tr></tbody></table></article>
+<article class="hara-benchmark-card is-unavailable"><h3>hara-truffle-native-vm</h3><strong>NOT MEASURED</strong><dl><dt>Host</dt><dd>Native Image</dd><dt>Engine</dt><dd>Truffle native fallback</dd><dt>Tier</dt><dd>VM</dd><dt>Artifact</dt><dd><code>target/hara-truffle-native-vm</code></dd><dt>Size</dt><dd>Recorded by a standard publication run</dd></dl><p>This target is fully specified but was not built on the evidence host. A standard publication runner must supply its measurement artifact.</p></article>
+<article class="hara-benchmark-card is-unavailable"><h3>hara-truffle-native-full</h3><strong>NOT MEASURED</strong><dl><dt>Host</dt><dd>Native Image</dd><dt>Engine</dt><dd>Truffle native compiled tier</dd><dt>Tier</dt><dd>compiled</dd><dt>Artifact</dt><dd><code>target/hara-truffle-native-full</code></dd><dt>Size</dt><dd>Recorded by a standard publication run</dd></dl><p>This target is fully specified but was not built on the evidence host. A standard publication runner must supply its measurement artifact.</p></article>
+</section>
+</div>
+<h2>HTTP frameworks</h2>
+<p>Single worker/event loop, loopback HTTP/1.1, keep-alive, concurrency 8.</p>
+<table><thead><tr><th>Route</th><th>Server</th><th>Requests/sec</th><th>p50 ms</th><th>p95 ms</th><th>p99 ms</th></tr></thead><tbody>
+<tr><td>/hello</td><td>hoplite</td><td>48461.3</td><td>0.000</td><td>0.000</td><td>0.000</td></tr>
+<tr><td>/json</td><td>hoplite</td><td>48285.8</td><td>0.000</td><td>0.000</td><td>0.000</td></tr>
+<tr><td>/delay</td><td>hoplite</td><td>281.2</td><td>27.000</td><td>28.000</td><td>28.000</td></tr>
+<tr><td>/hello</td><td>openresty</td><td>49975.0</td><td>0.000</td><td>0.000</td><td>0.000</td></tr>
+<tr><td>/json</td><td>openresty</td><td>56513.1</td><td>0.000</td><td>0.000</td><td>0.000</td></tr>
+<tr><td>/delay</td><td>openresty</td><td>285.7</td><td>27.000</td><td>27.000</td><td>28.000</td></tr>
+<tr><td>/hello</td><td>nginx</td><td>58530.9</td><td>0.000</td><td>0.000</td><td>0.000</td></tr>
+<tr><td>/json</td><td>nginx</td><td>63816.2</td><td>0.000</td><td>0.000</td><td>0.000</td></tr>
+<tr><td>/hello</td><td>fastify</td><td>31220.7</td><td>0.000</td><td>0.000</td><td>1.000</td></tr>
+<tr><td>/json</td><td>fastify</td><td>31520.9</td><td>0.000</td><td>0.000</td><td>1.000</td></tr>
+<tr><td>/delay</td><td>fastify</td><td>274.2</td><td>28.000</td><td>29.000</td><td>30.000</td></tr>
+<tr><td>/hello</td><td>axum</td><td>52151.2</td><td>0.000</td><td>0.000</td><td>0.000</td></tr>
+<tr><td>/json</td><td>axum</td><td>45903.1</td><td>0.000</td><td>0.000</td><td>0.000</td></tr>
+<tr><td>/delay</td><td>axum</td><td>276.9</td><td>28.000</td><td>29.000</td><td>29.000</td></tr>
+<tr><td>/delay</td><td>nginx</td><td>not applicable</td><td>—</td><td>—</td><td>—</td></tr>
+</tbody></table>
+<h2>Methodology</h2>
+<p>Every adapter checks the same expected result. Compilation, first execution, and prepared execution are separate boundaries. Browser windows use adaptive batching; HTTP values are medians across trials. Every target remains fully specified even when a particular evidence host cannot build it.</p>
+</div>

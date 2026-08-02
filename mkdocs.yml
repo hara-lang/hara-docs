@@ -113,6 +113,7 @@ nav:
       - Hara Chrome project: create/chrome-project.md
       - Hara VS Code project: create/vscode-project.md
   - Guides:
+      - Runtime benchmarks: reference/runtime-benchmarks.md
       - For developers:
           - For Clojurists: start/clojure.md
           - For Web Devs: start/web-developers.md
@@ -133,7 +134,6 @@ nav:
           - Extension system: reference/extensions-contract.md
           - Java and Rust APIs: javadocs.md
           - Xtalk equivalence: reference/xtalk-equivalence.md
-          - Runtime benchmarks: reference/runtime-benchmarks.md
           - Foundation porting: foundation-porting.md
   - Reference:
       - Language and runtime API:

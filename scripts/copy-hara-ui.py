@@ -7,6 +7,8 @@ from shutil import copy2
 def on_post_build(config, **_kwargs):
     project = Path(config.config_file_path).parent
     source = project / "vendor" / "hara-ui"
+    if not source.is_dir():
+        source = project.parent / "website" / "vendor" / "hara-ui"
     target = Path(config.site_dir) / "vendor" / "hara-ui"
     target.mkdir(parents=True, exist_ok=True)
     for name in ("tokens.css", "components.css"):
@@ -15,6 +17,10 @@ def on_post_build(config, **_kwargs):
     # The inline tutorials use a small subset of Studio's browser host.
     studio = project / "docs" / "rust" / "studio"
     substrate_source = project / "docs" / "rust" / "std" / "lib" / "substrate" / "frame.hal"
+    if not (studio / "broker.js").is_file():
+        studio = project.parent / "rust" / "web" / "studio"
+    if not substrate_source.is_file():
+        substrate_source = project.parent / "lib" / "src" / "std" / "lib" / "substrate" / "frame.hal"
     runtime = Path(config.site_dir) / "rust" / "studio"
     (runtime / "hal").mkdir(parents=True, exist_ok=True)
     for name in ("broker.js", "canvas-runtime.js"):
