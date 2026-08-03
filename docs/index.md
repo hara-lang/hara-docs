@@ -8,9 +8,9 @@ hide:
 
 <section class="hara-launch hara-docs-launch">
   <div class="hara-launch__head">
-    <p class="hara-label">Start here</p>
-    <h1>Learn how software is built. Then build one.</h1>
-    <p>Hara is a small, high-performance Lisp for learning to build from first principles. Start with one readable rule, run real code in the browser, and keep the same language as your programs grow.</p>
+    <p class="hara-label">Documentation</p>
+    <h1>Hara</h1>
+    <p>Interactive learning, operating instructions, developer guides, and concise language and runtime references.</p>
   </div>
 
   <div class="hara-outcome-grid hara-docs-grid">
@@ -21,11 +21,11 @@ hide:
       <small>Start with Hara <b>→</b></small>
     </a>
 
-    <a class="hara-outcome-card" href="learn-programming/">
-      <span class="hara-card-kicker">02 · Read the language</span>
-      <h2>Build from first principles</h2>
-      <p>Learn values, functions, decisions, collections, and explicit state without assuming any previous Lisp knowledge.</p>
-      <small>Read Hara <b>→</b></small>
+    <a class="hara-outcome-card" href="learn/">
+      <span class="hara-card-kicker">02 · Learn</span>
+      <h2>Learn Hara interactively</h2>
+      <p>Run real forms, build from first principles, and learn why protocols are the builder's central tool.</p>
+      <small>Choose a syllabus <b>→</b></small>
     </a>
 
     <a class="hara-outcome-card" href="getting-started/playground/">
