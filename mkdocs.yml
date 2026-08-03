@@ -82,7 +82,6 @@ nav:
           - With Playground: getting-started/playground.md
           - With Emacs: getting-started/emacs.md
           - With VS Code: getting-started/vscode.md
-          - With Greenways OS: getting-started/greenways-os.md
       - Concepts:
           - Concepts overview: concepts/index.md
           - Runtime-driven development: concepts/runtime-driven-development.md
