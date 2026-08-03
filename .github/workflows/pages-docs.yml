@@ -3,6 +3,7 @@ name: Deploy docs.hara-lang.org
 on:
   push:
     branches: [main, production]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -42,6 +43,9 @@ jobs:
 
       - name: Reject stale project guidance
         run: node scripts/check-content.mjs
+
+      - name: Validate interactive syllabi
+        run: node scripts/check-syllabi.mjs
 
       - name: Build MkDocs site
         run: mkdocs build --strict
