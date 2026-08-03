@@ -9,7 +9,7 @@ Start with the system, not the theory. This page is connected to a
 browser-hosted Hara kernel. Put the cursor in the form below and press
 `Ctrl-Enter` (or `⌘-Enter`). The result appears inline.
 
-```hara
+```hara eval
 (+ 1 2 3)
 ; => 6
 ```
@@ -56,7 +56,7 @@ For now, only four rules are needed:
   <div><code>{:name "Ada"}</code><b>Map</b><small>Braces connect named facts to values.</small></div>
 </div>
 
-```hara
+```hara eval
 (def user {:name "Ada"
            :status :active})
 
@@ -138,7 +138,7 @@ React is excellent at turning state into an interface. Hara gives you the
 option to keep important application information inspectable independently of
 the component that currently renders it.
 
-```hara
+```hara eval
 (def app-state
   (atom {:user nil
          :route :home
@@ -266,7 +266,7 @@ same thing.
 Now create a small piece of persistent runtime state, change it once, and
 inspect it again. Evaluate each form in order.
 
-```hara
+```hara eval
 (def orientation-state
   (atom {:status :ready
          :count 0}))

@@ -1,5 +1,5 @@
-import { HtaContext } from "../rust/hta.js?v=20260729-session-resources";
-import { createHostServices } from "../rust/studio/host-services.js";
+import { HtaContext } from "/runtime/hta.js?v=20260803-modular-kernel";
+import { createHostServices } from "/runtime/studio/host-services.js";
 
 export function prepareDocsEval(source) {
   if (/^\(\s*fn(?:\s|\[)/.test(source.trim())) {
@@ -32,10 +32,23 @@ async function loadKernelAssets(wasmUrl, resources, fetchAsset) {
   return { moduleBytes, loadedResources };
 }
 
+async function verifySha256(bytes, expected) {
+  if (!expected || !globalThis.crypto?.subtle) return;
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  const actual = [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+  if (actual !== expected) throw new Error("kernel/integrity: SHA-256 mismatch");
+}
+
+function filesystemDescriptor(value) {
+  const [provider, ...parts] = String(value).split(":");
+  return { provider: provider || "memory", key: parts.join(":") || "default" };
+}
+
 export async function createDocsKernel({
   wasmUrl,
   workerUrl,
   resources = {},
+  manifest = null,
   fetchAsset = fetch,
   WorkerClass = Worker,
   ContextClass = HtaContext
@@ -45,6 +58,7 @@ export async function createDocsKernel({
   // in flight on a cold page load.
   const { moduleBytes, loadedResources } =
     await loadKernelAssets(wasmUrl, resources, fetchAsset);
+  await verifySha256(moduleBytes, manifest?.variants?.core?.sha256);
   const worker = new WorkerClass(workerUrl, { type: "module" });
   const canvasRuntimes = new Map();
   const context = new ContextClass({
@@ -61,11 +75,12 @@ export async function createDocsKernel({
     await context.call("register-resources", [loadedResources]);
   }
   const string = (value) => JSON.stringify(String(value));
-  return {
+  const facade = {
     context,
     async createSession(name, { filesystem = `memory:${name}` } = {}) {
       const session = await context.createSession(name);
-      await session.attachFilesystem(filesystem);
+      const mountId = await context.createFilesystem(filesystemDescriptor(filesystem));
+      await session.attachFilesystem(mountId);
       const fsEval = async (form) =>
         session.eval(`(do (require [studio.fs :as fs]) ${form})`);
       return {
@@ -76,6 +91,10 @@ export async function createDocsKernel({
           return { value: await session.eval(prepared.source), label: prepared.label };
         },
         evalRaw: (source) => session.eval(source),
+        evalVm: (source) => session.evalVm(source),
+        prepareVm: (source) => session.prepareVm(source),
+        invokeVm: (program) => session.invokeVm(program),
+        traceEval: (source) => context.call("session/trace-eval", [name, source]),
         evalBound: (source, bindings = []) => session.evalBound(source, bindings),
         complete: (prefix) => session.complete(prefix),
         listFiles: (space = "guide") => fsEval(`(fs/list ${string(space)} "/")`),
@@ -91,6 +110,8 @@ export async function createDocsKernel({
         },
         async close() {
           canvasRuntimes.delete(name);
+          await session.detachFilesystem();
+          await context.closeFilesystem(mountId);
           return session.close();
         }
       };
@@ -99,4 +120,25 @@ export async function createDocsKernel({
       context.close();
     }
   };
+  facade.loadFeature = async (name) => {
+    const specification = manifest?.variants?.[name];
+    if (!specification || !["vm", "trace"].includes(name)) {
+      throw new Error(`kernel/feature-unavailable: ${name}`);
+    }
+    const response = await fetchAsset(specification.url);
+    if (!response.ok) throw new Error(`${specification.url}: ${response.status}`);
+    const bytes = await response.arrayBuffer();
+    await verifySha256(bytes, specification.sha256);
+    const feature = await createDocsKernel({
+      wasmUrl: specification.url,
+      workerUrl,
+      resources,
+      fetchAsset: async (url) => url === specification.url ? new Response(bytes) : fetchAsset(url),
+      WorkerClass,
+      ContextClass
+    });
+    feature.kind = name;
+    return feature;
+  };
+  return facade;
 }
