@@ -25,11 +25,13 @@ extra_css:
   - vendor/hara-ui/tokens.css
   - vendor/hara-ui/components.css
   - stylesheets/hara.css?v=31
+  - stylesheets/syllabus.css?v=1
 extra_javascript:
   - javascripts/hara.js
   - javascripts/demo.js
   - javascripts/home-live.js
   - javascripts/live-examples.js
+  - javascripts/syllabus.js
   - javascripts/live-canvas.js
 markdown_extensions:
   - admonition
@@ -88,7 +90,20 @@ nav:
           - Live coding: concepts/live-coding.md
           - Unified representation: concepts/unified-representation.md
   - Learn Hara:
-      - Introductory:
+      - Choose a path: learn/index.md
+      - First Contact: learn/first-contact/index.md
+      - Protocols for Builders:
+          - Interactive course: learn/protocols/index.md
+          - Protocol Atlas: learn/protocols/atlas.md
+      - Build something live:
+          - Building Tic Tac Toe: create/first-game.md
+          - Part I — Draw the board: create/tictactoe/board.md
+          - Part II — Organise the game: create/tictactoe/files.md
+          - Part III — State and rules: create/tictactoe/state.md
+          - Part IV — Pointer input: create/tictactoe/input.md
+          - Part V — Rendering: create/tictactoe/rendering.md
+          - Part VI — Make it live: create/tictactoe/live.md
+      - Foundations:
           - Course map: hal-intro/index.md
           - 01 — Basic data and immutable collections: hal-intro/01-basic-data.md
           - 02 — Functions and atoms: hal-intro/02-functions-and-atoms.md
