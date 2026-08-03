@@ -1,31 +1,31 @@
-# Learn to program with Hara
+# Read Hara and build from scratch
 
-This path is for people learning programming, not only learning a new
-language. You will use Hara's live REPL to make small, understandable changes
-and see what each program does before moving on.
+This path is for learning how programs are constructed, not merely memorising a new syntax.
 
-## How to use this guide
+No previous Lisp or Clojure knowledge is assumed. Hara gives you a small reading model, a live evaluator, and direct access to the ideas beneath a framework: values, functions, decisions, collections, state, and effects.
 
-Keep a Hara REPL open as you read. Type each example, change one value, and
-notice the result. Programming becomes much less mysterious when every idea is
-something you can test immediately.
+Keep a Hara REPL or the [browser Playground](../getting-started/playground.md) open while you read. Type each example, predict the result, change one value, and run it again.
 
-## The smallest program
+## The whole reading rule
 
-Enter this in a REPL:
+Start with one form:
 
 ```hara
 (+ 19 23)
+; => 42
 ```
 
-Hara reads the form between the parentheses, runs `+` with the two numbers,
-and returns `42`. A program is simply a series of precise instructions that
-transform information or cause an explicit effect.
+Hara reads the expression between the parentheses, calls `+` with two numbers, and returns `42`.
 
-## Values and data
+```text
+(operation input input)
+```
 
-Programs receive, create, and transform values. A value can be a number, text,
-a name, a list, or a set of labeled facts.
+That operation-first shape continues through ordinary function calls. You do not need to learn a separate surface syntax for each kind of application.
+
+## Values are the material of a program
+
+Programs receive, create, name, and transform values.
 
 ### Numbers and text
 
@@ -37,51 +37,79 @@ a name, a list, or a set of labeled facts.
 ; => "hello, Ada"
 ```
 
-The first item in a Hara form is usually the operation. The other items are
-the values passed to it:
+The first form combines numbers. The second combines strings. Both follow the same reading rule.
 
-```text
-(operation input-one input-two)
-```
+### Ordered values
 
-### Lists of values
-
-A vector uses square brackets. Use a vector when the order of values matters:
+A vector uses square brackets:
 
 ```hara
 (def scores [10 20 30])
+
 (count scores)
 ; => 3
 ```
 
-`def` gives a value a name. Change the vector, run the forms again, and inspect
-the new result.
+`def` gives a value a name. A vector is useful when order matters: positions, steps, coordinates, rows, or a sequence of commands.
 
-### Labeled facts
+### Named facts
 
-A map uses braces. Keywords such as `:name` label each fact:
+A map uses braces. Keywords label each fact:
 
 ```hara
-(def player {:name "Nova" :score 0})
-(:name player)
+(def player
+  {:name "Nova"
+   :score 0})
+
+(get player :name)
 ; => "Nova"
 ```
 
-A map can represent a player, task, screen, or project setting. It groups
-related facts into one value.
+A map can represent a player, task, request, document, screen, or configuration. It keeps related facts in one inspectable value.
 
-Try it yourself. Make a map with a name and one number. Retrieve each value by
-its keyword.
+## Transform values instead of hiding change
 
-## Decisions and repetition
+Persistent collections return an updated value while preserving the original.
 
-A program can choose an action from a value. It can also apply one action to
-many values.
+```hara
+(def next-player
+  (assoc player :score 10))
 
-### Make a decision
+player
+; => {:name "Nova" :score 0}
 
-`if` chooses between two results. The first value is a question. Hara evaluates
-only one of the next two forms:
+next-player
+; => {:name "Nova" :score 10}
+```
+
+This makes the transformation visible. You can inspect the input, the output, and the function between them.
+
+## Give behaviour a name
+
+A function receives values and returns a value.
+
+```hara
+(defn add-score [player amount]
+  (update player :score
+    (fn [score]
+      (+ score amount))))
+
+(add-score player 25)
+; => {:name "Nova" :score 25}
+```
+
+Read the definition from the outside in:
+
+1. `defn` creates a named function.
+2. `add-score` is its name.
+3. `[player amount]` lists its inputs.
+4. The remaining form calculates the result.
+
+The function does not need to know where the player came from or how the result will be displayed. That separation lets the same rule be tested, reused, and connected to different hosts.
+
+## Make decisions from data
+
+`if` selects one of two results:
 
 ```hara
 (def score 12)
@@ -92,80 +120,114 @@ only one of the next two forms:
 ; => "level complete"
 ```
 
-Change `score` to a smaller number. The program now follows the other path.
+Only one branch is evaluated. Change `score` and run the form again to see the other path.
 
-### Choose from several cases
-
-Use `cond` for several ordered choices:
+Use `cond` when several ordered cases are easier to read:
 
 ```hara
 (defn rank [score]
   (cond
-    (>= score 100) "gold"
-    (>= score 50) "silver"
-    :else "bronze"))
+    (>= score 100) :gold
+    (>= score 50)  :silver
+    :else          :bronze))
 
 (rank 70)
-; => "silver"
+; => :silver
 ```
 
-Read a `cond` from top to bottom. The first true condition supplies the result.
+A program is often a collection of these small decisions over well-shaped data.
 
-### Repeat over a collection
+## Apply one rule to many values
 
-Use `map` to apply one rule to each item:
+Use `map` to transform every item in a collection:
 
 ```hara
-(map (fn [score] (+ score 10)) [0 10 20])
+(map
+  (fn [score]
+    (+ score 10))
+  [0 10 20])
 ; => [10 20 30]
 ```
 
-`map` calls the function once for every score. It leaves the original vector
-unchanged and returns a new vector.
+The input vector remains available. `map` returns the new sequence of results.
 
-## Functions and changing state
+The same idea scales from three scores to records from a file, rows from a service, drawing commands, or events in a running system.
 
-A function gives a behavior a name. State records information that can change
-while an interactive program runs.
+## Make changing state explicit
 
-### Name a behavior
+Most values in Hara are immutable. When an interactive program needs a current value that changes over time, place it in an atom.
 
 ```hara
-(defn move-right [player amount]
-  (assoc player :x (+ (:x player) amount)))
-
-(move-right {:x 10 :y 4} 3)
-; => {:x 13 :y 4}
+(def game
+  (atom {:player {:x 10 :y 4}
+         :score 0}))
 ```
 
-`defn` defines a function. This function receives a player and an amount. It
-returns a new player map and does not change the original map.
+The atom marks the boundary. The map inside it remains an ordinary value.
 
-### Make change explicit
-
-Use an atom when a value must change over time. The atom makes the mutable
-state visible:
+Define a transition:
 
 ```hara
-(def player (atom {:x 10 :score 0}))
-
-(swap! player move-right 3)
-@player
-; => {:x 13 :score 0}
+(defn move-right [state amount]
+  (update-in state [:player :x]
+    (fn [x]
+      (+ x amount))))
 ```
 
-`swap!` applies a function to the current value in the atom. `@player` reads
-the current value.
+Apply it to the current value:
 
-Use this model for a game position, timer, or selected visual object. In a live
-workspace, redefine `move-right` and inspect the result without restarting the
-project.
+```hara
+(swap! game move-right 3)
 
-## You do not need to memorize everything
+(deref game)
+; => {:player {:x 13 :y 4} :score 0}
+```
 
-The goal is to build a useful mental model, not to learn every feature at once.
-Use the [user guide](../user-guide.md) when you need a language detail and the
-[reference](../reference/index.md) when you need the complete contract.
+The current state is visible, the transition has a name, and the result can be inspected before a renderer or host turns it into an effect.
 
-Continue with [your first browser game](../create/first-game.md). The game
-combines state, updates, and rendering on one canvas.
+This model works for a game position, selected document, connection status, timer, or any other piece of application state whose changes should remain understandable.
+
+## Separate rules from effects
+
+A pure function returns a value. An effect crosses into the environment: drawing on a canvas, reading a file, opening a socket, or calling a host object.
+
+Hara keeps that boundary explicit. Application rules can remain ordinary transformations, while a granted capability performs the effect.
+
+```text
+input value → application rule → output value → host capability → visible effect
+```
+
+You do not need host access to test the middle of that chain.
+
+## Work in a live loop
+
+Hara is designed to keep the running program close:
+
+```text
+write → evaluate → inspect → change
+```
+
+A REPL is not only for isolated calculations. Definitions, atoms, functions, and project state can stay alive while you refine them. When an experiment is correct, keep the definition in durable `.hal` source.
+
+This gives learning and production work the same basic rhythm. The program becomes more capable without replacing the mental model that got you started.
+
+## What you have learned
+
+You can now read and write the core of an ordinary Hara program:
+
+- forms call operations;
+- vectors hold ordered values;
+- maps hold named facts;
+- functions transform values;
+- conditions choose results;
+- persistent collections make updates visible;
+- atoms mark changing state;
+- capabilities mark effects at the host boundary.
+
+These ideas are enough to begin building something complete.
+
+## Continue
+
+Build [Tic Tac Toe](../create/first-game.md) to combine data, state, rules, pointer input, and rendering from a blank canvas.
+
+Then continue into the [Hara language course](../hal-intro/index.md) for persistent collections, streams, coroutines, promises, mutable boundaries, bytes, and files.
