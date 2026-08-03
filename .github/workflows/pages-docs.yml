@@ -3,6 +3,7 @@ name: Deploy docs.hara-lang.org
 on:
   push:
     branches: [main, production]
+  pull_request:
   workflow_dispatch:
 
 permissions:
