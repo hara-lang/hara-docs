@@ -1,5 +1,5 @@
 site_name: Hara
-site_description: A programmable kernel for building, inspecting, and changing live systems.
+site_description: A small, high-performance Lisp for learning to build software from first principles.
 site_url: https://docs.hara-lang.org/
 docs_dir: docs
 theme:
@@ -66,47 +66,48 @@ hooks:
   - scripts/copy-hara-ui.py
 nav:
   - Start:
-      - Overview:
-          - Why Hara?: start/orientation.md
-          - Building Tic Tac Toe: create/first-game.md
+      - 01 — Why Hara?: start/orientation.md
+      - 02 — Read Hara and build from scratch: learn-programming/index.md
+      - 03 — Try Hara in the browser: getting-started/playground.md
+      - 04 — Build Tic Tac Toe:
+          - Project overview: create/first-game.md
           - Part I — Draw the board: create/tictactoe/board.md
           - Part II — Organise the game: create/tictactoe/files.md
           - Part III — State and rules: create/tictactoe/state.md
           - Part IV — Pointer input: create/tictactoe/input.md
           - Part V — Rendering: create/tictactoe/rendering.md
           - Part VI — Make it live: create/tictactoe/live.md
-      - Getting Started:
-          - With the CLI: getting-started/cli.md
-          - With the JVM: getting-started/jvm.md
-          - With the Web: getting-started/web.md
-          - With Playground: getting-started/playground.md
-          - With Emacs: getting-started/emacs.md
-          - With VS Code: getting-started/vscode.md
-      - Concepts:
+      - 05 — Choose your setup: getting-started.md
+  - Learn Hara:
+      - Language course:
+          - Course map: hal-intro/index.md
+          - 01 — Basic data and persistent collections: hal-intro/01-basic-data.md
+          - 02 — Functions and atoms: hal-intro/02-functions-and-atoms.md
+          - 03 — Sequences, iterators, and streaming: hal-intro/03-iterators-and-streaming.md
+          - 04 — Coroutines and promises: hal-intro/04-coroutines-and-promises.md
+          - 05 — Arrays and objects: hal-intro/05-array-and-object.md
+          - 06 — Bytes and strings: hal-intro/06-bytes-and-strings.md
+          - 07 — I/O and files: hal-intro/07-io-and-files.md
+      - Core concepts:
           - Concepts overview: concepts/index.md
           - Runtime-driven development: concepts/runtime-driven-development.md
           - Live coding: concepts/live-coding.md
           - Unified representation: concepts/unified-representation.md
-  - Learn Hara:
-      - Introductory:
-          - Course map: hal-intro/index.md
-          - 01 — Basic data and immutable collections: hal-intro/01-basic-data.md
-          - 02 — Functions and atoms: hal-intro/02-functions-and-atoms.md
-          - 03 — Iterators and streaming: hal-intro/03-iterators-and-streaming.md
-          - 04 — Coroutines and promises: hal-intro/04-coroutines-and-promises.md
-          - 05 — Array and object: hal-intro/05-array-and-object.md
-          - 06 — Bytes and strings: hal-intro/06-bytes-and-strings.md
-          - 07 — I/O and files: hal-intro/07-io-and-files.md
-      - Systems and Wasm:
+      - Projects and systems:
           - Namespaces, libraries, and tests: namespaces.md
           - Namespace project walkthrough: walkthroughs/service-project.md
           - Rust and WASM runtime: reference/rust-runtime.md
-      - Web Specific:
+  - Work with Hara:
+      - Choose a host:
+          - With the CLI: getting-started/cli.md
+          - With the Web: getting-started/web.md
+          - With the JVM: getting-started/jvm.md
+          - With VS Code: getting-started/vscode.md
+          - With Emacs: getting-started/emacs.md
+      - Browser applications:
           - Browser HTA: web-specific/browser-hta.md
           - Hara kernel: kernel.md
           - Substrate application architecture: start/react.md
-      - The little book of Hara:
-          - Learn to program: learn-programming/index.md
   - Build projects:
       - Projects and visual workspaces: projects/index.md
       - Hara Chrome project: create/chrome-project.md
