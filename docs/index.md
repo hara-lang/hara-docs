@@ -10,7 +10,7 @@ hide:
   <div class="hara-launch__head">
     <p class="hara-label">Documentation</p>
     <h1>Hara</h1>
-    <p>Operating instructions, HAL learning, developer guides, and concise kernel and runtime references.</p>
+    <p>Interactive learning, operating instructions, developer guides, and concise language and runtime references.</p>
   </div>
 
   <div class="hara-outcome-grid hara-docs-grid">
@@ -21,11 +21,11 @@ hide:
       <small>Open Start <b>→</b></small>
     </a>
 
-    <a class="hara-outcome-card" href="learn-programming/">
+    <a class="hara-outcome-card" href="learn/">
       <span class="hara-card-kicker">02 · Learn</span>
-      <h2>Learn Hara</h2>
-      <p>Learn programming fundamentals and continue into Hara’s language, libraries, state, and live workflow.</p>
-      <small>Open Learn <b>→</b></small>
+      <h2>Learn Hara interactively</h2>
+      <p>Run real forms, build from first principles, and learn why protocols are the builder's central tool.</p>
+      <small>Choose a syllabus <b>→</b></small>
     </a>
 
     <a class="hara-outcome-card" href="start/clojure/">
