@@ -1,13 +1,12 @@
-# Identity, packages, and assets
+# Identity and packages
 
 Hara's official tap is a self-publishing system with one authority: accepted
-Git history. It has three public service names:
+Git history. It has two public service names:
 
 | Origin | Responsibility |
 | --- | --- |
 | `id.hara-lang.org` | GitHub ownership enrollment and signed public-key policy |
 | `packages.hara-lang.org` | package discovery, verification records, and immutable code objects |
-| `assets.hara-lang.org` | immutable file, image, 3D, audio, and video objects |
 
 Artifact manifests, HARP archives, extensions, publishing, distribution, and
 mirroring are parts of the protocol. They are not separate official domains.
