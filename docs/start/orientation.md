@@ -5,300 +5,155 @@ hara_kernel_loading: auto
 
 # Why Hara?
 
-Start with the system, not the theory. This page is connected to a
-browser-hosted Hara kernel. Put the cursor in the form below and press
-`Ctrl-Enter` (or `⌘-Enter`). The result appears inline.
+Hara is a small, high-performance Lisp for learning to build software from first principles.
+
+**Simple to pick up. Fast enough to keep.**
+
+You can learn its basic reading model in a few minutes, use it to understand the parts beneath a framework, and continue with the same language as the program becomes a real browser application, command-line tool, service, or embedded system.
+
+This page is connected to a browser-hosted Hara kernel. Put the cursor in the form below and press `Ctrl-Enter` (or `⌘-Enter`).
 
 ```hara eval
-(+ 1 2 3)
-; => 6
+(+ 19 23)
+; => 42
 ```
 
-You wrote one form, evaluated it in a live runtime, and inspected the value it
-returned. That small loop is the foundation of the manual:
+That is the smallest useful introduction to Hara:
 
 ```text
-write a form → evaluate it → inspect the value
+(operation input input)
 ```
 
-## Why that is useful
+The operation comes first. Here, `+` receives `19` and `23` and returns `42`.
 
-Modern web development is remarkably capable: React, TypeScript, browser APIs,
-state libraries, build tools, and cloud platforms can produce sophisticated
-applications quickly. As a project grows, though, the experience can become
-increasingly indirect: edit source, wait for an update, reproduce an
-interaction, inspect several tools, and infer what happened inside the running
-system.
+## Hara is Lisp
 
-Hara offers another approach. It is not another framework intended to replace
-the browser, React, or an existing frontend stack. It is a small, embeddable
-kernel that can sit inside a browser, editor, application, or development
-environment. The kernel gives a person—and an AI agent—a structured way to
-inspect application state, evaluate a bounded change, and observe the result
-while the system is running.
+Hara does not disguise its Lisp foundation. It uses it to keep the language small and the structure of a program visible.
 
-HAL (Hara Lisp) is an EDN-compatible, host-neutral notation and data format
-for communicating with that kernel. HAL forms provide a compact, inspectable
-way to ask the system questions and make bounded changes.
+For the first part of the language, four shapes are enough:
 
-## HAL is how you talk to the kernel
-
-The kernel reads HAL forms that describe computations, inspect values, and
-change the running system. The notation stays portable while the kernel and
-its host interfaces determine what can execute and which effects are allowed.
-
-For now, only four rules are needed:
-
-<div class="hara-syntax-primer" role="img" aria-label="Four basic Hara form rules">
+<div class="hara-syntax-primer" role="img" aria-label="Four basic Hara reading rules">
   <div><code>(+ 1 2)</code><b>Form</b><small>Parentheses hold one computation.</small></div>
   <div><code>+ 1 2</code><b>Operation first</b><small>The first item usually says what to do.</small></div>
-  <div><code>[1 2 3]</code><b>Vector</b><small>Square brackets hold an ordered collection.</small></div>
+  <div><code>[1 2 3]</code><b>Vector</b><small>Square brackets hold ordered values.</small></div>
   <div><code>{:name "Ada"}</code><b>Map</b><small>Braces connect named facts to values.</small></div>
 </div>
 
 ```hara eval
-(def user {:name "Ada"
-           :status :active})
+(def player
+  {:name "Nova"
+   :score 0})
 
-(get user :name)
+(assoc player :score 10)
+; => {:name "Nova" :score 10}
 ```
 
-Later chapters go deeper into reading HAL forms, evaluation, macroexpansion,
-and the relationship to Clojure and other Lisp traditions. For this manual,
-keep the positioning simple:
+The same structures continue through the language. A map can represent a player, a request, a document, a configuration, or the state of a running application. A form can calculate a number, transform that state, call a function, or request an explicit host capability.
 
-> Hara is a programmable kernel. HAL forms are how you talk to it.
+Hara source uses **HAL**, the language's EDN-compatible notation. Code is built from the same kinds of values that Hara programs already know how to inspect and transform. That is one of the reasons a small grammar can cover a great deal of ground.
 
-## Work with the running system
+## Learn the parts beneath the frameworks
 
-<div class="hara-workflow-compare" role="group" aria-label="Development workflow comparison">
-  <section class="hara-workflow hara-workflow--files">
-    <span class="hara-diagram-label">Files first</span>
-    <ol>
-      <li><i class="hara-step-picture hara-step-picture--edit" aria-hidden="true"></i><span><b>Edit</b><small>Change the durable source file.</small></span></li>
-      <li><i class="hara-step-picture hara-step-picture--build" aria-hidden="true"></i><span><b>Rebuild</b><small>Turn source into a runnable version.</small></span></li>
-      <li><i class="hara-step-picture hara-step-picture--reload" aria-hidden="true"></i><span><b>Reload</b><small>Replace what the running system knows.</small></span></li>
-      <li><i class="hara-step-picture hara-step-picture--reproduce" aria-hidden="true"></i><span><b>Reproduce</b><small>Return to the state that proves the issue.</small></span></li>
-      <li><i class="hara-step-picture hara-step-picture--infer" aria-hidden="true"></i><span><b>Infer</b><small>Work backwards to explain the result.</small></span></li>
-    </ol>
-  </section>
-  <section class="hara-workflow hara-workflow--kernel">
-    <span class="hara-diagram-label">Live system first</span>
-    <ol>
-      <li><i class="hara-step-picture hara-step-picture--inspect" aria-hidden="true"></i><span><b>Inspect</b><small>See the state that exists right now.</small></span></li>
-      <li><i class="hara-step-picture hara-step-picture--evaluate" aria-hidden="true"></i><span><b>Evaluate</b><small>Make one bounded change or query.</small></span></li>
-      <li><i class="hara-step-picture hara-step-picture--observe" aria-hidden="true"></i><span><b>Observe</b><small>Read the returned value or visible output.</small></span></li>
-      <li><i class="hara-step-picture hara-step-picture--trace" aria-hidden="true"></i><span><b>Trace</b><small>Follow the calls and effects behind it.</small></span></li>
-      <li><i class="hara-step-picture hara-step-picture--keep" aria-hidden="true"></i><span><b>Keep</b><small>Put the verified insight into source.</small></span></li>
-    </ol>
-  </section>
-</div>
+Frameworks are useful, but they package together many ideas that are easier to understand separately.
 
-This is runtime-driven development. Instead of changing a representation of a
-system and waiting to discover the result, you interact with the system while
-it is alive. A successful experiment can then be kept in source deliberately.
+Hara lets you work with those ideas directly:
 
-The kernel is the stable part of that workflow. The host changes according to
-where the interesting live state is:
+- values and named data;
+- functions and transformations;
+- decisions and recursion;
+- persistent collections;
+- state that is explicitly marked;
+- iteration and asynchronous work;
+- effects that cross into a host environment.
 
-<div class="hara-host-topology" role="img" aria-label="Browser, Chrome DevTools, VS Code, and CLI hosts connect to one Hara kernel">
-  <div class="hara-host-topology__hosts">
-    <span>Browser<br>workspace</span>
-    <span>Chrome<br>panel</span>
-    <span>VS Code</span>
-    <span>CLI / REPL</span>
-  </div>
-  <div class="hara-host-topology__kernel">Hara kernel <small>running system</small></div>
-</div>
+These are not Hara-specific tricks. They are durable programming concepts. Learning them makes it easier to understand what a framework is doing, decide when to use one, and build the missing piece yourself when necessary.
 
-The browser is a useful first host because it makes the loop immediate: there
-is nothing to install, values can be rendered beside their forms, and visual
-or browser-native effects can be observed where they occur.
+The important continuity is that Hara is not a teaching notation you must later abandon. The first expression and the complete application use the same language and values.
 
-## Web native from the start
+## Small does not mean temporary
 
-Hara is designed to run on the web and through WebAssembly. A browser-hosted
-kernel can be opened, queried, and observed without first assembling a large
-local toolchain. The first form on this page demonstrates the point: what
-matters is not that `(+ 1 2 3)` is small, but that it ran in the same
-environment whose result you could immediately inspect.
+Hara begins with a compact reader, but the language does not stop at arithmetic and collection examples.
 
-<div class="hara-web-native-path" role="img" aria-label="A Hara form runs in a browser-hosted WebAssembly kernel and returns an inspectable value">
-  <span>Hara form</span><b>→</b><span>Browser-hosted kernel</span><b>→</b><span>WebAssembly runtime</span><b>→</b><span>Inspectable value</span>
-</div>
+The language and runtime include persistent maps, vectors, sets, queues, and sorted collections; fixed, variadic, and multiple-arity functions; lexical closures; destructuring; namespaces; exceptions; protocols; multimethods; macros; lazy sequences; promises; coroutines; bytes; and explicitly mutable arrays and objects.
 
-The same kernel model can later be reached from a browser workspace, Chrome
-DevTools, VS Code, a command-line REPL, an embedded application, or an AI
-development tool. The editor or console is a surface; the kernel is the
-running environment behind it.
+The boundaries remain visible as the system becomes more capable:
 
-## Keep important application state visible
+| Default model | Explicit boundary |
+| --- | --- |
+| persistent collections | mutable arrays and objects |
+| immutable values | atoms for changing state |
+| ordinary function calls | coroutines and promises |
+| pure transformations | capability-gated host effects |
 
-React is excellent at turning state into an interface. Hara gives you the
-option to keep important application information inspectable independently of
-the component that currently renders it.
+This is the sense in which Hara is simple: not because serious parts are missing, but because a small number of structures continue to compose.
+
+For exact semantics, the [L0 language contract](../reference/l0-language.md) remains the source of truth.
+
+## Work directly with a running program
+
+Hara is designed around a short feedback loop:
+
+```text
+write → evaluate → inspect → change
+```
+
+Create a value, run a form, and inspect what came back. When a program needs state, make that state visible and change it through a named operation.
 
 ```hara eval
-(def app-state
-  (atom {:user nil
-         :route :home
-         :documents {}
-         :connection :online}))
+(def counter
+  (atom {:value 0}))
 
-(deref app-state)
+(defn increase [state]
+  (update state :value inc))
+
+(swap! counter increase)
+
+(deref counter)
+; => {:value 1}
 ```
 
-<div class="hara-state-distinction hara-react-state" role="img" aria-label="Application state and behaviour flow through a UI adapter to a React interface">
-  <section><i>◇</i><b>Application state and behaviour</b><small>Named information and operations you can inspect.</small><code>atom · defn · deref</code></section>
-  <section><i>⚛</i><b>UI adapter</b><small>React renders the information for this view.</small><code>state → interface</code></section>
-</div>
+Nothing in that example requires a hidden component lifecycle. The current value is visible. The transition is a function. The change is explicit.
 
-React can still render this information. It simply does not have to be the
-final owner of it. The deeper application architecture is documented in
-[Substrate application architecture](react.md), outside the Start sequence.
+A live session is not a replacement for durable source. It is the place where you can test an idea against a running system, inspect the evidence, and then keep the successful definition in the project.
 
-## Isn't this just a console?
+Read [runtime-driven development](../concepts/runtime-driven-development.md) when you are ready for the deeper kernel and session model.
 
-A JavaScript developer should ask this. The browser console already evaluates
-code, inspects values, and can change a page. Hara does not replace DevTools;
-DevTools lets you inspect the browser, while Hara lets you design an
-application to be inspectable.
+## Performance is part of the language story
 
-> A console is an interface. A kernel is the running environment behind the
-> interface.
+An approachable language is much more useful when you can keep using it after the first lesson.
 
-Chrome DevTools connects its console to a page's JavaScript runtime. Hara aims
-to provide a deliberately structured kernel that can be embedded in a system
-and reached through more than one surface, including browser workspaces,
-Chrome panels, VS Code, the CLI / REPL, and AI agents.
+Hara publishes reproducible benchmark evidence rather than asking you to accept a broad claim. Each reference run records the workload source, runtime versions, machine, preparation method, raw samples, expected checksum, and result. The complete comparison remains visible, including the runtimes that are faster.
 
-The distinction matters only if the kernel provides more than arbitrary
-evaluation. A Hara kernel is intended to provide:
+The current language comparison covers eight checksum-verified prepared workloads across arrays, persistent data, recursion, backtracking, branching, ranges, and matrix work.
 
-<div class="hara-kernel-capabilities" role="img" aria-label="Hara kernel capabilities">
-  <div><i>◷</i><b>Named session</b><small>Persistent runtime state.</small></div>
-  <div><i>◇</i><b>Structured values</b><small>State you can inspect.</small></div>
-  <div><i>▦</i><b>Workspace model</b><small>Projects have explicit shape.</small></div>
-  <div><i>⌁</i><b>Capabilities</b><small>Host access is controlled.</small></div>
-  <div><i>⌘</i><b>Evidence</b><small>Traces explain evaluations.</small></div>
-  <div><i>↔</i><b>Protocol</b><small>Tools and agents connect reliably.</small></div>
-  <div><i>◎</i><b>Shared clients</b><small>Several surfaces see one system.</small></div>
-  <div><i>◫</i><b>Connected output</b><small>Source, state, nodes, visuals.</small></div>
-</div>
+[Inspect the complete benchmark table and methodology →](https://www.hara-lang.org/benchmarks/)
 
-The browser console is a powerful developer tool attached to one browser
-execution context. It does not normally define an application-level inspection
-contract shared by people, editors, visual tools, and agents.
+The point is not that one number describes every program. It is that Hara's performance can be examined as carefully as its language semantics.
 
-> The console is one possible front end to Hara. The kernel is the persistent,
-> inspectable runtime that the console connects to.
+## Use the same language in several environments
 
-There is an important caveat. If Hara only evaluates HAL forms and
-prints results, then the JavaScript developer is right: it is effectively
-another console. The documentation must demonstrate the difference early—by
-showing the same kernel from multiple surfaces, named state, bounded changes,
-visible output, traces, and structured agent access—not merely assert it.
+You do not need to choose a deployment model before learning Hara.
 
-## What the kernel makes inspectable
+Start in the browser because it removes installation from the first experience. Later, choose the runtime that fits the system:
 
-Inspectability is not a debugging feature added after an application exists.
-It is a property to design for from the beginning. A Hara system should make
-these relationships legible:
+- **Web** for a browser-hosted kernel, interactive tools, visual applications, and documentation.
+- **Native** for command-line tools, services, local applications, and embedded products through the Rust runtime.
+- **JVM** for Java integration, Truffle development, and Native Image deployment.
 
-<div class="hara-inspection-lanes" role="img" aria-label="Inspectable Hara system relationships">
-  <div class="hara-inspection-lane">
-    <span>Source<br>forms</span><span>Evaluated<br>values</span><span>Application<br>state</span>
-  </div>
-  <div class="hara-inspection-lane">
-    <span>Messages<br>and events</span><span>Functions</span><span>Traces</span>
-  </div>
-  <div class="hara-inspection-lane">
-    <span>Host<br>capabilities</span><span>Permitted<br>effects</span><span>Visual<br>output</span>
-  </div>
-  <div class="hara-inspection-evidence">
-    Developer or agent change <b>→</b> observable evidence <b>→</b> source kept deliberately
-  </div>
-</div>
+The host changes. The language, values, and core programming model stay recognisable.
 
-That makes practical questions answerable: What state exists now? Which form
-changed it? What depends on it? Which event reached this function? What can be
-changed safely, and what result proves the change?
+## Choose the next step
 
-## A shared interface for people and agents
+The most direct route is:
 
-An agent using Hara should not have to edit files blindly and infer outcomes
-from build logs. The same live kernel can provide a structured loop:
-
-<div class="hara-evidence-loop" role="img" aria-label="Structured loop for people and agents">
-  <div><i>◉</i><b>Inspect</b><small>State and capabilities.</small></div>
-  <div><i>λ</i><b>Evaluate</b><small>One controlled form.</small></div>
-  <div><i>◫</i><b>Examine</b><small>Value, output, or error.</small></div>
-  <div><i>⌘</i><b>Trace</b><small>Calls and effects.</small></div>
-  <div><i>▣</i><b>Keep</b><small>Evidence becomes source.</small></div>
-</div>
-
-<div class="hara-safety-callout">
-  <span>Safety boundary</span>
-  <p>This does not make changes automatically safe. It makes their scope and their evidence visible to both collaborators.</p>
-</div>
-
-## Source, state, and effects are different things
-
-A source form is durable text. Evaluation gives it a value in a running
-session. That value may update state, and a host capability may turn state into
-an effect such as a canvas draw, file operation, DOM update, or message.
-
-Keeping those layers distinct makes a live system easier to reason about:
-
-<div class="hara-runtime-chain" role="img" aria-label="Source form evaluates to runtime state, which invokes a host capability and creates an observable effect">
-  <span>Source<br>form</span>
-  <span>Evaluate&nbsp;→</span>
-  <span>Runtime value<br>or state</span>
-  <span>Host<br>capability</span>
-  <span>Observable<br>effect</span>
-</div>
-
-The kernel lets you work across those layers without pretending they are the
-same thing.
-
-## Take the next step: persistent state
-
-Now create a small piece of persistent runtime state, change it once, and
-inspect it again. Evaluate each form in order.
-
-```hara eval
-(def orientation-state
-  (atom {:status :ready
-         :count 0}))
-
-(swap! orientation-state update :count inc)
-
-(deref orientation-state)
-; => {:status :ready :count 1}
-```
-
-You have just made one bounded change to a live session and inspected the
-result. The important lesson is not the syntax: it is that you can observe the
-system between each step.
-
-## What to expect today
-
-The documentation and browser examples provide a shared live kernel for
-evaluation, inline results, syntax-aware editing, and small inspectable
-experiments. Different hosts expose different capabilities; a browser kernel
-does not silently become access to local files, network services, or browser
-extension APIs. Those boundaries are explicit parts of the host relationship.
-
-The following chapters place the same kernel closer to the systems you are
-building: first by choosing a host and installing a runtime, then by working
-with definitions, state, projects, and visual systems in more depth.
-
-## Continue
-
-Next, choose where the kernel will run and verify that it is available:
+1. Learn to read ordinary Hara values and forms.
+2. Try them in the browser while every result is visible.
+3. Combine data, rules, state, input, and rendering in one complete program.
+4. Install a local runtime when a project needs files, an editor, Java, or native deployment.
 
 <div class="hara-next-routes">
-  <a href="../getting-started.md"><i>02</i><span><b>Install</b><small>Put a kernel where you work.</small></span></a>
-  <a href="https://playground.hara-lang.org/"><i>▶</i><span><b>Browser Playground</b><small>Try the live kernel now.</small></span></a>
-  <a href="../learn-programming/index.md"><i>→</i><span><b>Learn Hara</b><small>Continue with forms and state.</small></span></a>
+  <a href="../learn-programming/index.md"><i>02</i><span><b>Read Hara</b><small>Learn the language from first principles.</small></span></a>
+  <a href="../getting-started/playground.md"><i>▶</i><span><b>Try it live</b><small>Use the browser-hosted kernel.</small></span></a>
+  <a href="../create/first-game.md"><i>03</i><span><b>Build Tic Tac Toe</b><small>Create a complete program from a blank canvas.</small></span></a>
+  <a href="../getting-started.md"><i>04</i><span><b>Choose your setup</b><small>Move into the CLI, web, JVM, or an editor.</small></span></a>
 </div>

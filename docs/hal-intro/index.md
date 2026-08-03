@@ -1,24 +1,38 @@
-# HAL — Intro
+# The Hara language course
 
-HAL is the portable notation used to communicate with the Hara kernel. This
-tutorial teaches it through the values and runtime services that Hara programs
-use every day.
+This course continues from [Read Hara and build from scratch](../learn-programming/index.md). It takes the same small reading model from ordinary values into the runtime boundaries used by complete programs.
 
-The tutorial does not assume Clojure knowledge. It starts with plain data and builds toward asynchronous file work.
+No previous Clojure knowledge is assumed. You will work with the actual Hara language and libraries rather than a reduced teaching dialect.
 
 ## What you will learn
 
-You will learn seven connected parts of Hara:
+The course develops seven connected parts of Hara:
 
-1. Basic data types and immutable collections.
+1. Basic data types and persistent collections.
 2. Functions and atoms.
-3. Iterators and streaming.
+3. Sequences, iterators, and streaming.
 4. Coroutines and promises.
-5. Mutable arrays and objects.
+5. Explicitly mutable arrays and objects.
 6. Bytes and strings.
-7. I/O and files.
+7. Capability-gated I/O and files.
 
-The order matters. Each lesson uses the terms and values introduced by the earlier lessons.
+The order matters. Each lesson uses the values and boundaries introduced by the earlier lessons.
+
+## Why these boundaries matter
+
+Hara's simplicity comes from keeping a small set of distinctions visible as the program grows:
+
+| Ordinary model | Explicit boundary |
+| --- | --- |
+| persistent vectors, maps, sets, and lists | mutable `array` and `object` values |
+| plain immutable value | `atom` for current changing state |
+| lazy, replayable `Seq` | one-shot iterator |
+| immediate result | promise that settles later |
+| normal function call | resumable coroutine |
+| string | mutable bytes |
+| pure transformation | host capability and I/O |
+
+The course does not hide these distinctions behind a framework. It teaches you to recognise and use each one deliberately.
 
 ## The course project
 
@@ -26,33 +40,34 @@ You will build a small line-processing program.
 
 The final program will:
 
-1. Represent its configuration with immutable maps and vectors.
+1. Represent configuration with persistent maps and vectors.
 2. Use functions to transform records.
 3. Store live progress in an atom.
-4. stream records through iterators.
+4. Stream records through sequences and iterators.
 5. Coordinate work with coroutines and promises.
-6. Use arrays and objects at mutable boundaries.
-7. Encode text as bytes.
-8. Read and write files through explicit capabilities.
+6. Use arrays and objects at explicit mutable boundaries.
+7. Encode and decode text as bytes.
+8. Read and write files through granted capabilities.
 
-The project is intentionally small. The goal is to expose the runtime model, not hide it behind a framework.
+The project is intentionally compact. The goal is to expose the runtime model clearly enough that you can transfer it to a browser application, command-line tool, service, or embedded host.
 
 ## How to use each lesson
 
-Keep a Hara REPL open while you read.
+Keep a Hara REPL or the [browser Playground](../getting-started/playground.md) open while you read.
 
-For each example, use the same four-step loop:
+For each example, use the same loop:
 
-1. **Predict** the result before you run the form.
-2. **Run** the form in the REPL.
+1. **Predict** the result before running the form.
+2. **Run** it in the live session.
 3. **Change** one value or operation.
-4. **Explain** the new result in one sentence.
+4. **Inspect** the returned value.
+5. **Explain** the new result in one sentence.
 
-This loop turns syntax into an observable rule.
+This turns syntax into an observable rule and keeps the running system close to the source.
 
-## The vocabulary
+## Stable vocabulary
 
-The tutorial uses one term for each concept:
+The course uses one term for each concept:
 
 - A **value** is data that an expression returns.
 - A **form** is Hara data that the evaluator can run.
@@ -67,64 +82,47 @@ The tutorial uses one term for each concept:
 - **Bytes** are mutable binary storage.
 - **I/O** is an effect that crosses from Hara into its host environment.
 
-The lessons keep these names stable. A lesson introduces a new name only when it introduces a new runtime concept.
-
-## Hara's main boundaries
-
-Hara makes several boundaries visible:
-
-| Boundary | Pure side | Explicit side |
-| --- | --- | --- |
-| Collection updates | vectors, maps, sets, lists | `array`, `object` |
-| Current state | plain immutable value | `atom` |
-| Collection traversal | lazy `Seq` | one-shot iterator |
-| Deferred result | immediate value | promise |
-| Suspended work | normal function call | coroutine |
-| Text and binary data | string | bytes |
-| Program and host | pure transformation | capability-gated I/O |
-
-These boundaries are the core of the tutorial.
+A new name appears only when the course introduces a new runtime concept.
 
 ## Course map
 
-### [01. Basic data and immutable collections](01-basic-data.md)
+### [01 — Basic data and persistent collections](01-basic-data.md)
 
 Read numbers, booleans, strings, keywords, symbols, lists, vectors, maps, and sets. Update persistent collections without mutation.
 
-### [02. Functions and atoms](02-functions-and-atoms.md)
+### [02 — Functions and atoms](02-functions-and-atoms.md)
 
 Define transformations with `fn` and `defn`. Use an atom when a running program needs one replaceable value.
 
-### [03. Iterators and streaming](03-iterators-and-streaming.md)
+### [03 — Sequences, iterators, and streaming](03-iterators-and-streaming.md)
 
 Build lazy pipelines. Distinguish reusable values, lazy `Seq` values, and one-shot iterators.
 
-### [04. Coroutines and promises](04-coroutines-and-promises.md)
+### [04 — Coroutines and promises](04-coroutines-and-promises.md)
 
 Represent deferred results with promises. Suspend and resume control flow with coroutines.
 
-### [05. Array and object](05-array-and-object.md)
+### [05 — Arrays and objects](05-array-and-object.md)
 
 Use explicit mutable markers at host, protocol, and performance boundaries. Keep them separate from persistent collections.
 
-### [06. Bytes and strings](06-bytes-and-strings.md)
+### [06 — Bytes and strings](06-bytes-and-strings.md)
 
 Transform text with string functions. Encode and decode UTF-8. Inspect and update byte buffers.
 
-### [07. I/O and files](07-io-and-files.md)
+### [07 — I/O and files](07-io-and-files.md)
 
 Resolve paths safely. Read and write bytes through promises. Understand capability grants and effect boundaries.
 
-## What this tutorial leaves for later
+## After the course
 
-This tutorial does not try to cover every Hara feature.
+Continue according to what you want to build:
 
-After the course, continue with:
+- [Build Tic Tac Toe](../create/first-game.md) for a complete visual browser program.
+- [Namespaces, libraries, and tests](../namespaces.md) for larger source trees.
+- [Namespace project walkthrough](../walkthroughs/service-project.md) for a multi-file service shape.
+- [Choose your Hara setup](../getting-started.md) for the CLI, web, JVM, VS Code, or Emacs.
+- [L0 language contract](../reference/l0-language.md) for exact semantics.
+- [Runtime library contract](../reference/runtime-libraries.md) for intrinsic namespaces.
 
-- the [language guide](../user-guide.md) for namespaces and runtime basics;
-- the [L0 language contract](../reference/l0-language.md) for exact semantics;
-- the [runtime library contract](../reference/runtime-libraries.md) for intrinsic namespaces;
-- the [namespace catalog](../reference/namespaces.md) for public libraries;
-- the [project walkthrough](../walkthroughs/service-project.md) for multi-file code.
-
-Start with [01. Basic data and immutable collections](01-basic-data.md).
+Start with [01 — Basic data and persistent collections](01-basic-data.md).
