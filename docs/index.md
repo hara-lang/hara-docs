@@ -65,4 +65,9 @@ hide:
     <p>Hara publishes the source, environment, raw samples, checksums, and complete comparison table for its benchmarks—including the runtimes that are faster.</p>
     <a class="hara-inline-link" href="https://www.hara-lang.org/benchmarks/">Inspect the benchmarks <b>→</b></a>
   </div>
+  <div class="hara-fact-grid" aria-label="Hara benchmark evidence">
+    <article><span>Equivalent work</span><h3>Verified results</h3><p>Each timed workload must return its expected checksum before it is published.</p></article>
+    <article><span>Honest timing</span><h3>Separate phases</h3><p>Preparation, first invocation, warm-up, and steady-state execution remain distinct.</p></article>
+    <article><span>Complete evidence</span><h3>No hidden rows</h3><p>The table retains unsupported cases and the comparison runtimes that are faster.</p></article>
+  </div>
 </section>
