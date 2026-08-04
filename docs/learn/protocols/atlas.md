@@ -10,8 +10,9 @@ Hara's foundation protocols are a compact vocabulary for constructing values,
 collections, stateful components, deferred work, and live runtime systems.
 Their canonical identities live under `std.protocol.*`.
 
-This first Atlas release is a guided map. Individual protocol labs will be
-added behind these entries as the interactive course grows.
+The Atlas is both a reference and a course map. Protocol families with a
+complete interactive lab link directly to it; the remaining families identify
+the next labs to build.
 
 ## 01 — Represent and identify values
 
@@ -57,6 +58,8 @@ format.
 A collection is not required to inherit from one universal base class. It can
 provide only the abilities that make sense for its representation.
 
+[Work through these contracts in Collection Protocols →](collections.md){ .md-button .md-button--primary }
+
 ## 04 — Construct and update collections
 
 | Protocol | Canonical namespace | Methods |
@@ -75,6 +78,8 @@ provide only the abilities that make sense for its representation.
 The separate contracts make collection direction, update semantics, and return
 shape visible.
 
+[Practice persistent updates and direction →](collections.md#04-update-without-losing-the-previous-value){ .md-button }
+
 ## 05 — Traverse and reduce
 
 | Protocol | Canonical namespace | Methods |
@@ -86,6 +91,8 @@ shape visible.
 Persistent collections, lazy sequences, generated values, and one-shot sources
 can participate in shared algorithms without pretending to have identical
 resource behaviour.
+
+[Acquire and advance an explicit iterator →](collections.md#06-traversal-is-a-resource){ .md-button }
 
 ## 06 — Mark mutability boundaries
 
@@ -150,4 +157,5 @@ These demonstrate the larger pattern: a test system is assembled from
 replaceable contracts for matching, time, cancellation, registration,
 reporting, execution, results, and closure.
 
-[Return to Protocols for Builders →](./){ .md-button .md-button--primary }
+[Start the collection lab →](collections.md){ .md-button .md-button--primary }
+[Return to Protocols for Builders →](./){ .md-button }

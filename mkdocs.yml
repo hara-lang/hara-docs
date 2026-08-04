@@ -85,6 +85,7 @@ nav:
       - First Contact: learn/first-contact/index.md
       - Protocols for Builders:
           - Interactive course: learn/protocols/index.md
+          - Collection protocols: learn/protocols/collections.md
           - Protocol Atlas: learn/protocols/atlas.md
       - Build something live:
           - Building Tic Tac Toe: create/first-game.md

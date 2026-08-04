@@ -137,11 +137,27 @@ changing that call.
 
 </div>
 
-## The standard protocol collection
+## Continue by protocol family
 
-The current Hara foundation exposes 53 protocol identities under
-`std.protocol.*`. The Protocol Atlas groups them by the design question they
-answer, rather than presenting one long alphabetical dump.
+The foundation course establishes the model. The family labs now apply it to
+larger parts of a real system.
 
-[Open the Protocol Atlas →](atlas.md){ .md-button .md-button--primary }
+<div class="hara-syllabus-grid">
+  <a class="hara-path-card hara-path-card--primary" href="collections/">
+    <span>01 · VALUES AND COLLECTIONS</span>
+    <h2>Collection Protocols</h2>
+    <p>Work through count, lookup, presence, indexed access, persistent updates, traversal, and a custom multi-protocol value.</p>
+    <small>Eight interactive steps · real shared session</small>
+  </a>
+
+  <a class="hara-path-card" href="atlas/">
+    <span>REFERENCE · 53 FOUNDATION CONTRACTS</span>
+    <h2>Protocol Atlas</h2>
+    <p>Browse the complete vocabulary by the builder question each protocol answers.</p>
+    <small>Canonical std.protocol.* identities and methods</small>
+  </a>
+</div>
+
+[Continue: Collection Protocols →](collections.md){ .md-button .md-button--primary }
+[Browse the Protocol Atlas →](atlas.md){ .md-button }
 [Return to the learning paths →](../){ .md-button }
