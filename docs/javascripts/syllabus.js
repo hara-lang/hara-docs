@@ -24,8 +24,32 @@
     }
   };
 
+  const runnerState = (output) => {
+    if (!output || output.hidden) return "idle";
+    const declared = String(output.dataset.state ?? "").toLowerCase();
+    const text = output.textContent.trim();
+    const normalized = text.toLowerCase();
+
+    if (declared === "error"
+        || output.classList.contains("is-error")
+        || normalized.startsWith("error")) return "error";
+    if (declared === "pending"
+        || output.classList.contains("is-pending")
+        || normalized.includes("evaluating")) return "pending";
+    if (declared === "ready") return "success";
+
+    // The MkDocs editor prefixes returned values with =>. The Astro/Starlight
+    // runner places the returned value in a hara-repl output element instead.
+    if (output.matches(".hara-live-output") && text.startsWith("=>")) return "success";
+    if (output.closest(".hara-repl") && text) return "success";
+    return "idle";
+  };
+
   ready(() => {
     document.querySelectorAll("[data-hara-syllabus]").forEach((syllabus) => {
+      if (syllabus.dataset.haraSyllabusReady === "true") return;
+      syllabus.dataset.haraSyllabusReady = "true";
+
       const id = syllabus.dataset.haraSyllabus;
       if (!id) return;
       const title = syllabus.dataset.haraSyllabusTitle ?? "Syllabus";
@@ -37,51 +61,73 @@
       const progress = document.createElement("aside");
       progress.className = "hara-syllabus-progress";
       progress.setAttribute("aria-label", `${title} progress`);
-      progress.innerHTML = `
-        <div class="hara-syllabus-progress__copy">
-          <span class="hara-syllabus-progress__eyebrow">${title.toUpperCase()}</span>
-          <strong data-hara-progress-count></strong>
-        </div>
-        <button type="button" data-hara-progress-reset>Reset progress</button>
-        <div class="hara-syllabus-progress__bar" aria-hidden="true"><span></span></div>`;
-      syllabus.prepend(progress);
 
-      const count = progress.querySelector("[data-hara-progress-count]");
-      const bar = progress.querySelector(".hara-syllabus-progress__bar > span");
+      const copy = document.createElement("div");
+      copy.className = "hara-syllabus-progress__copy";
+      const eyebrow = document.createElement("span");
+      eyebrow.className = "hara-syllabus-progress__eyebrow";
+      eyebrow.textContent = title.toUpperCase();
+      const count = document.createElement("strong");
+      count.dataset.haraProgressCount = "";
+      copy.append(eyebrow, count);
+
+      const reset = document.createElement("button");
+      reset.type = "button";
+      reset.dataset.haraProgressReset = "";
+      reset.textContent = "Reset progress";
+
+      const track = document.createElement("div");
+      track.className = "hara-syllabus-progress__bar";
+      track.setAttribute("role", "progressbar");
+      track.setAttribute("aria-label", `${title} completion`);
+      track.setAttribute("aria-valuemin", "0");
+      track.setAttribute("aria-valuemax", String(steps.length));
+      const bar = document.createElement("span");
+      track.append(bar);
+      progress.append(copy, reset, track);
+      syllabus.prepend(progress);
 
       const renderProgress = () => {
         const total = steps.length;
         const done = steps.filter((step) => completed.has(step.dataset.haraStep)).length;
         count.textContent = `${done} / ${total} complete`;
         bar.style.width = `${total ? (done / total) * 100 : 0}%`;
+        track.setAttribute("aria-valuenow", String(done));
       };
 
       const attachOutputObserver = (step, button, status) => {
-        const bind = () => {
-          const output = step.querySelector(".hara-live-output");
-          if (!output || output.dataset.haraSyllabusBound) return false;
-          output.dataset.haraSyllabusBound = "true";
-          const update = () => {
-            const text = output.textContent.trim();
-            const successful = !output.hidden
-              && !output.classList.contains("is-error")
-              && text.startsWith("=>")
-              && !text.includes("evaluating");
-            if (!successful || completed.has(step.dataset.haraStep)) return;
+        const renderRunnerState = (output) => {
+          if (completed.has(step.dataset.haraStep)) return;
+          const state = runnerState(output);
+          if (state === "success") {
             step.classList.add("is-ran");
             button.disabled = false;
             status.textContent = "Ran successfully · explain the result, then complete";
-          };
-          new MutationObserver(update).observe(output, {
+          } else if (state === "pending") {
+            button.disabled = true;
+            status.textContent = "Evaluating…";
+          } else if (state === "error") {
+            step.classList.remove("is-ran");
+            button.disabled = true;
+            status.textContent = "The form returned an error · fix it before completing";
+          }
+        };
+
+        const bind = () => {
+          const output = step.querySelector(".hara-live-output, .hara-repl output");
+          if (!output || output.dataset.haraSyllabusBound === "true") return false;
+          output.dataset.haraSyllabusBound = "true";
+          new MutationObserver(() => renderRunnerState(output)).observe(output, {
             attributes: true,
-            attributeFilter: ["class", "hidden"],
+            attributeFilter: ["class", "hidden", "data-state"],
             childList: true,
             characterData: true,
             subtree: true
           });
-          update();
+          renderRunnerState(output);
           return true;
         };
+
         if (bind()) return;
         const observer = new MutationObserver(() => {
           if (bind()) observer.disconnect();
@@ -92,13 +138,13 @@
       steps.forEach((step) => {
         const stepId = step.dataset.haraStep;
         if (!stepId) return;
+
         const footer = document.createElement("footer");
         footer.className = "hara-syllabus-step__footer";
         const status = document.createElement("span");
         status.className = "hara-syllabus-step__status";
         const button = document.createElement("button");
         button.type = "button";
-        button.textContent = "Complete step";
         footer.append(status, button);
         step.append(footer);
 
@@ -131,7 +177,7 @@
         attachOutputObserver(step, button, status);
       });
 
-      progress.querySelector("[data-hara-progress-reset]").addEventListener("click", () => {
+      reset.addEventListener("click", () => {
         completed.clear();
         writeProgress(storageKey, completed);
         steps.forEach((step) => {
