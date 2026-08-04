@@ -57,3 +57,11 @@
 </div>
 {{ super() }}
 {% endblock %}
+{% block footer %}
+{{ super() }}
+<div style="display:flex;justify-content:center;gap:.55rem;flex-wrap:wrap;padding:1rem 1.5rem;border-top:1px solid var(--hara-line);color:var(--hara-muted);font-size:.72rem">
+  <a href="https://opensource.greenways.ai/open-source/">A Greenways Open Source Project</a>
+  <span aria-hidden="true">·</span>
+  <a href="https://github.com/hara-lang/hara-docs/blob/main/LICENSE">Apache-2.0</a>
+</div>
+{% endblock %}
