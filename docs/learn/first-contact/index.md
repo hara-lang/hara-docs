@@ -5,9 +5,10 @@ hara_kernel_loading: auto
 
 # First Contact
 
-This is a short working session, not a survey of the whole language. Each step
-runs in the browser-hosted Hara kernel and stands on its own, so you can change
-anything without breaking the next exercise.
+This is a short working session, not a survey of the whole language. On the
+main Hara site, the six examples share one named lesson session, so definitions
+remain available as you move down the page. Each step is also self-contained
+and can be rerun safely.
 
 Use the same rhythm throughout:
 
@@ -16,7 +17,7 @@ Use the same rhythm throughout:
 3. Change one value.
 4. Explain the new result in one sentence.
 
-<div class="hara-syllabus" data-hara-syllabus="first-contact-v1" data-hara-syllabus-title="First Contact">
+<div class="hara-syllabus" data-hara-syllabus="first-contact-v1" data-hara-syllabus-title="First Contact" data-hara-session-group="first-contact">
 
 <div class="hara-syllabus-step" data-hara-step="01-run-one-form">
 
@@ -25,7 +26,7 @@ Use the same rhythm throughout:
 Most Hara expressions use one visible shape: the operation comes first, followed
 by its inputs.
 
-```hara eval
+```hara eval group=first-contact
 (+ 19 23)
 ```
 
@@ -42,7 +43,7 @@ Change either number and run it again. Nothing else is required to begin.
 Vectors keep order. Maps give facts names. Keywords make those names stable and
 readable.
 
-```hara eval
+```hara eval group=first-contact
 (let [player {:name "Nova"
               :score 10
               :items ["lamp" "cable"]}]
@@ -64,7 +65,7 @@ passed to another function.
 A function receives values and returns a value. It does not need to know where
 those values came from or where the result will go.
 
-```hara eval
+```hara eval group=first-contact
 (do
   (defn add-score [player amount]
     (update player :score + amount))
@@ -85,7 +86,7 @@ has one clear job.
 
 Persistent data lets an old value and a changed value coexist.
 
-```hara eval
+```hara eval group=first-contact
 (let [original {:name "Nova" :score 10}
       changed (assoc original :score 35)]
   {:original original
@@ -106,7 +107,7 @@ become easier when updates return values rather than silently rewriting them.
 `count` works with several kinds of value because those values participate in a
 shared contract.
 
-```hara eval
+```hara eval group=first-contact
 {:vector (count [10 20 30])
  :map (count {:left 10 :right 20})
  :set (count #{:read :build :test})}
@@ -127,7 +128,7 @@ ability the value provides.
 `std.protocol.icount/ICount`. A new value can implement that contract and work
 with the ordinary `count` function.
 
-```hara eval
+```hara eval group=first-contact
 (do
   (defstruct Inventory [items])
 
