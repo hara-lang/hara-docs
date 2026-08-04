@@ -56,6 +56,11 @@ hide:
       <small>Choose a setup <b>→</b></small>
     </a>
   </div>
+
+  <div class="hara-docs-live">
+    <p class="hara-label">Hands on, right here</p>
+    <div data-hara-live="first-eval,collections"></div>
+  </div>
 </section>
 
 <section class="hara-section">
