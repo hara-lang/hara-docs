@@ -1,4 +1,4 @@
-name: Deploy docs.hara-lang.org
+name: Validate Hara docs
 
 on:
   push:
@@ -10,8 +10,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: "netlify-docs-${{ github.ref_name }}"
-  cancel-in-progress: false
+  group: "docs-validation-${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -47,19 +47,8 @@ jobs:
       - name: Validate interactive syllabi
         run: node scripts/check-syllabi.mjs
 
-      - name: Build MkDocs site
+      - name: Build MkDocs compatibility site
         run: mkdocs build --strict
 
-      - name: Deploy main to docs.testing.hara-lang.org
-        if: github.ref_name == 'main'
-        run: npx --yes netlify-cli deploy --prod --dir site --message "main ${GITHUB_SHA}"
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_TESTING_SITE_ID }}
-
-      - name: Deploy production to docs.hara-lang.org
-        if: github.ref_name == 'production'
-        run: npx --yes netlify-cli deploy --prod --dir site --message "production ${GITHUB_SHA}"
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_PRODUCTION_SITE_ID }}
+      # Canonical publication is owned by hara-lang/hara and is built below
+      # https://www.hara-lang.org/docs/ from this repository's pinned submodule.
