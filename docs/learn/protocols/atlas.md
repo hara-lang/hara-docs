@@ -122,6 +122,8 @@ boundaries.
 Reading, replacing, observing, awaiting, settling, cancelling, suspending, and
 resuming are different capabilities.
 
+[Work through these contracts in State and Lifecycle Protocols →](state-lifecycle.md){ .md-button .md-button--primary }
+
 ## 08 — Invoke behaviour in a context
 
 | Protocol | Canonical namespace | Methods |
@@ -147,6 +149,9 @@ runtime and transformation contexts.
 Components and runtime spaces make lifecycle, ownership, and active execution
 visible.
 
+`IClose` is introduced in the state and lifecycle lab; component and space
+contracts will form the live-systems lab.
+
 ## Beyond the foundation
 
 Hara also places portable domain contracts under `std.protocol.*`. The current
@@ -158,4 +163,5 @@ replaceable contracts for matching, time, cancellation, registration,
 reporting, execution, results, and closure.
 
 [Start the collection lab →](collections.md){ .md-button .md-button--primary }
+[Continue with state and lifecycle →](state-lifecycle.md){ .md-button }
 [Return to Protocols for Builders →](./){ .md-button }
