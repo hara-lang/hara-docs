@@ -86,6 +86,7 @@ nav:
       - Protocols for Builders:
           - Interactive course: learn/protocols/index.md
           - Collection protocols: learn/protocols/collections.md
+          - State and lifecycle protocols: learn/protocols/state-lifecycle.md
           - Protocol Atlas: learn/protocols/atlas.md
       - Build something live:
           - Building Tic Tac Toe: create/first-game.md

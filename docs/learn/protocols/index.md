@@ -150,6 +150,13 @@ larger parts of a real system.
     <small>Eight interactive steps · real shared session</small>
   </a>
 
+  <a class="hara-path-card" href="state-lifecycle/">
+    <span>02 · LIVE VALUES AND RESOURCES</span>
+    <h2>State and Lifecycle Protocols</h2>
+    <p>Separate reading, replacement, conditional updates, watches, realisation, settlement, resumption, and closure.</p>
+    <small>Eight interactive steps · deterministic examples</small>
+  </a>
+
   <a class="hara-path-card" href="atlas/">
     <span>REFERENCE · 53 FOUNDATION CONTRACTS</span>
     <h2>Protocol Atlas</h2>
@@ -159,5 +166,6 @@ larger parts of a real system.
 </div>
 
 [Continue: Collection Protocols →](collections.md){ .md-button .md-button--primary }
+[Continue: State and Lifecycle →](state-lifecycle.md){ .md-button }
 [Browse the Protocol Atlas →](atlas.md){ .md-button }
 [Return to the learning paths →](../){ .md-button }
