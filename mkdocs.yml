@@ -145,7 +145,7 @@ nav:
       - Building and extending:
           - Developer guide: development.md
           - Development tracing: development-tracing.md
-          - Identity, packages, and assets: guides/tap-publishing.md
+          - Identity and packages: guides/tap-publishing.md
           - Extension system: reference/extensions-contract.md
           - Java and Rust APIs: javadocs.md
           - Xtalk equivalence: reference/xtalk-equivalence.md

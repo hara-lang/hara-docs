@@ -12,9 +12,13 @@ vector can be countable. An atom can be dereferenceable. A database can be
 queryable. A test session can be runnable and closeable. Code can depend on the
 ability rather than the provider.
 
+The examples share one named lesson session on the main Hara site. Definitions
+from an earlier step therefore remain available for later experiments, while
+each displayed form remains complete enough to rerun.
+
 > **Functions make things happen. Protocols make systems fit together.**
 
-<div class="hara-syllabus" data-hara-syllabus="protocols-for-builders-v1" data-hara-syllabus-title="Protocols for Builders">
+<div class="hara-syllabus" data-hara-syllabus="protocols-for-builders-v1" data-hara-syllabus-title="Protocols for Builders" data-hara-session-group="protocols-for-builders">
 
 <div class="hara-syllabus-step" data-hara-step="01-see-the-contract">
 
@@ -23,7 +27,7 @@ ability rather than the provider.
 Collection operations in Hara are protocol-backed. The same `count` call works
 across values that provide `ICount`.
 
-```hara eval
+```hara eval group=protocols-for-builders
 {:vector (count [:a :b :c])
  :map (count {:a 1 :b 2})
  :list (count (conj (conj nil :first) :second))}
@@ -40,7 +44,7 @@ implementation first.
 
 A custom value can join the same vocabulary.
 
-```hara eval
+```hara eval group=protocols-for-builders
 (do
   (defstruct Inventory [items label])
 
@@ -64,7 +68,7 @@ contract.
 Lookup and membership are different questions. `IFind` can distinguish a
 missing key from a key whose value is `nil`.
 
-```hara eval
+```hara eval group=protocols-for-builders
 (let [record {:present nil}]
   {:present (IFind/has? record :present)
    :missing (IFind/has? record :missing)
@@ -84,7 +88,7 @@ An atom participates in several contracts. Reading, replacing, atomically
 comparing, and watching state are separate abilities rather than one opaque
 object lifecycle.
 
-```hara eval
+```hara eval group=protocols-for-builders
 (let [state (atom 41)]
   (IReset/reset state 42)
   {:ordinary (deref state)
@@ -103,7 +107,7 @@ the contracts that allow other values to participate.
 Protocols are not limited to Hara's foundation. A domain can name its own
 stable ability and support more than one implementation.
 
-```hara eval
+```hara eval group=protocols-for-builders
 (do
   (defprotocol IDescribe
     (describe [value]))

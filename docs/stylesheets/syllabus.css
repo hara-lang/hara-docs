@@ -1,3 +1,12 @@
+:where(.hara-syllabus-grid, .hara-learning-sequence, .hara-syllabus) {
+  --hara-syllabus-accent: var(--hara-cyan, var(--sl-color-accent-high, #41f5e4));
+  --hara-syllabus-panel: var(--hara-panel, var(--sl-color-bg-nav, rgba(10, 18, 28, .72)));
+  --hara-syllabus-line: var(--hara-line, var(--sl-color-gray-5, rgba(94, 226, 218, .2)));
+  --hara-syllabus-muted: var(--md-default-fg-color--light, var(--sl-color-gray-3, #8fa3b5));
+  --hara-syllabus-bg: var(--md-default-bg-color, var(--sl-color-bg, #071019));
+  --hara-syllabus-mono: var(--hara-mono, var(--__sl-font-mono, ui-monospace, monospace));
+}
+
 .hara-syllabus-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -11,28 +20,28 @@
   padding: 1.4rem;
   color: inherit !important;
   text-decoration: none !important;
-  background: var(--hara-panel, rgba(10, 18, 28, .72));
-  border: 1px solid var(--hara-line, rgba(94, 226, 218, .2));
+  background: var(--hara-syllabus-panel);
+  border: 1px solid var(--hara-syllabus-line);
   border-radius: .75rem;
   transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
 }
 
 .hara-path-card:hover,
 .hara-path-card:focus-visible {
-  border-color: var(--hara-cyan, #41f5e4);
+  border-color: var(--hara-syllabus-accent);
   box-shadow: 0 12px 36px rgba(0, 0, 0, .2);
   transform: translateY(-2px);
   outline: none;
 }
 
 .hara-path-card--primary {
-  background: linear-gradient(145deg, rgba(65, 245, 228, .1), var(--hara-panel, rgba(10, 18, 28, .76)) 58%);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--hara-syllabus-accent) 10%, transparent), var(--hara-syllabus-panel) 58%);
 }
 
 .hara-path-card > span,
 .hara-syllabus-progress__eyebrow {
-  color: var(--hara-cyan, #41f5e4);
-  font-family: var(--hara-mono, ui-monospace, monospace);
+  color: var(--hara-syllabus-accent);
+  font-family: var(--hara-syllabus-mono);
   font-size: .64rem;
   font-weight: 700;
   letter-spacing: .13em;
@@ -47,7 +56,7 @@
 }
 
 .hara-path-card small {
-  color: var(--md-default-fg-color--light);
+  color: var(--hara-syllabus-muted);
 }
 
 .hara-learning-sequence {
@@ -61,8 +70,8 @@
 .hara-learning-sequence span {
   min-height: 6rem;
   padding: 1rem;
-  background: var(--hara-panel, rgba(10, 18, 28, .72));
-  border: 1px solid var(--hara-line, rgba(94, 226, 218, .2));
+  background: var(--hara-syllabus-panel);
+  border: 1px solid var(--hara-syllabus-line);
   border-radius: .6rem;
 }
 
@@ -73,11 +82,11 @@
 
 .hara-learning-sequence small {
   margin-top: .35rem;
-  color: var(--md-default-fg-color--light);
+  color: var(--hara-syllabus-muted);
 }
 
 .hara-learning-sequence i {
-  color: var(--hara-cyan, #41f5e4);
+  color: var(--hara-syllabus-accent);
   font-style: normal;
 }
 
@@ -89,15 +98,15 @@
 .hara-syllabus-progress {
   position: sticky;
   z-index: 3;
-  top: 58px;
+  top: calc(var(--sl-nav-height, 58px) + .5rem);
   display: grid;
   grid-template-columns: 1fr auto;
   gap: .7rem 1rem;
   align-items: center;
   margin: 1.5rem 0;
   padding: .9rem 1rem;
-  background: color-mix(in srgb, var(--md-default-bg-color) 90%, transparent);
-  border: 1px solid var(--hara-line, rgba(94, 226, 218, .2));
+  background: color-mix(in srgb, var(--hara-syllabus-bg) 92%, transparent);
+  border: 1px solid var(--hara-syllabus-line);
   border-radius: .65rem;
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
@@ -113,7 +122,7 @@
   grid-column: 1 / -1;
   height: 4px;
   overflow: hidden;
-  background: rgba(127, 145, 160, .18);
+  background: color-mix(in srgb, var(--hara-syllabus-muted) 22%, transparent);
   border-radius: 999px;
 }
 
@@ -121,7 +130,7 @@
   display: block;
   width: 0;
   height: 100%;
-  background: var(--hara-cyan, #41f5e4);
+  background: var(--hara-syllabus-accent);
   transition: width .2s ease;
 }
 
@@ -130,7 +139,7 @@
   padding: .42rem .66rem;
   color: inherit;
   background: transparent;
-  border: 1px solid var(--hara-line, rgba(94, 226, 218, .28));
+  border: 1px solid var(--hara-syllabus-line);
   border-radius: .4rem;
   font: inherit;
   font-size: .68rem;
@@ -143,7 +152,7 @@
 .hara-syllabus-step__footer button:hover:not(:disabled),
 .hara-syllabus-progress button:focus-visible,
 .hara-syllabus-step__footer button:focus-visible:not(:disabled) {
-  border-color: var(--hara-cyan, #41f5e4);
+  border-color: var(--hara-syllabus-accent);
   outline: none;
 }
 
@@ -151,26 +160,30 @@
   position: relative;
   margin: 1.25rem 0;
   padding: 1.4rem;
-  background: var(--hara-panel, rgba(10, 18, 28, .66));
-  border: 1px solid var(--hara-line, rgba(94, 226, 218, .18));
+  background: var(--hara-syllabus-panel);
+  border: 1px solid var(--hara-syllabus-line);
   border-radius: .75rem;
 }
 
 .hara-syllabus-step.is-complete {
-  border-color: rgba(65, 245, 228, .52);
+  border-color: color-mix(in srgb, var(--hara-syllabus-accent) 58%, transparent);
 }
 
 .hara-syllabus-step.is-complete::after {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  color: var(--hara-cyan, #41f5e4);
+  color: var(--hara-syllabus-accent);
   content: "✓";
   font-weight: 800;
 }
 
 .hara-syllabus-step > h2:first-child {
   margin-top: 0;
+}
+
+.hara-syllabus-step :is(.hara-repl, .hara-live-example) {
+  margin-top: 1rem;
 }
 
 .hara-syllabus-step__footer {
@@ -180,19 +193,19 @@
   align-items: center;
   margin-top: 1.1rem;
   padding-top: .85rem;
-  border-top: 1px solid var(--hara-line, rgba(94, 226, 218, .14));
+  border-top: 1px solid color-mix(in srgb, var(--hara-syllabus-line) 72%, transparent);
 }
 
 .hara-syllabus-step__status {
-  color: var(--md-default-fg-color--light);
-  font-family: var(--hara-mono, ui-monospace, monospace);
+  color: var(--hara-syllabus-muted);
+  font-family: var(--hara-syllabus-mono);
   font-size: .68rem;
   letter-spacing: .04em;
 }
 
 .hara-syllabus-step.is-ran .hara-syllabus-step__status,
 .hara-syllabus-step.is-complete .hara-syllabus-step__status {
-  color: var(--hara-cyan, #41f5e4);
+  color: var(--hara-syllabus-accent);
 }
 
 .hara-syllabus-step__footer button:disabled {
@@ -213,5 +226,11 @@
 
   .hara-syllabus-progress {
     position: static;
+  }
+
+  .hara-syllabus-progress__copy,
+  .hara-syllabus-step__footer {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
