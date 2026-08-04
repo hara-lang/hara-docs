@@ -53,6 +53,7 @@
       const id = syllabus.dataset.haraSyllabus;
       if (!id) return;
       const title = syllabus.dataset.haraSyllabusTitle ?? "Syllabus";
+      const sessionGroup = String(syllabus.dataset.haraSessionGroup ?? "").trim();
       const storageKey = `hara-syllabus:${id}`;
       const steps = [...syllabus.querySelectorAll("[data-hara-step]")];
       if (!steps.length) return;
@@ -74,7 +75,13 @@
       const reset = document.createElement("button");
       reset.type = "button";
       reset.dataset.haraProgressReset = "";
-      reset.textContent = "Reset progress";
+      reset.textContent = sessionGroup ? "Reset lesson" : "Reset progress";
+      reset.setAttribute(
+        "aria-label",
+        sessionGroup
+          ? `Reset ${title} progress and live session`
+          : `Reset ${title} progress`
+      );
 
       const track = document.createElement("div");
       track.className = "hara-syllabus-progress__bar";
@@ -184,13 +191,19 @@
           step.classList.remove("is-complete", "is-ran");
           const status = step.querySelector(".hara-syllabus-step__status");
           const button = step.querySelector(".hara-syllabus-step__footer button");
-          if (status) status.textContent = "Run the example before completing this step";
+          if (status) status.textContent = "Lesson reset · run the example again";
           if (button) {
             button.textContent = "Complete step";
             button.disabled = true;
           }
         });
         renderProgress();
+
+        if (sessionGroup) {
+          document.dispatchEvent(new CustomEvent("hara:reset-session", {
+            detail: { groupName: sessionGroup, syllabusId: id }
+          }));
+        }
       });
 
       renderProgress();

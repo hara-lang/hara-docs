@@ -75,6 +75,9 @@ const controller = await readFile(
 if (!controller.includes(".hara-live-output, .hara-repl output")) {
   failures.push("syllabus controller must support both documentation runners");
 }
+if (!controller.includes("hara:reset-session") || !controller.includes("dataset.haraSessionGroup")) {
+  failures.push("syllabus reset must request replacement of the named live session");
+}
 
 const styles = await readFile(
   new URL("../docs/stylesheets/syllabus.css", import.meta.url),
