@@ -66,6 +66,17 @@
     if (restoreCaret != null) editor.setSelectionRange(restoreCaret, restoreCaret);
   };
 
+  // Android and iOS can commit a textarea's new caret after pointerup. Waiting
+  // for the synthesized click and the next paint reads the position the user
+  // actually tapped instead of evaluating the previous cursor location.
+  const afterCaretPlacement = (callback) => {
+    if (typeof requestAnimationFrame === "function") {
+      requestAnimationFrame(callback);
+    } else {
+      setTimeout(callback, 0);
+    }
+  };
+
   const install = (cell) => {
     if (cell.dataset.haraInstarepl === "true") return;
     const toolbar = cell.querySelector(".hara-live-toolbar");
@@ -89,18 +100,47 @@
       editor.focus();
     });
 
+    let touchGesture = null;
+    let pendingTouchEvaluation = false;
     let lastTouchEvaluation = 0;
-    editor.addEventListener("pointerup", (event) => {
-      if (event.pointerType !== "touch") return;
-      if (editor.selectionStart !== editor.selectionEnd) return;
-      const now = Date.now();
-      if (now - lastTouchEvaluation < 350) return;
 
-      const caret = editor.selectionStart;
-      const form = formAtEditor(editor, true);
-      if (!form?.source) return;
-      lastTouchEvaluation = now;
-      queueMicrotask(() => dispatchEval(editor, form, caret));
+    editor.addEventListener("pointerdown", (event) => {
+      if (event.pointerType !== "touch" || !event.isPrimary) return;
+      pendingTouchEvaluation = false;
+      touchGesture = {
+        id: event.pointerId,
+        x: event.clientX,
+        y: event.clientY
+      };
+    });
+
+    editor.addEventListener("pointerup", (event) => {
+      const gesture = touchGesture;
+      touchGesture = null;
+      if (!gesture || gesture.id !== event.pointerId) return;
+      if (Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) > 8) return;
+      pendingTouchEvaluation = true;
+    });
+
+    editor.addEventListener("click", () => {
+      if (!pendingTouchEvaluation) return;
+      pendingTouchEvaluation = false;
+      afterCaretPlacement(() => {
+        if (editor.selectionStart !== editor.selectionEnd) return;
+        const now = Date.now();
+        if (now - lastTouchEvaluation < 350) return;
+
+        const caret = editor.selectionStart;
+        const form = formAtEditor(editor, true);
+        if (!form?.source) return;
+        lastTouchEvaluation = now;
+        dispatchEval(editor, form, caret);
+      });
+    });
+
+    editor.addEventListener("pointercancel", () => {
+      touchGesture = null;
+      pendingTouchEvaluation = false;
     });
 
     const footerHint = [...cell.querySelectorAll(".window-status span")]
