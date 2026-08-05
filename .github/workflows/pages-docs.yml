@@ -47,6 +47,11 @@ jobs:
       - name: Validate interactive syllabi
         run: node scripts/check-syllabi.mjs
 
+      - name: Validate InstaREPL integration
+        run: |
+          node --check docs/javascripts/instarepl.js
+          node scripts/check-instarepl.mjs
+
       - name: Build MkDocs compatibility site
         run: mkdocs build --strict
 
