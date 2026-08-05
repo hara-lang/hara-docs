@@ -10,7 +10,9 @@ const config = await readFile(new URL("../mkdocs.yml", import.meta.url), "utf8")
 const requirements = [
   ["imports the structural form selector", /localFormAt/],
   ["adds an explicit Eval control", /hara-live-eval/],
-  ["evaluates direct touch taps", /pointerType !== "touch"/],
+  ["tracks direct touch taps", /pointerType !== "touch"/],
+  ["waits for the post-pointer click", /addEventListener\("click"/],
+  ["waits for caret placement to settle", /afterCaretPlacement/],
   ["does not replace touch selections", /selectionStart !== editor\.selectionEnd/],
   ["routes evaluation through the existing Ctrl-E session", /ctrlKey: true/],
   ["renders HTA keywords", /HtaKeyword\.prototype\.toString/],
@@ -21,6 +23,10 @@ const requirements = [
 const failures = requirements
   .filter(([, pattern]) => !pattern.test(controller))
   .map(([message]) => `instarepl controller ${message}`);
+
+if (/queueMicrotask\(\(\) => dispatchEval/.test(controller)) {
+  failures.push("instarepl must not evaluate from pointerup's stale caret microtask");
+}
 
 if (!/live-examples\.js[\s\S]*instarepl\.js/.test(config)) {
   failures.push("mkdocs must load instarepl.js after live-examples.js");
