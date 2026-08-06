@@ -1,84 +1,99 @@
 # Identity and packages
 
-Hara's official tap is a self-publishing system with one authority: accepted
-Git history. It has two public service names:
+Hara's official tap is a contributor-publishing system whose authority is accepted Git history.
 
 | Origin | Responsibility |
 | --- | --- |
-| `id.hara-lang.org` | GitHub ownership enrollment and signed public-key policy |
-| `packages.hara-lang.org` | package discovery, verification records, and immutable code objects |
+| `id.hara-lang.org` | GitHub identity, repository ownership, publisher keys, namespace grants, and revocation |
+| `packages.hara-lang.org` | package discovery, publication status, verification records, and immutable `.harp` objects |
 
-Artifact manifests, HARP archives, extensions, publishing, distribution, and
-mirroring are parts of the protocol. They are not separate official domains.
-There is no ledger.
+The portal is a convenience layer. Git repositories, exact commits, protected workflows, and accepted registry records remain the source of truth.
+
+## One manifest
+
+Every publication starts from `project.edn` at an exact Git commit. It contains package identity, version, dependencies, build declarations, extension namespaces, remote artifacts, capabilities, licence, and entry points.
+
+```text
+GitHub repository + tag
+          │
+          ├── exact project.edn
+          ├── generated project.lock.edn
+          └── declared source and artifacts
+                       │
+                       ▼
+             deterministic .harp
+                       │
+                       └── generated package.edn
+```
+
+## GitHub sign-in
+
+The Netlify portal can use GitHub OAuth as the contributor sign-in. The session records the stable numeric GitHub user identifier and current login.
+
+A separately installed GitHub App should perform repository-scoped operations. It verifies that the contributor can publish from the selected repository and opens the registry pull request without asking for a broad personal access token.
 
 ## Trust model
 
-An owner enrolls a GitHub namespace and an Ed25519 public key. The matching
-private key stays behind an external signer selected with `HARA_SIGNER`; Hara
-does not write it to a project, config file, service, or iterator cache.
+A publication intent binds:
 
-A release intent binds the coordinate, version, exact Git commit, recipe
-digest, and identity-policy revision. Protected automation verifies the
-signature and namespace grant, builds the exact input without protected
-credentials, checks deterministic output, uploads digest-addressed objects,
-and merges the accepted record into Git. Publication is automatic after
-enrollment, but a record is visible only after that protected Git change.
+- tap and package coordinate;
+- semantic version;
+- numeric GitHub repository identifier;
+- immutable tag and commit;
+- exact `project.edn` SHA-256 digest;
+- identity-policy revision.
 
-Repeating the same signed release is idempotent. Reusing a coordinate and
-version for different content is rejected. A yank adds state; it never deletes
-the historical release.
+Protected automation then:
+
+1. verifies GitHub repository authority and the namespace grant;
+2. checks out the exact commit;
+3. parses `project.edn` without evaluating Hara code;
+4. reconciles and verifies `project.lock.edn`;
+5. fetches only digest-pinned remote artifacts;
+6. builds without protected registry credentials;
+7. checks deterministic output;
+8. uploads digest-addressed objects in a protected finalizer;
+9. proposes or merges the accepted release record in Git.
+
+A release becomes visible only after the protected registry change is accepted. Repeating identical content is idempotent. Reusing a coordinate and version for different bytes is rejected. Yanking records state without deleting history.
 
 ## CLI lifecycle
 
-Bootstrap the official trust profile using a root fingerprint obtained through
-an authenticated release channel:
+Bootstrap and verify the official tap:
 
 ```shell
 HARA_OFFICIAL_ROOT_SHA256=<64-lowercase-hex> hara tap bootstrap hara
 hara tap verify hara
 ```
 
-Enroll using an external signer:
+Authenticate with GitHub and enroll a publisher identity:
 
 ```shell
-export HARA_SIGNER=/path/to/ed25519-sign-command
-export HARA_SIGNER_PUBLIC_KEY=<64-lowercase-hex>
 hara id login
 hara id enroll --owner YOUR_GITHUB_OWNER
 hara id status
 ```
 
-Check and publish code:
+Prepare and publish the project:
 
 ```shell
+hara project check
+hara project sync
 hara package check
 hara package build
+hara package test
 hara package publish --tap hara
 hara package status
 ```
 
-Build a versioned asset collection:
+The portal performs the same checks when publication is initiated through `packages.hara-lang.org`.
 
-```shell
-hara asset check
-hara asset build
-hara asset inspect
-hara asset publish --tap hara
-```
+## Netlify boundary
 
-`asset.edn` declares originals and deterministic derivatives. Delivery serves
-only recorded immutable objects; it does not run arbitrary transformations on
-request.
+The Netlify deployment contains the static package browser and narrow API functions for OAuth callbacks, sessions, repository selection, validation, and publication submission. It does not become a mutable package database.
+
+Large `.harp` and WASM objects may be served from immutable object storage or a CDN, but every accepted object is addressed and verified by digest. The registry Git record identifies the exact object, source commit, project digest, and attestation.
 
 ## Normative specifications
 
-The numbered `specs/02-platform` family defines CLI routing, tap discovery,
-identity, artifact manifests, HARP, packages, extensions, assets, publishing,
-distribution, and mirroring. The shared tap metaspec makes their roles,
-entities, operations, invariants, and conformance corpora machine-checkable.
-
-The Cloudflare implementation in `platform/cloudflare` is a reference delivery
-edge. It streams the authoritative Git documents and digest-addressed R2
-objects, and deliberately exposes no mutation endpoint. Protected GitHub
-workflows own enrollment and release finalization.
+The numbered platform specification family defines the CLI, tap trust, identity, artifacts, HARP, projects and packages, extension declarations, publishing, distribution, and mirroring. `project.edn` is the shared authoring boundary across those contracts.
