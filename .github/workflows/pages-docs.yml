@@ -22,12 +22,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Checkout Hara UI assets
-        uses: actions/checkout@v4
-        with:
-          repository: hara-lang/hara-ui
-          path: vendor/hara-ui
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -51,6 +45,12 @@ jobs:
         run: |
           node --check docs/javascripts/instarepl.js
           node scripts/check-instarepl.mjs
+
+      - name: Validate shared live-card integration
+        run: |
+          node --check docs/javascripts/home-live.js
+          test -f vendor/hara-ui/packages/live/src/live-card.js
+          test -f vendor/hara-ui/packages/live/src/style.css
 
       - name: Build MkDocs compatibility site
         run: mkdocs build --strict

@@ -1,77 +1,68 @@
-// The landing-card evaluator uses a small raw-WASM kernel. It is a
-// self-contained first contact: edits are evaluated in the browser and never
-// leave the visitor's device.
-(() => {
-  const card = document.querySelector("[data-hara-live]");
-  if (!card) return;
-
-  const source = card.querySelector("[data-hara-live-source]");
-  const result = card.querySelector("[data-hara-live-result]");
-  const status = card.querySelector("[data-hara-live-status]");
-  const run = card.querySelector("[data-hara-live-run]");
-  let broker = null;
-  let timer = null;
-  let revision = 0;
-
-  const show = (value, error = false) => {
-    result.textContent = value;
-    result.classList.toggle("is-error", error);
-  };
-
-  const keywordName = (value) => value?.constructor?.name === "HtaKeyword" ? `:${value.name}` : null;
-  const print = (value) => {
-    const keyword = keywordName(value);
-    if (keyword) return keyword;
-    if (value instanceof Map) return `{${[...value].map(([key, item]) => `${print(key)} ${print(item)}`).join(" ")}}`;
-    if (Array.isArray(value)) return `[${value.map(print).join(" ")}]`;
-    if (typeof value === "string") return JSON.stringify(value);
-    if (value === null) return "nil";
-    return String(value);
-  };
-
-  const asset = (path) => new URL(path, document.baseURI);
-  const boot = (async () => {
+// Documentation-home adapter for the shared @hara-lang/live component.
+//
+// The component source is pinned through vendor/hara-ui. Hara Docs supplies
+// only its browser-kernel facade and the snippet IDs declared in Markdown.
+(async () => {
+  const script = [...document.scripts].find((node) => {
     try {
-      const { createDocsKernel } = await import(asset("javascripts/kernel.js").href);
-      broker = await createDocsKernel({
-        wasmUrl: asset("rust/hara.wasm"),
-        workerUrl: asset("rust/hta-worker.js")
-      });
-      status.textContent = "WASM · live";
-    } catch (error) {
-      status.textContent = "WASM · unavailable";
-      show(`⇒ ${String(error?.message ?? error)}`, true);
+      return new URL(node.src).pathname.endsWith("/javascripts/home-live.js");
+    } catch (_) {
+      return false;
     }
-  })();
+  });
+  if (!script) return;
 
-  async function evaluate() {
-    const current = ++revision;
-    try {
-      await boot;
-      if (!broker) return;
-      status.textContent = "WASM · evaluating";
-      const value = await broker.eval(source.value);
-      if (current !== revision) return;
-      status.textContent = "WASM · live";
-      show(`⇒ ${print(value)}`);
-    } catch (error) {
-      if (current !== revision) return;
-      status.textContent = "WASM · live";
-      show(`⇒ ${String(error?.message ?? error)}`, true);
-    }
+  const roots = [...document.querySelectorAll("[data-hara-live]")];
+  if (!roots.length) return;
+
+  const liveBase = new URL("../vendor/hara-ui/packages/live/src/", script.src);
+  const runtimeBase = new URL("../rust/", script.src).href.replace(/\/$/, "");
+  const [live, snippets, kernelModule] = await Promise.all([
+    import(new URL("live-card.js", liveBase).href),
+    import(new URL("snippets.js", liveBase).href),
+    import(new URL("kernel.js", script.src).href)
+  ]);
+
+  const styleHref = new URL("style.css", liveBase).href;
+  if (!document.querySelector(`link[data-hara-live-style="${styleHref}"]`)) {
+    const style = document.createElement("link");
+    style.rel = "stylesheet";
+    style.href = styleHref;
+    style.dataset.haraLiveStyle = styleHref;
+    document.head.append(style);
   }
 
-  source.addEventListener("input", () => {
-    clearTimeout(timer);
-    timer = setTimeout(evaluate, 450);
-  });
-  source.addEventListener("keydown", (event) => {
-    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "e") {
-      event.preventDefault();
-      clearTimeout(timer);
-      evaluate();
+  let kernelPromise = null;
+  const getKernel = () => {
+    kernelPromise ??= kernelModule.createDocsKernel({
+      wasmUrl: new URL("../rust/hara.wasm", script.src),
+      workerUrl: new URL("../rust/hta-worker.js", script.src)
+    });
+    return kernelPromise;
+  };
+
+  for (const root of roots) {
+    if (root.dataset.haraLiveMounted === "true") continue;
+    const ids = root.dataset.haraLive
+      .split(",")
+      .map((id) => id.trim())
+      .filter(Boolean);
+    const selected = ids
+      .map((id) => snippets.getLiveSnippet(id))
+      .filter(Boolean);
+
+    if (!selected.length) {
+      console.warn("[hara-docs] no @hara-lang/live snippets matched", ids);
+      continue;
     }
-  });
-  run.addEventListener("click", evaluate);
-  boot.then(() => evaluate());
+
+    root.dataset.haraLiveMounted = "true";
+    live.mountLiveCard(root, {
+      snippets: selected,
+      activeSnippet: selected[0].id,
+      kernel: getKernel(),
+      runtimeBase,
+      playgroundUrl: "https://playground.hara-lang.org/"
+    });
+  }
 })();

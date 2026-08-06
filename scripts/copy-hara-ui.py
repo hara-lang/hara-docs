@@ -1,7 +1,7 @@
 """Copy the pinned Hara UI and browser-runtime assets into the docs site."""
 
 from pathlib import Path
-from shutil import copy2
+from shutil import copy2, copytree
 
 
 def on_post_build(config, **_kwargs):
@@ -13,6 +13,15 @@ def on_post_build(config, **_kwargs):
     target.mkdir(parents=True, exist_ok=True)
     for name in ("tokens.css", "components.css"):
         copy2(source / name, target / name)
+
+    # @hara-lang/live is owned by the pinned hara-ui repository. Publish its
+    # framework-free ESM and scoped CSS verbatim so the MkDocs homepage and the
+    # canonical Astro documentation can use the same component implementation.
+    live_source = source / "packages" / "live" / "src"
+    live_target = target / "packages" / "live" / "src"
+    if not live_source.is_dir():
+        raise FileNotFoundError(f"missing pinned @hara-lang/live sources: {live_source}")
+    copytree(live_source, live_target, dirs_exist_ok=True)
 
     # The inline tutorials use a small subset of Studio's browser host.
     studio = project / "docs" / "rust" / "studio"
