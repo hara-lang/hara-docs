@@ -1,0 +1,43 @@
+name: Validate project.edn documentation migration
+
+on:
+  push:
+    branches:
+      - agent/project-edn-single-manifest
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: python scripts/project-edn-docs-migration.py
+      - run: python -m pip install -r requirements-docs.txt
+      - run: mkdocs build --strict
+      - name: Ensure removed authoring surfaces are absent
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          forbidden = ["project.hal", "hara.extension.edn", "hara.build.edn", "hara.recipe.edn", "hara.install.edn", "hara package extension", "hara extension"]
+          bad = []
+          for p in Path('.').rglob('*'):
+              if not p.is_file() or '.git' in p.parts or 'site' in p.parts:
+                  continue
+              try: text = p.read_text()
+              except UnicodeDecodeError: continue
+              for token in forbidden:
+                  if token in text: bad.append(f"{p}: {token}")
+          if bad: raise SystemExit("\n".join(bad))
+          PY
+      - name: Commit navigation and cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Finalize project.edn documentation"
+          git push origin HEAD:agent/project-edn-single-manifest
