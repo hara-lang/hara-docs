@@ -52,8 +52,22 @@ jobs:
           test -f vendor/hara-ui/packages/live/src/live-card.js
           test -f vendor/hara-ui/packages/live/src/style.css
 
+      - name: Validate shared popup Identity integration
+        run: |
+          node --check docs/javascripts/identity-loader.js
+          grep -F '<meta name="hara-identity-mode" content="popup">' overrides/main.html
+          grep -F '<div data-hara-identity></div>' overrides/main.html
+          grep -F '/v1/identity-client.js' docs/javascripts/identity-loader.js
+          ! grep -E 'client_secret|access_token|HARA_GITHUB_OAUTH_CLIENT_SECRET' docs/javascripts/identity-loader.js
+
       - name: Build MkDocs compatibility site
         run: mkdocs build --strict
+
+      - name: Verify built popup Identity shell
+        run: |
+          grep -F '<meta name="hara-identity-mode" content="popup">' site/index.html
+          grep -F 'data-hara-identity' site/index.html
+          test -s site/javascripts/identity-loader.js
 
       # Canonical publication is owned by hara-lang/hara and is built below
       # https://www.hara-lang.org/docs/ from this repository's pinned submodule.
