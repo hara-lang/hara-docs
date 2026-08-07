@@ -7,15 +7,23 @@ connected to an editor.
 
 ## Install Hara
 
-Linux on x86_64 and macOS on arm64 or x86_64 can use the installer:
+The quickest way to install Hara is with Homebrew. macOS and Linux binaries for
+x86_64 and arm64 are published through the `hara-lang/tap` repository:
+
+```shell
+brew install hara-lang/tap/hara
+brew install hara-lang/tap/hara-truffle
+```
+
+`hara` is the Rust runtime; `hara-truffle` is the GraalVM/Truffle native image.
+You can install either or both.
+
+Alternatively, you can use the curl installer. The installer endpoint is being
+restored, so the commands below will work once the download service is back up:
 
 ```shell
 curl -fsSL https://www.hara-lang.org/install.sh | sh -- --rust --truffle
 ```
-
-The installer places `hara` and the native-image `hara-truffle` in
-`~/.local/bin`. GitHub Releases is the publishing authority for the downloaded
-packages and checksums.
 
 Install only the Rust runtime:
 
