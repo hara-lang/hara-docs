@@ -83,6 +83,7 @@ nav:
       - 05 — Choose your setup: getting-started.md
   - Learn Hara:
       - Choose a path: learn/index.md
+      - The Little Book of HAL: books/the-little-book-of-hal/docs/index.md
       - First Contact: learn/first-contact/index.md
       - Protocols for Builders:
           - Interactive course: learn/protocols/index.md
