@@ -6,6 +6,10 @@ Text must be encoded before a byte-oriented API can write or send it. Bytes must
 
 Hara uses UTF-8 for string encoding and decoding.
 
+The runnable examples on this page share one lesson session. Work from top to
+bottom when an example uses an earlier definition, and reload the page to start
+with a clean session.
+
 ## Learning goals
 
 By the end of this lesson, you can:
@@ -22,13 +26,13 @@ By the end of this lesson, you can:
 
 Create a string literal:
 
-```hara
+```hara eval group=hal-intro-06
 "HAL"
 ```
 
 Combine values with `str`:
 
-```hara
+```hara eval group=hal-intro-06
 (str "line=" 42)
 ; => "line=42"
 ```
@@ -41,14 +45,14 @@ The result is a new string. Existing strings do not change.
 
 Use `str/trim` to remove leading and trailing whitespace:
 
-```hara
+```hara eval group=hal-intro-06
 (str/trim "  HAL  ")
 ; => "HAL"
 ```
 
 Store the result when later code needs the cleaned value:
 
-```hara
+```hara eval group=hal-intro-06
 (def raw-line "  Alpha  ")
 (def clean-line (str/trim raw-line))
 ```
@@ -59,14 +63,14 @@ Store the result when later code needs the cleaned value:
 
 Convert text to lower case:
 
-```hara
+```hara eval group=hal-intro-06
 (str/to-lower "HARA")
 ; => "hara"
 ```
 
 Use one normalization rule before comparison:
 
-```hara
+```hara eval group=hal-intro-06
 (defn normalized-name [value]
   (str/to-lower (str/trim value)))
 
@@ -81,14 +85,14 @@ Case normalization is not a complete Unicode identity or locale policy. Use it o
 
 Use `str/join` to place a separator between values:
 
-```hara
+```hara eval group=hal-intro-06
 (str/join "," ["alpha" "beta" "gamma"])
 ; => "alpha,beta,gamma"
 ```
 
 Build an output line from stable fields:
 
-```hara
+```hara eval group=hal-intro-06
 (defn record-line [record]
   (str/join "\t"
     [(:line/number record)
@@ -101,13 +105,13 @@ Use an explicit separator. Do not rely on printed collection syntax as a file fo
 
 A newline inside a string is represented with an escape:
 
-```hara
+```hara eval group=hal-intro-06
 "first\nsecond"
 ```
 
 Append one line terminator at the output boundary:
 
-```hara
+```hara eval group=hal-intro-06
 (defn terminated-line [line]
   (str line "\n"))
 ```
@@ -116,29 +120,29 @@ Keep the internal line value and the serialized line representation distinct.
 
 ## Encode text as bytes
 
-Use `str/encode` to encode a string as UTF-8:
+Use `str/encode-utf8` to encode a string as UTF-8:
 
-```hara
+```hara eval group=hal-intro-06
 (def encoded
-  (str/encode "Hara"))
+  (str/encode-utf8 "Hara"))
 ```
 
 The result is a bytes value.
 
 Count its byte length:
 
-```hara
+```hara eval group=hal-intro-06
 (bytes/count encoded)
 ; => 4
 ```
 
 Character count and byte count can differ:
 
-```hara
+```hara eval group=hal-intro-06
 (def word "café")
 
 (count word)
-(bytes/count (str/encode word))
+(bytes/count (str/encode-utf8 word))
 ```
 
 UTF-8 uses more than one byte for many non-ASCII characters.
@@ -147,19 +151,19 @@ Use byte count for file sizes, protocol lengths, and storage limits. Use text le
 
 ## Decode bytes as text
 
-Use `str/decode` to decode UTF-8 bytes:
+Use `str/decode-utf8` to decode UTF-8 bytes:
 
-```hara
-(str/decode encoded)
+```hara eval group=hal-intro-06
+(str/decode-utf8 encoded)
 ; => "Hara"
 ```
 
 Round-trip text through UTF-8:
 
-```hara
+```hara eval group=hal-intro-06
 (def original "HAL")
 (def round-trip
-  (str/decode (str/encode original)))
+  (str/decode-utf8 (str/encode-utf8 original)))
 
 (= original round-trip)
 ; => true
@@ -171,7 +175,7 @@ Decoding requires valid input under the string library contract. Do not assume a
 
 Use `bytes` to create mutable binary storage:
 
-```hara
+```hara eval group=hal-intro-06
 (def packet
   (bytes 72 97 114 97))
 ```
@@ -180,7 +184,7 @@ Input values accept the checked range from `-128` through `255`.
 
 Readable bytes print with the bytes constructor form:
 
-```hara
+```hara eval group=hal-intro-06
 (bytes 1 2 -3)
 ```
 
@@ -188,14 +192,14 @@ Readable bytes print with the bytes constructor form:
 
 `bytes/get` returns an unsigned value from `0` through `255`:
 
-```hara
+```hara eval group=hal-intro-06
 (bytes/get packet 0)
 ; => 72
 ```
 
 It can accept a fallback for an invalid index:
 
-```hara
+```hara eval group=hal-intro-06
 (bytes/get packet 100 nil)
 ; => nil
 ```
@@ -206,7 +210,7 @@ Without a fallback, an invalid index reports a bounds error.
 
 The ordinary indexed protocol preserves signed byte storage:
 
-```hara
+```hara eval group=hal-intro-06
 (def signed-sample
   (bytes -1 0 1))
 
@@ -225,7 +229,7 @@ Use `bytes/u8` and `bytes/s8` when code must state the conversion explicitly.
 
 Bytes are mutable:
 
-```hara
+```hara eval group=hal-intro-06
 (def mutable-packet
   (bytes 1 2 3))
 
@@ -242,14 +246,14 @@ Do not treat bytes like a persistent vector.
 
 Create independent storage with `bytes/copy`:
 
-```hara
+```hara eval group=hal-intro-06
 (def packet-copy
   (bytes/copy mutable-packet))
 ```
 
 Update the copy:
 
-```hara
+```hara eval group=hal-intro-06
 (bytes/set packet-copy 0 99)
 ```
 
@@ -261,7 +265,7 @@ Copy when another component needs ownership of an independent mutable buffer.
 
 Create a selected byte range:
 
-```hara
+```hara eval group=hal-intro-06
 (def header
   (bytes/slice mutable-packet 0 2))
 ```
@@ -274,7 +278,7 @@ Use a slice for a protocol field, file segment, prefix, or bounded decoder input
 
 Bytes have mutable identity, but their equality and hashing contract uses byte content.
 
-```hara
+```hara eval group=hal-intro-06
 (= (bytes 1 2 3)
    (bytes 1 2 3))
 ; => true
@@ -298,14 +302,14 @@ file bytes
 
 Represent each conversion explicitly:
 
-```hara
+```hara eval group=hal-intro-06
 (defn transform-text-bytes [input-bytes]
   (-> input-bytes
-      (str/decode)
+      (str/decode-utf8)
       (str/trim)
       (str/to-lower)
       (str "\n")
-      (str/encode)))
+      (str/encode-utf8)))
 ```
 
 The returned value is bytes, ready for a byte-oriented file or socket API.
@@ -316,7 +320,7 @@ Create a serialized line:
 
 ```hara
 (defn encode-output-line [line-number line]
-  (str/encode
+  (str/encode-utf8
     (str/join "\t"
       [line-number
        (normalize-line line)
@@ -330,7 +334,7 @@ Inspect the result:
   (encode-output-line 1 " Alpha "))
 
 (bytes/count output-bytes)
-(str/decode output-bytes)
+(str/decode-utf8 output-bytes)
 ```
 
 Record the actual byte count in the run state:

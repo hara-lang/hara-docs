@@ -4,6 +4,10 @@ Hara programs start with values. Most values are immutable. An operation returns
 
 This lesson introduces scalar values, collection literals, lookup, and persistent updates.
 
+The runnable examples on this page share one lesson session. Work from top to
+bottom when an example uses an earlier definition, and reload the page to start
+with a clean session.
+
 ## Learning goals
 
 By the end of this lesson, you can:
@@ -23,7 +27,7 @@ A scalar value is one value that is not a collection.
 
 Hara has one empty value and two boolean values:
 
-```hara
+```hara eval group=hal-intro-01
 nil
 true
 false
@@ -31,7 +35,7 @@ false
 
 Only `nil` and `false` are falsey. Zero, an empty string, and an empty collection are truthy.
 
-```hara
+```hara eval group=hal-intro-01
 (if 0 :yes :no)
 ; => :yes
 
@@ -45,7 +49,7 @@ Do not use emptiness as a boolean test. Use an explicit predicate such as `empty
 
 Hara supports integers and floating-point values:
 
-```hara
+```hara eval group=hal-intro-01
 42
 -7
 3.5
@@ -53,7 +57,7 @@ Hara supports integers and floating-point values:
 
 It also reads big integers and big decimals:
 
-```hara
+```hara eval group=hal-intro-01
 12345678901234567890N
 19.95M
 ```
@@ -62,7 +66,7 @@ The suffix is part of the numeric literal.
 
 Ratios are not an L0 numeric type. Division does not create a ratio value.
 
-```hara
+```hara eval group=hal-intro-01
 (/ 5 2)
 ```
 
@@ -72,14 +76,14 @@ Check the result in your current runtime before you build numeric rules around i
 
 A string contains text:
 
-```hara
+```hara eval group=hal-intro-01
 "HAL"
 "line one\nline two"
 ```
 
 A character is a single character value:
 
-```hara
+```hara eval group=hal-intro-01
 \a
 \newline
 ```
@@ -90,7 +94,7 @@ Strings are immutable. String transformation functions return new strings.
 
 A keyword is a stable label:
 
-```hara
+```hara eval group=hal-intro-01
 :name
 :task/title
 :status/ready
@@ -98,7 +102,7 @@ A keyword is a stable label:
 
 Keywords often label fields in maps. A namespaced keyword makes the domain explicit.
 
-```hara
+```hara eval group=hal-intro-01
 {:task/title "Read input"
  :task/status :status/ready}
 ```
@@ -115,7 +119,7 @@ file/read
 
 The evaluator resolves an unquoted symbol. Quote returns the symbol itself:
 
-```hara
+```hara eval group=hal-intro-01
 'file/read
 ; => file/read
 ```
@@ -130,7 +134,7 @@ Hara has lists, vectors, maps, and sets.
 
 A list uses parentheses:
 
-```hara
+```hara eval group=hal-intro-01
 (+ 19 23)
 ```
 
@@ -138,7 +142,7 @@ In source code, the evaluator normally treats a list as a call or special form.
 
 Quote a list when you want list data:
 
-```hara
+```hara eval group=hal-intro-01
 '(north east south west)
 ```
 
@@ -149,13 +153,13 @@ uses parentheses for evaluation forms.
 
 A vector uses square brackets:
 
-```hara
+```hara eval group=hal-intro-01
 ["alpha" "beta" "gamma"]
 ```
 
 A vector preserves order and supports indexed access:
 
-```hara
+```hara eval group=hal-intro-01
 (nth [10 20 30] 1)
 ; => 20
 ```
@@ -168,7 +172,7 @@ Use a vector for ordered records, argument lists, coordinates, and finite sequen
 
 A map associates keys with values:
 
-```hara
+```hara eval group=hal-intro-01
 {:task/id 1
  :task/title "Read input"
  :task/done false}
@@ -176,14 +180,14 @@ A map associates keys with values:
 
 Use `get` to read a key:
 
-```hara
+```hara eval group=hal-intro-01
 (get {:task/title "Read input"} :task/title)
 ; => "Read input"
 ```
 
 A keyword can also look itself up in a map:
 
-```hara
+```hara eval group=hal-intro-01
 (:task/title {:task/title "Read input"})
 ; => "Read input"
 ```
@@ -194,13 +198,13 @@ Use a map when fields have names.
 
 A set contains unique values:
 
-```hara
+```hara eval group=hal-intro-01
 #{:read :transform :write}
 ```
 
 Adding an existing value does not create a duplicate:
 
-```hara
+```hara eval group=hal-intro-01
 (conj #{:read :write} :read)
 ; => #{:read :write}
 ```
@@ -213,7 +217,7 @@ A persistent collection does not change in place. An update returns another coll
 
 ### Add a vector item
 
-```hara
+```hara eval group=hal-intro-01
 (def steps [:read :transform])
 (def next-steps (conj steps :write))
 
@@ -228,7 +232,7 @@ The old vector remains valid.
 
 ### Replace a map field
 
-```hara
+```hara eval group=hal-intro-01
 (def task
   {:task/id 1
    :task/title "Read input"
@@ -242,7 +246,7 @@ The old vector remains valid.
 
 ### Remove a map field
 
-```hara
+```hara eval group=hal-intro-01
 (dissoc task :task/title)
 ; => {:task/id 1 :task/done false}
 ```
@@ -253,7 +257,7 @@ The original `task` value still contains the title.
 
 Use `get-in` and `assoc-in` for nested paths:
 
-```hara
+```hara eval group=hal-intro-01
 (def job
   {:job/id 7
    :job/progress {:current 0 :total 3}})
@@ -266,7 +270,7 @@ Use `get-in` and `assoc-in` for nested paths:
 
 Use `update-in` when the new value depends on the old value:
 
-```hara
+```hara eval group=hal-intro-01
 (update-in job [:job/progress :current] inc)
 ```
 
@@ -276,7 +280,7 @@ Each operation returns a new root map.
 
 Persistent operations return persistent values:
 
-```hara
+```hara eval group=hal-intro-01
 (conj [1 2] 3)
 (assoc {:a 1} :b 2)
 (dissoc {:a 1 :b 2} :a)
@@ -290,7 +294,7 @@ Later, you will use `array` and `object` when mutation is intentional.
 
 Create one immutable configuration value:
 
-```hara
+```hara eval group=hal-intro-01
 (def config
   {:input/path "data/input.txt"
    :output/path "data/output.txt"
@@ -303,7 +307,7 @@ Create one immutable configuration value:
 
 Read one value from each collection level:
 
-```hara
+```hara eval group=hal-intro-01
 (:input/path config)
 
 (nth (:pipeline/steps config) 1)
@@ -313,7 +317,7 @@ Read one value from each collection level:
 
 Create a changed configuration without changing `config`:
 
-```hara
+```hara eval group=hal-intro-01
 (def small-config
   (assoc-in config [:pipeline/options :max-lines] 10))
 ```
@@ -347,7 +351,7 @@ The evaluator tries to call `1`. Quote list data or use a vector.
 
 ### Expecting `assoc` to mutate
 
-```hara
+```hara eval group=hal-intro-01
 (assoc config :input/path "other.txt")
 config
 ```
@@ -356,7 +360,7 @@ The second form returns the original value because the first result was not stor
 
 ### Using truthiness for emptiness
 
-```hara
+```hara eval group=hal-intro-01
 (if [] :empty :not-empty)
 ; => :empty
 ```

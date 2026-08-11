@@ -9,6 +9,10 @@ The constructor makes the boundary explicit:
 - `array` creates a mutable indexed value.
 - `object` creates a mutable string-keyed value.
 
+The runnable examples on this page share one lesson session. Work from top to
+bottom because later examples inspect and mutate values created earlier, and
+reload the page to start with a clean session.
+
 ## Learning goals
 
 By the end of this lesson, you can:
@@ -24,14 +28,14 @@ By the end of this lesson, you can:
 
 Use `array` for mutable indexed storage:
 
-```hara
+```hara eval group=hal-intro-05
 (def buffer
   (array "alpha" "beta" "gamma"))
 ```
 
 Read an item with a dot call:
 
-```hara
+```hara eval group=hal-intro-05
 (. buffer (get 1))
 ; => "beta"
 ```
@@ -42,13 +46,13 @@ The dot form is restricted to declared marker methods. It is not general host re
 
 Set an indexed item:
 
-```hara
+```hara eval group=hal-intro-05
 (. buffer (set 1 "BETA"))
 ```
 
 Read it again:
 
-```hara
+```hara eval group=hal-intro-05
 (. buffer (get 1))
 ; => "BETA"
 ```
@@ -57,7 +61,7 @@ The same array identity now exposes the new value.
 
 This differs from `assoc` on a vector:
 
-```hara
+```hara eval group=hal-intro-05
 (def values ["alpha" "beta" "gamma"])
 (def changed (assoc values 1 "BETA"))
 ```
@@ -68,25 +72,25 @@ This differs from `assoc` on a vector:
 
 Append an item:
 
-```hara
+```hara eval group=hal-intro-05
 (. buffer (push-last "delta"))
 ```
 
 Prepend an item:
 
-```hara
+```hara eval group=hal-intro-05
 (. buffer (push-first "zero"))
 ```
 
 Remove the final item:
 
-```hara
+```hara eval group=hal-intro-05
 (. buffer (pop-last))
 ```
 
 Remove the first item:
 
-```hara
+```hara eval group=hal-intro-05
 (. buffer (pop-first))
 ```
 
@@ -98,19 +102,19 @@ Inspect the array after each operation. Do not infer a persistent result from th
 
 Insert at an index:
 
-```hara
+```hara eval group=hal-intro-05
 (. buffer (insert 1 "inserted"))
 ```
 
 Remove at an index:
 
-```hara
+```hara eval group=hal-intro-05
 (. buffer (remove 1))
 ```
 
 Create a slice:
 
-```hara
+```hara eval group=hal-intro-05
 (def section
   (. buffer (slice 0 2)))
 ```
@@ -119,7 +123,7 @@ The slice allocates separate array storage for the selected range.
 
 Use `clone` when you need a complete independent copy:
 
-```hara
+```hara eval group=hal-intro-05
 (def copied-buffer
   (. buffer (clone)))
 ```
@@ -130,21 +134,21 @@ Mutating `copied-buffer` does not mutate `buffer`.
 
 Arrays support restricted transformation methods:
 
-```hara
+```hara eval group=hal-intro-05
 (. (array 1 2 3)
    (map (fn [number] (* number 2))))
 ```
 
 Filter array items:
 
-```hara
+```hara eval group=hal-intro-05
 (. (array 1 2 3 4)
    (filter even?))
 ```
 
 Fold left:
 
-```hara
+```hara eval group=hal-intro-05
 (. (array 10 20 12)
    (fold-left + 0))
 ; => 42
@@ -156,7 +160,7 @@ These are array methods. They are distinct from Hara's ordinary persistent and l
 
 Marker arrays support declared collection protocols such as count and indexed access:
 
-```hara
+```hara eval group=hal-intro-05
 (count buffer)
 (nth buffer 0)
 ```
@@ -167,7 +171,7 @@ Protocol support does not make the array persistent. A later mutation remains vi
 
 Use `object` for mutable string-keyed storage:
 
-```hara
+```hara eval group=hal-intro-05
 (def record
   (object
     "line" "alpha"
@@ -179,14 +183,14 @@ Object keys are strings.
 
 Read a key:
 
-```hara
+```hara eval group=hal-intro-05
 (. record (get "line"))
 ; => "alpha"
 ```
 
 Check a key:
 
-```hara
+```hara eval group=hal-intro-05
 (. record (has? "number"))
 ; => true
 ```
@@ -195,19 +199,19 @@ Check a key:
 
 Set a key:
 
-```hara
+```hara eval group=hal-intro-05
 (. record (set "line" "ALPHA"))
 ```
 
 Delete a key:
 
-```hara
+```hara eval group=hal-intro-05
 (. record (delete "valid"))
 ```
 
 Inspect keys and values:
 
-```hara
+```hara eval group=hal-intro-05
 (. record (keys))
 (. record (vals))
 (. record (pairs))
@@ -219,7 +223,7 @@ The exact returned collection family follows the object method contract. Treat t
 
 Use `assign` to copy string-keyed fields from another compatible object value:
 
-```hara
+```hara eval group=hal-intro-05
 (def extra
   (object
     "status" "ready"
@@ -232,7 +236,7 @@ Inspect `record` after the call.
 
 Use `clone` before assignment when the original object must remain independent:
 
-```hara
+```hara eval group=hal-intro-05
 (def independent
   (. record (clone)))
 
@@ -245,7 +249,7 @@ Persistent values compare by their data contract. Mutable marker values have ide
 
 Two objects with the same fields are still two mutable identities:
 
-```hara
+```hara eval group=hal-intro-05
 (def first-record (object "value" 42))
 (def second-record (object "value" 42))
 ```
@@ -258,7 +262,7 @@ A mutation can change its visible data after another component receives it.
 
 A good mutable boundary has one clear owner:
 
-```hara
+```hara eval group=hal-intro-05
 (defn collect-three [source]
   (let [output (array)]
     (loop [remaining 3]
@@ -280,13 +284,13 @@ Convert a mutable array into a persistent vector when downstream code should not
 
 One direct approach is to stream its items into an eager transform:
 
-```hara
+```hara eval group=hal-intro-05
 (mapv identity buffer)
 ```
 
 Convert a persistent vector into an array when a mutable API requires one:
 
-```hara
+```hara eval group=hal-intro-05
 (def mutable-values
   (apply array [1 2 3]))
 ```
@@ -295,7 +299,7 @@ Make the conversion visible near the boundary.
 
 For objects, copy required string-keyed fields into a persistent map:
 
-```hara
+```hara eval group=hal-intro-05
 {:line/text (. record (get "line"))
  :line/number (. record (get "number"))}
 ```
@@ -326,7 +330,7 @@ Do not choose mutation only to make an update expression shorter.
 
 Create a mutable buffer for a small output batch:
 
-```hara
+```hara eval group=hal-intro-05
 (defn make-batch []
   (array))
 
@@ -340,7 +344,7 @@ Create a mutable buffer for a small output batch:
 
 Use it:
 
-```hara
+```hara eval group=hal-intro-05
 (def batch (make-batch))
 (add-to-batch! batch "alpha")
 (add-to-batch! batch "beta")
@@ -350,7 +354,7 @@ Use it:
 
 Convert it before storing it in persistent application state:
 
-```hara
+```hara eval group=hal-intro-05
 (def batch-value
   (mapv identity batch))
 ```

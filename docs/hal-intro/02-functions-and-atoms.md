@@ -7,6 +7,10 @@ Keep these jobs separate:
 - A function describes a change.
 - An atom records the current value.
 
+The runnable examples on this page share one lesson session. Work from top to
+bottom when an example uses an earlier definition, and reload the page to start
+with a clean session.
+
 ## Learning goals
 
 By the end of this lesson, you can:
@@ -23,7 +27,7 @@ By the end of this lesson, you can:
 
 Use `fn` to create a function value:
 
-```hara
+```hara eval group=hal-intro-02
 (fn [line] (str/trim line))
 ```
 
@@ -31,7 +35,7 @@ The parameter vector names the inputs. The body returns its final value.
 
 Call the function directly:
 
-```hara
+```hara eval group=hal-intro-02
 ((fn [number] (+ number 1)) 41)
 ; => 42
 ```
@@ -42,7 +46,7 @@ The inner form creates the function. The outer form calls it.
 
 Use `defn` to define a function in the current namespace:
 
-```hara
+```hara eval group=hal-intro-02
 (defn clean-line [line]
   (str/trim line))
 
@@ -63,7 +67,7 @@ A good function name states what the returned value means.
 
 A function returns the value of its final body form:
 
-```hara
+```hara eval group=hal-intro-02
 (defn line-info [line]
   (str/trim line)
   {:line/text line
@@ -78,7 +82,7 @@ Do not place forms in a function body unless their results or effects matter.
 
 Use `let` to name intermediate values:
 
-```hara
+```hara eval group=hal-intro-02
 (defn line-record [line-number line]
   (let [cleaned (str/trim line)]
     {:line/number line-number
@@ -107,7 +111,7 @@ This rule makes the dependency visible.
 
 A state-transition function receives an old state and returns a new state.
 
-```hara
+```hara eval group=hal-intro-02
 (defn mark-started [state]
   (assoc state :run/status :status/running))
 ```
@@ -116,14 +120,14 @@ The function does not know where the state is stored.
 
 Add progress with another pure function:
 
-```hara
+```hara eval group=hal-intro-02
 (defn record-line [state]
   (update state :run/line-count inc))
 ```
 
 Create the initial state:
 
-```hara
+```hara eval group=hal-intro-02
 (def initial-state
   {:run/status :status/idle
    :run/line-count 0
@@ -132,7 +136,7 @@ Create the initial state:
 
 Test a transition with plain data:
 
-```hara
+```hara eval group=hal-intro-02
 (record-line initial-state)
 ; => {:run/status :status/idle
 ;     :run/line-count 1
@@ -145,7 +149,7 @@ The original state remains unchanged.
 
 Use an atom when the program needs one replaceable current value:
 
-```hara
+```hara eval group=hal-intro-02
 (def run-state
   (atom initial-state))
 ```
@@ -154,13 +158,13 @@ The atom is not the state map. The atom contains the current state map.
 
 Read the atom with `deref`:
 
-```hara
+```hara eval group=hal-intro-02
 (deref run-state)
 ```
 
 The reader shorthand is `@`:
 
-```hara
+```hara eval group=hal-intro-02
 @run-state
 ```
 
@@ -170,7 +174,7 @@ Both forms return the current value.
 
 Use `reset!` when you already have the complete next value:
 
-```hara
+```hara eval group=hal-intro-02
 (reset! run-state initial-state)
 ```
 
@@ -178,7 +182,7 @@ Use `reset!` when you already have the complete next value:
 
 Use `swap!` when the next value depends on the current value:
 
-```hara
+```hara eval group=hal-intro-02
 (swap! run-state mark-started)
 ```
 
@@ -186,7 +190,7 @@ Use `swap!` when the next value depends on the current value:
 
 Pass additional function arguments after the function:
 
-```hara
+```hara eval group=hal-intro-02
 (defn record-error [state message]
   (assoc state
          :run/status :status/failed
@@ -201,13 +205,13 @@ The function receives the current state first, then the extra arguments.
 
 This is easy to test:
 
-```hara
+```hara eval group=hal-intro-02
 (record-error initial-state "bad input")
 ```
 
 This version hides storage inside the transformation:
 
-```hara
+```hara eval group=hal-intro-02
 (defn fail-run! [message]
   (swap! run-state record-error message))
 ```
@@ -220,7 +224,7 @@ Use `!` at the end of a name when the operation changes state or performs an eff
 
 Use `compare-and-set!` when the replacement must happen only if the atom still contains an expected value:
 
-```hara
+```hara eval group=hal-intro-02
 (compare-and-set!
   run-state
   initial-state
@@ -235,7 +239,7 @@ This operation is identity-sensitive for the expected atom value. Prefer `swap!`
 
 A common design stores one coherent immutable model in one atom:
 
-```hara
+```hara eval group=hal-intro-02
 (def app-state
   (atom
     {:run/status :status/idle
@@ -246,7 +250,7 @@ A common design stores one coherent immutable model in one atom:
 
 A transition can update several related fields together:
 
-```hara
+```hara eval group=hal-intro-02
 (defn begin-line [state line-number]
   (assoc state
          :run/status :status/running
@@ -261,7 +265,7 @@ This is easier to reason about than several atoms that can drift into inconsiste
 
 The atom changes which value it contains. It does not make the contained map mutable.
 
-```hara
+```hara eval group=hal-intro-02
 (def before @app-state)
 (swap! app-state record-line)
 (def after @app-state)
@@ -275,7 +279,7 @@ This property makes history, comparison, rollback, and UI rendering easier.
 
 Add these definitions to your course project:
 
-```hara
+```hara eval group=hal-intro-02
 (def initial-run
   {:run/status :status/idle
    :run/line-count 0
@@ -304,7 +308,7 @@ Hara supports the threading macro used above. Read it as a sequence of updates t
 
 Exercise the state:
 
-```hara
+```hara eval group=hal-intro-02
 (reset! run initial-run)
 (swap! run start-run)
 (swap! run add-line 12)
@@ -331,7 +335,7 @@ A function that accepts plain state is easier to test, reuse, and trace.
 
 ### Forgetting to dereference
 
-```hara
+```hara eval group=hal-intro-02
 run
 ```
 
@@ -339,7 +343,7 @@ This returns the atom object. Use `@run` for its current value.
 
 ### Ignoring the return value of a persistent update
 
-```hara
+```hara eval group=hal-intro-02
 (assoc @run :run/status :status/complete)
 @run
 ```

@@ -7,6 +7,13 @@ These concepts solve different problems:
 - A promise models **when a result becomes available**.
 - A coroutine models **where a computation pauses and continues**.
 
+The runnable examples on this page share one lesson session. Work from top to
+bottom when an example uses an earlier definition, and reload the page to start
+with a clean session.
+
+Promise examples run in the browser session. Coroutine examples remain static
+because the browser kernel does not currently publish the coroutine provider.
+
 ## Learning goals
 
 By the end of this lesson, you can:
@@ -25,7 +32,7 @@ A promise is a value that represents a future settlement.
 
 Create asynchronous work:
 
-```hara
+```hara eval group=hal-intro-04
 (def answer-promise
   (promise/run
     (fn []
@@ -40,7 +47,7 @@ The JVM runtime backs Hara promises with `CompletableFuture`. Other runtimes use
 
 Use `promise/then` to register the next transformation:
 
-```hara
+```hara eval group=hal-intro-04
 (def text-promise
   (promise/then
     answer-promise
@@ -67,7 +74,7 @@ A promise callback can return a plain value or another promise.
 
 A plain value settles the next promise:
 
-```hara
+```hara eval group=hal-intro-04
 (promise/then
   answer-promise
   (fn [answer]
@@ -82,7 +89,7 @@ This lets asynchronous operations compose without nested callback trees.
 
 Use `promise/catch` to handle a rejected promise:
 
-```hara
+```hara eval group=hal-intro-04
 (def recovered
   (promise/catch
     answer-promise
@@ -114,7 +121,7 @@ Use `finally` for release and state cleanup. Use `then` for successful transform
 
 Use `promise/all` when several independent results must all settle:
 
-```hara
+```hara eval group=hal-intro-04
 (def combined
   (promise/all
     [(promise/run (fn [] 10))
@@ -132,7 +139,7 @@ An atom holds a current replaceable value. A promise settles according to an asy
 
 Use an atom for live application state:
 
-```hara
+```hara eval group=hal-intro-04
 (def status
   (atom :status/idle))
 ```

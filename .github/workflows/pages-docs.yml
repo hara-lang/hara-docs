@@ -41,6 +41,9 @@ jobs:
       - name: Validate interactive syllabi
         run: node scripts/check-syllabi.mjs
 
+      - name: Validate HAL intro live examples
+        run: node scripts/check-hal-intro-live.mjs
+
       - name: Validate InstaREPL integration
         run: |
           node --check docs/javascripts/instarepl.js

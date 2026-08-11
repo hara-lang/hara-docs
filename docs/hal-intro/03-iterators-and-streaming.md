@@ -2,6 +2,10 @@
 
 A collection can hold values that already exist. A stream produces values as a consumer asks for them.
 
+The runnable examples on this page share one lesson session. Work from top to
+bottom when an example uses an earlier definition, and reload the page to start
+with a clean session.
+
 Hara separates three related concepts:
 
 - A persistent collection is an immutable value.
@@ -13,7 +17,7 @@ means that no non-empty sequence cell exists, `[]` is a reusable empty vector,
 and an exhausted iterator is a one-shot cursor at its end. Hara does not have
 an empty `Seq` object: every value satisfying `seq?` has a first item.
 
-```hara
+```hara eval group=hal-intro-03
 (seq [])           ; => nil
 (rest [1])         ; => nil
 (seq? (rest [1 2])); => true
@@ -49,7 +53,7 @@ By the end of this lesson, you can:
 
 `map` applies one function to each source item:
 
-```hara
+```hara eval group=hal-intro-03
 (map inc [1 2 3])
 ```
 
@@ -57,7 +61,7 @@ The result is a lazy `Seq`. Its printed form can vary by runtime display, but it
 
 Use a domain function when the operation has a domain meaning:
 
-```hara
+```hara eval group=hal-intro-03
 (defn line-length [line]
   (count line))
 
@@ -70,7 +74,7 @@ The mapping function receives one item and returns one item.
 
 `filter` calls a predicate and keeps matching items:
 
-```hara
+```hara eval group=hal-intro-03
 (defn non-empty-line? [line]
   (not (empty? (str/trim line))))
 
@@ -84,14 +88,14 @@ A predicate answers a question. It does not transform the item.
 
 `reduce` carries an accumulator through the source:
 
-```hara
+```hara eval group=hal-intro-03
 (reduce + 0 [10 20 12])
 ; => 42
 ```
 
 Count total characters:
 
-```hara
+```hara eval group=hal-intro-03
 (defn add-line-length [total line]
   (+ total (count line)))
 
@@ -107,7 +111,7 @@ Use `reduce` when many input items become one result.
 
 Nest operations from source to consumer:
 
-```hara
+```hara eval group=hal-intro-03
 (take 2
   (map str/trim
     (filter non-empty-line?
@@ -125,7 +129,7 @@ The pipeline can stop after it has enough output.
 
 The threading macro can express the same flow:
 
-```hara
+```hara eval group=hal-intro-03
 (->> [" first " " " " second " " third "]
      (filter non-empty-line?)
      (map str/trim)
@@ -138,7 +142,7 @@ Choose the form that makes the data flow easiest to inspect.
 
 A lazy operation creates a plan for producing values. A consumer causes that plan to advance.
 
-```hara
+```hara eval group=hal-intro-03
 (def numbers
   (map inc (range 0 1000000)))
 ```
@@ -147,7 +151,7 @@ The runtime does not need to create one million incremented values immediately.
 
 A bounded consumer requests only part of the source:
 
-```hara
+```hara eval group=hal-intro-03
 (take 3 numbers)
 ```
 
@@ -161,14 +165,14 @@ A UI model, encoded response, or saved result often needs a complete persistent 
 
 Use `mapv` when the result must be an eager vector:
 
-```hara
+```hara eval group=hal-intro-03
 (mapv str/trim [" one " " two "])
 ; => ["one" "two"]
 ```
 
 Use `realize` when you already have a lazy value and need its realized result:
 
-```hara
+```hara eval group=hal-intro-03
 (realize (take 3 numbers))
 ```
 
@@ -178,14 +182,14 @@ Do not realize a large source without a reason. Preserve streaming until the nex
 
 Use `iter` to acquire an iterator:
 
-```hara
+```hara eval group=hal-intro-03
 (def line-iterator
   (iter ["one" "two" "three"]))
 ```
 
 Check whether it has another item:
 
-```hara
+```hara eval group=hal-intro-03
 (iter-has? line-iterator)
 ; => true
 ```
@@ -196,7 +200,7 @@ Exhaustion returns `false`; an iterator failure is still an error.
 
 Advance it:
 
-```hara
+```hara eval group=hal-intro-03
 (iter-next line-iterator)
 ; => "one"
 
@@ -210,7 +214,7 @@ The iterator has changed position. It does not restart when you read its Var aga
 
 A persistent vector can create another iterator later. An existing iterator represents one traversal.
 
-```hara
+```hara eval group=hal-intro-03
 (def values [1 2 3])
 
 (def first-pass (iter values))
@@ -225,7 +229,7 @@ Do not store a partially consumed iterator where code expects a reusable collect
 
 The `iter-*` functions return raw iterator pipelines:
 
-```hara
+```hara eval group=hal-intro-03
 (def source
   (iter-range 0 100))
 
@@ -239,7 +243,7 @@ The `iter-*` functions return raw iterator pipelines:
 
 Take a bounded iterator view:
 
-```hara
+```hara eval group=hal-intro-03
 (def first-five
   (iter-take 5 doubled-source))
 ```
@@ -252,7 +256,7 @@ Direct iterator control is useful for protocol adapters, large sources, and code
 
 Close an iterator when the consumer stops before exhaustion:
 
-```hara
+```hara eval group=hal-intro-03
 (iter-close first-five)
 ```
 
@@ -266,7 +270,7 @@ A plain vector iterator has little to release, but the same discipline applies t
 
 The ordinary functions `map`, `filter`, `take`, `drop`, `mapcat`, `keep`, `cycle`, and `partition` return lazy `Seq` values.
 
-```hara
+```hara eval group=hal-intro-03
 (take 3
   (map (fn [number] (* number number))
        (range 0 100)))
@@ -280,7 +284,7 @@ Prefer ordinary collection functions unless you need one-shot control.
 
 Hara also supports a one-argument transform form:
 
-```hara
+```hara eval group=hal-intro-03
 (def trim-all
   (map str/trim))
 
@@ -296,14 +300,14 @@ This is a Hara transform contract. It is not a transducer contract.
 
 Use `any?` for a boolean existential result:
 
-```hara
+```hara eval group=hal-intro-03
 (any? empty? ["one" "" "three"])
 ; => true
 ```
 
 Use `every?` when all items must match:
 
-```hara
+```hara eval group=hal-intro-03
 (every? string? ["one" "two"])
 ; => true
 ```
@@ -314,14 +318,14 @@ These consumers can stop as soon as the result is known.
 
 Create a line transformation:
 
-```hara
+```hara eval group=hal-intro-03
 (defn normalize-line [line]
   (str/to-lower (str/trim line)))
 ```
 
 Build a lazy pipeline:
 
-```hara
+```hara eval group=hal-intro-03
 (defn normalized-lines [lines]
   (->> lines
        (filter non-empty-line?)
@@ -330,7 +334,7 @@ Build a lazy pipeline:
 
 Consume only the first three lines:
 
-```hara
+```hara eval group=hal-intro-03
 (take 3
   (normalized-lines
     [" Alpha " " " " Beta " " Gamma " " Delta "]))
@@ -338,7 +342,7 @@ Consume only the first three lines:
 
 Create a raw iterator version:
 
-```hara
+```hara eval group=hal-intro-03
 (defn normalized-line-iterator [lines]
   (iter-map normalize-line
     (iter-filter non-empty-line?
@@ -353,7 +357,7 @@ Keep the stream transformation pure. Update the run atom at the consumer boundar
 
 ```hara
 (defn consume-line! [line]
-  (swap! run add-line (count (str/encode line)))
+  (swap! run add-line (count (str/encode-utf8 line)))
   line)
 ```
 

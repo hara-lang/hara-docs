@@ -4,6 +4,11 @@ I/O crosses from a Hara program into its host environment. File operations are e
 
 The file namespace can exist even when the runtime does not grant file access.
 
+The runnable examples on this page share one lesson session. Work from top to
+bottom when an example uses an earlier definition, and reload the page to start
+with a clean session. File reads and writes remain static because this browser
+session does not grant or seed the file authority used by those examples.
+
 ## Learning goals
 
 By the end of this lesson, you can:
@@ -21,7 +26,7 @@ By the end of this lesson, you can:
 
 A pure function returns a value from its arguments:
 
-```hara
+```hara eval group=hal-intro-07
 (defn normalize-line [line]
   (str/to-lower (str/trim line)))
 ```
@@ -56,7 +61,7 @@ Do not treat a missing capability as a missing namespace.
 
 Use `file/resolve` to resolve a child path beneath a supplied root:
 
-```hara
+```hara eval group=hal-intro-07
 (def project-root ".")
 
 (def input-path
@@ -70,7 +75,7 @@ The result is a normalized path string.
 
 Keep the root and child path separate in configuration:
 
-```hara
+```hara eval group=hal-intro-07
 (def file-config
   {:file/root "."
    :file/input "data/input.txt"
@@ -79,7 +84,7 @@ Keep the root and child path separate in configuration:
 
 Resolve paths at the I/O boundary:
 
-```hara
+```hara eval group=hal-intro-07
 (defn input-path [config]
   (file/resolve
     (:file/root config)
@@ -106,7 +111,7 @@ Transform the settled bytes with `promise/then`:
   (promise/then
     input-promise
     (fn [input-bytes]
-      (str/decode input-bytes))))
+      (str/decode-utf8 input-bytes))))
 ```
 
 The decode step belongs after the file bytes arrive.
@@ -127,7 +132,7 @@ Use promise composition in application code.
 
 Keep line parsing pure:
 
-```hara
+```hara eval group=hal-intro-07
 (defn text-lines [text]
   (str/split-lines text))
 ```
@@ -143,7 +148,7 @@ Build a line pipeline:
 
 Serialize the complete result:
 
-```hara
+```hara eval group=hal-intro-07
 (defn lines->text [lines]
   (str (str/join "\n" lines) "\n"))
 ```
@@ -157,19 +162,19 @@ Create one pure bytes-to-bytes function:
 ```hara
 (defn transform-document-bytes [input-bytes]
   (-> input-bytes
-      (str/decode)
+      (str/decode-utf8)
       (transformed-lines)
       (lines->text)
-      (str/encode)))
+      (str/encode-utf8)))
 ```
 
 This function can be tested with in-memory values:
 
 ```hara
 (def sample-input
-  (str/encode " Alpha \n\n Beta \n"))
+  (str/encode-utf8 " Alpha \n\n Beta \n"))
 
-(str/decode
+(str/decode-utf8
   (transform-document-bytes sample-input))
 ; => "alpha\nbeta\n"
 ```
@@ -182,7 +187,7 @@ No file authority is required for this test.
 
 ```hara
 (def output-bytes
-  (str/encode "alpha\nbeta\n"))
+  (str/encode-utf8 "alpha\nbeta\n"))
 
 (def write-promise
   (file/write output-path output-bytes))
@@ -348,7 +353,7 @@ Do not claim that whole-file `file/read` is streaming.
 
 Create configuration:
 
-```hara
+```hara eval group=hal-intro-07
 (def config
   {:file/root "."
    :file/input "data/input.txt"
@@ -357,7 +362,7 @@ Create configuration:
 
 Resolve both paths:
 
-```hara
+```hara eval group=hal-intro-07
 (def resolved-input
   (file/resolve
     (:file/root config)
