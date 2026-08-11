@@ -44,6 +44,19 @@ different directions. You do not need to install anything for the first two.
 
 ## The sequence behind every path
 
+### Data work
+
+Start with immutable maps and vectors, transform them with iterator-backed
+functions, and inspect each intermediate value in the REPL. Keep file, network,
+and database access behind explicit providers so the same transformation stays
+portable across hosts.
+
+### Games and interactive systems
+
+Start with the Tic Tac Toe course, separate state transitions from rendering,
+and evaluate the smallest changed function into the running session. This is
+the same runtime-driven loop used by larger visual applications.
+
 <div class="hara-learning-sequence" role="img" aria-label="Values, functions, protocols, and systems form the Hara learning sequence">
   <span><b>Values</b><small>Give information a shape.</small></span>
   <i>→</i>

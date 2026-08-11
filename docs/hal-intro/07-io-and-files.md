@@ -447,4 +447,4 @@ You have completed the tutorial when you can answer these questions:
 7. When is a coroutine clearer than a short promise chain?
 8. Why is whole-file asynchronous I/O not automatically streaming?
 
-Continue with the [Hara language guide](../user-guide.md) or the [runtime library contract](../reference/runtime-libraries.md).
+Continue with the [language contract](../reference/l0-language.md) or [runtime libraries](../projects/index.md#namespaces-and-libraries).

@@ -119,10 +119,10 @@ Resolve paths safely. Read and write bytes through promises. Understand capabili
 Continue according to what you want to build:
 
 - [Build Tic Tac Toe](../create/first-game.md) for a complete visual browser program.
-- [Namespaces, libraries, and tests](../namespaces.md) for larger source trees.
-- [Namespace project walkthrough](../walkthroughs/service-project.md) for a multi-file service shape.
+- [Projects and namespaces](../projects/index.md) for larger source trees.
+- [Service project shape](../projects/index.md#service-project) for multi-file services.
 - [Choose your Hara setup](../getting-started.md) for the CLI, web, JVM, VS Code, or Emacs.
 - [L0 language contract](../reference/l0-language.md) for exact semantics.
-- [Runtime library contract](../reference/runtime-libraries.md) for intrinsic namespaces.
+- [Runtime libraries](../projects/index.md#namespaces-and-libraries) for portable namespaces.
 
 Start with [01 — Basic data and persistent collections](01-basic-data.md).

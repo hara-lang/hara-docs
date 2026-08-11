@@ -33,13 +33,13 @@ alone is not enough for compiler and build tasks.
 From the Hara repository root, run:
 
 ```shell
-mvn -f java/pom.xml -Ptruffle package
+mvn -f core/java/pom.xml -Ptruffle package
 ```
 
 The build produces:
 
 ```text
-java/target/hara-truffle.jar
+core/java/target/hara-truffle.jar
 ```
 
 Use the checked-in launcher from the repository root for the normal CLI and
@@ -215,13 +215,13 @@ dependency exclusions, profiles, and publishing remain future additions.
 Run the Java test suite:
 
 ```shell
-mvn -q -f java/pom.xml test
+mvn -q -f core/java/pom.xml test
 ```
 
 Run the focused Truffle L0 conformance test:
 
 ```shell
-mvn -q -f java/pom.xml -Ptruffle \
+mvn -q -f core/java/pom.xml -Ptruffle \
   -Dtest=hara.truffle.HaraL0ConformanceTest test
 ```
 
@@ -238,6 +238,6 @@ providers.
 
 ## Continue
 
-Read [Native runtime flavors](../reference/native-flavors.md) for the provider
-contract, [Java and Rust APIs](../javadocs.md) for host-facing APIs, and the
+Read [runtime hosts](../reference/rust-runtime.md#hosts) for the provider
+contract, [the developer guide](../development.md#api-documentation) for host-facing APIs, and the
 [developer guide](../development.md) for build and test workflows.

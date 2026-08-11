@@ -86,6 +86,19 @@ It also gives AI tools a more precise surface to work with. An assistant can eva
 
 ## Relationship to live coding
 
+### Live coding
+
+Live coding is the interaction technique: evaluate a form and observe the
+running program immediately. Runtime-driven development is the broader method:
+use runtime evidence to decide what to change, preserve the accepted change in
+source, and verify it at the narrowest boundary.
+
+### One representation
+
+Source forms, evaluated values, inspector selections, and visual projections
+are handles on the same program model. A visual tool should reveal that model,
+not create an incompatible project format.
+
 Runtime-driven development provides the architecture that makes live coding possible. The runtime preserves the active program and accepts new evaluations; live coding is the practice of using that ability to change the system while it continues to run.
 
-Continue with [Live coding](live-coding.md).
+Continue with [Live coding](#live-coding).

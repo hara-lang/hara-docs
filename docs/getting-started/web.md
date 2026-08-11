@@ -182,7 +182,7 @@ logic namespace remains portable and deterministic.
 ## Continue
 
 Build the [first browser game](../create/first-game.md), follow the deeper
-[Hara Chrome project guide](../create/chrome-project.md), read
+[Web setup above](#create-a-browser-project), read
 [projects and visual workspaces](../projects/index.md), and use the
 [Rust and WASM runtime mapping](../reference/rust-runtime.md) when implementing
 or embedding the browser host.

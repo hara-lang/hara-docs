@@ -227,7 +227,7 @@ sometimes runs a file, and sometimes starts a new process.
 
 ## Continue
 
-Read the deeper [Hara VS Code project guide](../create/vscode-project.md),
+Revisit the [VS Code project workflow](#open-a-hara-project),
 [Get started with the CLI](cli.md), and the
-[RESP protocol reference](../reference/resp-protocol.md) when implementing or
+[kernel RESP reference](../kernel.md#resp) when implementing or
 debugging an editor client.

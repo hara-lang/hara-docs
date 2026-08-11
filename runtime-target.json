@@ -1,0 +1,7 @@
+{
+  "sourceCommit": "494b17a39c952f24a68bfeda1bd66283a80f735c",
+  "sourceState": "working-tree-after-v0.1.5",
+  "requiredRelease": "0.1.6",
+  "status": "unreleased",
+  "publicationGate": "Replace runtime.lock.json with the immutable v0.1.6 release URL and SHA-256, refresh docs/rust, and validate both renderers before promotion."
+}

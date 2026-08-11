@@ -5,7 +5,8 @@ Hara owns one machine-readable command-line contract implemented by the Rust
 peers: they resolve the same public routes, aliases, options, outcomes, and
 exit codes while retaining independent native implementations.
 
-The normative sources live in the Hara specification repository:
+The normative sources live in the external
+[Hara specs repository](https://github.com/hara-lang/hara-specs-registry):
 
 - `specs/02-platform/000001-cli/metaspec/cli-app-metaspec.edn` defines the document model for CLI
   applications.
@@ -22,6 +23,14 @@ grouped route.
 Route documents are data, not executable configuration. A handler is a
 qualified keyword looked up in a closed native registry; a document cannot
 execute a HAL Var, Java class, Rust function, or project namespace.
+
+Current application documents use `:tool/cli` as their application identity
+and `:tool.cli.*` for routes, handlers, outcomes, and verification rules. The
+former `:hara/cli` and `:hara.cli.*` identifiers are historical.
+
+Source linting is a first-class route: `hara lint [PATH…] --format text|edn`.
+With no path it inspects the current project; a path may name a HAL file or a
+project directory.
 
 ## Outcomes
 
@@ -42,7 +51,8 @@ The repository wrapper uses `HARA_RUNTIME=rust|truffle` and defaults to
 Truffle for development compatibility. It never selects a runtime by command.
 Release installations expose the peer binaries directly.
 
-The offline parity smoke harness is:
+Parity and manifest verification now live with the Hara tool sources under
+`core/lib/src/tool/cli`. The historical offline smoke wrapper was:
 
 ```shell
 ./scripts/check-cli-parity

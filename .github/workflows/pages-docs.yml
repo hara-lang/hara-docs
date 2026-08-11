@@ -38,6 +38,9 @@ jobs:
       - name: Reject stale project guidance
         run: node scripts/check-content.mjs
 
+      - name: Validate shared navigation and redirects
+        run: node scripts/check-manifest.mjs
+
       - name: Validate interactive syllabi
         run: node scripts/check-syllabi.mjs
 

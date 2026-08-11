@@ -1,5 +1,20 @@
 # Rust and WASM runtime mapping
 
+Hara's portable compiled format is HBC5; deterministic multi-module bundles
+use HBB2. The native CLI exposes `hara bytecode disassemble FILE`,
+`hara bytecode run FILE`, and `hara bytecode conformance FILE`. Raw WASM can
+execute bytecode supplied directly by an embedding host.
+
+## Hosts
+
+- Native Rust owns the command-line evaluator and bytecode tooling.
+- Raw WASM owns the small embeddable evaluator boundary.
+- The browser host adds workers, sessions, and browser capability providers.
+- The JVM host implements the language contract through Truffle.
+
+Support is capability-based: a native CLI command is not automatically a
+browser or JVM command.
+
 ## Native Rust CLI
 
 The shared Rust runtime can also be built as a native command-line executable. It uses the same
@@ -26,7 +41,7 @@ behavior can be tested for parity.
 
 This document maps the tested Truffle Hara L0 contract to a Rust implementation. It is a
 portability design, not a second language specification: observable behavior comes from
-`l0-language.md`, `runtime-libraries.md`, and `l0-conformance.edn`.
+`l0-language.md`, the Foundation sources, and the conformance corpus.
 
 ## Runtime layers
 

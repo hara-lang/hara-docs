@@ -207,7 +207,7 @@ required capability.
 
 ## Continue
 
-Read the [user guide](../user-guide.md) for the language surface, the
-[REPL reference](../reference/repl.md) for interactive behavior, and
+Read the [language contract](../reference/l0-language.md) for the language surface, the
+[kernel and REPL reference](../kernel.md#repl-workflow) for interactive behavior, and
 [projects and visual workspaces](../projects/index.md) for the shared project
 model.

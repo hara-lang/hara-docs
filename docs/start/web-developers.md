@@ -108,7 +108,7 @@ adapter decides where the work runs.
 
 That lets a model begin locally and later move work into a Web Worker, service,
 or remote node without rewriting the UI around a new state model. Read the
-[Substrate application architecture](react.md) for the complete model.
+[application architecture](#application-architecture) for the complete model.
 
 ## Build an application that can answer questions
 
@@ -141,6 +141,13 @@ explicit capability boundaries can still limit access to files, network
 services, and browser APIs.
 
 ## Start with one difficult part
+
+## Application architecture
+
+Keep application state and domain transitions in Hara namespaces. Let React or
+another view layer own component lifecycle and DOM details, and connect the two
+through a small explicit adapter. This keeps business behavior REPL-callable
+without pretending host UI APIs are portable language primitives.
 
 Do not rewrite an entire application. Start with one model that is difficult to
 inspect: a document, workflow, browser game, dashboard, simulation, rules

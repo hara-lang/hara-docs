@@ -9,7 +9,7 @@ A Hara extension is a namespace backed by a declared WASM or HTA provider. Appli
 (deref (sha/digest (bytes 97 98 99)))
 ```
 
-Extension intent belongs in [`project.edn`](project-manifest.md) under `:project/extensions`. Package building normalizes those declarations into the generated `package.edn` inside the `.harp`.
+Extension intent belongs in [`project.edn`](../projects/index.md) under `:project/extensions`. Package building normalizes those declarations into the generated `package.edn` inside the `.harp`.
 
 ## Direct WASM
 

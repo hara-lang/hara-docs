@@ -36,8 +36,8 @@ Maven wrapper. See [Get started with the JVM](../getting-started/jvm.md).
 editor/output layout. Open **Starter** in [Playground](https://playground.hara-lang.org/) to inspect a
 complete directly loadable pair.
 
-Use [Hara Chrome](../create/chrome-project.md) when the project belongs near a
-browser workspace, or [Hara VS Code](../create/vscode-project.md) when you
+Use [the Web setup](../getting-started/web.md) when the project belongs near a
+browser workspace, or [the VS Code setup](../getting-started/vscode.md) when you
 want a focused source-and-session workflow.
 
 ## Work visually
@@ -85,8 +85,23 @@ works with keyboards, assistive technology, and reduced motion.
 - Treat spaces and sessions as working environments, not as the sole record of
   the project.
 
-## Share later
+## Namespaces and libraries
+
+Namespace forms declare dependencies with `:require`; runtime metadata uses
+the plural `:aliases` key. Current portable libraries use `std.foundation.*`,
+not the historical `std.lib.*` namespaces. Keep host authority behind an
+explicit capability or extension.
+
+## Testing and services
+
+Put tests in `:project/test-paths`. Evaluate the changed form, run the narrow
+project test, then run cross-host conformance for a portable boundary. Service
+projects compose pure handlers with explicit transport providers so the same
+handler stays callable from the REPL and tests.
+
+## Publishing
 
 Greenways Spaces is the intended destination for publishing a Hara project.
-That workflow is not available yet; the [publishing roadmap](publish-greenways.md)
-records the future journey without pretending it can be completed today.
+That workflow is not available yet; this publishing section
+remains staged. Validate the manifest, tests, capabilities, and package identity
+before handing an artifact to the publishing tools.

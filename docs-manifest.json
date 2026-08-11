@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "navigation": [
+    {
+      "label": "Start",
+      "items": [
+        { "label": "Why Hara?", "path": "start/orientation.md" },
+        { "label": "Learn programming", "path": "learn-programming/index.md" },
+        { "label": "Try Hara in the browser", "path": "getting-started/playground.md" },
+        { "label": "Build Tic Tac Toe", "path": "create/first-game.md" },
+        { "label": "Choose your setup", "path": "getting-started.md" }
+      ]
+    },
+    {
+      "label": "Learn",
+      "items": [
+        { "label": "Choose a learning path", "path": "learn/index.md" },
+        { "label": "The Little Book of HAL", "path": "books/the-little-book-of-hal/docs/index.md" },
+        { "label": "First Contact", "path": "learn/first-contact/index.md" },
+        {
+          "label": "Protocols for Builders",
+          "collapsed": true,
+          "items": [
+            { "label": "Course", "path": "learn/protocols/index.md" },
+            { "label": "Collections", "path": "learn/protocols/collections.md" },
+            { "label": "State and lifecycle", "path": "learn/protocols/state-lifecycle.md" },
+            { "label": "Protocol atlas", "path": "learn/protocols/atlas.md" }
+          ]
+        },
+        {
+          "label": "Hara foundations",
+          "collapsed": true,
+          "items": [
+            { "label": "Course map", "path": "hal-intro/index.md" },
+            { "label": "01 — Data and collections", "path": "hal-intro/01-basic-data.md" },
+            { "label": "02 — Functions and atoms", "path": "hal-intro/02-functions-and-atoms.md" },
+            { "label": "03 — Sequences and streams", "path": "hal-intro/03-iterators-and-streaming.md" },
+            { "label": "04 — Coroutines and promises", "path": "hal-intro/04-coroutines-and-promises.md" },
+            { "label": "05 — Arrays and objects", "path": "hal-intro/05-array-and-object.md" },
+            { "label": "06 — Bytes and strings", "path": "hal-intro/06-bytes-and-strings.md" },
+            { "label": "07 — I/O and files", "path": "hal-intro/07-io-and-files.md" }
+          ]
+        },
+        { "label": "Runtime-driven development", "path": "concepts/runtime-driven-development.md" }
+      ]
+    },
+    {
+      "label": "Use Hara",
+      "items": [
+        { "label": "CLI", "path": "getting-started/cli.md" },
+        { "label": "Web", "path": "getting-started/web.md" },
+        { "label": "JVM", "path": "getting-started/jvm.md" },
+        { "label": "VS Code", "path": "getting-started/vscode.md" },
+        { "label": "Emacs", "path": "getting-started/emacs.md" },
+        { "label": "Projects and namespaces", "path": "projects/index.md" },
+        { "label": "Web application architecture", "path": "start/web-developers.md" }
+      ]
+    },
+    {
+      "label": "Reference",
+      "items": [
+        { "label": "Reference index", "path": "reference/index.md" },
+        { "label": "Language and symbols", "path": "reference/l0-language.md" },
+        { "label": "Runtimes and bytecode", "path": "reference/rust-runtime.md" },
+        { "label": "Kernel and REPL", "path": "kernel.md" },
+        { "label": "CLI contract", "path": "reference/cli-contract.md" },
+        { "label": "Extension contract", "path": "reference/extensions-contract.md" },
+        { "label": "Identity and packages", "path": "guides/tap-publishing.md" },
+        { "label": "Developer guide", "path": "development.md" },
+        { "label": "Benchmarks", "url": "https://benchmarks.hara-lang.org/" }
+      ]
+    }
+  ],
+  "redirects": [
+    { "source": "books/the-little-book-of-hal/README.md", "from": "/docs/books/the-little-book-of-hal/readme/", "to": "/docs/books/the-little-book-of-hal/" },
+    { "source": "concepts/index.md", "from": "/docs/concepts/", "to": "/docs/concepts/runtime-driven-development/" },
+    { "source": "concepts/live-coding.md", "from": "/docs/concepts/live-coding/", "to": "/docs/concepts/runtime-driven-development/#live-coding" },
+    { "source": "concepts/unified-representation.md", "from": "/docs/concepts/unified-representation/", "to": "/docs/concepts/runtime-driven-development/#one-representation" },
+    { "source": "start/cli.md", "from": "/docs/start/cli/", "to": "/docs/getting-started/cli/" },
+    { "source": "create/chrome-project.md", "from": "/docs/create/chrome-project/", "to": "/docs/getting-started/web/" },
+    { "source": "create/vscode-project.md", "from": "/docs/create/vscode-project/", "to": "/docs/getting-started/vscode/" },
+    { "source": "namespaces.md", "from": "/docs/namespaces/", "to": "/docs/projects/" },
+    { "source": "walkthroughs/service-project.md", "from": "/docs/walkthroughs/service-project/", "to": "/docs/projects/#service-project" },
+    { "source": "walkthroughs/libraries.md", "from": "/docs/walkthroughs/libraries/", "to": "/docs/projects/#libraries" },
+    { "source": "walkthroughs/testing.md", "from": "/docs/walkthroughs/testing/", "to": "/docs/projects/#testing" },
+    { "source": "projects/publish-greenways.md", "from": "/docs/projects/publish-greenways/", "to": "/docs/projects/#publishing" },
+    { "source": "reference/project-manifest.md", "from": "/docs/reference/project-manifest/", "to": "/docs/projects/#project-manifest" },
+    { "source": "reference/namespaces.md", "from": "/docs/reference/namespaces/", "to": "/docs/projects/#namespaces" },
+    { "source": "reference/runtime-libraries.md", "from": "/docs/reference/runtime-libraries/", "to": "/docs/projects/#runtime-libraries" },
+    { "source": "work-visually.md", "from": "/docs/work-visually/", "to": "/docs/projects/#visual-workspaces" },
+    { "source": "studio.md", "from": "/docs/studio/", "to": "/docs/projects/#visual-workspaces" },
+    { "source": "start/react.md", "from": "/docs/start/react/", "to": "/docs/start/web-developers/#application-architecture" },
+    { "source": "reference/clojure-core-compatibility.md", "from": "/docs/reference/clojure-core-compatibility/", "to": "/docs/start/clojure/#compatibility" },
+    { "source": "reference/runtime/kernel-architecture/index.md", "from": "/docs/reference/runtime/kernel-architecture/", "to": "/docs/kernel/#architecture" },
+    { "source": "reference/runtime/kernel-architecture/multi-session-kernels.md", "from": "/docs/reference/runtime/kernel-architecture/multi-session-kernels/", "to": "/docs/kernel/#sessions" },
+    { "source": "reference/repl.md", "from": "/docs/reference/repl/", "to": "/docs/kernel/#repl-workflow" },
+    { "source": "reference/resp-protocol.md", "from": "/docs/reference/resp-protocol/", "to": "/docs/kernel/#resp" },
+    { "source": "reference/native-flavors.md", "from": "/docs/reference/native-flavors/", "to": "/docs/reference/rust-runtime/#hosts" },
+    { "source": "web-specific/browser-hta.md", "from": "/docs/web-specific/browser-hta/", "to": "/docs/reference/rust-runtime/#browser-host" },
+    { "source": "reference/jvm-flavor.md", "from": "/docs/reference/jvm-flavor/", "to": "/docs/reference/rust-runtime/#jvm-host" },
+    { "source": "development-tracing.md", "from": "/docs/development-tracing/", "to": "/docs/development/#tracing" },
+    { "source": "javadocs.md", "from": "/docs/javadocs/", "to": "/docs/development/#api-documentation" },
+    { "source": "reference/xtalk-equivalence.md", "from": "/docs/reference/xtalk-equivalence/", "to": "/docs/development/#xtalk-equivalence" },
+    { "source": "foundation-porting.md", "from": "/docs/foundation-porting/", "to": "/docs/development/#foundation-porting" },
+    { "source": "user-guide.md", "from": "/docs/user-guide/", "to": "/docs/reference/l0-language/" },
+    { "source": "builtins.md", "from": "/docs/builtins/", "to": "/docs/reference/l0-language/#symbols" },
+    { "source": "reference/runtime-benchmarks.md", "from": "/docs/reference/runtime-benchmarks/", "to": "https://benchmarks.hara-lang.org/" },
+    { "source": "reference/extensions.md", "from": "/docs/reference/extensions/", "to": "/docs/reference/extensions-contract/" },
+    { "source": "learn-programming/values-and-data.md", "from": "/docs/learn-programming/values-and-data/", "to": "/docs/learn-programming/#values-and-data" },
+    { "source": "learn-programming/functions-and-state.md", "from": "/docs/learn-programming/functions-and-state/", "to": "/docs/learn-programming/#functions-and-state" },
+    { "source": "learn-programming/decisions-and-repetition.md", "from": "/docs/learn-programming/decisions-and-repetition/", "to": "/docs/learn-programming/#decisions-and-repetition" },
+    { "source": "hara-lisp-intro/index.md", "from": "/docs/hara-lisp-intro/", "to": "/docs/hal-intro/" },
+    { "source": "hara-lisp-intro/01-basic-data.md", "from": "/docs/hara-lisp-intro/01-basic-data/", "to": "/docs/hal-intro/01-basic-data/" },
+    { "source": "hara-lisp-intro/02-functions-and-atoms.md", "from": "/docs/hara-lisp-intro/02-functions-and-atoms/", "to": "/docs/hal-intro/02-functions-and-atoms/" },
+    { "source": "hara-lisp-intro/03-iterators-and-streaming.md", "from": "/docs/hara-lisp-intro/03-iterators-and-streaming/", "to": "/docs/hal-intro/03-iterators-and-streaming/" },
+    { "source": "hara-lisp-intro/04-coroutines-and-promises.md", "from": "/docs/hara-lisp-intro/04-coroutines-and-promises/", "to": "/docs/hal-intro/04-coroutines-and-promises/" },
+    { "source": "hara-lisp-intro/05-array-and-object.md", "from": "/docs/hara-lisp-intro/05-array-and-object/", "to": "/docs/hal-intro/05-array-and-object/" },
+    { "source": "hara-lisp-intro/06-bytes-and-strings.md", "from": "/docs/hara-lisp-intro/06-bytes-and-strings/", "to": "/docs/hal-intro/06-bytes-and-strings/" },
+    { "source": "hara-lisp-intro/07-io-and-files.md", "from": "/docs/hara-lisp-intro/07-io-and-files/", "to": "/docs/hal-intro/07-io-and-files/" }
+  ]
+}

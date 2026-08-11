@@ -164,7 +164,7 @@ The changed cases are the ones worth checking while porting:
 | `eval` | `eval` | Hara evaluates in the active Hara runtime context; it does not invoke the Clojure compiler. |
 
 The complete, exhaustive contract—including all changed and runtime-drift
-entries—is in [Clojure core compatibility](../reference/clojure-core-compatibility.md).
+entries—is captured in this page's compatibility notes.
 
 ### Startup evidence
 
@@ -203,7 +203,7 @@ calls the clearest gap:
 | Persistent map | 0.452 | 0.110 | 1.087 | 1.234 |
 | Sequence navigation | 0.450 | 0.086 | 0.563 | 0.617 |
 
-See [Runtime benchmarks](../reference/runtime-benchmarks.md) for the complete
+See [Runtime benchmarks](https://benchmarks.hara-lang.org/) for the complete
 workloads, first-call timings, calls per second, convergence data, and the
 other runtimes.
 

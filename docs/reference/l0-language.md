@@ -2,8 +2,8 @@
 
 Version: `0.1`
 
-This document is the normative, implementation-independent contract for the
-Truffle-hosted Hara L0 runtime. The executable examples and expected values
+This document is the normative, implementation-independent contract for Hara
+L0 across the JVM, native Rust, and raw WASM hosts. The executable examples and expected values
 are maintained in [`l0-conformance.edn`](l0-conformance.edn). An implementation
 may use different storage or compiler techniques, but it must preserve the
 observable behavior described here.
@@ -24,7 +24,9 @@ column when a source name is available. Leading whitespace is not part of a
 form's source span.
 
 Aggregate forms may carry `:line`, `:column`, `:end-line`, and `:end-column`
-metadata. This metadata is diagnostic information and does not change value
+metadata. Anonymous function literals use `#(...)`; `%`, `%1`, `%2`, and `%&`
+name their arguments and nested literals establish their own argument scope.
+This metadata is diagnostic information and does not change value
 equality or symbol/keyword identity. Readable immutable values use canonical
 printing and must round-trip through the reader. Ratios are rejected.
 
@@ -38,7 +40,7 @@ multiple top-level forms returns the final result.
 The core special forms are `quote`, `if`, `do`, `when`, `when-not`, `and`,
 `or`, `cond`, `let`, `letfn`, `binding`, `loop`, `recur`, `fn`, `def`,
 `defn`, `defn-`, `declare`, `defmulti`, `defmethod`, `var`, `deref`, `set!`,
-`throw`, `try`, `ns`, `in-ns`, `require`, `refer`, `use`, `alias`,
+`throw`, `try`, `ns`, `ns+`, `in-ns`, `require`, `refer`, `use`, `alias`,
 `defstruct`, `defprotocol`, `extend-type`, `field`, and
 `apply`. `defn` is the only function-definition form; there is no `defn.xt`.
 
@@ -54,6 +56,10 @@ environment. `letfn` installs all local function bindings before evaluating
 the body, so self-recursion and mutual recursion work. Closures capture the
 lexical values they reference. `recur` is valid only in tail position and
 must match the enclosing `loop` or function arity.
+
+`def` installs a Var and returns that Var, so definition results remain
+inspectable and dereferenceable. `ns+` extends the current namespace declaration
+without replacing its existing aliases, refers, or loaded-module state.
 
 Functions support fixed arities, variadic parameter vectors using a final
 `&` binding, and multiple arity clauses. Exact arities take precedence over a
@@ -120,6 +126,8 @@ source element as its accumulator and rejects an empty source; the three-
 argument form returns the initial value for an empty source. The callback is an
 ordinary Hara function receiving accumulator and element.
 
+Closures resolve captured locals before namespace Vars, including locals
+introduced by destructuring and nested anonymous-function literals.
 Destructuring supports nested positional vector patterns, vector rest
 bindings, map `:keys`, `:strs`, `:syms`, `:as`, and `:or` patterns in function,
 `let`, and `loop` bindings. Missing sequential or map values produce nil
@@ -202,7 +210,7 @@ semantics and are not specified as thread-safe.
 
 Bytes are an ordinary value category constructed with `(bytes ...)`. Elements
 use signed-byte storage and accept the checked `-128..255` input domain.
-Operations live in `std.lib.bytes`: `bytes/count`, `bytes/get`, `bytes/set`,
+Operations live in `std.foundation.bytes`: `bytes/count`, `bytes/get`, `bytes/set`,
 `bytes/copy`, `bytes/slice`, `bytes/u8`, and `bytes/s8`. `bytes/get` returns an
 unsigned element in the range `0..255` and accepts an optional fallback for an
 invalid index; without a fallback it reports a bounds error. Protocol
@@ -294,9 +302,20 @@ unquote, unquote-splicing, variadic macros, `macroexpand-1`, and recursive
 Already compiled Truffle call targets are immutable; a newly compiled source
 observes a reloaded macro/module definition.
 
-The packaged L0 bootstrap is intentionally small and language-level: its
-current functions are defined in `std/foundation.hal`. The complete Foundation
-stdlib and KMI/L1 port are later migration work, not hidden Java semantics.
+The packaged bootstrap is intentionally language-level. Runtime libraries use
+the `std.foundation.*` namespace family; namespace metadata uses the plural
+`:aliases` key. The published symbol inventory is generated from runtime
+source and conformance evidence rather than kept as a second handwritten list.
+
+## Symbols
+
+The stable L0 surface consists of the special forms named in section 2, the
+protocol-backed collection operations in sections 2 and 4, arithmetic and
+comparison Vars in section 6, and the packaged Foundation bootstrap. Treat
+`std.foundation.*` source and the conformance manifest as authoritative for an
+exact release inventory. Historical `std.lib.string`, `std.lib.bytes`,
+`std.lib.promise`, `std.lib.file`, and `std.lib.socket` names are not current
+public namespaces.
 
 ## 9. Host and Native Image boundary
 

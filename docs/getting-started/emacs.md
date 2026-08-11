@@ -266,6 +266,6 @@ fresh CLI process does not.
 ## Continue
 
 Read [Get started with the CLI](cli.md) for the runtime commands, the
-[REPL reference](../reference/repl.md) for session behavior, and
-[namespaces, libraries, and tests](../namespaces.md) when the project grows
+[kernel and REPL reference](../kernel.md#repl-workflow) for session behavior, and
+[projects and namespaces](../projects/index.md) when the project grows
 beyond one file.

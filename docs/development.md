@@ -3,20 +3,22 @@
 ## Repository map
 
 ```text
-src/main/java/hara/truffle/  current Truffle language and context
-src/main/java/hara/kernel/   CLI, REPL, legacy interpreter, host services
-src/main/java/hara/lang/     values and protocols
-spec/hara/                   normative language and runtime contracts
-src/test/java/               JVM and Truffle tests
-site/                        static project website
+core/java/                   JVM, Truffle, kernel, and Java tests
+core/rust/                   native Rust, raw WASM, HBC5, and HBB2
+core/lib/                    HAL libraries and tool namespaces
+packaging/                   release and distribution automation
+scripts/runtime/             cross-host runtime checks
+../hara-specs-registry/      external normative specifications
+../../website/hara-docs/     documentation source
 ```
 
 ## Build and test
 
 ```shell
-mvn -q -f java/pom.xml test
-mvn -q -f java/pom.xml -Ptruffle package
-mvn -q -f java/pom.xml -Ptruffle -Dtest=hara.truffle.HaraL0ConformanceTest test
+mvn -q -f core/java/pom.xml test
+mvn -q -f core/java/pom.xml -Ptruffle package
+mvn -q -f core/java/pom.xml -Ptruffle -Dtest=hara.truffle.HaraL0ConformanceTest test
+cargo test --manifest-path core/rust/Cargo.toml
 ```
 
 When changing a boundary, run the narrow focused suite first and then the full suite. Graal fallback
@@ -33,7 +35,7 @@ interface. Do not add guest-visible JVM interop to make a library convenient.
 
 ## Adding a generated library
 
-1. Define the public names and argument/result semantics in `spec/hara/runtime-libraries.md`.
+1. Define public names and semantics in the external specs registry.
 2. Add the implementation to the runtime-generated namespace.
 3. Add valid, invalid, and unsupported capability cases.
 4. Add a conformance test and update the user guide.
@@ -52,7 +54,25 @@ crashes. See [Hara extensions](reference/extensions-contract.md).
 
 Public Java entry points should have Javadoc describing lifecycle, ownership, thread-safety,
 capabilities, and failure behavior. Add API documentation in the same change as a public surface.
-The [Javadocs guide](javadocs.md) lists the current targets and generation command.
+Generate API docs from `core/java/pom.xml`; generated output is not a second
+documentation source.
+
+## Tracing
+
+Run a focused JVM or Rust test, enable only the required host trace, and record
+the command and runtime flavor with the result.
+
+## XTalk equivalence
+
+Change the language spec or seed under `core/lib`, regenerate, and run emitter
+parity checks. Do not hand-edit generated target-language output.
+
+## Foundation porting
+
+The in-repository migration ledger is historical. Current libraries live under
+`core/lib`, use `std.foundation.*`, and place normative obligations in the
+external specs registry. Port one capability boundary with its conformance
+evidence.
 
 ## Pull requests
 
