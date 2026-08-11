@@ -186,3 +186,20 @@ Build the [first browser game](../create/first-game.md), follow the deeper
 [projects and visual workspaces](../projects/index.md), and use the
 [Rust and WASM runtime mapping](../reference/rust-runtime.md) when implementing
 or embedding the browser host.
+
+## Application architecture
+
+Keep domain state and transitions in Hara namespaces, and let React or another
+view layer own component lifecycle and DOM details. Connect them through a
+small adapter that accepts and returns stable Hara values.
+
+Expose shared state through a named atom or provider rather than hiding it in a
+component closure. The REPL, visual inspector, tests, and automation can then
+ask the running application the same questions. Browser storage, rendering,
+networking, and other host APIs remain explicit capabilities instead of
+pretending arbitrary JavaScript objects are portable language values.
+
+This separation gives a useful test boundary: exercise pure state transitions
+on any Hara host, then test only the browser adapter and provider wiring in the
+page. It also gives tools and AI agents runtime evidence without granting them
+unstructured access to the whole application.

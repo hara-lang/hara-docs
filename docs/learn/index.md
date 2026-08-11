@@ -9,15 +9,45 @@ hide:
 Hara is easiest to understand by using it. Run a form, inspect the value, make
 one change, and see what the running kernel does next.
 
+## Why Hara
+
+Hara is a compact language for understanding and building complete systems. Its data
+is readable, its programs remain inspectable while they run, and the same core
+language can be hosted by the browser, native Rust, or the JVM. You can learn
+the parts beneath a framework without choosing a language you must later throw
+away.
+
 The learning paths below begin with the same compact language and then move in
-different directions. You do not need to install anything for the first two.
+different directions. Start in the browser; installation can wait until you
+want a local project.
 
 <div class="hara-syllabus-grid">
+  <a class="hara-path-card hara-path-card--primary" href="../getting-started/playground/">
+    <span>TRY IT NOW</span>
+    <h2>Playground</h2>
+    <p>Evaluate Hara in the browser without installing a runtime.</p>
+    <small>Immediate · browser kernel</small>
+  </a>
+
   <a class="hara-path-card hara-path-card--primary" href="first-contact/">
     <span>01 · START HERE</span>
     <h2>First Contact</h2>
     <p>Six short experiments: read a form, shape data, write a function, preserve an old value, and meet protocols.</p>
     <small>About 15 minutes · browser kernel</small>
+  </a>
+
+  <a class="hara-path-card" href="../learn-programming/">
+    <span>READ PROGRAMS</span>
+    <h2>Learn programming</h2>
+    <p>Build an understanding of values, functions, state, decisions, and repetition from first principles.</p>
+    <small>Beginner path · no prior Lisp required</small>
+  </a>
+
+  <a class="hara-path-card" href="../books/the-little-book-of-hal/docs/">
+    <span>READ THE BOOK</span>
+    <h2>The Little Book of HAL</h2>
+    <p>Follow the language through a compact, narrative introduction.</p>
+    <small>Book format · work in progress</small>
   </a>
 
   <a class="hara-path-card" href="protocols/">
@@ -68,3 +98,6 @@ the same runtime-driven loop used by larger visual applications.
 </div>
 
 **Functions make things happen. Protocols make systems fit together.**
+
+When you are ready to work locally, continue to
+[Install and choose a host](../getting-started.md).

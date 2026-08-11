@@ -14,7 +14,7 @@ hide:
   </div>
 
   <div class="hara-outcome-grid hara-docs-grid">
-    <a class="hara-outcome-card hara-outcome-card--primary" href="start/orientation/">
+    <a class="hara-outcome-card hara-outcome-card--primary" href="learn/#why-hara">
       <span class="hara-card-kicker">01 · Why Hara</span>
       <h2>Simple to pick up. Fast enough to keep.</h2>
       <p>See the whole reading model, run your first form, and understand why Hara is a language worth learning.</p>

@@ -8,7 +8,7 @@ Start in the browser for the shortest path to a running form. Move to the CLI, a
 
 For a first encounter with Hara, use this order:
 
-1. Read [Why Hara?](start/orientation.md) and run the first form.
+1. Read [Why Hara?](learn/index.md#why-hara) and run the first form.
 2. Continue through [Read Hara and build from scratch](learn-programming/index.md).
 3. Use the [Playground](getting-started/playground.md) whenever you want a live browser session.
 4. Build [Tic Tac Toe](create/first-game.md) to combine data, rules, state, input, and rendering.

@@ -339,3 +339,24 @@ Implementations classify mismatches as a bug, a capability difference, or an
 approved specification revision. The current intentional differences from
 Clojure are: no mandatory ISeq/Seq, no ratios, no transducers/
 `transduce`/`eduction`, no Clojure-style host record contract (`defstruct` is the primitive struct form), no `deftype`, and no `defn.xt`.
+
+## Clojure compatibility
+
+Clojure readers will recognize immutable values, Vars, namespaces, atoms,
+protocols, multimethods, destructuring, macros, and the evaluate-inspect-change
+workflow. Hara deliberately keeps those transferable ideas while defining its
+own runtime contract.
+
+Important differences are normative rather than temporary omissions:
+
+- Hara is iterator-first and does not require Clojure `ISeq` semantics.
+- Empty iteration is represented explicitly by `nil`; a `Seq` is non-empty.
+- Ratios, transducers, `deftype`, and ambient JVM interop are not L0 features.
+- `defstruct` is Hara's primitive immutable struct form.
+- Host services are capabilities or providers, not implicitly reachable Java
+  classes or JavaScript objects.
+- Sessions isolate namespaces, Vars, loaded modules, tasks, and capabilities
+  inside one kernel.
+
+Treat familiar spelling as a starting point, not proof of identical behavior.
+The conformance corpus and the sections above define the portable semantics.

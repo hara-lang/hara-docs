@@ -2,64 +2,22 @@
   "schemaVersion": 1,
   "navigation": [
     {
-      "label": "Start",
-      "items": [
-        { "label": "Why Hara?", "path": "start/orientation.md" },
-        { "label": "Learn programming", "path": "learn-programming/index.md" },
-        { "label": "Try Hara in the browser", "path": "getting-started/playground.md" },
-        { "label": "Build Tic Tac Toe", "path": "create/first-game.md" },
-        { "label": "Choose your setup", "path": "getting-started.md" }
-      ]
-    },
-    {
       "label": "Learn",
       "items": [
-        { "label": "Choose a learning path", "path": "learn/index.md" },
-        { "label": "The Little Book of HAL", "path": "books/the-little-book-of-hal/docs/index.md" },
-        { "label": "First Contact", "path": "learn/first-contact/index.md" },
-        {
-          "label": "Protocols for Builders",
-          "collapsed": true,
-          "items": [
-            { "label": "Course", "path": "learn/protocols/index.md" },
-            { "label": "Collections", "path": "learn/protocols/collections.md" },
-            { "label": "State and lifecycle", "path": "learn/protocols/state-lifecycle.md" },
-            { "label": "Protocol atlas", "path": "learn/protocols/atlas.md" }
-          ]
-        },
-        {
-          "label": "Hara foundations",
-          "collapsed": true,
-          "items": [
-            { "label": "Course map", "path": "hal-intro/index.md" },
-            { "label": "01 — Data and collections", "path": "hal-intro/01-basic-data.md" },
-            { "label": "02 — Functions and atoms", "path": "hal-intro/02-functions-and-atoms.md" },
-            { "label": "03 — Sequences and streams", "path": "hal-intro/03-iterators-and-streaming.md" },
-            { "label": "04 — Coroutines and promises", "path": "hal-intro/04-coroutines-and-promises.md" },
-            { "label": "05 — Arrays and objects", "path": "hal-intro/05-array-and-object.md" },
-            { "label": "06 — Bytes and strings", "path": "hal-intro/06-bytes-and-strings.md" },
-            { "label": "07 — I/O and files", "path": "hal-intro/07-io-and-files.md" }
-          ]
-        },
-        { "label": "Runtime-driven development", "path": "concepts/runtime-driven-development.md" }
+        { "label": "Learn Hara", "path": "learn/index.md" }
       ]
     },
     {
-      "label": "Use Hara",
+      "label": "Build",
       "items": [
-        { "label": "CLI", "path": "getting-started/cli.md" },
-        { "label": "Web", "path": "getting-started/web.md" },
-        { "label": "JVM", "path": "getting-started/jvm.md" },
-        { "label": "VS Code", "path": "getting-started/vscode.md" },
-        { "label": "Emacs", "path": "getting-started/emacs.md" },
+        { "label": "Install and choose a host", "path": "getting-started.md" },
         { "label": "Projects and namespaces", "path": "projects/index.md" },
-        { "label": "Web application architecture", "path": "start/web-developers.md" }
+        { "label": "Runtime-driven development", "path": "concepts/runtime-driven-development.md" }
       ]
     },
     {
       "label": "Reference",
       "items": [
-        { "label": "Reference index", "path": "reference/index.md" },
         { "label": "Language and symbols", "path": "reference/l0-language.md" },
         { "label": "Runtimes and bytecode", "path": "reference/rust-runtime.md" },
         { "label": "Kernel and REPL", "path": "kernel.md" },
@@ -72,6 +30,12 @@
     }
   ],
   "redirects": [
+    { "source": "start/orientation.md", "from": "/docs/start/orientation/", "to": "/docs/learn/#why-hara" },
+    { "source": "start/data-scientists.md", "from": "/docs/start/data-scientists/", "to": "/docs/learn/#data-work" },
+    { "source": "start/game-developers.md", "from": "/docs/start/game-developers/", "to": "/docs/learn/#games-and-interactive-systems" },
+    { "source": "start/clojure.md", "from": "/docs/start/clojure/", "to": "/docs/reference/l0-language/#clojure-compatibility" },
+    { "source": "start/web-developers.md", "from": "/docs/start/web-developers/", "to": "/docs/getting-started/web/#application-architecture" },
+    { "source": "reference/index.md", "from": "/docs/reference/", "to": "/docs/reference/l0-language/" },
     { "source": "books/the-little-book-of-hal/README.md", "from": "/docs/books/the-little-book-of-hal/readme/", "to": "/docs/books/the-little-book-of-hal/" },
     { "source": "concepts/index.md", "from": "/docs/concepts/", "to": "/docs/concepts/runtime-driven-development/" },
     { "source": "concepts/live-coding.md", "from": "/docs/concepts/live-coding/", "to": "/docs/concepts/runtime-driven-development/#live-coding" },
@@ -89,8 +53,8 @@
     { "source": "reference/runtime-libraries.md", "from": "/docs/reference/runtime-libraries/", "to": "/docs/projects/#runtime-libraries" },
     { "source": "work-visually.md", "from": "/docs/work-visually/", "to": "/docs/projects/#visual-workspaces" },
     { "source": "studio.md", "from": "/docs/studio/", "to": "/docs/projects/#visual-workspaces" },
-    { "source": "start/react.md", "from": "/docs/start/react/", "to": "/docs/start/web-developers/#application-architecture" },
-    { "source": "reference/clojure-core-compatibility.md", "from": "/docs/reference/clojure-core-compatibility/", "to": "/docs/start/clojure/#compatibility" },
+    { "source": "start/react.md", "from": "/docs/start/react/", "to": "/docs/getting-started/web/#application-architecture" },
+    { "source": "reference/clojure-core-compatibility.md", "from": "/docs/reference/clojure-core-compatibility/", "to": "/docs/reference/l0-language/#clojure-compatibility" },
     { "source": "reference/runtime/kernel-architecture/index.md", "from": "/docs/reference/runtime/kernel-architecture/", "to": "/docs/kernel/#architecture" },
     { "source": "reference/runtime/kernel-architecture/multi-session-kernels.md", "from": "/docs/reference/runtime/kernel-architecture/multi-session-kernels/", "to": "/docs/kernel/#sessions" },
     { "source": "reference/repl.md", "from": "/docs/reference/repl/", "to": "/docs/kernel/#repl-workflow" },
