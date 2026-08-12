@@ -12,15 +12,6 @@
       ]
     },
     {
-      "label": "Self Learning",
-      "items": [
-        { "label": "Overview", "path": "self-learning/index.md" },
-        { "label": "The Little Book of HAL", "path": "books/the-little-book-of-hal/docs/index.md" },
-        { "label": "Protocols for Builders", "path": "learn/protocols/index.md" },
-        { "label": "Hara Koans", "url": "https://world.hara-lang.org/learn/koans/" }
-      ]
-    },
-    {
       "label": "Build",
       "items": [
         { "label": "Overview", "path": "build/index.md" },
@@ -39,6 +30,15 @@
       "label": "Reference",
       "items": [
         { "label": "Language API", "path": "api/index.md" }
+      ]
+    },
+    {
+      "label": "Self Learning",
+      "items": [
+        { "label": "Overview", "path": "self-learning/index.md" },
+        { "label": "The Little Book of HAL", "path": "books/the-little-book-of-hal/docs/index.md" },
+        { "label": "Protocols for Builders", "path": "learn/protocols/index.md" },
+        { "label": "Hara Koans", "url": "https://world.hara-lang.org/learn/koans/" }
       ]
     }
   ],

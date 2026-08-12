@@ -19,23 +19,23 @@ hide:
       <p>Begin in the browser, learn the programming model, and continue through Hara Foundations.</p>
       <small>Open the Learn Path <b>→</b></small>
     </a>
-    <a class="hara-outcome-card" href="self-learning/">
-      <span class="hara-card-kicker">02 · Self Learning</span>
-      <h2>Choose a book, course, or Koan.</h2>
-      <p>Read The Little Book of HAL, study protocols, or solve interactive problems on Hara World.</p>
-      <small>Browse self-learning resources <b>→</b></small>
-    </a>
     <a class="hara-outcome-card" href="build/">
-      <span class="hara-card-kicker">03 · Build</span>
+      <span class="hara-card-kicker">02 · Build</span>
       <h2>Set up tools and make a program.</h2>
       <p>Choose a host and editor, structure projects, work against a running system, and build Tic Tac Toe.</p>
       <small>Start building <b>→</b></small>
     </a>
     <a class="hara-outcome-card" href="api/">
-      <span class="hara-card-kicker">04 · Reference</span>
+      <span class="hara-card-kicker">03 · Reference</span>
       <h2>Look up the Foundation API.</h2>
       <p>Browse public namespaces, definitions, schemas, argument lists, and examples generated from Hara source and tests.</p>
       <small>Open the language API <b>→</b></small>
+    </a>
+    <a class="hara-outcome-card" href="self-learning/">
+      <span class="hara-card-kicker">04 · Self Learning</span>
+      <h2>Choose a book, course, or Koan.</h2>
+      <p>Read The Little Book of HAL, study protocols, or solve interactive problems on Hara World.</p>
+      <small>Browse self-learning resources <b>→</b></small>
     </a>
   </div>
 
