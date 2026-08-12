@@ -64,7 +64,7 @@ Store the result when later code needs the cleaned value:
 Convert text to lower case:
 
 ```hara eval group=hal-intro-06
-(str/to-lower "HARA")
+(str/lower "HARA")
 ; => "hara"
 ```
 
@@ -72,7 +72,7 @@ Use one normalization rule before comparison:
 
 ```hara eval group=hal-intro-06
 (defn normalized-name [value]
-  (str/to-lower (str/trim value)))
+  (str/lower (str/trim value)))
 
 (= (normalized-name " Hara ")
    (normalized-name "HARA"))
@@ -307,7 +307,7 @@ Represent each conversion explicitly:
   (-> input-bytes
       (str/decode-utf8)
       (str/trim)
-      (str/to-lower)
+      (str/lower)
       (str "\n")
       (str/encode-utf8)))
 ```

@@ -28,7 +28,7 @@ A pure function returns a value from its arguments:
 
 ```hara eval group=hal-intro-07
 (defn normalize-line [line]
-  (str/to-lower (str/trim line)))
+  (str/lower (str/trim line)))
 ```
 
 A file operation asks the host environment to read or change an external resource:

@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 const lessons = [
   ["01-basic-data.md", "hal-intro-01", 30, 2],
   ["02-functions-and-atoms.md", "hal-intro-02", 25, 1],
-  ["03-iterators-and-streaming.md", "hal-intro-03", 27, 2],
+  ["03-iterators-and-streaming.md", "hal-intro-03", 30, 2],
   ["04-coroutines-and-promises.md", "hal-intro-04", 6, 18],
   ["05-array-and-object.md", "hal-intro-05", 33, 1],
   ["06-bytes-and-strings.md", "hal-intro-06", 26, 3],
@@ -37,6 +37,14 @@ for (const [file, group, expectedLive, expectedStatic] of lessons) {
   }
   if (/str\/(?:encode|decode)(?!-utf8)/.test(source)) {
     failures.push(`${file}: use the browser-supported encode-utf8/decode-utf8 names`);
+  }
+  if (/str\/to-(?:lower|upper)/.test(source)) {
+    failures.push(`${file}: use current str/lower and str/upper names`);
+  }
+  for (const body of liveBodies) {
+    if (/^\s*\(\([^\n]*\b(?:map|filter|take|drop|keep|partition)\b/.test(body.trim())) {
+      failures.push(`${file}: runnable lazy values must end at a display-safe boundary`);
+    }
   }
   if (!/reload the page to start\s+with a clean session/.test(source)) {
     failures.push(`${file}: explain the page-local lesson session and reload behavior`);

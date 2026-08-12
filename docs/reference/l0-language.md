@@ -105,10 +105,10 @@ to a `Seq` without realizing its tail; `conj` is not defined for `Seq`.
 The same bootstrap provides ordinary names `map`, `filter`, `take`, `drop`,
 `mapcat`, `keep`, `cycle`, `zip`, and `partition-pair`; their `iter-*`
 counterparts return raw one-shot iterators. Direct `(map f concrete)` eagerly
-materializes and preserves the first collection's shape. Curried `((map f)
-source)` is lazy, as is `(map f (seq source))`; `seq` makes that lazy boundary
-explicit. Predicate reductions `every?` and `any?` consume an iterator lazily
-until their result is known.
+materializes a vector. Curried `((map f) source)` returns a lazy raw iterator;
+passing a `Seq` to the full-arity form does not preserve laziness. Materialize
+a transform result with `vec` when it must cross a display or storage boundary.
+Predicate reductions `every?` and `any?` stop as soon as their result is known.
 
 The bootstrap also provides `get-in`, `assoc-in`, `update`, and `update-in` for
 persistent nested values. These are ordinary `.hal` functions built on the
@@ -117,8 +117,8 @@ collection protocol functions; they do not introduce mutable update semantics.
 Collection navigation also includes `last`, `reverse`, `key`, `val`, `keys`,
 and `vals`. Membership is protocol-based: use `IFind/find` to retrieve an
 entry and public `has?` to distinguish absence from a present nil value.
-`keys` and `vals` return lazy `Seq` values, while `reverse` returns a
-persistent list and does not mutate its input.
+`keys` and `vals` return vectors, while `reverse` returns a persistent list and
+does not mutate its input.
 
 `reduce` eagerly consumes an iterator with either `(reduce function value)`
 or `(reduce function initial value)`. The two-argument form uses the first
@@ -157,23 +157,27 @@ navigation through the collection protocol; they never mutate the input.
 
 The bootstrap provides lazy `range`, `repeat`, `repeatedly`, and `iterate`
 generators. These return `Seq` values; their `iter-*` primitives return raw
-iterators. Infinite forms remain lazy until consumed by `take`, `iter-next`, or
-another iterator operation.
+iterators. Infinite forms remain lazy until consumed by an iterator operation.
+Full-arity `(take amount source)` consumes the bounded prefix and returns a
+vector; unary `(take amount)` constructs a lazy iterator transform.
 
-`take-while` and `drop-while` are lazy iterator combinators. They evaluate
-predicates only as demand advances and close their source when it is exhausted
-or the stopping predicate is reached.
+Unary `take-while` and `drop-while` construct lazy iterator transforms. Their
+full-arity collection forms eagerly materialize vectors. The transforms
+evaluate predicates only as demand advances and close their source when it is
+exhausted or the stopping predicate is reached.
 
-`partition-all` emits lazy persistent vector chunks and retains a final partial
-chunk; `partition` emits only complete chunks and discards an unmatched tail.
-Both require a positive chunk size.
+Unary `partition-all` and `partition` construct iterator transforms. Their
+collection forms eagerly return vectors of persistent vector chunks.
+`partition-all` retains a final partial chunk; `partition` discards an
+unmatched tail. Both require a positive chunk size.
 
 `map` and `iter-map` accept one or more sources. With multiple sources they
 advance them in lockstep and stop at the shortest source, invoking the function
 with one value from each source.
 
-`interpose` lazily inserts a separator between source values. `interleave`
-round-robins multiple sources and stops when the shortest source is exhausted.
+Unary `interpose` constructs a lazy iterator transform; its collection form
+eagerly returns a vector. `interleave` eagerly returns a vector while
+round-robinning multiple sources and stops when the shortest is exhausted.
 
 Hara is iterator-first. It does not require Clojure `ISeq`/`Seq` semantics.
 The core iterator forms are:

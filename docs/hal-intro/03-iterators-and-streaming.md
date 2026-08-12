@@ -28,6 +28,10 @@ an empty `Seq` object: every value satisfying `seq?` has a first item.
 This is why Hara needs only `rest`, not separate `rest` and `next` operations.
 Use `vec` when a reusable persistent result is required.
 
+The live evaluator cannot display a raw `Seq` or iterator as a portable HTA
+value. End runnable lazy examples with `vec`, `iter-next`, or another scalar
+consumer instead of returning the cursor itself.
+
 Use `iter` for explicit conversion at the empty boundary:
 
 ```hara
@@ -43,7 +47,7 @@ also requires at least one source item, so `(cycle [])` is an error.
 By the end of this lesson, you can:
 
 1. Transform collections with `map`, `filter`, and `reduce`.
-2. Explain why a lazy pipeline does not do all work immediately.
+2. Distinguish eager collection calls from lazy iterator transforms.
 3. Build bounded streams from generators.
 4. Create and consume a raw iterator.
 5. Close an iterator when work stops early.
@@ -57,7 +61,7 @@ By the end of this lesson, you can:
 (map inc [1 2 3])
 ```
 
-The result is a lazy `Seq`. Its printed form can vary by runtime display, but its logical values are `2`, `3`, and `4`.
+With both arguments supplied, `map` evaluates the vector eagerly and returns `[2 3 4]`. The one-argument form, such as `(map inc)`, returns an iterator transform for use in a lazy pipeline.
 
 Use a domain function when the operation has a domain meaning:
 
@@ -82,7 +86,8 @@ The mapping function receives one item and returns one item.
         ["first" "  " "third"])
 ```
 
-A predicate answers a question. It does not transform the item.
+A predicate answers a question. It does not transform the item. With the
+collection supplied, `filter` eagerly returns `["first" "third"]`.
 
 ## Combine items with `reduce`
 
@@ -107,7 +112,7 @@ Count total characters:
 
 Use `reduce` when many input items become one result.
 
-## Build a lazy pipeline
+## Build an eager collection pipeline
 
 Nest operations from source to consumer:
 
@@ -125,7 +130,10 @@ Read the pipeline from the inside:
 3. Trim each line.
 4. Take two results.
 
-The pipeline can stop after it has enough output.
+These full-arity calls are eager. `filter` creates a vector, `map` creates
+another vector, and `take` creates the final two-item vector. This form is
+clear for bounded, already-realized data, but it does not stop the earlier
+stages after two results.
 
 The threading macro can express the same flow:
 
@@ -138,45 +146,66 @@ The threading macro can express the same flow:
 
 Choose the form that makes the data flow easiest to inspect.
 
-## Laziness delays work
+## Build a lazy iterator pipeline
 
-A lazy operation creates a plan for producing values. A consumer causes that plan to advance.
+The one-argument forms construct iterator transforms. Compose those transforms,
+then apply the resulting pipeline to a source:
 
 ```hara eval group=hal-intro-03
-(def numbers
-  (map inc (range 0 1000000)))
+(def clean-first-two
+  (comp (take 2)
+        (map str/trim)
+        (filter non-empty-line?)))
+
+(vec (clean-first-two
+       [" first " " " " second " " third "]))
 ```
 
-The runtime does not need to create one million incremented values immediately.
+The transform result is a raw iterator. `vec` is the boundary that requests
+and stores its values. Because `take` stops requesting values after two
+outputs, the upstream transforms need not process the remaining source. The result is
+`["first" "second"]`. As with functions, `comp` lists transforms in reverse
+execution order.
+
+Lazy producers such as `range` return a `Seq`. Apply iterator transforms to
+them without using the eager two-argument collection form:
+
+```hara eval group=hal-intro-03
+(def numbers (range 0 1000000))
+(def incremented ((map inc) numbers))
+```
 
 A bounded consumer requests only part of the source:
 
 ```hara eval group=hal-intro-03
-(take 3 numbers)
+(vec ((take 3) incremented))
 ```
 
 This property supports large inputs and early termination.
 
-Keep effects out of lazy mapping functions. An effect can occur later than the source form suggests.
+Keep effects out of iterator mapping functions. An effect occurs when a
+consumer advances the iterator, not when the transform is constructed.
 
 ## Realize a result at a boundary
 
 A UI model, encoded response, or saved result often needs a complete persistent collection.
 
-Use `mapv` when the result must be an eager vector:
+Full-arity collection transforms already return eager vectors. `mapv` also
+makes that intent explicit:
 
 ```hara eval group=hal-intro-03
 (mapv str/trim [" one " " two "])
 ; => ["one" "two"]
 ```
 
-Use `realize` when you already have a lazy value and need its realized result:
+Use `vec` when you already have a `Seq` or iterator and need a reusable vector:
 
 ```hara eval group=hal-intro-03
-(realize (take 3 numbers))
+(vec ((take 3) (range 0 1000000)))
 ```
 
-Do not realize a large source without a reason. Preserve streaming until the next boundary needs a complete value.
+Do not materialize a large source without a reason. Preserve streaming until
+the next boundary needs a complete value.
 
 ## Create a raw iterator
 
@@ -266,17 +295,23 @@ Use cleanup paths when the source owns a file handle, socket, decoder, or other 
 
 A plain vector iterator has little to release, but the same discipline applies to resource-backed iterators.
 
-## Use `Seq` for normal lazy code
+## Know which forms are lazy
 
-The ordinary functions `map`, `filter`, `take`, `drop`, `mapcat`, `keep`, `cycle`, and `partition` return lazy `Seq` values.
+The producers `range`, `repeat`, `repeatedly`, `iterate`, and `cycle`
+return lazy `Seq` values. The one-argument forms of `map`, `filter`, `take`,
+`drop`, `mapcat`, `keep`, and `partition` return transforms; applying a
+transform returns a raw iterator. Supplying a collection directly to those
+functions eagerly returns a vector.
 
 ```hara eval group=hal-intro-03
-(take 3
-  (map (fn [number] (* number number))
-       (range 0 100)))
+(vec
+  ((comp (take 3)
+         (map (fn [number] (* number number))))
+   (range 0 100)))
 ```
 
-A `Seq` gives application code a stable lazy boundary. The raw iterator forms expose traversal mechanics.
+A `Seq` is a lazy, one-shot producer boundary. Iterator transforms expose the
+pipeline explicitly; `vec` creates a reusable result.
 
 Prefer ordinary collection functions unless you need one-shot control.
 
@@ -288,11 +323,12 @@ Hara also supports a one-argument transform form:
 (def trim-all
   (map str/trim))
 
-(trim-all [" one " " two "])
+(vec (trim-all [" one " " two "]))
 ; => ["one" "two"]
 ```
 
-For an ordinary collection, the transform returns an eager collection result. Existing lazy sources remain lazy.
+Applying the transform returns a raw iterator regardless of whether its source
+is a vector or a `Seq`. Use `vec` to materialize the iterator when required.
 
 This is a Hara transform contract. It is not a transducer contract.
 
@@ -320,10 +356,10 @@ Create a line transformation:
 
 ```hara eval group=hal-intro-03
 (defn normalize-line [line]
-  (str/to-lower (str/trim line)))
+  (str/lower (str/trim line)))
 ```
 
-Build a lazy pipeline:
+Build an eager collection helper:
 
 ```hara eval group=hal-intro-03
 (defn normalized-lines [lines]
@@ -332,12 +368,29 @@ Build a lazy pipeline:
        (map normalize-line)))
 ```
 
+Both full-arity calls materialize vectors. For a streaming helper, compose the
+one-argument transforms instead:
+
+```hara eval group=hal-intro-03
+(def normalize-lines
+  (comp (map normalize-line)
+        (filter non-empty-line?)))
+```
+
 Consume only the first three lines:
 
 ```hara eval group=hal-intro-03
 (take 3
   (normalized-lines
     [" Alpha " " " " Beta " " Gamma " " Delta "]))
+```
+
+Or consume three values from the streaming helper:
+
+```hara eval group=hal-intro-03
+(vec ((take 3)
+      (normalize-lines
+        [" Alpha " " " " Beta " " Gamma " " Delta "])))
 ```
 
 Create a raw iterator version:
@@ -361,7 +414,8 @@ Keep the stream transformation pure. Update the run atom at the consumer boundar
   line)
 ```
 
-Do not place this function inside a lazy `map` unless delayed state updates are intentional.
+Do not place this function inside an iterator transform unless updates during
+consumption are intentional. A full-arity `map` runs it immediately.
 
 A safer design lets the consumer request one line, update state, then request the next line.
 
@@ -376,17 +430,18 @@ A safer design lets the consumer request one line, update state, then request th
 
 ## Common mistakes
 
-### Treating a lazy plan as a completed result
+### Assuming every collection function is lazy
 
-A lazy pipeline may not have processed every source item yet.
+Full-arity transforms such as `(map f values)` eagerly return vectors. Use the
+one-argument transform form when work must advance only with demand.
 
 ### Reusing a consumed iterator
 
 Acquire a new iterator from a replayable source when you need another pass.
 
-### Performing hidden effects in `map`
+### Performing hidden effects in an iterator transform
 
-Use `map` for transformations. Put state changes and I/O at a clear consumer boundary.
+Use transforms for data changes. Put state changes and I/O at a clear consumer boundary.
 
 ### Forgetting to bound a large source
 
@@ -397,11 +452,11 @@ Use `take`, a predicate, or another stopping rule before realization.
 You are ready for the next lesson when you can answer these questions:
 
 1. What question does `map` answer?
-2. Why can a lazy pipeline stop early?
+2. Which `map` form is eager, and which form constructs an iterator transform?
 3. What changes when `iter-next` runs?
 4. Why is a raw iterator one-shot?
 5. When should an iterator be closed?
-6. When should you realize a lazy result?
-7. Why should effects stay outside ordinary lazy transforms?
+6. When should you materialize an iterator with `vec`?
+7. Why should effects stay outside iterator transforms?
 
 Continue with [04. Coroutines and promises](04-coroutines-and-promises.md).
