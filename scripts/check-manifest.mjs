@@ -17,8 +17,18 @@ function collect(items) {
 }
 
 collect(manifest.navigation);
-if (new Set(pages).size !== pages.length) throw new Error("duplicate navigation page");
-for (const page of pages) await access(resolve(docs, page));
+for (const tree of manifest.routeTrees ?? []) collect(tree.items);
+for (const page of new Set(pages)) await access(resolve(docs, page));
+
+if (manifest.navigation.length !== 4) throw new Error("documentation must expose four root sections");
+for (const group of manifest.navigation) {
+  if (group.items.some((item) => item.items)) throw new Error(`three-level root navigation: ${group.label}`);
+}
+const prefixes = (manifest.routeTrees ?? []).map(({ prefix }) => prefix);
+if (new Set(prefixes).size !== prefixes.length) throw new Error("duplicate route-tree prefix");
+for (const tree of manifest.routeTrees ?? []) {
+  if (tree.items.some((item) => item.items)) throw new Error(`nested route tree: ${tree.id}`);
+}
 
 const routes = manifest.redirects.map(({ from }) => from);
 if (new Set(routes).size !== routes.length) throw new Error("duplicate redirect route");
@@ -30,7 +40,7 @@ if (target.status === "released" && lock.version !== target.requiredRelease) {
   throw new Error(`runtime lock ${lock.version} does not satisfy released target ${target.requiredRelease}`);
 }
 
-console.log(`documentation manifest valid: ${pages.length} pages, ${routes.length} redirects`);
+console.log(`documentation manifest valid: ${new Set(pages).size} pages, ${manifest.routeTrees?.length ?? 0} route trees, ${routes.length} redirects`);
 if (target.status !== "released") {
   console.log(`publication gate: Hara ${target.requiredRelease} runtime artifact is not released; lock remains ${lock.version}`);
 }

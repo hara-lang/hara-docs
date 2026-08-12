@@ -2,70 +2,117 @@
   "schemaVersion": 1,
   "navigation": [
     {
-      "label": "Learn",
+      "label": "Learn Path",
       "items": [
-        { "label": "Learning paths", "path": "learn/index.md" },
+        { "label": "Overview", "path": "learn/index.md" },
         { "label": "Try Hara in the browser", "path": "getting-started/playground.md" },
         { "label": "First Contact", "path": "learn/first-contact/index.md" },
         { "label": "Learn programming", "path": "learn-programming/index.md" },
+        { "label": "Hara Foundations", "path": "hal-intro/index.md" }
+      ]
+    },
+    {
+      "label": "Self Learning",
+      "items": [
+        { "label": "Overview", "path": "self-learning/index.md" },
         { "label": "The Little Book of HAL", "path": "books/the-little-book-of-hal/docs/index.md" },
-        {
-          "label": "Protocols for Builders",
-          "collapsed": false,
-          "items": [
-            { "label": "Course overview", "path": "learn/protocols/index.md" },
-            { "label": "Collections", "path": "learn/protocols/collections.md" },
-            { "label": "State and lifecycle", "path": "learn/protocols/state-lifecycle.md" },
-            { "label": "Protocol atlas", "path": "learn/protocols/atlas.md" }
-          ]
-        },
-        { "label": "Build Tic Tac Toe", "path": "create/first-game.md" },
-        {
-          "label": "Hara foundations",
-          "collapsed": false,
-          "items": [
-            { "label": "Course overview", "path": "hal-intro/index.md" },
-            { "label": "01 — Data and collections", "path": "hal-intro/01-basic-data.md" },
-            { "label": "02 — Functions and atoms", "path": "hal-intro/02-functions-and-atoms.md" },
-            { "label": "03 — Sequences and streams", "path": "hal-intro/03-iterators-and-streaming.md" },
-            { "label": "04 — Coroutines and promises", "path": "hal-intro/04-coroutines-and-promises.md" },
-            { "label": "05 — Arrays and objects", "path": "hal-intro/05-array-and-object.md" },
-            { "label": "06 — Bytes and strings", "path": "hal-intro/06-bytes-and-strings.md" },
-            { "label": "07 — I/O and files", "path": "hal-intro/07-io-and-files.md" }
-          ]
-        }
+        { "label": "Protocols for Builders", "path": "learn/protocols/index.md" },
+        { "label": "Hara Koans", "url": "https://world.hara-lang.org/learn/koans/" }
       ]
     },
     {
       "label": "Build",
       "items": [
+        { "label": "Overview", "path": "build/index.md" },
         { "label": "Install and choose a host", "path": "getting-started.md" },
-        {
-          "label": "Hosts and tools",
-          "collapsed": false,
-          "items": [
-            { "label": "Command line", "path": "getting-started/cli.md" },
-            { "label": "Web applications", "path": "getting-started/web.md" },
-            { "label": "JVM", "path": "getting-started/jvm.md" },
-            { "label": "VS Code", "path": "getting-started/vscode.md" },
-            { "label": "Emacs", "path": "getting-started/emacs.md" }
-          ]
-        },
+        { "label": "Command line", "path": "getting-started/cli.md" },
+        { "label": "Web applications", "path": "getting-started/web.md" },
+        { "label": "JVM", "path": "getting-started/jvm.md" },
+        { "label": "VS Code", "path": "getting-started/vscode.md" },
+        { "label": "Emacs", "path": "getting-started/emacs.md" },
         { "label": "Projects and namespaces", "path": "projects/index.md" },
-        { "label": "Runtime-driven development", "path": "concepts/runtime-driven-development.md" }
+        { "label": "Runtime-driven development", "path": "concepts/runtime-driven-development.md" },
+        { "label": "Build Tic Tac Toe", "path": "create/first-game.md" }
       ]
     },
     {
       "label": "Reference",
       "items": [
-        { "label": "Language and symbols", "path": "reference/l0-language.md" },
-        { "label": "Runtimes and bytecode", "path": "reference/rust-runtime.md" },
-        { "label": "Kernel and REPL", "path": "kernel.md" },
-        { "label": "CLI contract", "path": "reference/cli-contract.md" },
-        { "label": "Extension contract", "path": "reference/extensions-contract.md" },
-        { "label": "Identity and packages", "path": "guides/tap-publishing.md" },
-        { "label": "Developer guide", "path": "development.md" },
-        { "label": "Benchmarks", "url": "https://benchmarks.hara-lang.org/" }
+        { "label": "Language API", "path": "api/index.md" }
+      ]
+    }
+  ],
+  "routeTrees": [
+    {
+      "id": "foundations",
+      "prefix": "/docs/hal-intro/",
+      "label": "Hara Foundations",
+      "items": [
+        { "label": "Course overview", "path": "hal-intro/index.md" },
+        { "label": "01 — Data and collections", "path": "hal-intro/01-basic-data.md" },
+        { "label": "02 — Functions and atoms", "path": "hal-intro/02-functions-and-atoms.md" },
+        { "label": "03 — Sequences and streams", "path": "hal-intro/03-iterators-and-streaming.md" },
+        { "label": "04 — Coroutines and promises", "path": "hal-intro/04-coroutines-and-promises.md" },
+        { "label": "05 — Arrays and objects", "path": "hal-intro/05-array-and-object.md" },
+        { "label": "06 — Bytes and strings", "path": "hal-intro/06-bytes-and-strings.md" },
+        { "label": "07 — I/O and files", "path": "hal-intro/07-io-and-files.md" }
+      ]
+    },
+    {
+      "id": "protocols",
+      "prefix": "/docs/learn/protocols/",
+      "label": "Protocols for Builders",
+      "items": [
+        { "label": "Course overview", "path": "learn/protocols/index.md" },
+        { "label": "Collections", "path": "learn/protocols/collections.md" },
+        { "label": "State and lifecycle", "path": "learn/protocols/state-lifecycle.md" },
+        { "label": "Protocol atlas", "path": "learn/protocols/atlas.md" }
+      ]
+    },
+    {
+      "id": "tic-tac-toe",
+      "prefix": "/docs/create/",
+      "label": "Build Tic Tac Toe",
+      "items": [
+        { "label": "Course overview", "path": "create/first-game.md" },
+        { "label": "01 — Board", "path": "create/tictactoe/board.md" },
+        { "label": "02 — State", "path": "create/tictactoe/state.md" },
+        { "label": "03 — Rendering", "path": "create/tictactoe/rendering.md" },
+        { "label": "04 — Input", "path": "create/tictactoe/input.md" },
+        { "label": "05 — Live workflow", "path": "create/tictactoe/live.md" },
+        { "label": "06 — Files", "path": "create/tictactoe/files.md" }
+      ]
+    },
+    {
+      "id": "little-book",
+      "prefix": "/docs/books/the-little-book-of-hal/",
+      "label": "The Little Book of HAL",
+      "items": [
+        { "label": "Read the book", "path": "books/the-little-book-of-hal/docs/index.md" }
+      ]
+    },
+    {
+      "id": "language-api",
+      "prefix": "/docs/api/",
+      "label": "Language API",
+      "items": [
+        { "label": "API index", "path": "api/index.md" },
+        { "label": "std.foundation", "path": "api/std.foundation.md" },
+        { "label": "bytes", "path": "api/std.foundation.bytes.md" },
+        { "label": "coroutines", "path": "api/std.foundation.coroutine.md" },
+        { "label": "crypto", "path": "api/std.foundation.crypto.md" },
+        { "label": "EDN", "path": "api/std.foundation.edn.md" },
+        { "label": "files", "path": "api/std.foundation.file.md" },
+        { "label": "host", "path": "api/std.foundation.host.md" },
+        { "label": "JSON", "path": "api/std.foundation.json.md" },
+        { "label": "kernel", "path": "api/std.foundation.kernel.md" },
+        { "label": "operating system", "path": "api/std.foundation.os.md" },
+        { "label": "pretty printing", "path": "api/std.foundation.pretty.md" },
+        { "label": "pretty-print engine", "path": "api/std.foundation.pretty.engine.md" },
+        { "label": "promises", "path": "api/std.foundation.promise.md" },
+        { "label": "sets", "path": "api/std.foundation.set.md" },
+        { "label": "sockets", "path": "api/std.foundation.socket.md" },
+        { "label": "strings", "path": "api/std.foundation.string.md" }
       ]
     }
   ],
