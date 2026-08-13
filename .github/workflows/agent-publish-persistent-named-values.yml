@@ -1,4 +1,4 @@
-name: Agent publish persistent named-value documentation
+name: Publish persistent named-value documentation
 
 on:
   push:
@@ -22,168 +22,25 @@ jobs:
           ref: agent/document-persistent-named-values
           fetch-depth: 0
 
-      - name: Update the L0 named-value contract and corpus
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
+      - name: Update the named-value reference
+        run: python3 .github/agent/publish_named_value_reference.py
 
-          reference_path = Path("docs/reference/l0-language.md")
-          reference = reference_path.read_text(encoding="utf-8")
-
-          replacements = [
-              (
-                  "`defstruct`, `defprotocol`, `extend-type`, `field`, and\n`apply`.",
-                  "`defstruct`, `defmutable`, `defprotocol`, `extend-type`, `field`, and\n`apply`.",
-              ),
-              (
-                  "multifunctions, and `defstruct` constructors.",
-                  "multifunctions, and `defstruct` or `defmutable` constructors.",
-              ),
-              (
-                  "| Mutable Hara collections and `array`/`object` markers | supported only by their declared protocols or restricted dot methods | mutation returns the same identity and is immediately visible | declared collection protocols only | arrays support indexed access; objects use string keys | declared protocol only |",
-                  "| Immutable named structs | keyword invocation and `get` read declared fields | `assoc`, `assoc-in`, `update`, and `update-in` return the same struct type; `dissoc` of a declared field returns a plain persistent map | `count` is the declared width; `empty` preserves the type with nil fields | unsupported | declared field order |\n| `defmutable` named values | keyword invocation, `get`, and `field` read declared fields | persistent updates are rejected; `(set! (field value :name) replacement)` mutates the existing identity | `count` is the declared width; `empty` is not a mutable update operation | unsupported | declared field order |\n| Mutable Hara collections and `array`/`object` markers | supported only by their declared protocols or restricted dot methods | mutation returns the same identity and is immediately visible | declared collection protocols only | arrays support indexed access; objects use string keys | declared protocol only |",
-              ),
-              (
-                  "`defstruct` is Hara's primitive immutable struct form.",
-                  "`defstruct` is Hara's primitive immutable named-value form; `defmutable` is its fixed-shape reference-identity counterpart.",
-              ),
-          ]
-          for old, new in replacements:
-              if reference.count(old) != 1:
-                  raise SystemExit(f"expected one reference anchor, found {reference.count(old)}: {old[:80]!r}")
-              reference = reference.replace(old, new, 1)
-
-          old_named_value_paragraph = """`defstruct` creates immutable `HaraStruct` values. Struct metadata is separate
-from fields and survives `with-meta`; metadata does not affect value equality
-or hashing. `IFn` is a language protocol and can be extended to structs.
-`defmulti`/`defmethod` dispatch by Hara equality and support `:default`."""
-          new_named_value_section = """### 7.3 Immutable and mutable named values
-
-`defstruct` and `defmutable` use parallel declaration and constructor shapes:
-
-```hara
-(defstruct Point [x y])
-(defmutable Cursor [x y])
-
-(Point 1 2)
-(->Point 1 2)
-(map->Point {:x 1 :y 2})
-
-(Cursor 1 2)
-(->Cursor 1 2)
-(map->Cursor {:x 1 :y 2})
-```
-
-An immutable struct is backed by Hara's persistent map implementation while its
-type descriptor retains declared field order. Keyword invocation and `get` read
-fields. `assoc`, `assoc-in`, `update`, and `update-in` accept declared fields
-only, return the same struct type, preserve the receiver, and use structural
-sharing. A map constructor supplies `nil` for a missing declared field and
-ignores extra keys. Removing a declared field with `dissoc` returns a plain
-persistent map. `empty` preserves the struct type and supplies `nil` for every
-declared field. The `field` special form rejects immutable structs; use
-`(:x value)` or `(get value :x)` instead. Struct equality and hashing include
-type identity and field values.
-
-A mutable named value has fixed declared fields and reference identity. `field`
-reads a field and is a settable place:
-
-```hara
-(field cursor :x)
-(set! (field cursor :x) 10)
-```
-
-The receiver and replacement are each evaluated once, from left to right.
-Mutation is visible through aliases and `set!` returns the replacement value.
-Keyword lookup, `get`, `keys`, `vals`, `count`, and iteration are supported.
-`assoc`, `dissoc`, and persistent nested updates reject mutable values. Use
-`(into {} value)` for a shallow persistent-map snapshot; later mutation does
-not alter that snapshot. Mutable equality and hashing use reference identity,
-and mutable named values are not HTA-serializable or session-transferable.
-
-Metadata, `instance?`, inline protocol clauses, `extend-type`, callable `IFn`,
-typed catch matching, and polyglot member access apply consistently to both
-named-value families without changing their persistence or identity rules.
-`defmulti`/`defmethod` dispatch by Hara equality and support `:default`."""
-          if reference.count(old_named_value_paragraph) != 1:
-              raise SystemExit(
-                  f"expected one named-value paragraph, found {reference.count(old_named_value_paragraph)}"
-              )
-          reference = reference.replace(old_named_value_paragraph, new_named_value_section, 1)
-          reference_path.write_text(reference, encoding="utf-8")
-
-          corpus_path = Path("docs/reference/l0-conformance.edn")
-          corpus = corpus_path.read_text(encoding="utf-8")
-          metadata_case = """  {:id :runtime/metadata
-   :class :runtime
-   :source \"(ILookup/lookup (IObjType/meta (IObjType/with-meta (Person \\\"Ada\\\") {:doc \\\"person\\\"})) :doc)\"
-   :setup \"(defstruct Person [name])\"
-   :expect {:value \"person\" :type :string}}
-"""
-          named_value_cases = """  {:id :named-value/struct-map-constructor
-   :class :runtime
-   :source \"(do (defstruct Point [x y]) (let [value (map->Point {:x 1 :extra 9})] [(:x value) (:y value)]))\"
-   :expect {:value [1 nil] :type :vector}}
-  {:id :named-value/struct-persistent-update
-   :class :runtime
-   :source \"(do (defstruct Point [x y]) (let [before (Point {:nested 1} 2) after (assoc-in before [:x :nested] 10)] [(instance? Point after) (get-in after [:x :nested]) (get-in before [:x :nested])]))\"
-   :expect {:value [true 10 1] :type :vector}}
-  {:id :named-value/struct-dissoc
-   :class :runtime
-   :source \"(do (defstruct Point [x y]) (let [value (dissoc (Point 1 2) :x)] [(map? value) (instance? Point value) value]))\"
-   :expect {:value [true false {:y 2}] :type :vector}}
-  {:id :named-value/struct-empty
-   :class :runtime
-   :source \"(do (defstruct Point [x y]) (let [value (empty (Point 1 2))] [(instance? Point value) (:x value) (:y value)]))\"
-   :expect {:value [true nil nil] :type :vector}}
-  {:id :named-value/struct-type-identity
-   :class :runtime
-   :source \"(do (defstruct Point [x y]) (defstruct OtherPoint [x y]) [(= (Point 1 2) (Point 1 2)) (= (Point 1 2) (OtherPoint 1 2))])\"
-   :expect {:value [true false] :type :vector}}
-  {:id :named-value/mutable-alias-and-set-order
-   :class :runtime
-   :source \"(do (defmutable Cursor [x y]) (let [cursor (Cursor 1 2) alias cursor order (atom []) result (set! (field (do (swap! order conj :receiver) cursor) :x) (do (swap! order conj :replacement) 10))] [result @order (field alias :x) (= cursor alias) (= cursor (Cursor 10 2))]))\"
-   :expect {:value [10 [:receiver :replacement] 10 true false] :type :vector}}
-  {:id :named-value/mutable-snapshot
-   :class :runtime
-   :source \"(do (defmutable Cursor [x y]) (let [cursor (Cursor 1 2) snapshot (into {} cursor)] (set! (field cursor :x) 10) [(:x cursor) (get cursor :y) (keys cursor) (vals cursor) (count cursor) snapshot (into {} cursor)]))\"
-   :expect {:value [10 2 [:x :y] [10 2] 2 {:x 1 :y 2} {:x 10 :y 2}] :type :vector}}
-"""
-          if corpus.count(metadata_case) != 1:
-              raise SystemExit(f"expected one metadata case, found {corpus.count(metadata_case)}")
-          corpus = corpus.replace(metadata_case, metadata_case + named_value_cases, 1)
-          corpus_path.write_text(corpus, encoding="utf-8")
-          PY
-
-      - name: Validate documentation structure
+      - name: Validate the documentation
         run: |
           git diff --check
           node scripts/check-content.mjs
           node scripts/check-manifest.mjs
-          python3 - <<'PY'
-          from pathlib import Path
+          grep -Fq '### 7.3 Immutable and mutable named values' docs/reference/l0-language.md
+          grep -Fq '(set! (field cursor :x) 10)' docs/reference/l0-language.md
+          grep -Fq 'not HTA-serializable or session-transferable' docs/reference/l0-language.md
 
-          reference = Path("docs/reference/l0-language.md").read_text(encoding="utf-8")
-          corpus = Path("docs/reference/l0-conformance.edn").read_text(encoding="utf-8")
-          required = [
-              "### 7.3 Immutable and mutable named values",
-              "(set! (field cursor :x) 10)",
-              "not HTA-serializable or session-transferable",
-              ":named-value/struct-persistent-update",
-              ":named-value/mutable-alias-and-set-order",
-              ":named-value/mutable-snapshot",
-          ]
-          combined = reference + corpus
-          missing = [item for item in required if item not in combined]
-          if missing:
-              raise SystemExit(f"missing required named-value documentation: {missing}")
-          PY
-
-      - name: Publish the clean documentation branch
+      - name: Publish the clean branch
         run: |
           git rm .github/workflows/agent-publish-persistent-named-values.yml
+          git rm .github/agent/publish_named_value_reference.py
+          git rm .github/agent/publish_persistent_named_values.py
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/reference/l0-language.md docs/reference/l0-conformance.edn
+          git add docs/reference/l0-language.md
           git commit -m 'Document persistent structs and mutable named values'
           git push origin HEAD:refs/heads/agent/document-persistent-named-values
