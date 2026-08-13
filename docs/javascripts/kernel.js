@@ -16,10 +16,11 @@ export function prepareDocsEval(source) {
  * Studio's persistent browser store and virtual filesystem, but no workspace
  * UI or ambient device capabilities.
  */
-async function loadKernelAssets(wasmUrl, resources, fetchAsset) {
+async function loadKernelAssets(wasmUrl, resources, bootstrapUrl, fetchAsset) {
   const entries = Object.entries(resources);
-  const [response, ...resourceResponses] = await Promise.all([
+  const [response, bootstrapResponse, ...resourceResponses] = await Promise.all([
     fetchAsset(wasmUrl),
+    bootstrapUrl ? fetchAsset(bootstrapUrl) : Promise.resolve(null),
     ...entries.map(([, url]) => fetchAsset(url))
   ]);
   if (!response.ok) throw new Error(`hara.wasm: ${response.status}`);
@@ -29,7 +30,13 @@ async function loadKernelAssets(wasmUrl, resources, fetchAsset) {
     if (!resourceResponse.ok) throw new Error(`${name}: ${resourceResponse.status}`);
     return [name, await resourceResponse.text()];
   }));
-  return { moduleBytes, loadedResources };
+  if (bootstrapResponse && !bootstrapResponse.ok) {
+    throw new Error(`${bootstrapUrl}: ${bootstrapResponse.status}`);
+  }
+  const bootstrapBytes = bootstrapResponse
+    ? new Uint8Array(await bootstrapResponse.arrayBuffer())
+    : null;
+  return { moduleBytes, bootstrapBytes, loadedResources };
 }
 
 async function verifySha256(bytes, expected) {
@@ -56,9 +63,11 @@ export async function createDocsKernel({
   // Fetch every startup dependency before constructing the worker. This keeps
   // the kernel from becoming observable while its require resources are still
   // in flight on a cold page load.
-  const { moduleBytes, loadedResources } =
-    await loadKernelAssets(wasmUrl, resources, fetchAsset);
+  const bootstrapUrl = manifest?.bootstrap?.url ?? null;
+  const { moduleBytes, bootstrapBytes, loadedResources } =
+    await loadKernelAssets(wasmUrl, resources, bootstrapUrl, fetchAsset);
   await verifySha256(moduleBytes, manifest?.variants?.core?.sha256);
+  if (bootstrapBytes) await verifySha256(bootstrapBytes, manifest?.bootstrap?.sha256);
   const worker = new WorkerClass(workerUrl, { type: "module" });
   const canvasRuntimes = new Map();
   const context = new ContextClass({
@@ -74,11 +83,19 @@ export async function createDocsKernel({
   if (loadedResources.length > 0) {
     await context.call("register-resources", [loadedResources]);
   }
+  if (bootstrapBytes) {
+    await context.call("eval-halc", [bootstrapBytes]);
+    await context.call("eval", ["(ns user)"]);
+  }
   const string = (value) => JSON.stringify(String(value));
   const facade = {
     context,
     async createSession(name, { filesystem = `memory:${name}` } = {}) {
       const session = await context.createSession(name);
+      if (bootstrapBytes) {
+        await context.call("session/eval-halc", [name, bootstrapBytes]);
+        await session.eval("(ns user)");
+      }
       const mountId = await context.createFilesystem(filesystemDescriptor(filesystem));
       await session.attachFilesystem(mountId);
       const fsEval = async (form) =>
@@ -132,6 +149,7 @@ export async function createDocsKernel({
     const feature = await createDocsKernel({
       wasmUrl: specification.url,
       workerUrl,
+      manifest: { variants: { core: specification }, bootstrap: manifest.bootstrap },
       resources,
       fetchAsset: async (url) => url === specification.url ? new Response(bytes) : fetchAsset(url),
       WorkerClass,
