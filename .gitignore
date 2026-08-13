@@ -1,5 +1,13 @@
 # Build output
 site/
+site-mkdocs/
+astro/.astro/
+astro/dist/
+
+# Node
+astro/node_modules/
+astro/packages/visual-language/
+astro/.generated-doc-static.json
 
 # Python
 __pycache__/
