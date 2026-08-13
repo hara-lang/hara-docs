@@ -58,16 +58,21 @@ and grouped-session reset. See [Author lessons and walkthroughs](guides/authorin
 
 ## Documentation publication
 
-`hara-lang/hara-docs` owns the canonical documentation origin at
-`https://docs.hara-lang.org/`. A successful push to `main` validates the source,
-builds the standalone MkDocs site with the pinned browser runtime and shared UI,
-packages a GitHub Pages artifact, deploys it, and smoke-tests the published Little
-Book. Pull requests and the `testing` branch perform the same source and build
-checks without replacing production.
+`hara-lang/hara-docs` owns its build and production deployment. A successful
+push to `main` validates the source, builds the standalone MkDocs site with the
+pinned browser runtime and shared UI, and deploys the already validated `site/`
+artifact to the dedicated Netlify project at `https://hara-docs.netlify.app/`.
+Pull requests and the `testing` branch perform the same source and build checks
+without replacing production.
 
-The website repository may link to the documentation origin and preserve legacy
-`/docs/*` redirects, but it is not the publication authority. A documentation
-change must not wait for a `hara-www` assembly or Netlify deployment.
+The independent Netlify origin is used until the authoritative DNS provider for
+`hara-lang.org` is connected and `docs.hara-lang.org` can be pointed at the
+repository-owned deployment. Changing that public hostname must not move the
+build or release trigger back into `hara-www`.
+
+The website repository may link or redirect to this origin, but it is not the
+publication authority. A documentation change must not wait for a website
+assembly or deployment.
 
 Build the same standalone artifact locally with:
 
@@ -77,8 +82,8 @@ scripts/install-runtime
 DISABLE_MKDOCS_2_WARNING=true mkdocs build --clean
 ```
 
-The result is written to `site/`. It must contain `CNAME`, the browser kernel,
-shared live-card assets, lesson assets, and every route registered by
+The result is written to `site/`. It must contain the browser kernel, shared
+live-card assets, lesson assets, and every route registered by
 `docs-manifest.json`.
 
 ## Java API documentation
