@@ -71,6 +71,15 @@ jobs:
           grep -F '/v1/identity-client.js' docs/javascripts/identity-loader.js
           ! grep -E 'client_secret|access_token|HARA_GITHUB_OAUTH_CLIENT_SECRET' docs/javascripts/identity-loader.js
 
+      - name: Verify independent deployment credential
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          if [ -z "${NETLIFY_AUTH_TOKEN:-}" ]; then
+            echo "NETLIFY_AUTH_TOKEN is required for independent documentation publication." >&2
+            exit 1
+          fi
+
       - name: Build standalone docs site
         env:
           DISABLE_MKDOCS_2_WARNING: "true"
@@ -86,8 +95,8 @@ jobs:
           test -s site/javascripts/identity-loader.js
           test -s site/rust/hara.wasm
           test -s site/vendor/hara-ui/packages/live/src/live-card.js
-          grep -Fq 'https://docs.hara-lang.org/' site/index.html
-          grep -Fxq 'docs.hara-lang.org' site/CNAME
+          test ! -e site/CNAME
+          grep -Fq 'https://hara-docs.netlify.app/' site/index.html
           grep -Fq 'The Little Book of HAL' site/books/the-little-book-of-hal/docs/index.html
           grep -Fq '<meta name="hara-identity-mode" content="popup">' site/index.html
           grep -Fq 'data-hara-identity' site/index.html
@@ -101,60 +110,54 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  package:
-    name: Package GitHub Pages artifact
+  deploy:
+    name: Deploy independent Hara docs
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      pages: write
+    environment:
+      name: netlify-production
+      url: https://hara-docs.netlify.app/
+    env:
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: ebf43b71-ef29-44d0-a951-8217f3e2471b
+      DOCS_ORIGIN: https://hara-docs.netlify.app
     steps:
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Download standalone site
+      - name: Download validated site
         uses: actions/download-artifact@v4
         with:
           name: hara-docs-site
           path: site
 
-      - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          path: site
+          node-version: 22
 
-  deploy:
-    name: Deploy docs.hara-lang.org
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: package
-    runs-on: ubuntu-24.04
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Deploy validated artifact to Netlify
+        run: >-
+          npx --yes netlify-cli@latest deploy
+          --prod
+          --dir site
+          --site "$NETLIFY_SITE_ID"
+          --message "hara-docs ${GITHUB_SHA}"
 
-      - name: Verify published Little Book
-        env:
-          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+      - name: Verify published Little Book and browser runtime
         run: |
           set -euo pipefail
-          base="${PAGE_URL%/}"
-          for attempt in $(seq 1 18); do
+          for attempt in $(seq 1 24); do
             if curl --fail --location --silent --show-error \
-              "$base/books/the-little-book-of-hal/docs/" \
+              "$DOCS_ORIGIN/books/the-little-book-of-hal/docs/" \
               --output /tmp/little-book.html \
-              && grep -Fq 'The Little Book of HAL' /tmp/little-book.html; then
-              echo "verified $base/books/the-little-book-of-hal/docs/"
+              && grep -Fq 'The Little Book of HAL' /tmp/little-book.html \
+              && curl --fail --location --silent --show-error \
+                "$DOCS_ORIGIN/rust/hara.wasm" \
+                --output /tmp/hara.wasm \
+              && test -s /tmp/hara.wasm; then
+              echo "verified $DOCS_ORIGIN/books/the-little-book-of-hal/docs/"
               exit 0
             fi
             sleep 5
           done
-          echo "GitHub Pages deployed, but the independent docs origin did not pass its smoke check." >&2
+          echo "Netlify deployed, but the independent documentation origin did not pass its smoke check." >&2
           exit 1
