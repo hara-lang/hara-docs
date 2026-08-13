@@ -1,10 +1,12 @@
-:where(.hara-syllabus-grid, .hara-learning-sequence, .hara-syllabus) {
-  --hara-syllabus-accent: var(--hara-cyan, var(--sl-color-accent-high, #41f5e4));
-  --hara-syllabus-panel: var(--hara-panel, var(--sl-color-bg-nav, rgba(10, 18, 28, .72)));
-  --hara-syllabus-line: var(--hara-line, var(--sl-color-gray-5, rgba(94, 226, 218, .2)));
-  --hara-syllabus-muted: var(--md-default-fg-color--light, var(--sl-color-gray-3, #8fa3b5));
-  --hara-syllabus-bg: var(--md-default-bg-color, var(--sl-color-bg, #071019));
-  --hara-syllabus-mono: var(--hara-mono, var(--__sl-font-mono, ui-monospace, monospace));
+:where(.hara-syllabus-grid, .hara-learning-sequence, .hara-lesson, .hara-syllabus) {
+  --hara-lesson-accent: var(--hara-cyan, var(--sl-color-accent-high, #41f5e4));
+  --hara-lesson-panel: var(--hara-panel, var(--sl-color-bg-nav, rgba(10, 18, 28, .78)));
+  --hara-lesson-line: var(--hara-line, var(--sl-color-gray-5, rgba(94, 226, 218, .2)));
+  --hara-lesson-muted: var(--md-default-fg-color--light, var(--sl-color-gray-3, #8fa3b5));
+  --hara-lesson-bg: var(--md-default-bg-color, var(--sl-color-bg, #071019));
+  --hara-lesson-fg: var(--md-default-fg-color, var(--sl-color-white, #f4f7fb));
+  --hara-lesson-mono: var(--hara-mono, var(--__sl-font-mono, ui-monospace, monospace));
+  --hara-lesson-radius: .72rem;
 }
 
 .hara-syllabus-grid {
@@ -20,30 +22,34 @@
   padding: 1.4rem;
   color: inherit !important;
   text-decoration: none !important;
-  background: var(--hara-syllabus-panel);
-  border: 1px solid var(--hara-syllabus-line);
+  background: var(--hara-lesson-panel);
+  border: 1px solid var(--hara-lesson-line);
   border-radius: .75rem;
   transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
 }
 
 .hara-path-card:hover,
 .hara-path-card:focus-visible {
-  border-color: var(--hara-syllabus-accent);
+  border-color: var(--hara-lesson-accent);
   box-shadow: 0 12px 36px rgba(0, 0, 0, .2);
   transform: translateY(-2px);
   outline: none;
 }
 
 .hara-path-card--primary {
-  background: linear-gradient(145deg, color-mix(in srgb, var(--hara-syllabus-accent) 10%, transparent), var(--hara-syllabus-panel) 58%);
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--hara-lesson-accent) 10%, transparent),
+    var(--hara-lesson-panel) 58%
+  );
 }
 
 .hara-path-card > span,
-.hara-syllabus-progress__eyebrow {
-  color: var(--hara-syllabus-accent);
-  font-family: var(--hara-syllabus-mono);
-  font-size: .64rem;
-  font-weight: 700;
+.hara-lesson-progress__eyebrow {
+  color: var(--hara-lesson-accent);
+  font-family: var(--hara-lesson-mono);
+  font-size: .68rem;
+  font-weight: 750;
   letter-spacing: .13em;
 }
 
@@ -56,7 +62,7 @@
 }
 
 .hara-path-card small {
-  color: var(--hara-syllabus-muted);
+  color: var(--hara-lesson-muted);
 }
 
 .hara-learning-sequence {
@@ -70,8 +76,8 @@
 .hara-learning-sequence span {
   min-height: 6rem;
   padding: 1rem;
-  background: var(--hara-syllabus-panel);
-  border: 1px solid var(--hara-syllabus-line);
+  background: var(--hara-lesson-panel);
+  border: 1px solid var(--hara-lesson-line);
   border-radius: .6rem;
 }
 
@@ -82,135 +88,377 @@
 
 .hara-learning-sequence small {
   margin-top: .35rem;
-  color: var(--hara-syllabus-muted);
+  color: var(--hara-lesson-muted);
 }
 
 .hara-learning-sequence i {
-  color: var(--hara-syllabus-accent);
+  color: var(--hara-lesson-accent);
   font-style: normal;
 }
 
+.hara-lesson,
 .hara-syllabus {
-  counter-reset: hara-syllabus-step;
+  counter-reset: hara-lesson-step;
   margin: 2rem 0;
 }
 
-.hara-syllabus-progress {
+.hara-lesson-progress {
   position: sticky;
-  z-index: 3;
+  z-index: 4;
   top: calc(var(--sl-nav-height, 58px) + .5rem);
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: .7rem 1rem;
-  align-items: center;
+  gap: .7rem;
   margin: 1.5rem 0;
-  padding: .9rem 1rem;
-  background: color-mix(in srgb, var(--hara-syllabus-bg) 92%, transparent);
-  border: 1px solid var(--hara-syllabus-line);
-  border-radius: .65rem;
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  padding: .82rem .95rem .72rem;
+  color: var(--hara-lesson-fg);
+  background: color-mix(in srgb, var(--hara-lesson-bg) 94%, transparent);
+  border: 1px solid var(--hara-lesson-line);
+  border-radius: var(--hara-lesson-radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .16);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
 }
 
-.hara-syllabus-progress__copy {
+.hara-lesson-progress__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .8rem;
+  align-items: center;
+}
+
+.hara-lesson-progress__copy {
   display: flex;
-  gap: .6rem;
+  flex-wrap: wrap;
+  gap: .35rem .65rem;
   align-items: baseline;
+  min-width: 0;
 }
 
-.hara-syllabus-progress__bar {
-  grid-column: 1 / -1;
-  height: 4px;
+.hara-lesson-progress__count {
+  font-size: .92rem;
+  white-space: nowrap;
+}
+
+.hara-lesson-progress__current {
+  min-width: 0;
   overflow: hidden;
-  background: color-mix(in srgb, var(--hara-syllabus-muted) 22%, transparent);
+  color: var(--hara-lesson-muted);
+  font-size: .78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hara-lesson-outline {
+  display: flex;
+  gap: .42rem;
+  margin: 0;
+  padding: .05rem 0 .1rem;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+.hara-lesson-outline__item {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0;
+}
+
+.hara-lesson-outline__button {
+  display: inline-flex;
+  gap: .42rem;
+  align-items: center;
+  max-width: 15rem;
+  min-height: 2rem;
+  padding: .25rem .55rem .25rem .3rem;
+  color: var(--hara-lesson-muted);
+  background: color-mix(in srgb, var(--hara-lesson-panel) 72%, transparent);
+  border: 1px solid transparent;
   border-radius: 999px;
-}
-
-.hara-syllabus-progress__bar > span {
-  display: block;
-  width: 0;
-  height: 100%;
-  background: var(--hara-syllabus-accent);
-  transition: width .2s ease;
-}
-
-.hara-syllabus-progress button,
-.hara-syllabus-step__footer button {
-  padding: .42rem .66rem;
-  color: inherit;
-  background: transparent;
-  border: 1px solid var(--hara-syllabus-line);
-  border-radius: .4rem;
   font: inherit;
-  font-size: .68rem;
-  font-weight: 700;
-  letter-spacing: .05em;
+  font-size: .7rem;
   cursor: pointer;
 }
 
-.hara-syllabus-progress button:hover,
-.hara-syllabus-step__footer button:hover:not(:disabled),
-.hara-syllabus-progress button:focus-visible,
-.hara-syllabus-step__footer button:focus-visible:not(:disabled) {
-  border-color: var(--hara-syllabus-accent);
+.hara-lesson-outline__number {
+  display: grid;
+  flex: 0 0 1.35rem;
+  width: 1.35rem;
+  height: 1.35rem;
+  place-items: center;
+  color: inherit;
+  border: 1px solid var(--hara-lesson-line);
+  border-radius: 50%;
+  font-family: var(--hara-lesson-mono);
+  font-size: .63rem;
+  font-weight: 750;
+}
+
+.hara-lesson-outline__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hara-lesson-outline__button:hover:not(:disabled),
+.hara-lesson-outline__button:focus-visible,
+.hara-lesson-outline__button.is-current {
+  color: var(--hara-lesson-fg);
+  border-color: var(--hara-lesson-line);
   outline: none;
 }
 
-.hara-syllabus-step {
+.hara-lesson-outline__button.is-current .hara-lesson-outline__number,
+.hara-lesson-outline__button.is-complete .hara-lesson-outline__number {
+  color: var(--hara-lesson-bg);
+  background: var(--hara-lesson-accent);
+  border-color: var(--hara-lesson-accent);
+}
+
+.hara-lesson-outline__button.is-complete {
+  color: var(--hara-lesson-accent);
+}
+
+.hara-lesson-outline__button:disabled {
+  cursor: not-allowed;
+  opacity: .46;
+}
+
+.hara-lesson-progress__bar {
+  height: 3px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--hara-lesson-muted) 22%, transparent);
+  border-radius: 999px;
+}
+
+.hara-lesson-progress__fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--hara-lesson-accent);
+  transition: width .2s ease;
+}
+
+.hara-lesson-step {
   position: relative;
   margin: 1.25rem 0;
-  padding: 1.4rem;
-  background: var(--hara-syllabus-panel);
-  border: 1px solid var(--hara-syllabus-line);
-  border-radius: .75rem;
+  padding: 1.35rem;
+  scroll-margin-top: calc(var(--sl-nav-height, 58px) + 9rem);
+  background: color-mix(in srgb, var(--hara-lesson-panel) 94%, transparent);
+  border: 1px solid var(--hara-lesson-line);
+  border-radius: var(--hara-lesson-radius);
+  transition: border-color .18s ease, box-shadow .18s ease, opacity .18s ease;
 }
 
-.hara-syllabus-step.is-complete {
-  border-color: color-mix(in srgb, var(--hara-syllabus-accent) 58%, transparent);
+.hara-lesson-step.is-active {
+  border-color: color-mix(in srgb, var(--hara-lesson-accent) 72%, var(--hara-lesson-line));
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .17);
 }
 
-.hara-syllabus-step.is-complete::after {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  color: var(--hara-syllabus-accent);
-  content: "✓";
-  font-weight: 800;
+.hara-lesson-step.is-complete {
+  border-color: color-mix(in srgb, var(--hara-lesson-accent) 48%, var(--hara-lesson-line));
 }
 
-.hara-syllabus-step > h2:first-child {
-  margin-top: 0;
+.hara-lesson-step.is-locked {
+  opacity: .62;
 }
 
-.hara-syllabus-step :is(.hara-repl, .hara-live-example) {
-  margin-top: 1rem;
-}
-
-.hara-syllabus-step__footer {
+.hara-lesson-step__meta {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
   align-items: center;
-  margin-top: 1.1rem;
-  padding-top: .85rem;
-  border-top: 1px solid color-mix(in srgb, var(--hara-syllabus-line) 72%, transparent);
+  margin: -.2rem 0 .8rem;
+  color: var(--hara-lesson-muted);
+  font-family: var(--hara-lesson-mono);
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
 
-.hara-syllabus-step__status {
-  color: var(--hara-syllabus-muted);
-  font-family: var(--hara-syllabus-mono);
-  font-size: .68rem;
-  letter-spacing: .04em;
+.hara-lesson-step__state {
+  color: var(--hara-lesson-accent);
 }
 
-.hara-syllabus-step.is-ran .hara-syllabus-step__status,
-.hara-syllabus-step.is-complete .hara-syllabus-step__status {
-  color: var(--hara-syllabus-accent);
+.hara-lesson-step > h2:first-of-type,
+.hara-lesson-step > h3:first-of-type {
+  margin-top: 0;
 }
 
-.hara-syllabus-step__footer button:disabled {
+.hara-lesson-step :is(.hara-repl, .hara-live-example, .hara-docs-live, .hara-live-card) {
+  margin-top: 1rem;
+}
+
+.hara-lesson-step__footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: end;
+  margin-top: 1.15rem;
+  padding-top: .9rem;
+  border-top: 1px solid color-mix(in srgb, var(--hara-lesson-line) 72%, transparent);
+}
+
+.hara-lesson-step__feedback {
+  display: grid;
+  gap: .48rem;
+  min-width: 0;
+}
+
+.hara-lesson-step__status {
+  color: var(--hara-lesson-muted);
+  font-family: var(--hara-lesson-mono);
+  font-size: .7rem;
+  letter-spacing: .025em;
+}
+
+.hara-lesson-step.is-complete .hara-lesson-step__status,
+.hara-lesson-step.is-active:not(.is-locked) .hara-lesson-step__status {
+  color: var(--hara-lesson-accent);
+}
+
+.hara-lesson-step__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .48rem;
+  justify-content: flex-end;
+}
+
+.hara-lesson-button {
+  min-height: 2.2rem;
+  padding: .42rem .72rem;
+  color: var(--hara-lesson-fg);
+  background: transparent;
+  border: 1px solid var(--hara-lesson-line);
+  border-radius: .46rem;
+  font: inherit;
+  font-size: .72rem;
+  font-weight: 720;
+  letter-spacing: .025em;
+  cursor: pointer;
+}
+
+.hara-lesson-button--primary {
+  color: var(--hara-lesson-bg);
+  background: var(--hara-lesson-accent);
+  border-color: var(--hara-lesson-accent);
+}
+
+.hara-lesson-button--quiet {
+  color: var(--hara-lesson-muted);
+}
+
+.hara-lesson-button:hover:not(:disabled),
+.hara-lesson-button:focus-visible {
+  border-color: var(--hara-lesson-accent);
+  outline: none;
+}
+
+.hara-lesson-button:disabled {
   cursor: not-allowed;
-  opacity: .45;
+  opacity: .46;
+}
+
+.hara-lesson-criteria {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem .8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hara-lesson-criteria li {
+  display: inline-flex;
+  gap: .35rem;
+  align-items: center;
+  margin: 0;
+  color: var(--hara-lesson-muted);
+  font-size: .72rem;
+}
+
+.hara-lesson-criteria li.is-complete {
+  color: var(--hara-lesson-accent);
+}
+
+.hara-lesson-criteria__marker {
+  font-family: var(--hara-lesson-mono);
+  font-weight: 800;
+}
+
+.hara-lesson-task {
+  position: relative;
+  padding-left: 1.65rem;
+  cursor: pointer;
+}
+
+.hara-lesson-task::before {
+  position: absolute;
+  top: .08em;
+  left: 0;
+  display: grid;
+  width: 1.15rem;
+  height: 1.15rem;
+  place-items: center;
+  content: "";
+  border: 1px solid var(--hara-lesson-line);
+  border-radius: .28rem;
+}
+
+.hara-lesson-task.is-complete::before {
+  color: var(--hara-lesson-bg);
+  content: "✓";
+  background: var(--hara-lesson-accent);
+  border-color: var(--hara-lesson-accent);
+  font-size: .75rem;
+  font-weight: 850;
+}
+
+.hara-lesson-task:focus-visible {
+  outline: 2px solid var(--hara-lesson-accent);
+  outline-offset: .22rem;
+}
+
+.hara-lesson-task[aria-disabled="true"] {
+  cursor: default;
+}
+
+.hara-lesson-complete {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: .9rem;
+  align-items: center;
+  margin: 1.25rem 0 2rem;
+  padding: 1rem 1.1rem;
+  background: color-mix(in srgb, var(--hara-lesson-accent) 8%, var(--hara-lesson-panel));
+  border: 1px solid color-mix(in srgb, var(--hara-lesson-accent) 52%, var(--hara-lesson-line));
+  border-radius: var(--hara-lesson-radius);
+}
+
+.hara-lesson-complete[hidden] {
+  display: none;
+}
+
+.hara-lesson-complete__mark {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  color: var(--hara-lesson-bg);
+  background: var(--hara-lesson-accent);
+  border-radius: 50%;
+  font-weight: 850;
+}
+
+.hara-lesson-complete__copy {
+  display: grid;
+  gap: .16rem;
+}
+
+.hara-lesson-complete__copy span {
+  color: var(--hara-lesson-muted);
+  font-size: .78rem;
 }
 
 @media (max-width: 760px) {
@@ -224,13 +472,51 @@
     transform: rotate(90deg);
   }
 
-  .hara-syllabus-progress {
+  .hara-lesson-progress {
     position: static;
   }
 
-  .hara-syllabus-progress__copy,
-  .hara-syllabus-step__footer {
-    align-items: flex-start;
-    flex-direction: column;
+  .hara-lesson-progress__top,
+  .hara-lesson-step__footer,
+  .hara-lesson-complete {
+    grid-template-columns: 1fr;
+  }
+
+  .hara-lesson-progress__copy {
+    display: grid;
+    gap: .16rem;
+  }
+
+  .hara-lesson-progress__current {
+    white-space: normal;
+  }
+
+  .hara-lesson-outline__label {
+    max-width: 8rem;
+  }
+
+  .hara-lesson-step {
+    padding: 1.05rem;
+    scroll-margin-top: 1rem;
+  }
+
+  .hara-lesson-step__actions {
+    justify-content: flex-start;
+  }
+
+  .hara-lesson-button {
+    flex: 1 1 auto;
+  }
+
+  .hara-lesson-complete .hara-lesson-button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hara-path-card,
+  .hara-lesson-progress__fill,
+  .hara-lesson-step {
+    transition: none;
   }
 }
