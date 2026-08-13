@@ -1,3 +1,13 @@
 site_name: The Little Book of HAL
 nav:
   - Introduction: index.md
+  - 01 — Values Have Shapes: 01-values-have-shapes.md
+  - 02 — Ask Again: 02-ask-again.md
+  - 03 — Build on Return: 03-build-on-return.md
+  - 04 — Number Games: 04-number-games.md
+  - 05 — Trees of Values: 05-trees-of-values.md
+  - 06 — Forms Have Meaning: 06-forms-have-meaning.md
+  - 07 — Sets and Relations: 07-sets-and-relations.md
+  - 08 — Functions Make Functions: 08-functions-make-functions.md
+  - 09 — Recursion Without a Name: 09-recursion-without-a-name.md
+  - 10 — The Value of a Form: 10-the-value-of-a-form.md

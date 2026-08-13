@@ -88,7 +88,17 @@
       "prefix": "/docs/books/the-little-book-of-hal/",
       "label": "The Little Book of HAL",
       "items": [
-        { "label": "Read the book", "path": "books/the-little-book-of-hal/docs/index.md" }
+        { "label": "Read the book", "path": "books/the-little-book-of-hal/docs/index.md" },
+        { "label": "01 — Values Have Shapes", "path": "books/the-little-book-of-hal/docs/01-values-have-shapes.md" },
+        { "label": "02 — Ask Again", "path": "books/the-little-book-of-hal/docs/02-ask-again.md" },
+        { "label": "03 — Build on Return", "path": "books/the-little-book-of-hal/docs/03-build-on-return.md" },
+        { "label": "04 — Number Games", "path": "books/the-little-book-of-hal/docs/04-number-games.md" },
+        { "label": "05 — Trees of Values", "path": "books/the-little-book-of-hal/docs/05-trees-of-values.md" },
+        { "label": "06 — Forms Have Meaning", "path": "books/the-little-book-of-hal/docs/06-forms-have-meaning.md" },
+        { "label": "07 — Sets and Relations", "path": "books/the-little-book-of-hal/docs/07-sets-and-relations.md" },
+        { "label": "08 — Functions Make Functions", "path": "books/the-little-book-of-hal/docs/08-functions-make-functions.md" },
+        { "label": "09 — Recursion Without a Name", "path": "books/the-little-book-of-hal/docs/09-recursion-without-a-name.md" },
+        { "label": "10 — The Value of a Form", "path": "books/the-little-book-of-hal/docs/10-the-value-of-a-form.md" }
       ]
     },
     {

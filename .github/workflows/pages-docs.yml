@@ -46,6 +46,7 @@ jobs:
           node --check docs/javascripts/syllabus.js
           node --test docs/javascripts/syllabus.test.mjs
           node scripts/check-lessons.mjs
+          node scripts/check-little-book.mjs
 
       - name: Validate HAL intro live examples
         run: node scripts/check-hal-intro-live.mjs
