@@ -96,7 +96,7 @@ jobs:
           test -s site/rust/hara.wasm
           test -s site/vendor/hara-ui/packages/live/src/live-card.js
           test ! -e site/CNAME
-          grep -Fq 'https://hara-docs.netlify.app/' site/index.html
+          grep -Fq 'https://www.hara-lang.org/docs/' site/index.html
           grep -Fq 'The Little Book of HAL' site/books/the-little-book-of-hal/docs/index.html
           grep -Fq '<meta name="hara-identity-mode" content="popup">' site/index.html
           grep -Fq 'data-hara-identity' site/index.html

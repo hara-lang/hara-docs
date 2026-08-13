@@ -65,14 +65,15 @@ artifact to the dedicated Netlify project at `https://hara-docs.netlify.app/`.
 Pull requests and the `testing` branch perform the same source and build checks
 without replacing production.
 
-The independent Netlify origin is used until the authoritative DNS provider for
-`hara-lang.org` is connected and `docs.hara-lang.org` can be pointed at the
-repository-owned deployment. Changing that public hostname must not move the
-build or release trigger back into `hara-www`.
+The Netlify site is the independently published origin. `hara-www` proxies
+`/docs/*` to that origin with a 200 rewrite, so readers keep the canonical
+`https://www.hara-lang.org/docs/` URL while documentation releases remain owned
+by this repository. The generated canonical and social metadata therefore use
+the public `/docs/` URL, not the Netlify origin URL.
 
-The website repository may link or redirect to this origin, but it is not the
-publication authority. A documentation change must not wait for a website
-assembly or deployment.
+The website repository owns only that stable proxy route; it is not the
+documentation publication authority. A documentation change does not wait for
+a website assembly or deployment.
 
 Build the same standalone artifact locally with:
 
