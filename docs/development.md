@@ -50,6 +50,12 @@ Providers must not change Hara call sites. Keep transport-specific details insid
 preserve stable errors for malformed manifests, denied capabilities, timeouts, cancellation, and
 crashes. See [Hara extensions](reference/extensions-contract.md).
 
+## Documentation lessons and walkthroughs
+
+Use the shared lesson component rather than building page-specific progress UI. It supports runnable
+examples, manual guides, persistent task lists, external completion signals, sequential navigation,
+and grouped-session reset. See [Author lessons and walkthroughs](guides/authoring-lessons.md).
+
 ## Java API documentation
 
 Public Java entry points should have Javadoc describing lifecycle, ownership, thread-safety,
