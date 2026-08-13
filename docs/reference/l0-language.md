@@ -41,7 +41,7 @@ The core special forms are `quote`, `if`, `do`, `when`, `when-not`, `and`,
 `or`, `cond`, `let`, `letfn`, `binding`, `loop`, `recur`, `fn`, `def`,
 `defn`, `defn-`, `declare`, `defmulti`, `defmethod`, `var`, `deref`, `set!`,
 `throw`, `try`, `ns`, `ns+`, `in-ns`, `require`, `refer`, `use`, `alias`,
-`defstruct`, `defprotocol`, `extend-type`, `field`, and
+`defstruct`, `defmutable`, `defprotocol`, `extend-type`, `field`, and
 `apply`. `defn` is the only function-definition form; there is no `defn.xt`.
 
 The ordinary collection functions `count`, `get`, `assoc`, `conj`, `cons`,
@@ -65,7 +65,7 @@ Functions support fixed arities, variadic parameter vectors using a final
 `&` binding, and multiple arity clauses. Exact arities take precedence over a
 variadic fallback. `apply` spreads the final sequential argument into the
 call. Invocation supports Hara functions, protocol `IFn` implementations,
-multifunctions, and `defstruct` constructors.
+multifunctions, and `defstruct` or `defmutable` constructors.
 
 The packaged `std/foundation.hal` bootstrap defines `nil?`, `false?`, `true?`,
 `empty?`, `first`, `second`, `rest`, and `not-empty` using ordinary L0 forms
@@ -262,6 +262,8 @@ polyglot values likewise require an explicit protocol extension.
 | List | lookup and `nth` through its sequential contract | `cons`/`push-first` prepend; navigation returns new lists | supported | supported by its declared sequential contract | head to tail |
 | Queue | sequential lookup | `conj`/`push-last` enqueue and preserve the original | supported | supported by its declared sequential contract | head to tail |
 | Tuple | callable `nth` | fixed-arity operations return the canonical resulting tuple arity | supported; empty is canonical `Tup0` | supported | tuple order |
+| Immutable named structs | keyword invocation and `get` read declared fields | `assoc`, `assoc-in`, `update`, and `update-in` return the same struct type; `dissoc` of a declared field returns a plain persistent map | `count` is the declared width; `empty` preserves the type with nil fields | unsupported | declared field order |
+| `defmutable` named values | keyword invocation, `get`, and `field` read declared fields | persistent updates are rejected; `(set! (field value :name) replacement)` mutates the existing identity | `count` is the declared width; `empty` is not a mutable update operation | unsupported | declared field order |
 | Mutable Hara collections and `array`/`object` markers | supported only by their declared protocols or restricted dot methods | mutation returns the same identity and is immediately visible | declared collection protocols only | arrays support indexed access; objects use string keys | declared protocol only |
 | Bytes | byte lookup supports a fallback; `INth` exposes signed storage | `bytes/set` mutates the byte buffer and returns its identity | count supported | checked bounds | byte order |
 | `nil` | lookup returns `nil` or the supplied fallback | `conj` creates a singleton list; `assoc` is unsupported | count is zero and empty is `nil` | unsupported | empty iterator where explicitly requested |
@@ -286,9 +288,53 @@ installs language implementations; calling the method Var performs dispatch. Dis
 values, adapted Java values, primitives, nil, and foreign values. Replacing a
 method or extension invalidates affected dispatch assumptions.
 
-`defstruct` creates immutable `HaraStruct` values. Struct metadata is separate
-from fields and survives `with-meta`; metadata does not affect value equality
-or hashing. `IFn` is a language protocol and can be extended to structs.
+### 7.3 Immutable and mutable named values
+
+`defstruct` and `defmutable` use parallel declaration and constructor shapes:
+
+```hara
+(defstruct Point [x y])
+(defmutable Cursor [x y])
+
+(Point 1 2)
+(->Point 1 2)
+(map->Point {:x 1 :y 2})
+
+(Cursor 1 2)
+(->Cursor 1 2)
+(map->Cursor {:x 1 :y 2})
+```
+
+An immutable struct is backed by Hara's persistent map implementation while its
+type descriptor retains declared field order. Keyword invocation and `get` read
+fields. `assoc`, `assoc-in`, `update`, and `update-in` accept declared fields
+only, return the same struct type, preserve the receiver, and use structural
+sharing. A map constructor supplies `nil` for a missing declared field and
+ignores extra keys. Removing a declared field with `dissoc` returns a plain
+persistent map. `empty` preserves the struct type and supplies `nil` for every
+declared field. The `field` special form rejects immutable structs; use
+`(:x value)` or `(get value :x)` instead. Struct equality and hashing include
+type identity and field values.
+
+A mutable named value has fixed declared fields and reference identity. `field`
+reads a field and is a settable place:
+
+```hara
+(field cursor :x)
+(set! (field cursor :x) 10)
+```
+
+The receiver and replacement are each evaluated once, from left to right.
+Mutation is visible through aliases and `set!` returns the replacement value.
+Keyword lookup, `get`, `keys`, `vals`, `count`, and iteration are supported.
+`assoc`, `dissoc`, and persistent nested updates reject mutable values. Use
+`(into {} value)` for a shallow persistent-map snapshot; later mutation does
+not alter that snapshot. Mutable equality and hashing use reference identity,
+and mutable named values are not HTA-serializable or session-transferable.
+
+Metadata, `instance?`, inline protocol clauses, `extend-type`, callable `IFn`,
+typed catch matching, and polyglot member access apply consistently to both
+named-value families without changing their persistence or identity rules.
 `defmulti`/`defmethod` dispatch by Hara equality and support `:default`.
 
 ## 8. Vars, namespaces, macros, and modules
@@ -356,7 +402,7 @@ Important differences are normative rather than temporary omissions:
 - Hara is iterator-first and does not require Clojure `ISeq` semantics.
 - Empty iteration is represented explicitly by `nil`; a `Seq` is non-empty.
 - Ratios, transducers, `deftype`, and ambient JVM interop are not L0 features.
-- `defstruct` is Hara's primitive immutable struct form.
+- `defstruct` is Hara's primitive immutable named-value form; `defmutable` is its fixed-shape reference-identity counterpart.
 - Host services are capabilities or providers, not implicitly reachable Java
   classes or JavaScript objects.
 - Sessions isolate namespaces, Vars, loaded modules, tasks, and capabilities
