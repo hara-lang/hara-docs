@@ -219,7 +219,7 @@
    :expect {:value 9 :type :integer}}
   {:id :mutable/array-set
    :class :runtime
-   :source "(let [a (array 1 2)] (. a (set 1 7)) (. a (get 1)))"
+   :source "(let [a (Arr/new 1 2)] (Arr/set a 1 7) (Arr/get a 1))"
    :expect {:value 7 :type :integer}}
   {:id :mutable/array-slice
    :class :runtime
@@ -367,7 +367,7 @@
    :expect {:value 2 :type :integer}}
   {:id :binding/multiple-body
    :class :binding
-   :source "(let [a (array 1 2 3)] (. a (push-last 4)) (. a (get 3)))"
+   :source "(let [a (Arr/new 1 2 3)] (Arr/push-last a 4) (Arr/get a 3))"
    :expect {:value 4 :type :integer}}
   {:id :unsupported/ratio
    :class :unsupported
