@@ -1,4 +1,4 @@
-name: Validate Hara docs
+name: Publish Hara docs
 
 on:
   push:
@@ -10,12 +10,13 @@ permissions:
   contents: read
 
 concurrency:
-  group: "docs-validation-${{ github.workflow }}-${{ github.ref }}"
+  group: "hara-docs-${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: Validate and build standalone site
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -70,14 +71,90 @@ jobs:
           grep -F '/v1/identity-client.js' docs/javascripts/identity-loader.js
           ! grep -E 'client_secret|access_token|HARA_GITHUB_OAUTH_CLIENT_SECRET' docs/javascripts/identity-loader.js
 
-      - name: Build MkDocs compatibility site
-        run: mkdocs build --strict
+      - name: Build standalone docs site
+        env:
+          DISABLE_MKDOCS_2_WARNING: "true"
+        run: mkdocs build --clean
 
-      - name: Verify built popup Identity shell
+      - name: Verify standalone publication artifact
         run: |
-          grep -F '<meta name="hara-identity-mode" content="popup">' site/index.html
-          grep -F 'data-hara-identity' site/index.html
+          set -euo pipefail
+          test -s site/index.html
+          test -s site/books/the-little-book-of-hal/docs/index.html
+          test -s site/books/the-little-book-of-hal/docs/10-the-value-of-a-form/index.html
+          test -s site/javascripts/syllabus.js
           test -s site/javascripts/identity-loader.js
+          test -s site/rust/hara.wasm
+          test -s site/vendor/hara-ui/packages/live/src/live-card.js
+          grep -Fq 'https://docs.hara-lang.org/' site/index.html
+          grep -Fxq 'docs.hara-lang.org' site/CNAME
+          grep -Fq 'The Little Book of HAL' site/books/the-little-book-of-hal/docs/index.html
+          grep -Fq '<meta name="hara-identity-mode" content="popup">' site/index.html
+          grep -Fq 'data-hara-identity' site/index.html
 
-      # Canonical publication is owned by hara-lang/hara and is built below
-      # https://www.hara-lang.org/docs/ from this repository's pinned submodule.
+      - name: Preserve production site artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: hara-docs-site
+          path: site
+          if-no-files-found: error
+          retention-days: 1
+
+  package:
+    name: Package GitHub Pages artifact
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pages: write
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Download standalone site
+        uses: actions/download-artifact@v4
+        with:
+          name: hara-docs-site
+          path: site
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+  deploy:
+    name: Deploy docs.hara-lang.org
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: package
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Verify published Little Book
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euo pipefail
+          base="${PAGE_URL%/}"
+          for attempt in $(seq 1 18); do
+            if curl --fail --location --silent --show-error \
+              "$base/books/the-little-book-of-hal/docs/" \
+              --output /tmp/little-book.html \
+              && grep -Fq 'The Little Book of HAL' /tmp/little-book.html; then
+              echo "verified $base/books/the-little-book-of-hal/docs/"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "GitHub Pages deployed, but the independent docs origin did not pass its smoke check." >&2
+          exit 1

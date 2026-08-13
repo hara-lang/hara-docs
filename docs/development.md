@@ -9,7 +9,7 @@ core/lib/                    HAL libraries and tool namespaces
 packaging/                   release and distribution automation
 scripts/runtime/             cross-host runtime checks
 ../hara-specs-registry/      external normative specifications
-../../website/hara-docs/     documentation source
+../../website/hara-docs/     documentation source and publication owner
 ```
 
 ## Build and test
@@ -55,6 +55,31 @@ crashes. See [Hara extensions](reference/extensions-contract.md).
 Use the shared lesson component rather than building page-specific progress UI. It supports runnable
 examples, manual guides, persistent task lists, external completion signals, sequential navigation,
 and grouped-session reset. See [Author lessons and walkthroughs](guides/authoring-lessons.md).
+
+## Documentation publication
+
+`hara-lang/hara-docs` owns the canonical documentation origin at
+`https://docs.hara-lang.org/`. A successful push to `main` validates the source,
+builds the standalone MkDocs site with the pinned browser runtime and shared UI,
+packages a GitHub Pages artifact, deploys it, and smoke-tests the published Little
+Book. Pull requests and the `testing` branch perform the same source and build
+checks without replacing production.
+
+The website repository may link to the documentation origin and preserve legacy
+`/docs/*` redirects, but it is not the publication authority. A documentation
+change must not wait for a `hara-www` assembly or Netlify deployment.
+
+Build the same standalone artifact locally with:
+
+```shell
+python -m pip install -r requirements-docs.txt
+scripts/install-runtime
+DISABLE_MKDOCS_2_WARNING=true mkdocs build --clean
+```
+
+The result is written to `site/`. It must contain `CNAME`, the browser kernel,
+shared live-card assets, lesson assets, and every route registered by
+`docs-manifest.json`.
 
 ## Java API documentation
 

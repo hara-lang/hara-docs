@@ -1,6 +1,6 @@
 site_name: Hara
 site_description: A small, high-performance Lisp for learning to build software from first principles.
-site_url: https://www.hara-lang.org/docs/
+site_url: https://docs.hara-lang.org/
 docs_dir: docs
 theme:
   name: material
