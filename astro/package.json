@@ -1,0 +1,30 @@
+{
+  "name": "@hara-lang/docs-astro",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run prepare:docs && astro dev",
+    "prepare:docs": "node scripts/prepare-docs.mjs",
+    "verify:visual-language": "node scripts/verify-visual-language.mjs",
+    "check": "npm run prepare:docs && npm run verify:visual-language && astro check",
+    "test": "npm run prepare:docs && npm run verify:visual-language && node --test test/*.test.mjs",
+    "build": "npm run prepare:docs && npm run verify:visual-language && astro check && astro build && node scripts/flatten-artifact.mjs && node scripts/verify-build.mjs",
+    "verify:build": "node scripts/verify-build.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.3",
+    "@astrojs/starlight": "0.37.7",
+    "@hara-lang/live": "file:../vendor/hara-ui/packages/live",
+    "@hara-lang/visual-language": "file:packages/visual-language",
+    "astro": "5.16.0",
+    "sharp": "0.35.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "typescript": "5.9.2"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

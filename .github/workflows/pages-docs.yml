@@ -15,13 +15,20 @@ concurrency:
 
 jobs:
   build:
-    name: Validate and build standalone site
+    name: Validate MkDocs compatibility and build Astro
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
+      - name: Checkout documentation and pinned hara-ui
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Checkout pinned visual language
+        uses: actions/checkout@v4
+        with:
+          repository: hara-lang/visual-language
+          ref: c49ad17d5052c8eeca0aff4a6146ff60b89ce88f
+          path: astro/packages/visual-language
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -30,8 +37,16 @@ jobs:
           cache: "pip"
           cache-dependency-path: requirements-docs.txt
 
-      - name: Install dependencies
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install MkDocs dependencies
         run: pip install -r requirements-docs.txt
+
+      - name: Install Astro dependencies
+        run: npm install --prefix astro --no-audit --no-fund
 
       - name: Download and verify pinned Studio runtime
         run: scripts/install-runtime
@@ -71,7 +86,51 @@ jobs:
           grep -F '/v1/identity-client.js' docs/javascripts/identity-loader.js
           ! grep -E 'client_secret|access_token|HARA_GITHUB_OAUTH_CLIENT_SECRET' docs/javascripts/identity-loader.js
 
+      - name: Build MkDocs compatibility artifact
+        env:
+          DISABLE_MKDOCS_2_WARNING: "true"
+        run: mkdocs build --clean --site-dir site-mkdocs
+
+      - name: Verify MkDocs compatibility artifact
+        run: |
+          set -euo pipefail
+          test -s site-mkdocs/index.html
+          test -s site-mkdocs/books/the-little-book-of-hal/docs/index.html
+          test -s site-mkdocs/rust/hara.wasm
+          test -s site-mkdocs/vendor/hara-ui/packages/live/src/live-card.js
+          grep -Fq 'https://www.hara-lang.org/docs/' site-mkdocs/index.html
+          grep -Fq 'The Little Book of HAL' site-mkdocs/books/the-little-book-of-hal/docs/index.html
+
+      - name: Test the transferred Astro renderer
+        run: npm test --prefix astro
+
+      - name: Build and verify the publishable Astro artifact
+        run: npm run build --prefix astro
+
+      - name: Verify Astro publication contract
+        run: |
+          set -euo pipefail
+          test -s astro/dist/index.html
+          test -s astro/dist/learn/index.html
+          test -s astro/dist/hal-intro/01-basic-data/index.html
+          test -s astro/dist/books/the-little-book-of-hal/docs/index.html
+          test -s astro/dist/api/index.html
+          test -s astro/dist/pagefind/pagefind.js
+          test -s astro/dist/assets/og-hara-docs.jpg
+          test -s astro/dist/assets/visual-language/motifs/web/aperture-light-1280.avif
+          test -s astro/dist/assets/visual-language/motifs/web/aperture-dark-1280.avif
+          test -s astro/dist/docs-assets/live/live-card.js
+          test -s astro/dist/docs-assets/rust/hara.wasm
+          test ! -e astro/dist/docs/docs
+          grep -Eq '<meta[^>]+name="generator"[^>]+content="Astro ' astro/dist/index.html
+          grep -Fq 'https://www.hara-lang.org/docs/' astro/dist/index.html
+          grep -Fq '/docs/assets/docs-repl.js' astro/dist/index.html
+          grep -Fq 'pagefind' astro/dist/index.html
+          ! grep -R -F 'https://www.hara-lang.org/docs/docs/' astro/dist
+          ! grep -R -F '__VITE_ASSET__' astro/dist
+
       - name: Verify independent deployment credential
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         run: |
@@ -80,38 +139,16 @@ jobs:
             exit 1
           fi
 
-      - name: Build standalone docs site
-        env:
-          DISABLE_MKDOCS_2_WARNING: "true"
-        run: mkdocs build --clean
-
-      - name: Verify standalone publication artifact
-        run: |
-          set -euo pipefail
-          test -s site/index.html
-          test -s site/books/the-little-book-of-hal/docs/index.html
-          test -s site/books/the-little-book-of-hal/docs/10-the-value-of-a-form/index.html
-          test -s site/javascripts/syllabus.js
-          test -s site/javascripts/identity-loader.js
-          test -s site/rust/hara.wasm
-          test -s site/vendor/hara-ui/packages/live/src/live-card.js
-          test ! -e site/CNAME
-          grep -Fq 'https://www.hara-lang.org/docs/' site/index.html
-          grep -Fq 'The Little Book of HAL' site/books/the-little-book-of-hal/docs/index.html
-          grep -Fq '<meta name="hara-identity-mode" content="popup">' site/index.html
-          grep -Fq 'data-hara-identity' site/index.html
-
-      - name: Preserve production site artifact
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+      - name: Preserve validated Astro artifact
         uses: actions/upload-artifact@v4
         with:
-          name: hara-docs-site
-          path: site
+          name: hara-docs-astro-site
+          path: astro/dist
           if-no-files-found: error
           retention-days: 1
 
   deploy:
-    name: Deploy independent Hara docs
+    name: Deploy independent Astro docs
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-24.04
@@ -122,11 +159,12 @@ jobs:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       NETLIFY_SITE_ID: ebf43b71-ef29-44d0-a951-8217f3e2471b
       DOCS_ORIGIN: https://hara-docs.netlify.app
+      DOCS_CANONICAL: https://www.hara-lang.org/docs
     steps:
-      - name: Download validated site
+      - name: Download validated Astro site
         uses: actions/download-artifact@v4
         with:
-          name: hara-docs-site
+          name: hara-docs-astro-site
           path: site
 
       - name: Setup Node
@@ -140,24 +178,61 @@ jobs:
           --prod
           --dir site
           --site "$NETLIFY_SITE_ID"
-          --message "hara-docs ${GITHUB_SHA}"
+          --message "hara-docs Astro ${GITHUB_SHA}"
 
-      - name: Verify published Little Book and browser runtime
+      - name: Smoke-test origin and canonical documentation routes
         run: |
           set -euo pipefail
+
+          fetch() {
+            local url="$1"
+            local output="$2"
+            curl --fail --location --silent --show-error \
+              --retry 4 --retry-all-errors --retry-delay 2 \
+              "$url" --output "$output"
+          }
+
           for attempt in $(seq 1 24); do
-            if curl --fail --location --silent --show-error \
-              "$DOCS_ORIGIN/books/the-little-book-of-hal/docs/" \
-              --output /tmp/little-book.html \
-              && grep -Fq 'The Little Book of HAL' /tmp/little-book.html \
-              && curl --fail --location --silent --show-error \
-                "$DOCS_ORIGIN/rust/hara.wasm" \
-                --output /tmp/hara.wasm \
-              && test -s /tmp/hara.wasm; then
-              echo "verified $DOCS_ORIGIN/books/the-little-book-of-hal/docs/"
-              exit 0
+            if fetch "$DOCS_ORIGIN/" /tmp/origin-root.html \
+              && fetch "$DOCS_ORIGIN/docs/" /tmp/origin-docs.html \
+              && fetch "$DOCS_CANONICAL/" /tmp/canonical-root.html \
+              && grep -Eq '<meta[^>]+name="generator"[^>]+content="Astro ' /tmp/origin-root.html \
+              && grep -Eq 'sidebar-pane|data-has-sidebar|aria-label="Main navigation"' /tmp/origin-root.html \
+              && grep -Fq '/docs/assets/docs-repl.js' /tmp/origin-root.html \
+              && grep -Fq 'pagefind' /tmp/origin-root.html \
+              && ! grep -Fq '/docs/docs/' /tmp/origin-root.html \
+              && cmp -s /tmp/origin-root.html /tmp/origin-docs.html \
+              && grep -Fq 'https://www.hara-lang.org/docs/' /tmp/canonical-root.html; then
+              break
+            fi
+            if [ "$attempt" -eq 24 ]; then
+              echo "The independent Astro origin did not pass its root smoke checks." >&2
+              exit 1
             fi
             sleep 5
           done
-          echo "Netlify deployed, but the independent documentation origin did not pass its smoke check." >&2
-          exit 1
+
+          effective_url="$(curl --fail --location --silent --show-error \
+            --output /tmp/canonical-effective.html --write-out '%{url_effective}' \
+            "$DOCS_CANONICAL/")"
+          test "$effective_url" = "$DOCS_CANONICAL/"
+
+          fetch "$DOCS_CANONICAL/hal-intro/01-basic-data/" /tmp/lesson.html
+          fetch "$DOCS_CANONICAL/books/the-little-book-of-hal/docs/" /tmp/book.html
+          fetch "$DOCS_CANONICAL/api/" /tmp/api.html
+          fetch "$DOCS_CANONICAL/start/orientation/" /tmp/redirect.html
+          fetch "$DOCS_CANONICAL/pagefind/pagefind.js" /tmp/pagefind.js
+          fetch "$DOCS_CANONICAL/assets/og-hara-docs.jpg" /tmp/docs-card.jpg
+          fetch "$DOCS_CANONICAL/assets/visual-language/motifs/web/aperture-light-1280.avif" /tmp/aperture.avif
+          fetch "$DOCS_CANONICAL/docs-assets/live/live-card.js" /tmp/live-card.js
+          fetch "$DOCS_CANONICAL/docs-assets/rust/hara.wasm" /tmp/hara.wasm
+
+          grep -Eq 'data-hara-eval|data-hara-live|data-hara-canvas-stage' /tmp/lesson.html
+          grep -Fq 'The Little Book of HAL' /tmp/book.html
+          grep -Fq 'Language API' /tmp/api.html
+          grep -Fq '/docs/learn/' /tmp/redirect.html
+          grep -Fq 'mountLiveCard' /tmp/live-card.js
+          test -s /tmp/pagefind.js
+          test -s /tmp/docs-card.jpg
+          test -s /tmp/aperture.avif
+          test -s /tmp/hara.wasm
