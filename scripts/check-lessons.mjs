@@ -100,30 +100,37 @@ function blocks(structural, attributeName) {
   return found.sort((left, right) => left.start - right.start);
 }
 
-const failures = [];
-let lessonCount = 0;
-let stepCount = 0;
+function runnableFencesFor(root, step, fences) {
+  const absoluteStart = root.contentStart + step.start;
+  const absoluteEnd = root.contentStart + step.end;
+  return fences.filter((fence) =>
+    fence.start >= absoluteStart
+    && fence.end <= absoluteEnd
+    && /^hara\s+eval(?:\s|$)/i.test(fence.info));
+}
 
-for (const path of await markdownFiles(new URL("../docs", import.meta.url).pathname)) {
-  const source = await readFile(path, "utf8");
-  const { structural, fences } = parseFences(source);
-
-  if (/data-hara-syllabus=|data-hara-step=/.test(structural)) {
-    failures.push(`${path}: migrate legacy syllabus markup to data-hara-lesson`);
+function validateVersionedId(path, kind, id, failures) {
+  if (!/-v\d+$/.test(id)) {
+    failures.push(`${path}: ${kind} id must end in a version, received ${id}`);
   }
+}
 
-  const lessonRoots = blocks(structural, "data-hara-lesson");
-  if (!lessonRoots.length) continue;
-  lessonCount += lessonRoots.length;
+function validateStepIds(path, kind, steps, failures) {
+  if (steps.length < 2) failures.push(`${path}: a ${kind} needs at least two steps`);
 
-  if (lessonRoots.length !== 1) {
-    failures.push(`${path}: keep one lesson component per page`);
+  const identifiers = steps.map((step) => step.id);
+  if (new Set(identifiers).size !== identifiers.length) {
+    failures.push(`${path}: duplicate ${kind} step values`);
   }
-
-  const lesson = lessonRoots[0];
-  if (!/-v\d+$/.test(lesson.id)) {
-    failures.push(`${path}: lesson id must end in a version, received ${lesson.id}`);
+  for (const id of identifiers) {
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) {
+      failures.push(`${path}: step id must be kebab-case, received ${id}`);
+    }
   }
+}
+
+function validateLesson({ path, source, lesson, fences, failures }) {
+  validateVersionedId(path, "lesson", lesson.id, failures);
   if (!attribute(lesson.attributes, "data-hara-lesson-title")) {
     failures.push(`${path}: declare data-hara-lesson-title`);
   }
@@ -134,18 +141,7 @@ for (const path of await markdownFiles(new URL("../docs", import.meta.url).pathn
   }
 
   const steps = blocks(lesson.body, "data-hara-lesson-step");
-  stepCount += steps.length;
-  if (steps.length < 2) failures.push(`${path}: a lesson needs at least two steps`);
-
-  const identifiers = steps.map((step) => step.id);
-  if (new Set(identifiers).size !== identifiers.length) {
-    failures.push(`${path}: duplicate data-hara-lesson-step values`);
-  }
-  for (const id of identifiers) {
-    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) {
-      failures.push(`${path}: step id must be kebab-case, received ${id}`);
-    }
-  }
+  validateStepIds(path, "lesson", steps, failures);
 
   let runnableStepCount = 0;
   for (const step of steps) {
@@ -166,12 +162,7 @@ for (const path of await markdownFiles(new URL("../docs", import.meta.url).pathn
     if (!RUN_MODES.has(mode)) continue;
     runnableStepCount += 1;
 
-    const absoluteStart = lesson.contentStart + step.start;
-    const absoluteEnd = lesson.contentStart + step.end;
-    const runnable = fences.filter((fence) =>
-      fence.start >= absoluteStart
-      && fence.end <= absoluteEnd
-      && /^hara\s+eval(?:\s|$)/i.test(fence.info));
+    const runnable = runnableFencesFor(lesson, step, fences);
     if (!runnable.length) {
       failures.push(`${path}: ${step.id} needs a runnable Hara fence`);
     }
@@ -188,12 +179,74 @@ for (const path of await markdownFiles(new URL("../docs", import.meta.url).pathn
       && !/^---[\s\S]*?hara_kernel_loading:\s*auto[\s\S]*?---/m.test(source)) {
     failures.push(`${path}: runnable lessons must set hara_kernel_loading: auto`);
   }
+  return steps.length;
+}
+
+function validateLegacySyllabus({ path, source, syllabus, fences, failures }) {
+  validateVersionedId(path, "legacy syllabus", syllabus.id, failures);
+  if (!attribute(syllabus.attributes, "data-hara-syllabus-title")) {
+    failures.push(`${path}: legacy syllabus must declare data-hara-syllabus-title`);
+  }
+
+  const sessionGroup = attribute(syllabus.attributes, "data-hara-session-group") ?? "";
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(sessionGroup)) {
+    failures.push(`${path}: legacy syllabus must declare one kebab-case data-hara-session-group`);
+  }
+
+  const steps = blocks(syllabus.body, "data-hara-step");
+  validateStepIds(path, "legacy syllabus", steps, failures);
+
+  for (const step of steps) {
+    const runnable = runnableFencesFor(syllabus, step, fences);
+    if (!runnable.length) {
+      failures.push(`${path}: legacy step ${step.id} needs a runnable Hara fence`);
+    }
+    for (const fence of runnable) {
+      if (fenceGroup(fence.info) !== sessionGroup) {
+        failures.push(`${path}: legacy step ${step.id} runnable fence must declare group=${sessionGroup}`);
+      }
+    }
+  }
+
+  if (!/^---[\s\S]*?hara_kernel_loading:\s*auto[\s\S]*?---/m.test(source)) {
+    failures.push(`${path}: legacy runnable syllabus must set hara_kernel_loading: auto`);
+  }
+  return steps.length;
+}
+
+const failures = [];
+let lessonCount = 0;
+let legacySyllabusCount = 0;
+let stepCount = 0;
+
+for (const path of await markdownFiles(new URL("../docs", import.meta.url).pathname)) {
+  const source = await readFile(path, "utf8");
+  const { structural, fences } = parseFences(source);
+  const lessonRoots = blocks(structural, "data-hara-lesson");
+  const legacyRoots = blocks(structural, "data-hara-syllabus");
+
+  if (!lessonRoots.length && !legacyRoots.length) continue;
+  if (lessonRoots.length && legacyRoots.length) {
+    failures.push(`${path}: do not mix lesson and legacy syllabus roots on one page`);
+  }
+  if (lessonRoots.length > 1) failures.push(`${path}: keep one lesson component per page`);
+  if (legacyRoots.length > 1) failures.push(`${path}: keep one legacy syllabus per page`);
+
+  for (const lesson of lessonRoots) {
+    lessonCount += 1;
+    stepCount += validateLesson({ path, source, lesson, fences, failures });
+  }
+  for (const syllabus of legacyRoots) {
+    legacySyllabusCount += 1;
+    stepCount += validateLegacySyllabus({ path, source, syllabus, fences, failures });
+  }
 }
 
 const controllerPath = new URL("../docs/javascripts/syllabus.js", import.meta.url);
 const controller = await readFile(controllerPath, "utf8");
 for (const contract of [
   "data-hara-lesson",
+  "data-hara-syllabus",
   ".hara-live-card-output",
   "run-edit-run",
   "data-hara-task",
@@ -228,6 +281,8 @@ try {
   failures.push("missing lesson authoring guide");
 }
 
-if (!lessonCount) failures.push("no lesson components found");
+if (!lessonCount) failures.push("no data-hara-lesson components found");
 if (failures.length) throw new Error(failures.join("\n"));
-console.log(`validated ${lessonCount} lessons with ${stepCount} steps`);
+console.log(
+  `validated ${lessonCount} lessons, ${legacySyllabusCount} legacy syllabi, and ${stepCount} steps`
+);
