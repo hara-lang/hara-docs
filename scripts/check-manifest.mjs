@@ -42,5 +42,5 @@ if (target.status === "released" && lock.version !== target.requiredRelease) {
 
 console.log(`documentation manifest valid: ${new Set(pages).size} pages, ${manifest.routeTrees?.length ?? 0} route trees, ${routes.length} redirects`);
 if (target.status !== "released") {
-  console.log(`publication gate: Hara ${target.requiredRelease} runtime artifact is not released; lock remains ${lock.version}`);
+  console.log(`publication gate: Hara ${target.requiredRelease} uses ${lock.mode ?? "release"} runtime mode`);
 }

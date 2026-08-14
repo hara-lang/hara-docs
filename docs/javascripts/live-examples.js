@@ -142,7 +142,18 @@
           "studio.fs": asset("../rust/studio/hal/fs.hal"),
           "studio.node": asset("../rust/studio/hal/node.hal"),
           "studio.draw": asset("../rust/studio/hal/draw.hal"),
-          "std.lib.substrate.frame": asset("../rust/std/lib/substrate/frame.hal")
+          "std.substrate.core": asset("../rust/std/substrate/core.hal"),
+          "std.substrate.frame": asset("../rust/std/substrate/frame.hal"),
+          "std.substrate.json": asset("../rust/std/substrate/json.hal"),
+          "std.substrate.protocol": asset("../rust/std/substrate/protocol.hal"),
+          "std.substrate.pubsub": asset("../rust/std/substrate/pubsub.hal"),
+          "std.substrate.request": asset("../rust/std/substrate/request.hal"),
+          "std.substrate.router": asset("../rust/std/substrate/router.hal"),
+          "std.substrate.space": asset("../rust/std/substrate/space.hal"),
+          "std.substrate.transport-memory": asset("../rust/std/substrate/transport_memory.hal"),
+          "std.substrate.util": asset("../rust/std/substrate/util.hal"),
+          "std.substrate.util-handlers": asset("../rust/std/substrate/util_handlers.hal"),
+          "std.substrate": asset("../rust/std/substrate.hal")
         }
       }));
 

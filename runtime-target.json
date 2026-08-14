@@ -1,7 +1,7 @@
 {
-  "sourceCommit": "494b17a39c952f24a68bfeda1bd66283a80f735c",
-  "sourceState": "working-tree-after-v0.1.5",
+  "sourceCommit": "7ee3b8eea7aa5576b54524d2594caa1e7058e861",
+  "sourceState": "checked-in-v0.1.6-runtime",
   "requiredRelease": "0.1.6",
-  "status": "unreleased",
-  "publicationGate": "Replace runtime.lock.json with the immutable v0.1.6 release URL and SHA-256, refresh docs/rust, and validate both renderers before promotion."
+  "status": "checked-in",
+  "publicationGate": "Switch runtime.lock.json to release mode only after an immutable v0.1.6 archive is published."
 }

@@ -19,8 +19,14 @@ verify_release_runtime() {
 }
 
 VERSION=$(read_lock version)
+MODE=$(read_lock mode)
 EXPECTED=$(read_lock sha256)
 if [ -z "$ARCHIVE" ]; then
+  if [ "$MODE" = "checked-in" ]; then
+    verify_runtime "$ROOT/docs"
+    echo "Using checked-in Hara Studio runtime $VERSION."
+    exit 0
+  fi
   URL=$(read_lock url)
   TEMP_ROOT=${RUNNER_TEMP:-${TMPDIR:-/tmp}}
   ARCHIVE="$TEMP_ROOT/hara-studio-runtime-$VERSION.tar.gz"
