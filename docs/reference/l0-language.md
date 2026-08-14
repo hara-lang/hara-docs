@@ -151,6 +151,40 @@ become mutable merely because they cross a host boundary. Protocol operations
 such as count, lookup, nth, assoc, dissoc, conj, cons, first, and
 empty preserve the collection-family rules tested by the conformance suites.
 
+Hash maps, hash sets, lists, vectors, and their literal forms are foundational.
+The specialized constructors and predicates are owned by `std.lib.collection`:
+
+```hara
+(ns example.collections
+  (:require [std.lib.collection :as collection]))
+
+(collection/ordered-map :first 1 :second 2)
+(collection/ordered-set :first :second)
+(collection/sorted-map :second 2 :first 1)
+(collection/sorted-set 2 1)
+(collection/queue :first :second)
+(collection/trie "first" 1 "second" 2)
+
+(collection/trie? (collection/trie "first" 1)) ; => true
+```
+
+The complete predicate family is `ordered-map?`, `ordered-set?`, `sorted-map?`,
+`sorted-set?`, `queue?`, and `trie?`, qualified through the same namespace.
+Trie keys must be strings. Sorted families iterate in sort order, while ordered
+families preserve insertion order.
+
+This ownership is a breaking namespace migration. Specialized constructors are
+not unqualified foundation Vars and there are no compatibility aliases:
+
+| Previous call | Current call |
+| --- | --- |
+| `(ordered-map ...)` | `(collection/ordered-map ...)` |
+| `(ordered-set ...)` | `(collection/ordered-set ...)` |
+| `(sorted-map ...)` | `(collection/sorted-map ...)` |
+| `(sorted-set ...)` | `(collection/sorted-set ...)` |
+| `(queue ...)` | `(collection/queue ...)` |
+| `(trie ...)` | `(collection/trie ...)` |
+
 The ordinary `dissoc` function accepts a collection followed by one or more
 keys and returns persistent updates. `peek` and `pop` expose first-element
 navigation through the collection protocol; they never mutate the input.

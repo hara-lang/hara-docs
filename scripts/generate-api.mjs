@@ -43,12 +43,12 @@ for (const ns of api.namespaces) {
 }
 
 const index = [
-  "---", "title: Language API", "description: Source-derived reference for Hara's std.foundation library.", "---", "",
+  "---", "title: Language API", "description: Source-derived reference for Hara's standard library.", "---", "",
   "# Language API", "",
-  "This reference is generated from the public definitions and test facts in Hara's `std.foundation` source family. It is an index, not a second learning path.", "",
+  "This reference is generated from public Hara standard-library definitions and test facts. It is an index, not a second learning path.", "",
   ...api.namespaces.flatMap((ns) => [`- [${code(ns.name)}](./${ns.name.replaceAll(".", "")}/) — ${summary(ns)}`]), "",
   `Generated from ${api.namespaces.length} namespaces and ${api.namespaces.reduce((count, ns) => count + ns.definitions.length, 0)} public definitions.`,
 ];
 await writeFile(resolve(output, "index.md"), `${index.join("\n")}\n`);
 await writeFile(resolve(root, "generated/api-index.json"), `${JSON.stringify(api, null, 2)}\n`);
-console.log(`generated ${api.namespaces.length} Foundation API namespace pages`);
+console.log(`generated ${api.namespaces.length} standard-library API namespace pages`);
