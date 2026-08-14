@@ -105,8 +105,13 @@ Adding at a collection's natural edge and prepending a value are separate
 operations.
 
 ```hara eval group=collection-protocols
-{:conj (std.protocol.iconj/conj [2 3] 4)
- :cons (std.protocol.icons/cons [2 3] 1)}
+(do
+  (require [std.lib.collection :as collection])
+  (let [deque (collection/deque 2 3)]
+    {:conj (std.protocol.iconj/conj [2 3] 4)
+     :cons (std.protocol.icons/cons [2 3] 1)
+     :front (collection/push-first deque 1)
+     :back (collection/push-last deque 4)}))
 ```
 
 The direct protocol calls place the receiver first. The ordinary public `cons`
@@ -214,6 +219,8 @@ without central coordination or framework-specific adapters.
 | What occupies this position? | `INth` |
 | What is the persistent replacement? | `IAssoc`, `IDissoc` |
 | How is a value added? | `IConj`, `ICons` |
+| What is at either end, and what remains after removing it? | `IPeekFirst`, `IPeekLast`, `IPopFirst`, `IPopLast` |
+| How is a value added to a specific end? | `IPushFirst`, `IPushLast` |
 | How is a traversal acquired and advanced? | `IIter`, `IIterator` |
 
 [Continue through the Protocol Atlas →](atlas.md){ .md-button .md-button--primary }

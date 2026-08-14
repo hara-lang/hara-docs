@@ -1616,6 +1616,13 @@
       "source": "std/lib/collection.hal",
       "definitions": [
         {
+          "name": "deque",
+          "kind": "builtin",
+          "doc": "Native constructor activated by this namespace.",
+          "signature": "",
+          "line": 1
+        },
+        {
           "name": "ordered-map",
           "kind": "builtin",
           "doc": "Native constructor activated by this namespace.",
@@ -1624,6 +1631,13 @@
         },
         {
           "name": "ordered-set",
+          "kind": "builtin",
+          "doc": "Native constructor activated by this namespace.",
+          "signature": "",
+          "line": 1
+        },
+        {
+          "name": "priority-map",
           "kind": "builtin",
           "doc": "Native constructor activated by this namespace.",
           "signature": "",
@@ -1658,95 +1672,151 @@
           "line": 1
         },
         {
+          "name": "peek-first",
+          "kind": "defn",
+          "doc": "Returns the first value through IPeekFirst.",
+          "signature": "[collection]",
+          "line": 5
+        },
+        {
+          "name": "peek-last",
+          "kind": "defn",
+          "doc": "Returns the last value through IPeekLast.",
+          "signature": "[collection]",
+          "line": 10
+        },
+        {
+          "name": "pop-first",
+          "kind": "defn",
+          "doc": "Returns collection without its first value through IPopFirst.",
+          "signature": "[collection]",
+          "line": 15
+        },
+        {
+          "name": "pop-last",
+          "kind": "defn",
+          "doc": "Returns collection without its last value through IPopLast.",
+          "signature": "[collection]",
+          "line": 20
+        },
+        {
+          "name": "push-first",
+          "kind": "defn",
+          "doc": "Returns collection with value added at the front through IPushFirst.",
+          "signature": "[collection value]",
+          "line": 25
+        },
+        {
+          "name": "push-last",
+          "kind": "defn",
+          "doc": "Returns collection with value added at the back through IPushLast.",
+          "signature": "[collection value]",
+          "line": 30
+        },
+        {
+          "name": "deque?",
+          "kind": "defn",
+          "doc": "Returns true when value is a persistent deque.",
+          "signature": "[value]",
+          "line": 35
+        },
+        {
+          "name": "priority-map?",
+          "kind": "defn",
+          "doc": "Returns true when value is a stable persistent priority map.",
+          "signature": "[value]",
+          "line": 40
+        },
+        {
           "name": "ordered-map?",
           "kind": "defn",
           "doc": "Returns true when value is an insertion-ordered persistent map.",
           "signature": "[value]",
-          "line": 5
+          "line": 45
         },
         {
           "name": "ordered-set?",
           "kind": "defn",
           "doc": "Returns true when value is an insertion-ordered persistent set.",
           "signature": "[value]",
-          "line": 10
+          "line": 50
         },
         {
           "name": "queue?",
           "kind": "defn",
           "doc": "Returns true when value is a persistent queue.",
           "signature": "[value]",
-          "line": 15
+          "line": 55
         },
         {
           "name": "sorted-map?",
           "kind": "defn",
           "doc": "Returns true when value is a key-sorted persistent map.",
           "signature": "[value]",
-          "line": 20
+          "line": 60
         },
         {
           "name": "sorted-set?",
           "kind": "defn",
           "doc": "Returns true when value is a value-sorted persistent set.",
           "signature": "[value]",
-          "line": 25
+          "line": 65
         },
         {
           "name": "trie?",
           "kind": "defn",
           "doc": "Returns true when value is a persistent string-keyed trie.",
           "signature": "[value]",
-          "line": 30
+          "line": 70
         },
         {
           "name": "keywordize-keys",
           "kind": "defn",
           "doc": "Recursively transforms string and symbol map keys into keywords.",
           "signature": "[value]",
-          "line": 44
+          "line": 84
         },
         {
           "name": "keyword-spearify-keys",
           "kind": "defn",
           "doc": "Recursively transforms string map keys into spear-case keywords.",
           "signature": "[value]",
-          "line": 54
+          "line": 94
         },
         {
           "name": "stringify-keys",
           "kind": "defn",
           "doc": "Recursively transforms keyword map keys into strings.",
           "signature": "[value]",
-          "line": 66
+          "line": 106
         },
         {
           "name": "string-snakify-keys",
           "kind": "defn",
           "doc": "Recursively transforms keyword map keys into snake-case strings.",
           "signature": "[value]",
-          "line": 75
+          "line": 115
         },
         {
           "name": "walk:contains",
           "kind": "defn",
           "doc": "Returns true when predicate matches any value in a nested form.",
           "signature": "[predicate form]",
-          "line": 87
+          "line": 127
         },
         {
           "name": "walk:find",
           "kind": "defn",
           "doc": "Returns the set of nested values matched by predicate.",
           "signature": "[predicate form]",
-          "line": 99
+          "line": 139
         },
         {
           "name": "walk:keep",
           "kind": "defn",
           "doc": "Returns the set of truthy values produced while walking form.",
           "signature": "[function form]",
-          "line": 111
+          "line": 151
         }
       ],
       "examples": []

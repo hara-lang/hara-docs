@@ -145,8 +145,8 @@ offending form has a source span.
 
 ## 4. Persistent collections and iteration
 
-Lists, vectors, maps, sets, queues, tuples, ordered collections, and sorted
-collections are persistent values. Literal `[]`, `{}`, lists, and sets never
+Lists, vectors, maps, sets, queues, deques, tuples, ordered collections, sorted
+collections, tries, and priority maps are persistent values. Literal `[]`, `{}`, lists, and sets never
 become mutable merely because they cross a host boundary. Protocol operations
 such as count, lookup, nth, assoc, dissoc, conj, cons, first, and
 empty preserve the collection-family rules tested by the conformance suites.
@@ -160,6 +160,8 @@ The specialized constructors and predicates are owned by `std.lib.collection`:
 
 (collection/ordered-map :first 1 :second 2)
 (collection/ordered-set :first :second)
+(collection/deque :first :second)
+(collection/priority-map :background 20 :interactive 1)
 (collection/sorted-map :second 2 :first 1)
 (collection/sorted-set 2 1)
 (collection/queue :first :second)
@@ -168,10 +170,17 @@ The specialized constructors and predicates are owned by `std.lib.collection`:
 (collection/trie? (collection/trie "first" 1)) ; => true
 ```
 
-The complete predicate family is `ordered-map?`, `ordered-set?`, `sorted-map?`,
-`sorted-set?`, `queue?`, and `trie?`, qualified through the same namespace.
+The complete predicate family is `deque?`, `ordered-map?`, `ordered-set?`,
+`priority-map?`, `sorted-map?`, `sorted-set?`, `queue?`, and `trie?`, qualified through the same namespace.
 Trie keys must be strings. Sorted families iterate in sort order, while ordered
-families preserve insertion order.
+families preserve insertion order. Priority maps iterate by ascending natural
+priority and preserve insertion order among equal-priority keys.
+
+Deque end operations are explicit and live on the same public collection
+surface: `peek-first`, `peek-last`, `pop-first`, `pop-last`, `push-first`, and
+`push-last`. They dispatch through the native canonical protocols and preserve
+the receiver. A deque uses an internal count-measured finger tree; the finger
+tree is not a separate public collection type.
 
 This ownership is a breaking namespace migration. Specialized constructors are
 not unqualified foundation Vars and there are no compatibility aliases:
@@ -184,6 +193,9 @@ not unqualified foundation Vars and there are no compatibility aliases:
 | `(sorted-set ...)` | `(collection/sorted-set ...)` |
 | `(queue ...)` | `(collection/queue ...)` |
 | `(trie ...)` | `(collection/trie ...)` |
+
+`deque` and `priority-map` are new collection constructors rather than migrated
+foundation aliases.
 
 The ordinary `dissoc` function accepts a collection followed by one or more
 keys and returns persistent updates. `peek` and `pop` expose first-element

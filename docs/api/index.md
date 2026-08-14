@@ -14,6 +14,6 @@ This reference is generated from public Hara standard-library definitions and te
 - [`std.foundation.promise`](./stdfoundationpromise/) — 11 public definitions
 - [`std.foundation.string`](./stdfoundationstring/) — 28 public definitions
 - [`std.foundation`](./stdfoundation/) — 162 public definitions
-- [`std.lib.collection`](./stdlibcollection/) — 19 public definitions
+- [`std.lib.collection`](./stdlibcollection/) — 29 public definitions
 
-Generated from 8 namespaces and 242 public definitions.
+Generated from 8 namespaces and 252 public definitions.
