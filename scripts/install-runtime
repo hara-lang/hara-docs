@@ -14,8 +14,8 @@ verify_runtime() {
   node "$ROOT/scripts/verify-kernel-runtime.mjs" "$1"
 }
 
-verify_session_runtime() {
-  node "$ROOT/scripts/verify-kernel-runtime.mjs" "$1" --session-api-only
+verify_release_runtime() {
+  node "$ROOT/scripts/verify-kernel-runtime.mjs" "$1" --release-runtime
 }
 
 VERSION=$(read_lock version)
@@ -48,27 +48,19 @@ cleanup() {
 }
 trap cleanup EXIT
 tar -xzf "$ARCHIVE" -C "$STAGE"
-if ! verify_runtime "$STAGE"; then
-  echo "Pinned Studio runtime lacks the Docs session API; preserving the checked-in session runtime." >&2
-  verify_session_runtime "$ROOT/docs"
-  CURRENT=$(mktemp -d)
-  mkdir -p "$CURRENT/studio/hal"
-  cp "$DEST/hara.wasm" "$DEST/hta.js" "$DEST/hta-worker.js" "$CURRENT/"
-  cp "$DEST/studio/host-services.js" "$CURRENT/studio/"
-  cp "$DEST/studio/hal/fs.hal" "$DEST/studio/hal/store.hal" "$CURRENT/studio/hal/"
-fi
+verify_release_runtime "$STAGE"
+
+# The browser filesystem bridge belongs to Docs rather than the Studio runtime
+# release. Preserve it while replacing the pinned runtime as one coherent set.
+CURRENT=$(mktemp -d)
+mkdir -p "$CURRENT/studio/hal"
+cp "$DEST/studio/hal/fs.hal" "$CURRENT/studio/hal/"
 
 # Docs ships the browser kernel ABI and current Studio host/resource set used
 # by the interactive examples. Projects, examples, and workspace assets remain
 # owned by playground.hara-lang.org.
 rm -rf "$DEST"
-mkdir -p "$DEST/std/lib/substrate"
-cp "$STAGE/rust/hara.wasm" "$STAGE/rust/hta.js" "$STAGE/rust/hta-worker.js" "$DEST/"
-cp -R "$STAGE/rust/studio" "$DEST/"
-cp "$STAGE/rust/studio/hal/substrate-frame.hal" "$DEST/std/lib/substrate/frame.hal"
-if [ -n "$CURRENT" ]; then
-  cp "$CURRENT/hara.wasm" "$CURRENT/hta.js" "$CURRENT/hta-worker.js" "$DEST/"
-  cp "$CURRENT/studio/host-services.js" "$DEST/studio/"
-  cp "$CURRENT/studio/hal/fs.hal" "$CURRENT/studio/hal/store.hal" "$DEST/studio/hal/"
-fi
+mkdir -p "$DEST"
+cp -R "$STAGE/rust/." "$DEST/"
+cp "$CURRENT/studio/hal/fs.hal" "$DEST/studio/hal/"
 verify_runtime "$ROOT/docs"
