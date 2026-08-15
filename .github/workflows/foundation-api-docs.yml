@@ -9,6 +9,7 @@ on:
       - "docs/api/**"
       - "docs/guides/foundation-reorganization-2026.md"
       - "docs/hal-intro/07-io-and-files.md"
+      - "generated/api-index.json"
       - ".github/workflows/foundation-api-docs.yml"
   push:
     branches: [main]
@@ -19,19 +20,23 @@ on:
       - "docs/api/**"
       - "docs/guides/foundation-reorganization-2026.md"
       - "docs/hal-intro/07-io-and-files.md"
+      - "generated/api-index.json"
       - ".github/workflows/foundation-api-docs.yml"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   generate:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - name: Checkout documentation
+      - name: Checkout documentation branch
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
 
       - name: Read pinned Hara target
         id: target
@@ -139,7 +144,27 @@ jobs:
               assert ".." not in value.parts, field
           PY
 
+      - name: Commit generated API and migration pages
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        shell: bash
+        run: |
+          if git diff --quiet -- docs/api generated/api-index.json; then
+            echo "Generated Foundation API documentation is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- docs/api generated/api-index.json
+          git commit -m "Regenerate Foundation API documentation from pinned Hara manifest"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+
+      - name: Reject generated drift outside same-repository pull requests
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          git diff --exit-code -- docs/api generated/api-index.json
+
       - name: Upload generated API review artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: foundation-api-docs-generated
