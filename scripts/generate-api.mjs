@@ -28,7 +28,7 @@ export const parseOptions = (args) => ({
 
 const gitValue = (checkout, args, fallback) => {
   try {
-    return execFileSync("git", ["-C", checkout, ...args], { encoding: "utf8" }).trim() || fallback;
+    return execFileSync("git", ["-C", checkout, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim() || fallback;
   } catch {
     return fallback;
   }
@@ -39,7 +39,7 @@ const defaultHaraRoot = () => {
   return existsSync(legacy) ? legacy : undefined;
 };
 
-export const loadManifest = async ({ input, haraRoot }) => {
+export const loadManifest = async ({ input, haraRoot, allowSchemaV1 = false }) => {
   if (input) return JSON.parse(await readFile(resolve(process.cwd(), input), "utf8"));
   const selectedRoot = haraRoot ?? defaultHaraRoot();
   if (!selectedRoot) {
@@ -48,14 +48,25 @@ export const loadManifest = async ({ input, haraRoot }) => {
   const checkout = resolve(selectedRoot);
   const commit = gitValue(checkout, ["rev-parse", "HEAD"], "unknown");
   const sourceRef = gitValue(checkout, ["branch", "--show-current"], "detached");
+  const adapter = resolve(checkout, "scripts/generate_foundation_api_manifest.py");
+  if (existsSync(adapter)) {
+    const raw = execFileSync(process.env.PYTHON ?? "python3", [
+      adapter,
+      "--root", checkout,
+      "--ref", sourceRef,
+      "--commit", commit,
+    ], { encoding: "utf8" });
+    return JSON.parse(raw);
+  }
+  if (!allowSchemaV1) {
+    throw new Error("The selected Hara checkout does not provide scripts/generate_foundation_api_manifest.py; pass a schema-v2 --input manifest or use --allow-schema-v1 only for migration checks.");
+  }
   const raw = execFileSync("cargo", [
     "run", "--quiet",
     "--manifest-path", resolve(checkout, "core/rust/Cargo.toml"),
     "--bin", "hara-api-doc", "--",
     resolve(checkout, "core/lib/src"),
     resolve(checkout, "core/lib/test"),
-    "--ref", sourceRef,
-    "--commit", commit,
   ], { encoding: "utf8" });
   return JSON.parse(raw);
 };

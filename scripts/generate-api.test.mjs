@@ -7,6 +7,7 @@ import test from "node:test";
 import {
   expectedPages,
   generateFromManifest,
+  loadManifest,
   renderIndex,
   validateManifest,
 } from "./generate-api.mjs";
@@ -96,3 +97,17 @@ test("schema v1 is a bounded opt-in compatibility path", () => {
   assert.throws(() => validateManifest(api), /--allow-schema-v1/);
   assert.equal(validateManifest(api, { allowSchemaV1: true }), api);
 });
+
+test("Hara checkout loading uses the schema-v2 manifest adapter", async () => withTemp(async (directory) => {
+  const scripts = resolve(directory, "scripts");
+  await import("node:fs/promises").then(({ mkdir }) => mkdir(scripts, { recursive: true }));
+  const adapter = resolve(scripts, "generate_foundation_api_manifest.py");
+  await writeFile(adapter, [
+    "import json",
+    `print(json.dumps(${JSON.stringify(manifest())}))`,
+    "",
+  ].join("\n"));
+  const api = await loadManifest({ haraRoot: directory });
+  assert.equal(api.schemaVersion, 2);
+  assert.equal(api.source.repository, "https://github.com/hara-lang/hara");
+}));
