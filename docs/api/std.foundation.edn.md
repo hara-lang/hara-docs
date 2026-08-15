@@ -1,36 +1,27 @@
+<!-- hara-api:generated -->
 ---
-title: std.foundation.edn
-description: Generated API reference for std.foundation.edn.
+title: std.foundation.edn migration
+description: Migration guidance for the former std.foundation.edn API.
 ---
 
 # `std.foundation.edn`
 
-Generated from `std/foundation/edn.hal` and its companion tests. 3 public definitions.
+Status: `moved`.
 
-> This page is generated from Hara source. Edit the source or tests, then regenerate it; do not edit this page by hand.
+Current direction: native-static-object `Edn`.
 
-## `read`
+This former name is not part of the current public Foundation namespace set.
 
-defn · `[source]`
+## Update imports
 
-Reads exactly one value using the restricted HAL EDN profile.
+Remove the old dependency; Edn is a built-in static object.
 
-Source: `std/foundation/edn.hal:32`
+## Update calls
 
-## `write`
+Replace std.foundation.edn/... with Edn/....
 
-defn · `[value]`
+Documented source: `https://github.com/hara-lang/hara` at `209ffd3f8ac596b02290cd73663a75f1918ff436` (`209ffd3f8ac596b02290cd73663a75f1918ff436`).
 
-Returns value's canonical, readable EDN representation.
+Semantic surface: `sha256:8fdb5fafde7b0c29b1a01b2d7f7f9dfae037aa35ac622a9f277840bd4c8db95e`. Manifest schema: `2`.
 
-Source: `std/foundation/edn.hal:38`
-
-## `pretty`
-
-defn · `[value opts]`
-
-Returns value's canonical readable representation.
-
-   Options are reserved and must currently be supplied as a map.
-
-Source: `std/foundation/edn.hal:44`
+> This migration page is generated from Hara's canonical migration ledger.

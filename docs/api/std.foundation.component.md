@@ -1,24 +1,24 @@
 <!-- hara-api:generated -->
 ---
-title: std.foundation.socket migration
-description: Migration guidance for the former std.foundation.socket API.
+title: std.foundation.component migration
+description: Migration guidance for the former std.foundation.component API.
 ---
 
-# `std.foundation.socket`
+# `std.foundation.component`
 
 Status: `moved`.
 
-Current direction: native-static-object `Socket`.
+Current direction: namespace `std.lib.component`.
 
 This former name is not part of the current public Foundation namespace set.
 
 ## Update imports
 
-Remove the old dependency; Socket is a built-in static object.
+Replace the old dependency with std.lib.component.
 
 ## Update calls
 
-Replace std.foundation.socket/... with Socket/....
+Replace std.foundation.component/... with std.lib.component/....
 
 Documented source: `https://github.com/hara-lang/hara` at `209ffd3f8ac596b02290cd73663a75f1918ff436` (`209ffd3f8ac596b02290cd73663a75f1918ff436`).
 

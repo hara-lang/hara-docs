@@ -1,6 +1,1227 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "source": {
+    "repository": "https://github.com/hara-lang/hara",
+    "ref": "209ffd3f8ac596b02290cd73663a75f1918ff436",
+    "commit": "209ffd3f8ac596b02290cd73663a75f1918ff436"
+  },
+  "generator": {
+    "name": "generate-foundation-api-manifest",
+    "version": "2"
+  },
+  "inventory": {
+    "path": "core/rust/standard-library.namespaces",
+    "authority": "registered-standard-library-namespaces"
+  },
+  "profiles": [
+    "jvm",
+    "rust",
+    "wasm"
+  ],
+  "surfaceDigest": "sha256:8fdb5fafde7b0c29b1a01b2d7f7f9dfae037aa35ac622a9f277840bd4c8db95e",
+  "migrationLedger": {
+    "schemaVersion": 1,
+    "path": "core/spec/std/foundation-migrations.json",
+    "digest": "sha256:b82361b350af7af09212597e6ac042767cadf52c6c2964fd67da2063ef868437"
+  },
   "namespaces": [
+    {
+      "name": "std.foundation",
+      "source": "std/foundation.hal",
+      "definitions": [
+        {
+          "name": "test-config",
+          "kind": "defn",
+          "doc": "Validates test options against the runtime-owned Test configuration.",
+          "signature": "[options]",
+          "line": 57
+        },
+        {
+          "name": "test-result",
+          "kind": "defn",
+          "doc": "Constructs a portable test result, optionally adding outcome details.",
+          "signature": "",
+          "line": 63
+        },
+        {
+          "name": "test-check",
+          "kind": "defmacro",
+          "doc": "Evaluates one lightweight assertion and converts thrown errors into results.",
+          "signature": "[name actual expected]",
+          "line": 72
+        },
+        {
+          "name": "test-passed?",
+          "kind": "defn",
+          "doc": "Returns true when a portable test result passed.",
+          "signature": "[result]",
+          "line": 87
+        },
+        {
+          "name": "read-forms",
+          "kind": "defn",
+          "doc": "Reads every top-level form from a capability-gated HAL source file.",
+          "signature": "[path]",
+          "line": 93
+        },
+        {
+          "name": "identity",
+          "kind": "defn",
+          "doc": "Returns its argument unchanged.",
+          "signature": "[value]",
+          "line": 103
+        },
+        {
+          "name": "inc",
+          "kind": "defn",
+          "doc": "Returns value + 1.",
+          "signature": "[value]",
+          "line": 108
+        },
+        {
+          "name": "dec",
+          "kind": "defn",
+          "doc": "Returns value - 1.",
+          "signature": "[value]",
+          "line": 113
+        },
+        {
+          "name": "constantly",
+          "kind": "defn",
+          "doc": "Returns a function that ignores its arguments and always returns value.",
+          "signature": "[value]",
+          "line": 118
+        },
+        {
+          "name": "comp",
+          "kind": "defn",
+          "doc": "Composes two or more functions right-to-left.",
+          "signature": "",
+          "line": 123
+        },
+        {
+          "name": "complement",
+          "kind": "defn",
+          "doc": "Returns a function returning the logical negation of predicate's result.",
+          "signature": "[predicate]",
+          "line": 136
+        },
+        {
+          "name": "partial",
+          "kind": "defn",
+          "doc": "Returns a function that calls function with arguments prepended to its own.",
+          "signature": "[function & arguments]",
+          "line": 141
+        },
+        {
+          "name": "juxt",
+          "kind": "defn",
+          "doc": "Returns a function whose result is the vector of each function applied to\n   its arguments.",
+          "signature": "[& functions]",
+          "line": 148
+        },
+        {
+          "name": "meta",
+          "kind": "defn",
+          "doc": "Returns value metadata through IObjType, or nil when none is present.",
+          "signature": "[value]",
+          "line": 162
+        },
+        {
+          "name": "with-meta",
+          "kind": "defn",
+          "doc": "Returns value carrying metadata through IObjType.",
+          "signature": "[value metadata]",
+          "line": 168
+        },
+        {
+          "name": "boolean",
+          "kind": "defn",
+          "doc": "Coerces value to true or false using Hara truthiness.",
+          "signature": "[value]",
+          "line": 178
+        },
+        {
+          "name": "zero?",
+          "kind": "defn",
+          "doc": "Returns true if value equals 0.",
+          "signature": "[value]",
+          "line": 183
+        },
+        {
+          "name": "pos?",
+          "kind": "defn",
+          "doc": "Returns true if value is greater than 0.",
+          "signature": "[value]",
+          "line": 188
+        },
+        {
+          "name": "neg?",
+          "kind": "defn",
+          "doc": "Returns true if value is less than 0.",
+          "signature": "[value]",
+          "line": 193
+        },
+        {
+          "name": "even?",
+          "kind": "defn",
+          "doc": "Returns true if value is evenly divisible by 2.",
+          "signature": "[value]",
+          "line": 198
+        },
+        {
+          "name": "odd?",
+          "kind": "defn",
+          "doc": "Returns true if value is not evenly divisible by 2.",
+          "signature": "[value]",
+          "line": 203
+        },
+        {
+          "name": "nil?",
+          "kind": "defn",
+          "doc": "Returns true if value is nil.",
+          "signature": "[value]",
+          "line": 208
+        },
+        {
+          "name": "false?",
+          "kind": "defn",
+          "doc": "Returns true if value is exactly false.",
+          "signature": "[value]",
+          "line": 213
+        },
+        {
+          "name": "true?",
+          "kind": "defn",
+          "doc": "Returns true if value is exactly true.",
+          "signature": "[value]",
+          "line": 218
+        },
+        {
+          "name": "has?",
+          "kind": "defn",
+          "doc": "Returns true if collection contains key, including when its value is nil.",
+          "signature": "[collection key]",
+          "line": 223
+        },
+        {
+          "name": "reset!",
+          "kind": "defn",
+          "doc": "Sets reference to value through IReset and returns value.",
+          "signature": "[reference value]",
+          "line": 233
+        },
+        {
+          "name": "cas!",
+          "kind": "defn",
+          "doc": "Atomically replaces old-value with new-value through ICas.",
+          "signature": "[reference old-value new-value]",
+          "line": 239
+        },
+        {
+          "name": "swap!",
+          "kind": "defn",
+          "doc": "Atomically applies function to reference through an ICas retry loop.",
+          "signature": "[reference function & arguments]",
+          "line": 245
+        },
+        {
+          "name": "watch-add",
+          "kind": "defn",
+          "doc": "Adds a keyed watch callback through IWatch and returns reference.",
+          "signature": "[reference key function]",
+          "line": 256
+        },
+        {
+          "name": "watch-remove",
+          "kind": "defn",
+          "doc": "Removes keyed watch through IWatch and returns reference.",
+          "signature": "[reference key]",
+          "line": 262
+        },
+        {
+          "name": "watch-list",
+          "kind": "defn",
+          "doc": "Returns reference's watch iterator through IWatch.",
+          "signature": "[reference]",
+          "line": 268
+        },
+        {
+          "name": "empty?",
+          "kind": "defn",
+          "doc": "Returns true if value yields no items.",
+          "signature": "[value]",
+          "line": 278
+        },
+        {
+          "name": "first",
+          "kind": "defn",
+          "doc": "Returns the first item of value, or nil if value is empty.",
+          "signature": "[value]",
+          "line": 283
+        },
+        {
+          "name": "second",
+          "kind": "defn",
+          "doc": "Returns the second item of value, or nil if value has fewer than two items.",
+          "signature": "[value]",
+          "line": 290
+        },
+        {
+          "name": "rest",
+          "kind": "defn",
+          "doc": "Returns all but the first item of value as a seq, or nil if empty.",
+          "signature": "[value]",
+          "line": 295
+        },
+        {
+          "name": "not-empty",
+          "kind": "defn",
+          "doc": "Returns value if it has any items, nil otherwise.",
+          "signature": "[value]",
+          "line": 301
+        },
+        {
+          "name": "last",
+          "kind": "defn",
+          "doc": "Returns the last item of value, or nil if value is empty.",
+          "signature": "[value]",
+          "line": 306
+        },
+        {
+          "name": "reverse",
+          "kind": "defn",
+          "doc": "Returns the items of value in reverse order as a list.",
+          "signature": "[value]",
+          "line": 316
+        },
+        {
+          "name": "get-in",
+          "kind": "defn",
+          "doc": "Returns the value at the end of the key path keys, or nil if absent.",
+          "signature": "[value keys]",
+          "line": 330
+        },
+        {
+          "name": "assoc-in",
+          "kind": "defn",
+          "doc": "Returns value with new-value associated at the end of the key path keys,\n   creating intermediate maps as needed.",
+          "signature": "[value keys new-value]",
+          "line": 341
+        },
+        {
+          "name": "update",
+          "kind": "defn",
+          "doc": "Associates key in value with the result of applying function to the old\n   value and args.",
+          "signature": "[value key function & args]",
+          "line": 355
+        },
+        {
+          "name": "update-in",
+          "kind": "defn",
+          "doc": "Like update, but at the end of the key path keys.",
+          "signature": "[value keys function & args]",
+          "line": 362
+        },
+        {
+          "name": "key",
+          "kind": "defn",
+          "doc": "Returns the key of a map entry.",
+          "signature": "[entry]",
+          "line": 372
+        },
+        {
+          "name": "val",
+          "kind": "defn",
+          "doc": "Returns the value of a map entry.",
+          "signature": "[entry]",
+          "line": 377
+        },
+        {
+          "name": "keys",
+          "kind": "defn",
+          "doc": "Returns a vector of the map's keys.",
+          "signature": "[value]",
+          "line": 382
+        },
+        {
+          "name": "vals",
+          "kind": "defn",
+          "doc": "Returns a vector of the map's values.",
+          "signature": "[value]",
+          "line": 387
+        },
+        {
+          "name": "range",
+          "kind": "defn",
+          "doc": "Returns a lazy seq of numbers: from 0 upward, below end, or from start\n   below end.",
+          "signature": "",
+          "line": 418
+        },
+        {
+          "name": "repeat",
+          "kind": "defn",
+          "doc": "Returns a lazy seq of value repeated forever, or amount times.",
+          "signature": "",
+          "line": 434
+        },
+        {
+          "name": "repeatedly",
+          "kind": "defn",
+          "doc": "Returns a lazy seq of calls to function, forever or amount times.",
+          "signature": "",
+          "line": 441
+        },
+        {
+          "name": "iterate",
+          "kind": "defn",
+          "doc": "Returns a lazy seq of seed, (function seed), (function (function seed)), …",
+          "signature": "[function seed]",
+          "line": 448
+        },
+        {
+          "name": "take-while",
+          "kind": "defn",
+          "doc": "Unary form returns an iterator transform; collection form eagerly\n   materializes items while predicate holds.",
+          "signature": "",
+          "line": 453
+        },
+        {
+          "name": "drop-while",
+          "kind": "defn",
+          "doc": "Unary form returns an iterator transform; collection form eagerly\n   materializes after dropping items while predicate holds.",
+          "signature": "",
+          "line": 461
+        },
+        {
+          "name": "partition-all",
+          "kind": "defn",
+          "doc": "Partitions value into groups of at most amount items; unary form returns a\n   transform.",
+          "signature": "",
+          "line": 469
+        },
+        {
+          "name": "partition",
+          "kind": "defn",
+          "doc": "Partitions value into groups of exactly amount items; unary form returns a\n   transform.",
+          "signature": "",
+          "line": 478
+        },
+        {
+          "name": "interpose",
+          "kind": "defn",
+          "doc": "Unary form returns an iterator transform; collection form eagerly inserts\n   separator between items.",
+          "signature": "",
+          "line": 487
+        },
+        {
+          "name": "interleave",
+          "kind": "defn",
+          "doc": "Eagerly returns the first items of each source, then the second items, and\n   so on, stopping at the shortest source.",
+          "signature": "[value & rest]",
+          "line": 495
+        },
+        {
+          "name": "map",
+          "kind": "defn",
+          "doc": "Unary form returns an iterator transform. Otherwise eagerly maps function\n   over one or more sources into a vector, stopping at the shortest.",
+          "signature": "",
+          "line": 503
+        },
+        {
+          "name": "filter",
+          "kind": "defn",
+          "doc": "Unary form returns an iterator transform; collection form eagerly keeps\n   items for which predicate returns true.",
+          "signature": "",
+          "line": 513
+        },
+        {
+          "name": "take",
+          "kind": "defn",
+          "doc": "Unary form returns an iterator transform; collection form eagerly returns\n   the first amount items.",
+          "signature": "",
+          "line": 521
+        },
+        {
+          "name": "drop",
+          "kind": "defn",
+          "doc": "Unary form returns an iterator transform; collection form eagerly returns\n   all but the first amount items.",
+          "signature": "",
+          "line": 528
+        },
+        {
+          "name": "mapcat",
+          "kind": "defn",
+          "doc": "Unary form returns an iterator transform; collection form eagerly maps and\n   concatenates.",
+          "signature": "",
+          "line": 535
+        },
+        {
+          "name": "keep",
+          "kind": "defn",
+          "doc": "Unary form returns an iterator transform; collection form eagerly returns\n   non-nil mapped results.",
+          "signature": "",
+          "line": 543
+        },
+        {
+          "name": "cycle",
+          "kind": "defn",
+          "doc": "Returns a lazy seq repeating the items of value forever.",
+          "signature": "[value]",
+          "line": 551
+        },
+        {
+          "name": "zip",
+          "kind": "defn",
+          "doc": "Eagerly returns tuples of the items of each source in parallel, stopping at\n   the shortest source.",
+          "signature": "[first & rest]",
+          "line": 556
+        },
+        {
+          "name": "partition-pair",
+          "kind": "defn",
+          "doc": "Eagerly returns value partitioned into pairs.",
+          "signature": "[value]",
+          "line": 564
+        },
+        {
+          "name": "every?",
+          "kind": "defn",
+          "doc": "Unary form returns a reusable terminal; collection form tests every item.",
+          "signature": "",
+          "line": 569
+        },
+        {
+          "name": "any?",
+          "kind": "defn",
+          "doc": "Unary form returns a reusable terminal; collection form tests any item.",
+          "signature": "",
+          "line": 575
+        },
+        {
+          "name": "E",
+          "kind": "def",
+          "doc": "",
+          "signature": "",
+          "line": 585
+        },
+        {
+          "name": "PI",
+          "kind": "def",
+          "doc": "",
+          "signature": "",
+          "line": 587
+        },
+        {
+          "name": "long",
+          "kind": "defn",
+          "doc": "Converts a numeric value to a signed 64-bit integer by truncating toward zero.",
+          "signature": "[value]",
+          "line": 592
+        },
+        {
+          "name": "double",
+          "kind": "defn",
+          "doc": "Converts a numeric value to an IEEE-754 double.",
+          "signature": "[value]",
+          "line": 598
+        },
+        {
+          "name": "bit-and",
+          "kind": "defn",
+          "doc": "Returns the bitwise conjunction of values through the portable Bits boundary.",
+          "signature": "[& values]",
+          "line": 604
+        },
+        {
+          "name": "bit-or",
+          "kind": "defn",
+          "doc": "Returns the bitwise disjunction of values through the portable Bits boundary.",
+          "signature": "[& values]",
+          "line": 610
+        },
+        {
+          "name": "bit-xor",
+          "kind": "defn",
+          "doc": "Returns the bitwise exclusive-or of values through the portable Bits boundary.",
+          "signature": "[& values]",
+          "line": 616
+        },
+        {
+          "name": "bit-not",
+          "kind": "defn",
+          "doc": "Returns the bitwise complement of value through the portable Bits boundary.",
+          "signature": "[value]",
+          "line": 622
+        },
+        {
+          "name": "bit-shift-left",
+          "kind": "defn",
+          "doc": "Left-shifts the first value by the remaining shift counts.",
+          "signature": "[& values]",
+          "line": 628
+        },
+        {
+          "name": "bit-shift-right",
+          "kind": "defn",
+          "doc": "Right-shifts the first value by the remaining shift counts.",
+          "signature": "[& values]",
+          "line": 634
+        },
+        {
+          "name": "abs",
+          "kind": "defn",
+          "doc": "Returns the absolute magnitude of value.",
+          "signature": "[value]",
+          "line": 640
+        },
+        {
+          "name": "acos",
+          "kind": "defn",
+          "doc": "Returns the arc cosine of value in radians.",
+          "signature": "[value]",
+          "line": 646
+        },
+        {
+          "name": "acosh",
+          "kind": "defn",
+          "doc": "Returns the inverse hyperbolic cosine of value.",
+          "signature": "[value]",
+          "line": 652
+        },
+        {
+          "name": "asin",
+          "kind": "defn",
+          "doc": "Returns the arc sine of value in radians.",
+          "signature": "[value]",
+          "line": 658
+        },
+        {
+          "name": "asinh",
+          "kind": "defn",
+          "doc": "Returns the inverse hyperbolic sine of value.",
+          "signature": "[value]",
+          "line": 664
+        },
+        {
+          "name": "atan",
+          "kind": "defn",
+          "doc": "Returns the arc tangent of value in radians.",
+          "signature": "[value]",
+          "line": 670
+        },
+        {
+          "name": "atan2",
+          "kind": "defn",
+          "doc": "Returns the angle for y and x in radians.",
+          "signature": "[y x]",
+          "line": 676
+        },
+        {
+          "name": "atanh",
+          "kind": "defn",
+          "doc": "Returns the inverse hyperbolic tangent of value.",
+          "signature": "[value]",
+          "line": 682
+        },
+        {
+          "name": "ceil",
+          "kind": "defn",
+          "doc": "Rounds value upward to the nearest integral number.",
+          "signature": "[value]",
+          "line": 688
+        },
+        {
+          "name": "cos",
+          "kind": "defn",
+          "doc": "Returns the cosine of value in radians.",
+          "signature": "[value]",
+          "line": 694
+        },
+        {
+          "name": "cosh",
+          "kind": "defn",
+          "doc": "Returns the hyperbolic cosine of value.",
+          "signature": "[value]",
+          "line": 700
+        },
+        {
+          "name": "exp",
+          "kind": "defn",
+          "doc": "Returns Euler's number raised to value.",
+          "signature": "[value]",
+          "line": 706
+        },
+        {
+          "name": "floor",
+          "kind": "defn",
+          "doc": "Rounds value downward to the nearest integral number.",
+          "signature": "[value]",
+          "line": 712
+        },
+        {
+          "name": "pow",
+          "kind": "defn",
+          "doc": "Returns value raised to exponent.",
+          "signature": "[value exponent]",
+          "line": 718
+        },
+        {
+          "name": "sin",
+          "kind": "defn",
+          "doc": "Returns the sine of value in radians.",
+          "signature": "[value]",
+          "line": 724
+        },
+        {
+          "name": "sinh",
+          "kind": "defn",
+          "doc": "Returns the hyperbolic sine of value.",
+          "signature": "[value]",
+          "line": 730
+        },
+        {
+          "name": "sqrt",
+          "kind": "defn",
+          "doc": "Returns the non-negative square root of value.",
+          "signature": "[value]",
+          "line": 736
+        },
+        {
+          "name": "tan",
+          "kind": "defn",
+          "doc": "Returns the tangent of value in radians.",
+          "signature": "[value]",
+          "line": 742
+        },
+        {
+          "name": "tanh",
+          "kind": "defn",
+          "doc": "Returns the hyperbolic tangent of value.",
+          "signature": "[value]",
+          "line": 748
+        },
+        {
+          "name": "T",
+          "kind": "defn",
+          "doc": "Ignores its arguments and returns true.",
+          "signature": "[& values]",
+          "line": 754
+        },
+        {
+          "name": "F",
+          "kind": "defn",
+          "doc": "Ignores its arguments and returns false.",
+          "signature": "[& values]",
+          "line": 759
+        },
+        {
+          "name": "NIL",
+          "kind": "defn",
+          "doc": "Ignores its arguments and returns nil.",
+          "signature": "[& values]",
+          "line": 764
+        },
+        {
+          "name": "U",
+          "kind": "defn",
+          "doc": "Self-application combinator.",
+          "signature": "[function]",
+          "line": 769
+        },
+        {
+          "name": "Z",
+          "kind": "defn",
+          "doc": "Eager fixed-point combinator.",
+          "signature": "[function]",
+          "line": 774
+        },
+        {
+          "name": "Y",
+          "kind": "defn",
+          "doc": "Classical fixed-point combinator; diverges under ordinary eager use.",
+          "signature": "[function]",
+          "line": 781
+        },
+        {
+          "name": "min",
+          "kind": "defn",
+          "doc": "Returns the least of value and values under compare.",
+          "signature": "[value & values]",
+          "line": 792
+        },
+        {
+          "name": "max",
+          "kind": "defn",
+          "doc": "Returns the greatest of value and values under compare.",
+          "signature": "[value & values]",
+          "line": 801
+        },
+        {
+          "name": "sort",
+          "kind": "defn",
+          "doc": "Returns values sorted by comparison (default compare) as a vector. Stable.",
+          "signature": "",
+          "line": 823
+        },
+        {
+          "name": "sort-by",
+          "kind": "defn",
+          "doc": "Returns values sorted by the results of key-function under comparison\n   (default compare).",
+          "signature": "",
+          "line": 836
+        },
+        {
+          "name": "drop-last",
+          "kind": "defn",
+          "doc": "Returns values without its last amount items (default 1) as a vector.",
+          "signature": "",
+          "line": 851
+        },
+        {
+          "name": "butlast",
+          "kind": "defn",
+          "doc": "Returns values without its last item.",
+          "signature": "[values]",
+          "line": 860
+        },
+        {
+          "name": "take-last",
+          "kind": "defn",
+          "doc": "Returns the last amount items of values as a vector.",
+          "signature": "[amount values]",
+          "line": 865
+        },
+        {
+          "name": "split-at",
+          "kind": "defn",
+          "doc": "Returns a pair of vector results from take and drop.",
+          "signature": "[amount values]",
+          "line": 872
+        },
+        {
+          "name": "split-with",
+          "kind": "defn",
+          "doc": "Returns vectors containing the longest matching prefix and the remainder.",
+          "signature": "[predicate values]",
+          "line": 879
+        },
+        {
+          "name": "partition-by",
+          "kind": "defn",
+          "doc": "Returns a vector of the runs of items of values for which function returns\n   equal consecutive markers.",
+          "signature": "[function values]",
+          "line": 894
+        },
+        {
+          "name": "take-nth",
+          "kind": "defn",
+          "doc": "Returns every amount-th item as a vector. Throws on non-positive amount.",
+          "signature": "[amount values]",
+          "line": 914
+        },
+        {
+          "name": "into",
+          "kind": "defn",
+          "doc": "Returns destination with every item of source conjoined.",
+          "signature": "[destination source]",
+          "line": 935
+        },
+        {
+          "name": "distinct",
+          "kind": "defn",
+          "doc": "Returns the items of values with duplicates removed, preserving order and\n   origin.",
+          "signature": "[values]",
+          "line": 941
+        },
+        {
+          "name": "distinct?",
+          "kind": "defn",
+          "doc": "Returns true if no two of values are equal.",
+          "signature": "[& values]",
+          "line": 956
+        },
+        {
+          "name": "mapv",
+          "kind": "defn",
+          "doc": "Returns a vector containing function applied across one or more collections.",
+          "signature": "[function & collections]",
+          "line": 969
+        },
+        {
+          "name": "map-indexed",
+          "kind": "defn",
+          "doc": "Returns a vector of function applied to each index and value.",
+          "signature": "[function values]",
+          "line": 975
+        },
+        {
+          "name": "ffirst",
+          "kind": "defn",
+          "doc": "Returns the first item of the first item in values.",
+          "signature": "[values]",
+          "line": 987
+        },
+        {
+          "name": "remove",
+          "kind": "defn",
+          "doc": "Returns the values for which predicate is false.",
+          "signature": "[predicate values]",
+          "line": 993
+        },
+        {
+          "name": "zipmap",
+          "kind": "defn",
+          "doc": "Returns a map of map-keys to map-values, stopping at the shorter input.",
+          "signature": "[map-keys map-values]",
+          "line": 999
+        },
+        {
+          "name": "map-keys",
+          "kind": "defn",
+          "doc": "Returns a map whose keys are (function key), preserving each value.\n   When transformed keys collide, the later entry wins.",
+          "signature": "[function value-map]",
+          "line": 1010
+        },
+        {
+          "name": "map-vals",
+          "kind": "defn",
+          "doc": "Returns a map with function applied to each value, preserving its keys.",
+          "signature": "[function value-map]",
+          "line": 1024
+        },
+        {
+          "name": "merge-with",
+          "kind": "defn",
+          "doc": "Merges maps left-to-right, combining duplicate values with\n   (function old new). Nil maps are skipped.",
+          "signature": "[function & maps]",
+          "line": 1037
+        },
+        {
+          "name": "group-by",
+          "kind": "defn",
+          "doc": "Returns a map of (function value) to vectors of the values producing it.",
+          "signature": "[function values]",
+          "line": 1060
+        },
+        {
+          "name": "frequencies",
+          "kind": "defn",
+          "doc": "Returns a map of each distinct item of values to its occurrence count.",
+          "signature": "[values]",
+          "line": 1072
+        },
+        {
+          "name": "union",
+          "kind": "defn",
+          "doc": "Returns a set containing every value in sets.",
+          "signature": "[& sets]",
+          "line": 1086
+        },
+        {
+          "name": "intersection",
+          "kind": "defn",
+          "doc": "Returns the values present in every set.",
+          "signature": "[first-set & sets]",
+          "line": 1092
+        },
+        {
+          "name": "difference",
+          "kind": "defn",
+          "doc": "Returns values in first-set absent from every remaining set.",
+          "signature": "[first-set & sets]",
+          "line": 1104
+        },
+        {
+          "name": "subset?",
+          "kind": "defn",
+          "doc": "Returns true when every value in left is present in right.",
+          "signature": "[left right]",
+          "line": 1110
+        },
+        {
+          "name": "superset?",
+          "kind": "defn",
+          "doc": "Returns true when every value in right is present in left.",
+          "signature": "[left right]",
+          "line": 1116
+        },
+        {
+          "name": "hierarchical-top",
+          "kind": "defn",
+          "doc": "Returns the root node of a descendant hierarchy.",
+          "signature": "[index]",
+          "line": 1122
+        },
+        {
+          "name": "hierarchical-sort",
+          "kind": "defn",
+          "doc": "Prunes a descendant hierarchy into its direct dependency graph.",
+          "signature": "[index]",
+          "line": 1133
+        },
+        {
+          "name": "topological-top",
+          "kind": "defn",
+          "doc": "Returns graph nodes which are not dependencies of another node.",
+          "signature": "[graph]",
+          "line": 1154
+        },
+        {
+          "name": "find-cycle",
+          "kind": "defn",
+          "doc": "Returns one closed cycle path from graph, or nil.",
+          "signature": "[graph]",
+          "line": 1181
+        },
+        {
+          "name": "topological-sort",
+          "kind": "defn",
+          "doc": "Returns graph nodes in dependency order and throws on a cycle.",
+          "signature": "[graph]",
+          "line": 1187
+        },
+        {
+          "name": "topological-sort-order-by-deps",
+          "kind": "defn",
+          "doc": "Stably sorts each dependency level by dependency count and node identity.",
+          "signature": "[graph sorted-values]",
+          "line": 1224
+        },
+        {
+          "name": "form?",
+          "kind": "defn",
+          "doc": "Returns true when value is a persistent Hara source form.",
+          "signature": "[value]",
+          "line": 1248
+        },
+        {
+          "name": "walk",
+          "kind": "defn",
+          "doc": "Traverses persistent data while preserving collection kinds and metadata.",
+          "signature": "[inner outer form]",
+          "line": 1254
+        },
+        {
+          "name": "postwalk",
+          "kind": "defn",
+          "doc": "Performs a depth-first post-order traversal.",
+          "signature": "[function form]",
+          "line": 1284
+        },
+        {
+          "name": "prewalk",
+          "kind": "defn",
+          "doc": "Performs a depth-first pre-order traversal.",
+          "signature": "[function form]",
+          "line": 1290
+        },
+        {
+          "name": "prewalk-replace",
+          "kind": "defn",
+          "doc": "Recursively replaces keys found in replacements before descending.",
+          "signature": "[replacements form]",
+          "line": 1296
+        },
+        {
+          "name": "postwalk-replace",
+          "kind": "defn",
+          "doc": "Recursively replaces keys found in replacements after descending.",
+          "signature": "[replacements form]",
+          "line": 1304
+        },
+        {
+          "name": "macroexpand",
+          "kind": "defn",
+          "doc": "Repeatedly applies macroexpand-1 until the form is stable. Throws after\n   1000 expansion steps.",
+          "signature": "[form]",
+          "line": 1315
+        },
+        {
+          "name": "macroexpand-all",
+          "kind": "defn",
+          "doc": "Fully expands form, descending into subforms. Quote bodies are preserved;\n   syntax-quote templates expand only their unquoted parts.",
+          "signature": "[form]",
+          "line": 1371
+        },
+        {
+          "name": "case",
+          "kind": "defmacro",
+          "doc": "Selects the expression paired with the matching constant, or the optional default.",
+          "signature": "[value & clauses]",
+          "line": 1475
+        },
+        {
+          "name": "some->",
+          "kind": "defmacro",
+          "doc": "Threads a non-nil value through forms as their first argument.",
+          "signature": "[value & forms]",
+          "line": 1481
+        },
+        {
+          "name": "some->>",
+          "kind": "defmacro",
+          "doc": "Threads a non-nil value through forms as their last argument.",
+          "signature": "[value & forms]",
+          "line": 1486
+        },
+        {
+          "name": "apply-in",
+          "kind": "defn",
+          "doc": "Invokes value in runtime after IApplicable input and output transforms.",
+          "signature": "[value runtime args]",
+          "line": 1495
+        },
+        {
+          "name": "apply-as",
+          "kind": "defn",
+          "doc": "Invokes value using its default IApplicable runtime.",
+          "signature": "[value args]",
+          "line": 1503
+        },
+        {
+          "name": "invoke-as",
+          "kind": "defn",
+          "doc": "Invokes value using its default IApplicable runtime and arguments.",
+          "signature": "[value & args]",
+          "line": 1509
+        },
+        {
+          "name": "doto",
+          "kind": "defmacro",
+          "doc": "Evaluates value once, invokes each form with it inserted first, and returns\n   the original value.",
+          "signature": "[value & forms]",
+          "line": 1526
+        },
+        {
+          "name": "if-not",
+          "kind": "defmacro",
+          "doc": "Evaluates then when test is false, otherwise the optional alternative.",
+          "signature": "[test then & alternative]",
+          "line": 1536
+        },
+        {
+          "name": "when",
+          "kind": "defmacro",
+          "doc": "Evaluates body when test is truthy, otherwise returns nil.",
+          "signature": "[test & body]",
+          "line": 1541
+        },
+        {
+          "name": "if-let",
+          "kind": "defmacro",
+          "doc": "Binds name to expression; evaluates then when the value is truthy,\n   otherwise the optional alternative.",
+          "signature": "[binding then & alternative]",
+          "line": 1546
+        },
+        {
+          "name": "when-let",
+          "kind": "defmacro",
+          "doc": "Binds name to expression; when the value is truthy, evaluates body.",
+          "signature": "[binding & body]",
+          "line": 1555
+        },
+        {
+          "name": "cond->",
+          "kind": "defmacro",
+          "doc": "Threads value through each step whose condition holds, inserting it as the\n   first argument.",
+          "signature": "[value & clauses]",
+          "line": 1563
+        },
+        {
+          "name": "cond->>",
+          "kind": "defmacro",
+          "doc": "Threads value through each step whose condition holds, inserting it as the\n   last argument.",
+          "signature": "[value & clauses]",
+          "line": 1569
+        },
+        {
+          "name": "with-ns",
+          "kind": "defmacro",
+          "doc": "Evaluates body forms in an existing namespace and restores the caller.",
+          "signature": "[namespace & forms]",
+          "line": 1575
+        },
+        {
+          "name": "intern-in",
+          "kind": "defmacro",
+          "doc": "Copies selected Vars into a namespace as its public façade.",
+          "signature": "[ns? & syms]",
+          "line": 1580
+        },
+        {
+          "name": "intern-all",
+          "kind": "defmacro",
+          "doc": "Copies every public Var from each source namespace into the current namespace.",
+          "signature": "[& namespaces]",
+          "line": 1597
+        },
+        {
+          "name": "*template-meta*",
+          "kind": "def",
+          "doc": "",
+          "signature": "",
+          "line": 1612
+        },
+        {
+          "name": "with:template-meta",
+          "kind": "defmacro",
+          "doc": "Binds template metadata for the duration of body.",
+          "signature": "[metadata & body]",
+          "line": 1614
+        },
+        {
+          "name": "template-meta",
+          "kind": "defn",
+          "doc": "Returns metadata supplied to the active template expansion.",
+          "signature": "[]",
+          "line": 1621
+        },
+        {
+          "name": "template-vars",
+          "kind": "defmacro",
+          "doc": "Evaluates template forms for named source Vars.",
+          "signature": "[spec & entries]",
+          "line": 1627
+        },
+        {
+          "name": "template-entries",
+          "kind": "defmacro",
+          "doc": "Evaluates template forms for literal entries.",
+          "signature": "[spec & entries]",
+          "line": 1643
+        },
+        {
+          "name": "template-ensure",
+          "kind": "defn",
+          "doc": "Returns generated template Vars after the caller has materialized them.",
+          "signature": "[symbols variables]",
+          "line": 1653
+        },
+        {
+          "name": "code-line",
+          "kind": "defmacro",
+          "doc": "Expands to the line number of the invocation form.",
+          "signature": "[]",
+          "line": 1659
+        },
+        {
+          "name": "code-column",
+          "kind": "defmacro",
+          "doc": "Expands to the column number of the invocation form.",
+          "signature": "[]",
+          "line": 1663
+        }
+      ],
+      "examples": [],
+      "group": "foundation",
+      "status": "implemented",
+      "profiles": [
+        "jvm",
+        "rust",
+        "wasm"
+      ]
+    },
     {
       "name": "std.foundation.bytes",
       "source": "std/foundation/bytes.hal",
@@ -55,7 +1276,14 @@
           "line": 74
         }
       ],
-      "examples": []
+      "examples": [],
+      "group": "foundation",
+      "status": "implemented",
+      "profiles": [
+        "jvm",
+        "rust",
+        "wasm"
+      ]
     },
     {
       "name": "std.foundation.coroutine",
@@ -111,77 +1339,105 @@
           "line": 76
         }
       ],
-      "examples": []
-    },
-    {
-      "name": "std.foundation.pretty.engine",
-      "source": "std/foundation/pretty/engine.hal",
-      "definitions": [
-        {
-          "name": "append-text",
-          "kind": "defn",
-          "doc": "",
-          "signature": "[state text visible]",
-          "line": 5
-        },
-        {
-          "name": "render-many",
-          "kind": "defn",
-          "doc": "",
-          "signature": "[documents state options mode indent]",
-          "line": 12
-        },
-        {
-          "name": "line-state",
-          "kind": "defn",
-          "doc": "",
-          "signature": "[state inline terminate mode indent]",
-          "line": 24
-        },
-        {
-          "name": "render-vector",
-          "kind": "defn",
-          "doc": "",
-          "signature": "[document state options mode indent]",
-          "line": 34
-        },
-        {
-          "name": "render-node",
-          "kind": "defn",
-          "doc": "",
-          "signature": "[document state options mode indent]",
-          "line": 90
-        },
-        {
-          "name": "render",
-          "kind": "defn",
-          "doc": "",
-          "signature": "",
-          "line": 107
-        }
-      ],
-      "examples": []
+      "examples": [],
+      "group": "foundation",
+      "status": "implemented",
+      "profiles": [
+        "jvm",
+        "rust",
+        "wasm"
+      ]
     },
     {
       "name": "std.foundation.pretty",
       "source": "std/foundation/pretty.hal",
       "definitions": [
         {
+          "name": "default-options",
+          "kind": "def",
+          "doc": "",
+          "signature": "",
+          "line": 3
+        },
+        {
+          "name": "CanonicalVisitor",
+          "kind": "defstruct",
+          "doc": "",
+          "signature": "[options]",
+          "line": 8
+        },
+        {
+          "name": "PrettyVisitor",
+          "kind": "defstruct",
+          "doc": "",
+          "signature": "[options]",
+          "line": 9
+        },
+        {
+          "name": "canonical-printer",
+          "kind": "defn",
+          "doc": "",
+          "signature": "",
+          "line": 139
+        },
+        {
+          "name": "pretty-printer",
+          "kind": "defn",
+          "doc": "",
+          "signature": "",
+          "line": 145
+        },
+        {
+          "name": "format-doc-edn",
+          "kind": "defn",
+          "doc": "",
+          "signature": "[visitor value]",
+          "line": 151
+        },
+        {
+          "name": "format-doc",
+          "kind": "defn",
+          "doc": "",
+          "signature": "",
+          "line": 154
+        },
+        {
           "name": "render",
           "kind": "defn",
           "doc": "",
           "signature": "",
-          "line": 5
+          "line": 168
         },
         {
           "name": "write",
           "kind": "defn",
           "doc": "",
           "signature": "",
-          "line": 11
+          "line": 172
+        },
+        {
+          "name": "pprint-str",
+          "kind": "defn",
+          "doc": "",
+          "signature": "",
+          "line": 176
+        },
+        {
+          "name": "pprint",
+          "kind": "defn",
+          "doc": "",
+          "signature": "",
+          "line": 183
         }
       ],
-      "examples": []
+      "examples": [],
+      "group": "foundation",
+      "status": "implemented",
+      "profiles": [
+        "jvm",
+        "rust",
+        "wasm"
+      ]
     },
     {
       "name": "std.foundation.promise",
@@ -265,7 +1521,14 @@
           "line": 101
         }
       ],
-      "examples": []
+      "examples": [],
+      "group": "foundation",
+      "status": "implemented",
+      "profiles": [
+        "jvm",
+        "rust",
+        "wasm"
+      ]
     },
     {
       "name": "std.foundation.string",
@@ -276,1340 +1539,304 @@
           "kind": "defn",
           "doc": "Returns the portable character count of value.",
           "signature": "[value]",
-          "line": 30
+          "line": 10
         },
         {
           "name": "blank?",
           "kind": "defn",
-          "doc": "Returns true when value is empty or contains only whitespace.",
+          "doc": "Returns true when value is nil, empty, or contains only whitespace.",
           "signature": "[value]",
-          "line": 36
+          "line": 16
         },
         {
           "name": "includes?",
           "kind": "defn",
           "doc": "Returns true when value contains part.",
           "signature": "[value part]",
-          "line": 42
+          "line": 24
         },
         {
           "name": "starts-with?",
           "kind": "defn",
           "doc": "Returns true when value begins with part.",
           "signature": "[value part]",
-          "line": 48
+          "line": 30
         },
         {
           "name": "ends-with?",
           "kind": "defn",
           "doc": "Returns true when value ends with part.",
           "signature": "[value part]",
-          "line": 54
+          "line": 36
         },
         {
           "name": "char-at",
           "kind": "defn",
           "doc": "Returns the character at index as a one-character string.",
           "signature": "[value index]",
-          "line": 60
+          "line": 42
         },
         {
           "name": "slice",
           "kind": "defn",
           "doc": "Returns the portion of value from start up to optional end.",
           "signature": "",
-          "line": 66
+          "line": 48
         },
         {
           "name": "index-of",
           "kind": "defn",
           "doc": "Returns the first index of part at or after optional offset.",
           "signature": "",
-          "line": 75
+          "line": 57
         },
         {
           "name": "last-index-of",
           "kind": "defn",
           "doc": "Returns the last index of part, optionally bounded by offset.",
           "signature": "",
-          "line": 84
+          "line": 66
         },
         {
           "name": "join",
           "kind": "defn",
           "doc": "Joins values into one string, placing separator between adjacent items.",
           "signature": "[separator values]",
-          "line": 93
+          "line": 75
         },
         {
           "name": "split",
           "kind": "defn",
           "doc": "Splits value around separator and returns the resulting strings.",
           "signature": "[value separator]",
-          "line": 99
+          "line": 81
         },
         {
           "name": "split-lines",
           "kind": "defn",
           "doc": "Splits value at portable line boundaries.",
           "signature": "[value]",
-          "line": 105
+          "line": 87
         },
         {
           "name": "repeat",
           "kind": "defn",
           "doc": "Returns value repeated count times.",
           "signature": "[value count]",
-          "line": 111
+          "line": 93
         },
         {
           "name": "replace",
           "kind": "defn",
           "doc": "Replaces every occurrence of match in value with replacement.",
           "signature": "[value match replacement]",
-          "line": 117
+          "line": 99
         },
         {
           "name": "replace-first",
           "kind": "defn",
           "doc": "Replaces the first occurrence of match in value with replacement.",
           "signature": "[value match replacement]",
-          "line": 123
+          "line": 105
         },
         {
           "name": "trim",
           "kind": "defn",
           "doc": "Removes leading and trailing whitespace from value.",
           "signature": "[value]",
-          "line": 129
+          "line": 111
         },
         {
           "name": "trim-left",
           "kind": "defn",
           "doc": "Removes leading whitespace from value.",
           "signature": "[value]",
-          "line": 135
+          "line": 117
         },
         {
           "name": "trim-right",
           "kind": "defn",
           "doc": "Removes trailing whitespace from value.",
           "signature": "[value]",
-          "line": 141
+          "line": 123
+        },
+        {
+          "name": "trim-newlines",
+          "kind": "defn",
+          "doc": "Removes trailing newline and carriage-return characters from value.",
+          "signature": "[value]",
+          "line": 129
+        },
+        {
+          "name": "upper-case",
+          "kind": "defn",
+          "doc": "Returns value converted to uppercase.",
+          "signature": "[value]",
+          "line": 142
+        },
+        {
+          "name": "lower-case",
+          "kind": "defn",
+          "doc": "Returns value converted to lowercase.",
+          "signature": "[value]",
+          "line": 148
         },
         {
           "name": "upper",
           "kind": "defn",
-          "doc": "Returns value converted to uppercase.",
+          "doc": "Compatibility alias for upper-case.",
           "signature": "[value]",
-          "line": 147
+          "line": 154
         },
         {
           "name": "lower",
           "kind": "defn",
-          "doc": "Returns value converted to lowercase.",
+          "doc": "Compatibility alias for lower-case.",
           "signature": "[value]",
-          "line": 153
+          "line": 160
+        },
+        {
+          "name": "capital-case",
+          "kind": "defn",
+          "doc": "Uppercases the first character and lowercases the remainder.",
+          "signature": "[value]",
+          "line": 166
         },
         {
           "name": "capitalize",
           "kind": "defn",
           "doc": "Uppercases value's first character according to the native contract.",
           "signature": "[value]",
-          "line": 159
+          "line": 178
         },
         {
           "name": "decapitalize",
           "kind": "defn",
           "doc": "Lowercases value's first character according to the native contract.",
           "signature": "[value]",
-          "line": 165
+          "line": 184
         },
         {
           "name": "pad-left",
           "kind": "defn",
           "doc": "Prepends padding until value reaches length.",
           "signature": "[value length padding]",
-          "line": 171
+          "line": 190
         },
         {
           "name": "pad-right",
           "kind": "defn",
           "doc": "Appends padding until value reaches length.",
           "signature": "[value length padding]",
-          "line": 177
+          "line": 196
         },
         {
           "name": "reverse",
           "kind": "defn",
           "doc": "Returns value with its portable character order reversed.",
           "signature": "[value]",
-          "line": 183
+          "line": 202
         },
         {
           "name": "encode-utf8",
           "kind": "defn",
           "doc": "Encodes value as UTF-8 bytes.",
           "signature": "[value]",
-          "line": 189
+          "line": 208
         },
         {
           "name": "decode-utf8",
           "kind": "defn",
           "doc": "Decodes UTF-8 bytes into a string.",
           "signature": "[value]",
-          "line": 195
+          "line": 214
+        },
+        {
+          "name": "tag",
+          "kind": "defn",
+          "doc": "Returns portable tag text and concatenates additional values without a separator.",
+          "signature": "",
+          "line": 238
+        },
+        {
+          "name": "escape",
+          "kind": "defn",
+          "doc": "Replaces each one-character string found in replacements.",
+          "signature": "[value replacements]",
+          "line": 251
+        },
+        {
+          "name": "caseless=",
+          "kind": "defn",
+          "doc": "Returns true when values are equal after lowercase conversion.",
+          "signature": "[left right]",
+          "line": 267
+        },
+        {
+          "name": "replace-at",
+          "kind": "defn",
+          "doc": "Replaces the character at a portable Unicode index.",
+          "signature": "[value index replacement]",
+          "line": 274
+        },
+        {
+          "name": "insert-at",
+          "kind": "defn",
+          "doc": "Inserts replacement at a portable Unicode index.",
+          "signature": "[value index replacement]",
+          "line": 282
+        },
+        {
+          "name": "camel-case",
+          "kind": "defn",
+          "doc": "Converts spaces, underscores, hyphens, and camel humps to camelCase.",
+          "signature": "[value]",
+          "line": 351
+        },
+        {
+          "name": "pascal-case",
+          "kind": "defn",
+          "doc": "Converts spaces, underscores, hyphens, and camel humps to PascalCase.",
+          "signature": "[value]",
+          "line": 364
+        },
+        {
+          "name": "snake-case",
+          "kind": "defn",
+          "doc": "Converts spaces, hyphens, and camel humps to snake_case.",
+          "signature": "[value]",
+          "line": 374
+        },
+        {
+          "name": "spear-case",
+          "kind": "defn",
+          "doc": "Converts spaces, underscores, and camel humps to spear-case.",
+          "signature": "[value]",
+          "line": 380
+        },
+        {
+          "name": "dot-case",
+          "kind": "defn",
+          "doc": "Converts spaces, underscores, hyphens, and camel humps to dot.case.",
+          "signature": "[value]",
+          "line": 386
         },
         {
           "name": "to-fixed",
           "kind": "defn",
           "doc": "Formats numeric value with exactly precision fractional digits.",
           "signature": "[value precision]",
-          "line": 201
-        }
-      ],
-      "examples": []
-    },
-    {
-      "name": "std.foundation",
-      "source": "std/foundation.hal",
-      "definitions": [
-        {
-          "name": "read-forms",
-          "kind": "defn",
-          "doc": "Reads every top-level form from a capability-gated HAL source file.",
-          "signature": "[path]",
-          "line": 53
-        },
-        {
-          "name": "identity",
-          "kind": "defn",
-          "doc": "Returns its argument unchanged.",
-          "signature": "[value]",
-          "line": 63
-        },
-        {
-          "name": "inc",
-          "kind": "defn",
-          "doc": "Returns value + 1.",
-          "signature": "[value]",
-          "line": 68
-        },
-        {
-          "name": "dec",
-          "kind": "defn",
-          "doc": "Returns value - 1.",
-          "signature": "[value]",
-          "line": 73
-        },
-        {
-          "name": "constantly",
-          "kind": "defn",
-          "doc": "Returns a function that ignores its arguments and always returns value.",
-          "signature": "[value]",
-          "line": 78
-        },
-        {
-          "name": "comp",
-          "kind": "defn",
-          "doc": "Composes two or more functions right-to-left.",
-          "signature": "",
-          "line": 83
-        },
-        {
-          "name": "complement",
-          "kind": "defn",
-          "doc": "Returns a function returning the logical negation of predicate's result.",
-          "signature": "[predicate]",
-          "line": 96
-        },
-        {
-          "name": "partial",
-          "kind": "defn",
-          "doc": "Returns a function that calls function with arguments prepended to its own.",
-          "signature": "[function & arguments]",
-          "line": 101
-        },
-        {
-          "name": "juxt",
-          "kind": "defn",
-          "doc": "Returns a function whose result is the vector of each function applied to\n   its arguments.",
-          "signature": "[& functions]",
-          "line": 108
-        },
-        {
-          "name": "boolean",
-          "kind": "defn",
-          "doc": "Coerces value to true or false using Hara truthiness.",
-          "signature": "[value]",
-          "line": 122
-        },
-        {
-          "name": "zero?",
-          "kind": "defn",
-          "doc": "Returns true if value equals 0.",
-          "signature": "[value]",
-          "line": 127
-        },
-        {
-          "name": "pos?",
-          "kind": "defn",
-          "doc": "Returns true if value is greater than 0.",
-          "signature": "[value]",
-          "line": 132
-        },
-        {
-          "name": "neg?",
-          "kind": "defn",
-          "doc": "Returns true if value is less than 0.",
-          "signature": "[value]",
-          "line": 137
-        },
-        {
-          "name": "even?",
-          "kind": "defn",
-          "doc": "Returns true if value is evenly divisible by 2.",
-          "signature": "[value]",
-          "line": 142
-        },
-        {
-          "name": "odd?",
-          "kind": "defn",
-          "doc": "Returns true if value is not evenly divisible by 2.",
-          "signature": "[value]",
-          "line": 147
-        },
-        {
-          "name": "nil?",
-          "kind": "defn",
-          "doc": "Returns true if value is nil.",
-          "signature": "[value]",
-          "line": 152
-        },
-        {
-          "name": "false?",
-          "kind": "defn",
-          "doc": "Returns true if value is exactly false.",
-          "signature": "[value]",
-          "line": 157
-        },
-        {
-          "name": "true?",
-          "kind": "defn",
-          "doc": "Returns true if value is exactly true.",
-          "signature": "[value]",
-          "line": 162
-        },
-        {
-          "name": "has?",
-          "kind": "defn",
-          "doc": "Returns true if collection contains key, including when its value is nil.",
-          "signature": "[collection key]",
-          "line": 167
-        },
-        {
-          "name": "reset!",
-          "kind": "defn",
-          "doc": "Sets reference to value through IReset and returns value.",
-          "signature": "[reference value]",
-          "line": 177
-        },
-        {
-          "name": "cas!",
-          "kind": "defn",
-          "doc": "Atomically replaces old-value with new-value through ICas.",
-          "signature": "[reference old-value new-value]",
-          "line": 183
-        },
-        {
-          "name": "swap!",
-          "kind": "defn",
-          "doc": "Atomically applies function to reference through an ICas retry loop.",
-          "signature": "[reference function & arguments]",
-          "line": 189
-        },
-        {
-          "name": "watch-add",
-          "kind": "defn",
-          "doc": "Adds a keyed watch callback through IWatch and returns reference.",
-          "signature": "[reference key function]",
-          "line": 200
-        },
-        {
-          "name": "watch-remove",
-          "kind": "defn",
-          "doc": "Removes keyed watch through IWatch and returns reference.",
-          "signature": "[reference key]",
-          "line": 206
-        },
-        {
-          "name": "watch-list",
-          "kind": "defn",
-          "doc": "Returns reference's watch iterator through IWatch.",
-          "signature": "[reference]",
-          "line": 212
-        },
-        {
-          "name": "empty?",
-          "kind": "defn",
-          "doc": "Returns true if value yields no items.",
-          "signature": "[value]",
-          "line": 222
-        },
-        {
-          "name": "first",
-          "kind": "defn",
-          "doc": "Returns the first item of value, or nil if value is empty.",
-          "signature": "[value]",
-          "line": 227
-        },
-        {
-          "name": "second",
-          "kind": "defn",
-          "doc": "Returns the second item of value, or nil if value has fewer than two items.",
-          "signature": "[value]",
-          "line": 234
-        },
-        {
-          "name": "rest",
-          "kind": "defn",
-          "doc": "Returns all but the first item of value as a seq, or nil if empty.",
-          "signature": "[value]",
-          "line": 239
-        },
-        {
-          "name": "not-empty",
-          "kind": "defn",
-          "doc": "Returns value if it has any items, nil otherwise.",
-          "signature": "[value]",
-          "line": 245
-        },
-        {
-          "name": "last",
-          "kind": "defn",
-          "doc": "Returns the last item of value, or nil if value is empty.",
-          "signature": "[value]",
-          "line": 250
-        },
-        {
-          "name": "reverse",
-          "kind": "defn",
-          "doc": "Returns the items of value in reverse order as a list.",
-          "signature": "[value]",
-          "line": 260
-        },
-        {
-          "name": "get-in",
-          "kind": "defn",
-          "doc": "Returns the value at the end of the key path keys, or nil if absent.",
-          "signature": "[value keys]",
-          "line": 274
-        },
-        {
-          "name": "assoc-in",
-          "kind": "defn",
-          "doc": "Returns value with new-value associated at the end of the key path keys,\n   creating intermediate maps as needed.",
-          "signature": "[value keys new-value]",
-          "line": 285
-        },
-        {
-          "name": "update",
-          "kind": "defn",
-          "doc": "Associates key in value with the result of applying function to the old\n   value and args.",
-          "signature": "[value key function & args]",
-          "line": 299
-        },
-        {
-          "name": "update-in",
-          "kind": "defn",
-          "doc": "Like update, but at the end of the key path keys.",
-          "signature": "[value keys function & args]",
-          "line": 306
-        },
-        {
-          "name": "key",
-          "kind": "defn",
-          "doc": "Returns the key of a map entry.",
-          "signature": "[entry]",
-          "line": 316
-        },
-        {
-          "name": "val",
-          "kind": "defn",
-          "doc": "Returns the value of a map entry.",
-          "signature": "[entry]",
-          "line": 321
-        },
-        {
-          "name": "keys",
-          "kind": "defn",
-          "doc": "Returns a vector of the map's keys.",
-          "signature": "[value]",
-          "line": 326
-        },
-        {
-          "name": "vals",
-          "kind": "defn",
-          "doc": "Returns a vector of the map's values.",
-          "signature": "[value]",
-          "line": 331
-        },
-        {
-          "name": "range",
-          "kind": "defn",
-          "doc": "Returns a lazy seq of numbers: from 0 upward, below end, or from start\n   below end.",
-          "signature": "",
-          "line": 362
-        },
-        {
-          "name": "repeat",
-          "kind": "defn",
-          "doc": "Returns a lazy seq of value repeated forever, or amount times.",
-          "signature": "",
-          "line": 378
-        },
-        {
-          "name": "repeatedly",
-          "kind": "defn",
-          "doc": "Returns a lazy seq of calls to function, forever or amount times.",
-          "signature": "",
-          "line": 385
-        },
-        {
-          "name": "iterate",
-          "kind": "defn",
-          "doc": "Returns a lazy seq of seed, (function seed), (function (function seed)), …",
-          "signature": "[function seed]",
           "line": 392
-        },
-        {
-          "name": "take-while",
-          "kind": "defn",
-          "doc": "Unary form returns an iterator transform; collection form eagerly\n   materializes items while predicate holds.",
-          "signature": "",
-          "line": 397
-        },
-        {
-          "name": "drop-while",
-          "kind": "defn",
-          "doc": "Unary form returns an iterator transform; collection form eagerly\n   materializes after dropping items while predicate holds.",
-          "signature": "",
-          "line": 405
-        },
-        {
-          "name": "partition-all",
-          "kind": "defn",
-          "doc": "Partitions value into groups of at most amount items; unary form returns a\n   transform.",
-          "signature": "",
-          "line": 413
-        },
-        {
-          "name": "partition",
-          "kind": "defn",
-          "doc": "Partitions value into groups of exactly amount items; unary form returns a\n   transform.",
-          "signature": "",
-          "line": 422
-        },
-        {
-          "name": "interpose",
-          "kind": "defn",
-          "doc": "Unary form returns an iterator transform; collection form eagerly inserts\n   separator between items.",
-          "signature": "",
-          "line": 431
-        },
-        {
-          "name": "interleave",
-          "kind": "defn",
-          "doc": "Eagerly returns the first items of each source, then the second items, and\n   so on, stopping at the shortest source.",
-          "signature": "[value & rest]",
-          "line": 439
-        },
-        {
-          "name": "map",
-          "kind": "defn",
-          "doc": "Unary form returns an iterator transform. Otherwise eagerly maps function\n   over one or more sources into a vector, stopping at the shortest.",
-          "signature": "",
-          "line": 447
-        },
-        {
-          "name": "filter",
-          "kind": "defn",
-          "doc": "Unary form returns an iterator transform; collection form eagerly keeps\n   items for which predicate returns true.",
-          "signature": "",
-          "line": 457
-        },
-        {
-          "name": "take",
-          "kind": "defn",
-          "doc": "Unary form returns an iterator transform; collection form eagerly returns\n   the first amount items.",
-          "signature": "",
-          "line": 465
-        },
-        {
-          "name": "drop",
-          "kind": "defn",
-          "doc": "Unary form returns an iterator transform; collection form eagerly returns\n   all but the first amount items.",
-          "signature": "",
-          "line": 472
-        },
-        {
-          "name": "mapcat",
-          "kind": "defn",
-          "doc": "Unary form returns an iterator transform; collection form eagerly maps and\n   concatenates.",
-          "signature": "",
-          "line": 479
-        },
-        {
-          "name": "keep",
-          "kind": "defn",
-          "doc": "Unary form returns an iterator transform; collection form eagerly returns\n   non-nil mapped results.",
-          "signature": "",
-          "line": 487
-        },
-        {
-          "name": "cycle",
-          "kind": "defn",
-          "doc": "Returns a lazy seq repeating the items of value forever.",
-          "signature": "[value]",
-          "line": 495
-        },
-        {
-          "name": "zip",
-          "kind": "defn",
-          "doc": "Eagerly returns tuples of the items of each source in parallel, stopping at\n   the shortest source.",
-          "signature": "[first & rest]",
-          "line": 500
-        },
-        {
-          "name": "partition-pair",
-          "kind": "defn",
-          "doc": "Eagerly returns value partitioned into pairs.",
-          "signature": "[value]",
-          "line": 508
-        },
-        {
-          "name": "every?",
-          "kind": "defn",
-          "doc": "Unary form returns a reusable terminal; collection form tests every item.",
-          "signature": "",
-          "line": 513
-        },
-        {
-          "name": "any?",
-          "kind": "defn",
-          "doc": "Unary form returns a reusable terminal; collection form tests any item.",
-          "signature": "",
-          "line": 519
-        },
-        {
-          "name": "E",
-          "kind": "def",
-          "doc": "",
-          "signature": "",
-          "line": 529
-        },
-        {
-          "name": "PI",
-          "kind": "def",
-          "doc": "",
-          "signature": "",
-          "line": 531
-        },
-        {
-          "name": "long",
-          "kind": "defn",
-          "doc": "Converts a numeric value to a signed 64-bit integer by truncating toward zero.",
-          "signature": "[value]",
-          "line": 536
-        },
-        {
-          "name": "double",
-          "kind": "defn",
-          "doc": "Converts a numeric value to an IEEE-754 double.",
-          "signature": "[value]",
-          "line": 542
-        },
-        {
-          "name": "bit-and",
-          "kind": "defn",
-          "doc": "Returns the bitwise conjunction of values through the portable Bits boundary.",
-          "signature": "[& values]",
-          "line": 548
-        },
-        {
-          "name": "bit-or",
-          "kind": "defn",
-          "doc": "Returns the bitwise disjunction of values through the portable Bits boundary.",
-          "signature": "[& values]",
-          "line": 554
-        },
-        {
-          "name": "bit-xor",
-          "kind": "defn",
-          "doc": "Returns the bitwise exclusive-or of values through the portable Bits boundary.",
-          "signature": "[& values]",
-          "line": 560
-        },
-        {
-          "name": "bit-not",
-          "kind": "defn",
-          "doc": "Returns the bitwise complement of value through the portable Bits boundary.",
-          "signature": "[value]",
-          "line": 566
-        },
-        {
-          "name": "bit-shift-left",
-          "kind": "defn",
-          "doc": "Left-shifts the first value by the remaining shift counts.",
-          "signature": "[& values]",
-          "line": 572
-        },
-        {
-          "name": "bit-shift-right",
-          "kind": "defn",
-          "doc": "Right-shifts the first value by the remaining shift counts.",
-          "signature": "[& values]",
-          "line": 578
-        },
-        {
-          "name": "abs",
-          "kind": "defn",
-          "doc": "Returns the absolute magnitude of value.",
-          "signature": "[value]",
-          "line": 584
-        },
-        {
-          "name": "acos",
-          "kind": "defn",
-          "doc": "Returns the arc cosine of value in radians.",
-          "signature": "[value]",
-          "line": 590
-        },
-        {
-          "name": "acosh",
-          "kind": "defn",
-          "doc": "Returns the inverse hyperbolic cosine of value.",
-          "signature": "[value]",
-          "line": 596
-        },
-        {
-          "name": "asin",
-          "kind": "defn",
-          "doc": "Returns the arc sine of value in radians.",
-          "signature": "[value]",
-          "line": 602
-        },
-        {
-          "name": "asinh",
-          "kind": "defn",
-          "doc": "Returns the inverse hyperbolic sine of value.",
-          "signature": "[value]",
-          "line": 608
-        },
-        {
-          "name": "atan",
-          "kind": "defn",
-          "doc": "Returns the arc tangent of value in radians.",
-          "signature": "[value]",
-          "line": 614
-        },
-        {
-          "name": "atan2",
-          "kind": "defn",
-          "doc": "Returns the angle for y and x in radians.",
-          "signature": "[y x]",
-          "line": 620
-        },
-        {
-          "name": "atanh",
-          "kind": "defn",
-          "doc": "Returns the inverse hyperbolic tangent of value.",
-          "signature": "[value]",
-          "line": 626
-        },
-        {
-          "name": "ceil",
-          "kind": "defn",
-          "doc": "Rounds value upward to the nearest integral number.",
-          "signature": "[value]",
-          "line": 632
-        },
-        {
-          "name": "cos",
-          "kind": "defn",
-          "doc": "Returns the cosine of value in radians.",
-          "signature": "[value]",
-          "line": 638
-        },
-        {
-          "name": "cosh",
-          "kind": "defn",
-          "doc": "Returns the hyperbolic cosine of value.",
-          "signature": "[value]",
-          "line": 644
-        },
-        {
-          "name": "exp",
-          "kind": "defn",
-          "doc": "Returns Euler's number raised to value.",
-          "signature": "[value]",
-          "line": 650
-        },
-        {
-          "name": "floor",
-          "kind": "defn",
-          "doc": "Rounds value downward to the nearest integral number.",
-          "signature": "[value]",
-          "line": 656
-        },
-        {
-          "name": "pow",
-          "kind": "defn",
-          "doc": "Returns value raised to exponent.",
-          "signature": "[value exponent]",
-          "line": 662
-        },
-        {
-          "name": "sin",
-          "kind": "defn",
-          "doc": "Returns the sine of value in radians.",
-          "signature": "[value]",
-          "line": 668
-        },
-        {
-          "name": "sinh",
-          "kind": "defn",
-          "doc": "Returns the hyperbolic sine of value.",
-          "signature": "[value]",
-          "line": 674
-        },
-        {
-          "name": "sqrt",
-          "kind": "defn",
-          "doc": "Returns the non-negative square root of value.",
-          "signature": "[value]",
-          "line": 680
-        },
-        {
-          "name": "tan",
-          "kind": "defn",
-          "doc": "Returns the tangent of value in radians.",
-          "signature": "[value]",
-          "line": 686
-        },
-        {
-          "name": "tanh",
-          "kind": "defn",
-          "doc": "Returns the hyperbolic tangent of value.",
-          "signature": "[value]",
-          "line": 692
-        },
-        {
-          "name": "T",
-          "kind": "defn",
-          "doc": "Ignores its arguments and returns true.",
-          "signature": "[& values]",
-          "line": 698
-        },
-        {
-          "name": "F",
-          "kind": "defn",
-          "doc": "Ignores its arguments and returns false.",
-          "signature": "[& values]",
-          "line": 703
-        },
-        {
-          "name": "NIL",
-          "kind": "defn",
-          "doc": "Ignores its arguments and returns nil.",
-          "signature": "[& values]",
-          "line": 708
-        },
-        {
-          "name": "U",
-          "kind": "defn",
-          "doc": "Self-application combinator.",
-          "signature": "[function]",
-          "line": 713
-        },
-        {
-          "name": "Z",
-          "kind": "defn",
-          "doc": "Eager fixed-point combinator.",
-          "signature": "[function]",
-          "line": 718
-        },
-        {
-          "name": "Y",
-          "kind": "defn",
-          "doc": "Classical fixed-point combinator; diverges under ordinary eager use.",
-          "signature": "[function]",
-          "line": 725
-        },
-        {
-          "name": "min",
-          "kind": "defn",
-          "doc": "Returns the least of value and values under compare.",
-          "signature": "[value & values]",
-          "line": 736
-        },
-        {
-          "name": "max",
-          "kind": "defn",
-          "doc": "Returns the greatest of value and values under compare.",
-          "signature": "[value & values]",
-          "line": 745
-        },
-        {
-          "name": "sort",
-          "kind": "defn",
-          "doc": "Returns values sorted by comparison (default compare) as a vector. Stable.",
-          "signature": "",
-          "line": 767
-        },
-        {
-          "name": "sort-by",
-          "kind": "defn",
-          "doc": "Returns values sorted by the results of key-function under comparison\n   (default compare).",
-          "signature": "",
-          "line": 780
-        },
-        {
-          "name": "drop-last",
-          "kind": "defn",
-          "doc": "Returns values without its last amount items (default 1) as a vector.",
-          "signature": "",
-          "line": 795
-        },
-        {
-          "name": "butlast",
-          "kind": "defn",
-          "doc": "Returns values without its last item.",
-          "signature": "[values]",
-          "line": 804
-        },
-        {
-          "name": "take-last",
-          "kind": "defn",
-          "doc": "Returns the last amount items of values as a vector.",
-          "signature": "[amount values]",
-          "line": 809
-        },
-        {
-          "name": "split-at",
-          "kind": "defn",
-          "doc": "Returns a pair of vector results from take and drop.",
-          "signature": "[amount values]",
-          "line": 816
-        },
-        {
-          "name": "split-with",
-          "kind": "defn",
-          "doc": "Returns vectors containing the longest matching prefix and the remainder.",
-          "signature": "[predicate values]",
-          "line": 823
-        },
-        {
-          "name": "partition-by",
-          "kind": "defn",
-          "doc": "Returns a vector of the runs of items of values for which function returns\n   equal consecutive markers.",
-          "signature": "[function values]",
-          "line": 838
-        },
-        {
-          "name": "take-nth",
-          "kind": "defn",
-          "doc": "Returns every amount-th item as a vector. Throws on non-positive amount.",
-          "signature": "[amount values]",
-          "line": 858
-        },
-        {
-          "name": "into",
-          "kind": "defn",
-          "doc": "Returns destination with every item of source conjoined.",
-          "signature": "[destination source]",
-          "line": 879
-        },
-        {
-          "name": "distinct",
-          "kind": "defn",
-          "doc": "Returns the items of values with duplicates removed, preserving order and\n   origin.",
-          "signature": "[values]",
-          "line": 885
-        },
-        {
-          "name": "distinct?",
-          "kind": "defn",
-          "doc": "Returns true if no two of values are equal.",
-          "signature": "[& values]",
-          "line": 900
-        },
-        {
-          "name": "mapv",
-          "kind": "defn",
-          "doc": "Returns a vector containing function applied across one or more collections.",
-          "signature": "[function & collections]",
-          "line": 913
-        },
-        {
-          "name": "map-indexed",
-          "kind": "defn",
-          "doc": "Returns a vector of function applied to each index and value.",
-          "signature": "[function values]",
-          "line": 919
-        },
-        {
-          "name": "ffirst",
-          "kind": "defn",
-          "doc": "Returns the first item of the first item in values.",
-          "signature": "[values]",
-          "line": 931
-        },
-        {
-          "name": "remove",
-          "kind": "defn",
-          "doc": "Returns the values for which predicate is false.",
-          "signature": "[predicate values]",
-          "line": 937
-        },
-        {
-          "name": "zipmap",
-          "kind": "defn",
-          "doc": "Returns a map of map-keys to map-values, stopping at the shorter input.",
-          "signature": "[map-keys map-values]",
-          "line": 943
-        },
-        {
-          "name": "map-keys",
-          "kind": "defn",
-          "doc": "Returns a map whose keys are (function key), preserving each value.\n   When transformed keys collide, the later entry wins.",
-          "signature": "[function value-map]",
-          "line": 954
-        },
-        {
-          "name": "map-vals",
-          "kind": "defn",
-          "doc": "Returns a map with function applied to each value, preserving its keys.",
-          "signature": "[function value-map]",
-          "line": 968
-        },
-        {
-          "name": "merge-with",
-          "kind": "defn",
-          "doc": "Merges maps left-to-right, combining duplicate values with\n   (function old new). Nil maps are skipped.",
-          "signature": "[function & maps]",
-          "line": 981
-        },
-        {
-          "name": "group-by",
-          "kind": "defn",
-          "doc": "Returns a map of (function value) to vectors of the values producing it.",
-          "signature": "[function values]",
-          "line": 1004
-        },
-        {
-          "name": "frequencies",
-          "kind": "defn",
-          "doc": "Returns a map of each distinct item of values to its occurrence count.",
-          "signature": "[values]",
-          "line": 1016
-        },
-        {
-          "name": "union",
-          "kind": "defn",
-          "doc": "Returns a set containing every value in sets.",
-          "signature": "[& sets]",
-          "line": 1030
-        },
-        {
-          "name": "intersection",
-          "kind": "defn",
-          "doc": "Returns the values present in every set.",
-          "signature": "[first-set & sets]",
-          "line": 1036
-        },
-        {
-          "name": "difference",
-          "kind": "defn",
-          "doc": "Returns values in first-set absent from every remaining set.",
-          "signature": "[first-set & sets]",
-          "line": 1048
-        },
-        {
-          "name": "subset?",
-          "kind": "defn",
-          "doc": "Returns true when every value in left is present in right.",
-          "signature": "[left right]",
-          "line": 1054
-        },
-        {
-          "name": "superset?",
-          "kind": "defn",
-          "doc": "Returns true when every value in right is present in left.",
-          "signature": "[left right]",
-          "line": 1060
-        },
-        {
-          "name": "hierarchical-top",
-          "kind": "defn",
-          "doc": "Returns the root node of a descendant hierarchy.",
-          "signature": "[index]",
-          "line": 1066
-        },
-        {
-          "name": "hierarchical-sort",
-          "kind": "defn",
-          "doc": "Prunes a descendant hierarchy into its direct dependency graph.",
-          "signature": "[index]",
-          "line": 1077
-        },
-        {
-          "name": "topological-top",
-          "kind": "defn",
-          "doc": "Returns graph nodes which are not dependencies of another node.",
-          "signature": "[graph]",
-          "line": 1098
-        },
-        {
-          "name": "find-cycle",
-          "kind": "defn",
-          "doc": "Returns one closed cycle path from graph, or nil.",
-          "signature": "[graph]",
-          "line": 1125
-        },
-        {
-          "name": "topological-sort",
-          "kind": "defn",
-          "doc": "Returns graph nodes in dependency order and throws on a cycle.",
-          "signature": "[graph]",
-          "line": 1131
-        },
-        {
-          "name": "topological-sort-order-by-deps",
-          "kind": "defn",
-          "doc": "Stably sorts each dependency level by dependency count and node identity.",
-          "signature": "[graph sorted-values]",
-          "line": 1168
-        },
-        {
-          "name": "walk",
-          "kind": "defn",
-          "doc": "Traverses persistent data while preserving collection kinds and metadata.",
-          "signature": "[inner outer form]",
-          "line": 1192
-        },
-        {
-          "name": "postwalk",
-          "kind": "defn",
-          "doc": "Performs a depth-first post-order traversal.",
-          "signature": "[function form]",
-          "line": 1222
-        },
-        {
-          "name": "prewalk",
-          "kind": "defn",
-          "doc": "Performs a depth-first pre-order traversal.",
-          "signature": "[function form]",
-          "line": 1228
-        },
-        {
-          "name": "prewalk-replace",
-          "kind": "defn",
-          "doc": "Recursively replaces keys found in replacements before descending.",
-          "signature": "[replacements form]",
-          "line": 1234
-        },
-        {
-          "name": "postwalk-replace",
-          "kind": "defn",
-          "doc": "Recursively replaces keys found in replacements after descending.",
-          "signature": "[replacements form]",
-          "line": 1242
-        },
-        {
-          "name": "macroexpand",
-          "kind": "defn",
-          "doc": "Repeatedly applies macroexpand-1 until the form is stable. Throws after\n   1000 expansion steps.",
-          "signature": "[form]",
-          "line": 1253
-        },
-        {
-          "name": "macroexpand-all",
-          "kind": "defn",
-          "doc": "Fully expands form, descending into subforms. Quote bodies are preserved;\n   syntax-quote templates expand only their unquoted parts.",
-          "signature": "[form]",
-          "line": 1309
-        },
-        {
-          "name": "case",
-          "kind": "defmacro",
-          "doc": "Selects the expression paired with the matching constant, or the optional default.",
-          "signature": "[value & clauses]",
-          "line": 1413
-        },
-        {
-          "name": "some->",
-          "kind": "defmacro",
-          "doc": "Threads a non-nil value through forms as their first argument.",
-          "signature": "[value & forms]",
-          "line": 1419
-        },
-        {
-          "name": "some->>",
-          "kind": "defmacro",
-          "doc": "Threads a non-nil value through forms as their last argument.",
-          "signature": "[value & forms]",
-          "line": 1424
-        },
-        {
-          "name": "apply-in",
-          "kind": "defn",
-          "doc": "Invokes value in runtime after IApplicable input and output transforms.",
-          "signature": "[value runtime args]",
-          "line": 1433
-        },
-        {
-          "name": "apply-as",
-          "kind": "defn",
-          "doc": "Invokes value using its default IApplicable runtime.",
-          "signature": "[value args]",
-          "line": 1441
-        },
-        {
-          "name": "invoke-as",
-          "kind": "defn",
-          "doc": "Invokes value using its default IApplicable runtime and arguments.",
-          "signature": "[value & args]",
-          "line": 1447
-        },
-        {
-          "name": "doto",
-          "kind": "defmacro",
-          "doc": "Evaluates value once, invokes each form with it inserted first, and returns\n   the original value.",
-          "signature": "[value & forms]",
-          "line": 1464
-        },
-        {
-          "name": "if-not",
-          "kind": "defmacro",
-          "doc": "Evaluates then when test is false, otherwise the optional alternative.",
-          "signature": "[test then & alternative]",
-          "line": 1474
-        },
-        {
-          "name": "when",
-          "kind": "defmacro",
-          "doc": "Evaluates body when test is truthy, otherwise returns nil.",
-          "signature": "[test & body]",
-          "line": 1479
-        },
-        {
-          "name": "if-let",
-          "kind": "defmacro",
-          "doc": "Binds name to expression; evaluates then when the value is truthy,\n   otherwise the optional alternative.",
-          "signature": "[binding then & alternative]",
-          "line": 1484
-        },
-        {
-          "name": "when-let",
-          "kind": "defmacro",
-          "doc": "Binds name to expression; when the value is truthy, evaluates body.",
-          "signature": "[binding & body]",
-          "line": 1493
-        },
-        {
-          "name": "cond->",
-          "kind": "defmacro",
-          "doc": "Threads value through each step whose condition holds, inserting it as the\n   first argument.",
-          "signature": "[value & clauses]",
-          "line": 1501
-        },
-        {
-          "name": "cond->>",
-          "kind": "defmacro",
-          "doc": "Threads value through each step whose condition holds, inserting it as the\n   last argument.",
-          "signature": "[value & clauses]",
-          "line": 1507
-        },
-        {
-          "name": "with-ns",
-          "kind": "defmacro",
-          "doc": "Evaluates body forms in an existing namespace and restores the caller.",
-          "signature": "[namespace & forms]",
-          "line": 1513
-        },
-        {
-          "name": "intern-in",
-          "kind": "defmacro",
-          "doc": "Copies selected Vars into a namespace as its public façade.",
-          "signature": "[ns? & syms]",
-          "line": 1518
-        },
-        {
-          "name": "intern-all",
-          "kind": "defmacro",
-          "doc": "Copies every public Var from each source namespace into the current namespace.",
-          "signature": "[& namespaces]",
-          "line": 1535
-        },
-        {
-          "name": "*template-meta*",
-          "kind": "def",
-          "doc": "",
-          "signature": "",
-          "line": 1550
-        },
-        {
-          "name": "with:template-meta",
-          "kind": "defmacro",
-          "doc": "Binds template metadata for the duration of body.",
-          "signature": "[metadata & body]",
-          "line": 1552
-        },
-        {
-          "name": "template-meta",
-          "kind": "defn",
-          "doc": "Returns metadata supplied to the active template expansion.",
-          "signature": "[]",
-          "line": 1559
-        },
-        {
-          "name": "template-vars",
-          "kind": "defmacro",
-          "doc": "Evaluates template forms for named source Vars.",
-          "signature": "[spec & entries]",
-          "line": 1565
-        },
-        {
-          "name": "template-entries",
-          "kind": "defmacro",
-          "doc": "Evaluates template forms for literal entries.",
-          "signature": "[spec & entries]",
-          "line": 1581
-        },
-        {
-          "name": "template-ensure",
-          "kind": "defn",
-          "doc": "Returns generated template Vars after the caller has materialized them.",
-          "signature": "[symbols variables]",
-          "line": 1591
-        },
-        {
-          "name": "code-line",
-          "kind": "defmacro",
-          "doc": "Expands to the line number of the invocation form.",
-          "signature": "[]",
-          "line": 1597
-        },
-        {
-          "name": "code-column",
-          "kind": "defmacro",
-          "doc": "Expands to the column number of the invocation form.",
-          "signature": "[]",
-          "line": 1601
         }
       ],
-      "examples": []
+      "examples": [],
+      "group": "foundation",
+      "status": "implemented",
+      "profiles": [
+        "jvm",
+        "rust",
+        "wasm"
+      ]
     },
     {
       "name": "std.lib.collection",
@@ -1819,7 +2046,417 @@
           "line": 151
         }
       ],
-      "examples": []
+      "examples": [],
+      "group": "library",
+      "status": "implemented",
+      "profiles": [
+        "jvm",
+        "rust",
+        "wasm"
+      ]
+    }
+  ],
+  "aliases": [
+    {
+      "alias": "bytes",
+      "target": "std.foundation.bytes",
+      "kind": "namespace-alias",
+      "automatic": true
+    },
+    {
+      "alias": "co",
+      "target": "std.foundation.coroutine",
+      "kind": "namespace-alias",
+      "automatic": true
+    },
+    {
+      "alias": "pretty",
+      "target": "std.foundation.pretty",
+      "kind": "namespace-alias",
+      "automatic": true
+    },
+    {
+      "alias": "promise",
+      "target": "std.foundation.promise",
+      "kind": "namespace-alias",
+      "automatic": true
+    },
+    {
+      "alias": "str",
+      "target": "std.foundation.string",
+      "kind": "namespace-alias",
+      "automatic": true
+    }
+  ],
+  "nativeObjects": [
+    {
+      "name": "Arr",
+      "namespace": "std.native.Arr",
+      "automaticAlias": "Arr",
+      "kind": "static-object"
+    },
+    {
+      "name": "Bits",
+      "namespace": "std.native.Bits",
+      "automaticAlias": "Bits",
+      "kind": "static-object"
+    },
+    {
+      "name": "Bytes",
+      "namespace": "std.native.Bytes",
+      "automaticAlias": "Bytes",
+      "kind": "static-object"
+    },
+    {
+      "name": "Coroutine",
+      "namespace": "std.native.Coroutine",
+      "automaticAlias": "Coroutine",
+      "kind": "static-object"
+    },
+    {
+      "name": "Crypto",
+      "namespace": "std.native.Crypto",
+      "automaticAlias": "Crypto",
+      "kind": "static-object"
+    },
+    {
+      "name": "Document",
+      "namespace": "std.native.Document",
+      "automaticAlias": "Document",
+      "kind": "static-object"
+    },
+    {
+      "name": "Edn",
+      "namespace": "std.native.Edn",
+      "automaticAlias": "Edn",
+      "kind": "static-object"
+    },
+    {
+      "name": "Error",
+      "namespace": "std.native.Error",
+      "automaticAlias": "Error",
+      "kind": "static-object"
+    },
+    {
+      "name": "File",
+      "namespace": "std.native.File",
+      "automaticAlias": "File",
+      "kind": "static-object"
+    },
+    {
+      "name": "Host",
+      "namespace": "std.native.Host",
+      "automaticAlias": "Host",
+      "kind": "static-object"
+    },
+    {
+      "name": "Iter",
+      "namespace": "std.native.Iter",
+      "automaticAlias": "Iter",
+      "kind": "static-object"
+    },
+    {
+      "name": "Json",
+      "namespace": "std.native.Json",
+      "automaticAlias": "Json",
+      "kind": "static-object"
+    },
+    {
+      "name": "Kernel",
+      "namespace": "std.native.Kernel",
+      "automaticAlias": "Kernel",
+      "kind": "static-object"
+    },
+    {
+      "name": "Maths",
+      "namespace": "std.native.Maths",
+      "automaticAlias": "Maths",
+      "kind": "static-object"
+    },
+    {
+      "name": "Numbers",
+      "namespace": "std.native.Numbers",
+      "automaticAlias": "Numbers",
+      "kind": "static-object"
+    },
+    {
+      "name": "Obj",
+      "namespace": "std.native.Obj",
+      "automaticAlias": "Obj",
+      "kind": "static-object"
+    },
+    {
+      "name": "Printer",
+      "namespace": "std.native.Printer",
+      "automaticAlias": "Printer",
+      "kind": "static-object"
+    },
+    {
+      "name": "Promise",
+      "namespace": "std.native.Promise",
+      "automaticAlias": "Promise",
+      "kind": "static-object"
+    },
+    {
+      "name": "Regex",
+      "namespace": "std.native.Regex",
+      "automaticAlias": "Regex",
+      "kind": "static-object"
+    },
+    {
+      "name": "Runtime",
+      "namespace": "std.native.Runtime",
+      "automaticAlias": "Runtime",
+      "kind": "static-object"
+    },
+    {
+      "name": "Socket",
+      "namespace": "std.native.Socket",
+      "automaticAlias": "Socket",
+      "kind": "static-object"
+    },
+    {
+      "name": "String",
+      "namespace": "std.native.String",
+      "automaticAlias": "String",
+      "kind": "static-object"
+    },
+    {
+      "name": "Test",
+      "namespace": "std.native.Test",
+      "automaticAlias": "Test",
+      "kind": "static-object"
+    },
+    {
+      "name": "UUID",
+      "namespace": "std.native.UUID",
+      "automaticAlias": "UUID",
+      "kind": "static-object"
+    }
+  ],
+  "migrations": [
+    {
+      "formerName": "std.foundation.component",
+      "status": "moved",
+      "replacement": {
+        "kind": "namespace",
+        "name": "std.lib.component"
+      },
+      "requireRewrite": "Replace the old dependency with std.lib.component.",
+      "callRewrite": "Replace std.foundation.component/... with std.lib.component/....",
+      "evidence": [
+        "core/rust/standard-library.namespaces",
+        "core/lib/src/std/lib/component.hal"
+      ],
+      "tracking": [
+        "#644",
+        "#649"
+      ]
+    },
+    {
+      "formerName": "std.foundation.crypto",
+      "status": "moved",
+      "replacement": {
+        "kind": "native-static-object",
+        "name": "Crypto",
+        "internalNamespace": "std.native.Crypto"
+      },
+      "higherLevelLibraries": [
+        "std.crypto.*"
+      ],
+      "requireRewrite": "Remove the old dependency; Crypto is a built-in static object.",
+      "callRewrite": "Replace std.foundation.crypto/... with Crypto/... and use verified std.crypto.* libraries for higher-level algorithms.",
+      "evidence": [
+        "core/lib/src/code/translate/rules.hal",
+        "core/rust/src/kernel/generated.rs"
+      ],
+      "tracking": [
+        "#644",
+        "#649"
+      ]
+    },
+    {
+      "formerName": "std.foundation.edn",
+      "status": "moved",
+      "replacement": {
+        "kind": "native-static-object",
+        "name": "Edn",
+        "internalNamespace": "std.native.Edn"
+      },
+      "requireRewrite": "Remove the old dependency; Edn is a built-in static object.",
+      "callRewrite": "Replace std.foundation.edn/... with Edn/....",
+      "evidence": [
+        "core/lib/src/code/translate/rules.hal",
+        "core/java/src/main/java/hara/truffle/NativeEdnLibraryProvider.java"
+      ],
+      "tracking": [
+        "#644",
+        "#649"
+      ]
+    },
+    {
+      "formerName": "std.foundation.file",
+      "status": "moved",
+      "replacement": {
+        "kind": "native-static-object",
+        "name": "File",
+        "internalNamespace": "std.native.File"
+      },
+      "plannedPortableReplacement": {
+        "kind": "namespace",
+        "name": "std.fs",
+        "status": "planned"
+      },
+      "requireRewrite": "Remove the old dependency; use File for current native primitives and require std.fs only after it is present in the selected release.",
+      "callRewrite": "Replace std.foundation.file/... with File/...; migrate higher-level portable operations to std.fs as that library lands.",
+      "evidence": [
+        "core/lib/src/code/translate/rules.hal",
+        "core/java/src/main/java/hara/truffle/NativeFileLibraryProvider.java",
+        "core/rust/standard-library.namespaces"
+      ],
+      "tracking": [
+        "#644",
+        "#649",
+        "hara-lang/hara-specs-registry#12"
+      ]
+    },
+    {
+      "formerName": "std.foundation.host",
+      "status": "moved",
+      "replacement": {
+        "kind": "native-static-object",
+        "name": "Host",
+        "internalNamespace": "std.native.Host"
+      },
+      "requireRewrite": "Remove the old dependency; Host is a built-in static object.",
+      "callRewrite": "Replace std.foundation.host/... with Host/....",
+      "evidence": [
+        "core/lib/src/code/translate/rules.hal",
+        "core/rust/src/kernel/generated.rs"
+      ],
+      "tracking": [
+        "#644",
+        "#649"
+      ]
+    },
+    {
+      "formerName": "std.foundation.json",
+      "status": "moved",
+      "replacement": {
+        "kind": "native-static-object",
+        "name": "Json",
+        "internalNamespace": "std.native.Json"
+      },
+      "requireRewrite": "Remove the old dependency; Json is a built-in static object.",
+      "callRewrite": "Replace std.foundation.json/... with Json/....",
+      "evidence": [
+        "core/lib/src/code/translate/rules.hal",
+        "core/rust/src/kernel/generated.rs"
+      ],
+      "tracking": [
+        "#644",
+        "#649"
+      ]
+    },
+    {
+      "formerName": "std.foundation.kernel",
+      "status": "moved",
+      "replacement": {
+        "kind": "native-static-object",
+        "name": "Kernel",
+        "internalNamespace": "std.native.Kernel"
+      },
+      "requireRewrite": "Remove the old dependency; Kernel is a built-in static object.",
+      "callRewrite": "Replace std.foundation.kernel/... with Kernel/....",
+      "evidence": [
+        "core/lib/src/code/translate/rules.hal",
+        "core/rust/src/kernel/generated.rs"
+      ],
+      "tracking": [
+        "#644",
+        "#649"
+      ]
+    },
+    {
+      "formerName": "std.foundation.os",
+      "status": "moved",
+      "replacement": {
+        "kind": "native-static-object",
+        "name": "OS",
+        "internalNamespace": "std.native.OS"
+      },
+      "profileNotes": {
+        "jvm": "Provided by std.native.OS.",
+        "rust": "Process handles use std.native.Process; complete OS/static-object parity remains under cross-runtime validation.",
+        "wasm": "Availability is host-capability dependent."
+      },
+      "requireRewrite": "Remove the old dependency and use the OS/Process boundary supported by the runtime profile.",
+      "callRewrite": "Replace std.foundation.os/... with OS/... where available; retain runtime-native Process handling for process values.",
+      "evidence": [
+        "core/lib/src/code/translate/rules.hal",
+        "core/java/src/main/java/hara/truffle/NativeOsLibraryProvider.java",
+        "core/rust/src/native_process.rs"
+      ],
+      "tracking": [
+        "#644",
+        "#648",
+        "#649"
+      ]
+    },
+    {
+      "formerName": "std.foundation.pretty.engine",
+      "status": "retired",
+      "replacement": {
+        "kind": "namespace",
+        "name": "std.foundation.pretty"
+      },
+      "requireRewrite": "Require std.foundation.pretty rather than its former implementation helper.",
+      "callRewrite": "Use the public std.foundation.pretty API; internal engine functions are not a compatibility promise.",
+      "evidence": [
+        "core/lib/src/std/foundation/pretty.hal",
+        "core/rust/standard-library.namespaces"
+      ],
+      "tracking": [
+        "#644",
+        "#649"
+      ]
+    },
+    {
+      "formerName": "std.foundation.set",
+      "status": "moved",
+      "replacement": {
+        "kind": "namespace-root",
+        "name": "std.foundation"
+      },
+      "requireRewrite": "Remove the old dependency; retained set operations resolve from std.foundation.",
+      "callRewrite": "Replace std.foundation.set/union and related calls with std.foundation/union or referred root operations.",
+      "evidence": [
+        "core/lib/src/std/foundation.hal",
+        "core/rust/standard-library.namespaces"
+      ],
+      "tracking": [
+        "#644",
+        "#649"
+      ]
+    },
+    {
+      "formerName": "std.foundation.socket",
+      "status": "moved",
+      "replacement": {
+        "kind": "native-static-object",
+        "name": "Socket",
+        "internalNamespace": "std.native.Socket"
+      },
+      "requireRewrite": "Remove the old dependency; Socket is a built-in static object.",
+      "callRewrite": "Replace std.foundation.socket/... with Socket/....",
+      "evidence": [
+        "core/lib/src/code/translate/rules.hal",
+        "core/rust/src/kernel/generated.rs"
+      ],
+      "tracking": [
+        "#644",
+        "#649"
+      ]
     }
   ]
 }

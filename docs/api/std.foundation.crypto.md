@@ -1,18 +1,27 @@
+<!-- hara-api:generated -->
 ---
-title: std.foundation.crypto
-description: Generated API reference for std.foundation.crypto.
+title: std.foundation.crypto migration
+description: Migration guidance for the former std.foundation.crypto API.
 ---
 
 # `std.foundation.crypto`
 
-Generated from `std/foundation/crypto.hal` and its companion tests. 1 public definition.
+Status: `moved`.
 
-> This page is generated from Hara source. Edit the source or tests, then regenerate it; do not edit this page by hand.
+Current direction: native-static-object `Crypto`.
 
-## `sha256`
+This former name is not part of the current public Foundation namespace set.
 
-defn · `[bytes]`
+## Update imports
 
-Returns the lowercase SHA-256 digest of bytes.
+Remove the old dependency; Crypto is a built-in static object.
 
-Source: `std/foundation/crypto.hal:4`
+## Update calls
+
+Replace std.foundation.crypto/... with Crypto/... and use verified std.crypto.* libraries for higher-level algorithms.
+
+Documented source: `https://github.com/hara-lang/hara` at `209ffd3f8ac596b02290cd73663a75f1918ff436` (`209ffd3f8ac596b02290cd73663a75f1918ff436`).
+
+Semantic surface: `sha256:8fdb5fafde7b0c29b1a01b2d7f7f9dfae037aa35ac622a9f277840bd4c8db95e`. Manifest schema: `2`.
+
+> This migration page is generated from Hara's canonical migration ledger.

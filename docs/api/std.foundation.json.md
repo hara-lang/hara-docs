@@ -1,34 +1,27 @@
+<!-- hara-api:generated -->
 ---
-title: std.foundation.json
-description: Generated API reference for std.foundation.json.
+title: std.foundation.json migration
+description: Migration guidance for the former std.foundation.json API.
 ---
 
 # `std.foundation.json`
 
-Generated from `std/foundation/json.hal` and its companion tests. 3 public definitions.
+Status: `moved`.
 
-> This page is generated from Hara source. Edit the source or tests, then regenerate it; do not edit this page by hand.
+Current direction: native-static-object `Json`.
 
-## `read`
+This former name is not part of the current public Foundation namespace set.
 
-defn · `[source]`
+## Update imports
 
-Reads one strict JSON value from source.
+Remove the old dependency; Json is a built-in static object.
 
-Source: `std/foundation/json.hal:30`
+## Update calls
 
-## `write`
+Replace std.foundation.json/... with Json/....
 
-defn · `[value]`
+Documented source: `https://github.com/hara-lang/hara` at `209ffd3f8ac596b02290cd73663a75f1918ff436` (`209ffd3f8ac596b02290cd73663a75f1918ff436`).
 
-Returns value's compact JSON representation.
+Semantic surface: `sha256:8fdb5fafde7b0c29b1a01b2d7f7f9dfae037aa35ac622a9f277840bd4c8db95e`. Manifest schema: `2`.
 
-Source: `std/foundation/json.hal:36`
-
-## `pretty`
-
-defn · `[value opts]`
-
-Returns value's indented JSON representation using opts.
-
-Source: `std/foundation/json.hal:42`
+> This migration page is generated from Hara's canonical migration ledger.

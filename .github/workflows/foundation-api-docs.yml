@@ -1,0 +1,176 @@
+name: Foundation API documentation
+
+on:
+  pull_request:
+    paths:
+      - "foundation-api-target.json"
+      - "scripts/generate-api.mjs"
+      - "scripts/generate-api.test.mjs"
+      - "docs/api/**"
+      - "docs/guides/foundation-reorganization-2026.md"
+      - "docs/hal-intro/07-io-and-files.md"
+      - "generated/api-index.json"
+      - ".github/workflows/foundation-api-docs.yml"
+  push:
+    branches: [main]
+    paths:
+      - "foundation-api-target.json"
+      - "scripts/generate-api.mjs"
+      - "scripts/generate-api.test.mjs"
+      - "docs/api/**"
+      - "docs/guides/foundation-reorganization-2026.md"
+      - "docs/hal-intro/07-io-and-files.md"
+      - "generated/api-index.json"
+      - ".github/workflows/foundation-api-docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout documentation branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Read pinned Hara target
+        id: target
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+
+          target = json.loads(Path("foundation-api-target.json").read_text())
+          repository = target["repository"]
+          commit = target["commit"]
+          schema = target["manifestSchemaVersion"]
+          if repository != "hara-lang/hara":
+              raise SystemExit(f"unsupported Foundation API repository: {repository}")
+          if len(commit) != 40 or any(ch not in "0123456789abcdef" for ch in commit):
+              raise SystemExit(f"Foundation API target is not an immutable commit: {commit}")
+          if schema != 2:
+              raise SystemExit(f"unsupported Foundation API manifest schema: {schema}")
+          print(f"repository={repository}")
+          print(f"commit={commit}")
+          PY
+
+      - name: Checkout pinned Hara source
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.target.outputs.repository }}
+          ref: ${{ steps.target.outputs.commit }}
+          path: .hara-api-source
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Hara Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: .hara-api-source/core/rust
+
+      - name: Generate pinned schema-v2 manifest
+        run: |
+          python .hara-api-source/scripts/generate_foundation_api_manifest.py \
+            --root .hara-api-source \
+            --repository https://github.com/${{ steps.target.outputs.repository }} \
+            --ref ${{ steps.target.outputs.commit }} \
+            --commit ${{ steps.target.outputs.commit }} \
+            --output generated/foundation-api-manifest.json
+
+      - name: Test the documentation generator
+        run: |
+          node --check scripts/generate-api.mjs
+          node --check scripts/generate-api.test.mjs
+          node --test scripts/generate-api.test.mjs
+
+      - name: Generate current API and migration pages
+        run: |
+          node scripts/generate-api.mjs \
+            --input generated/foundation-api-manifest.json
+          git status --short -- docs/api generated/api-index.json
+
+      - name: Validate generated provenance and boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path, PurePosixPath
+
+          manifest = json.loads(Path("generated/api-index.json").read_text())
+          target = json.loads(Path("foundation-api-target.json").read_text())
+          expected = [
+              "std.foundation",
+              "std.foundation.bytes",
+              "std.foundation.coroutine",
+              "std.foundation.pretty",
+              "std.foundation.promise",
+              "std.foundation.string",
+          ]
+          current = [
+              item["name"]
+              for item in manifest["namespaces"]
+              if item.get("group") == "foundation"
+          ]
+          assert manifest["schemaVersion"] == target["manifestSchemaVersion"] == 2
+          assert manifest["source"]["commit"] == target["commit"]
+          assert current == expected, {"expected": expected, "actual": current}
+          assert manifest["surfaceDigest"].startswith("sha256:")
+          assert len(manifest.get("migrations", [])) == 11
+          native = {item["name"] for item in manifest.get("nativeObjects", [])}
+          assert {"Edn", "Json", "Crypto", "File", "Socket", "Host", "Kernel"}.issubset(native)
+          assert "Process" not in native
+          for field in (
+              manifest["inventory"]["path"],
+              manifest["migrationLedger"]["path"],
+          ):
+              value = PurePosixPath(field)
+              assert not value.is_absolute(), field
+              assert ".." not in value.parts, field
+          PY
+
+      - name: Commit generated API and migration pages
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        shell: bash
+        run: |
+          if git diff --quiet -- docs/api generated/api-index.json; then
+            echo "Generated Foundation API documentation is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- docs/api generated/api-index.json
+          git commit -m "Regenerate Foundation API documentation from pinned Hara manifest"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+
+      - name: Reject generated drift outside same-repository pull requests
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          git diff --exit-code -- docs/api generated/api-index.json
+
+      - name: Upload generated API review artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: foundation-api-docs-generated
+          path: |
+            docs/api
+            generated/api-index.json
+            generated/foundation-api-manifest.json
+          if-no-files-found: error
+          retention-days: 30

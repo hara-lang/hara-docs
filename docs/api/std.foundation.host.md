@@ -1,42 +1,27 @@
+<!-- hara-api:generated -->
 ---
-title: std.foundation.host
-description: Generated API reference for std.foundation.host.
+title: std.foundation.host migration
+description: Migration guidance for the former std.foundation.host API.
 ---
 
 # `std.foundation.host`
 
-Generated from `std/foundation/host.hal` and its companion tests. 4 public definitions.
+Status: `moved`.
 
-> This page is generated from Hara source. Edit the source or tests, then regenerate it; do not edit this page by hand.
+Current direction: native-static-object `Host`.
 
-## `call`
+This former name is not part of the current public Foundation namespace set.
 
-defn · `[service method & args]`
+## Update imports
 
-Invokes a capability-gated host operation and returns its promise.
+Remove the old dependency; Host is a built-in static object.
 
-Source: `std/foundation/host.hal:17`
+## Update calls
 
-## `describe`
+Replace std.foundation.host/... with Host/....
 
-defn · `[]`
+Documented source: `https://github.com/hara-lang/hara` at `209ffd3f8ac596b02290cd73663a75f1918ff436` (`209ffd3f8ac596b02290cd73663a75f1918ff436`).
 
-Returns a promise of the host descriptor: version, capability names, scopes, and limits.
+Semantic surface: `sha256:8fdb5fafde7b0c29b1a01b2d7f7f9dfae037aa35ac622a9f277840bd4c8db95e`. Manifest schema: `2`.
 
-Source: `std/foundation/host.hal:23`
-
-## `capabilities`
-
-defn · `[]`
-
-Returns a promise of the capability names granted to this session.
-
-Source: `std/foundation/host.hal:29`
-
-## `capability?`
-
-defn · `[capability]`
-
-Returns a promise of whether capability is granted to this session.
-
-Source: `std/foundation/host.hal:35`
+> This migration page is generated from Hara's canonical migration ledger.
