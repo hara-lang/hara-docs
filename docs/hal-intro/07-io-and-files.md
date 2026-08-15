@@ -158,9 +158,12 @@ Split text into lines without performing I/O:
   (str (str/join "\n" lines) "\n"))
 ```
 
-Build a pure transformation:
+Build a pure transformation. This block is runnable because it performs no host I/O:
 
-```hara
+```hara eval group=hal-intro-07
+(defn non-empty-line? [line]
+  (not (= "" (str/trim line))))
+
 (defn transformed-lines [text]
   (->> (text-lines text)
        (filter non-empty-line?)
