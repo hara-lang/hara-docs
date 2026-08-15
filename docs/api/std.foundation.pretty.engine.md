@@ -1,58 +1,27 @@
+<!-- hara-api:generated -->
 ---
-title: std.foundation.pretty.engine
-description: Generated API reference for std.foundation.pretty.engine.
+title: std.foundation.pretty.engine migration
+description: Migration guidance for the former std.foundation.pretty.engine API.
 ---
 
 # `std.foundation.pretty.engine`
 
-Generated from `std/foundation/pretty/engine.hal` and its companion tests. 6 public definitions.
+Status: `retired`.
 
-> This page is generated from Hara source. Edit the source or tests, then regenerate it; do not edit this page by hand.
+Current direction: namespace `std.foundation.pretty`.
 
-## `append-text`
+This former name is not part of the current public Foundation namespace set.
 
-defn · `[state text visible]`
+## Update imports
 
-No source docstring is currently provided.
+Require std.foundation.pretty rather than its former implementation helper.
 
-Source: `std/foundation/pretty/engine.hal:5`
+## Update calls
 
-## `render-many`
+Use the public std.foundation.pretty API; internal engine functions are not a compatibility promise.
 
-defn · `[documents state options mode indent]`
+Documented source: `https://github.com/hara-lang/hara` at `209ffd3f8ac596b02290cd73663a75f1918ff436` (`209ffd3f8ac596b02290cd73663a75f1918ff436`).
 
-No source docstring is currently provided.
+Semantic surface: `sha256:8fdb5fafde7b0c29b1a01b2d7f7f9dfae037aa35ac622a9f277840bd4c8db95e`. Manifest schema: `2`.
 
-Source: `std/foundation/pretty/engine.hal:12`
-
-## `line-state`
-
-defn · `[state inline terminate mode indent]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/pretty/engine.hal:24`
-
-## `render-vector`
-
-defn · `[document state options mode indent]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/pretty/engine.hal:34`
-
-## `render-node`
-
-defn · `[document state options mode indent]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/pretty/engine.hal:90`
-
-## `render`
-
-defn
-
-No source docstring is currently provided.
-
-Source: `std/foundation/pretty/engine.hal:107`
+> This migration page is generated from Hara's canonical migration ledger.

@@ -1,122 +1,27 @@
+<!-- hara-api:generated -->
 ---
-title: std.foundation.os
-description: Generated API reference for std.foundation.os.
+title: std.foundation.os migration
+description: Migration guidance for the former std.foundation.os API.
 ---
 
 # `std.foundation.os`
 
-Generated from `std/foundation/os.hal` and its companion tests. 14 public definitions.
+Status: `moved`.
 
-> This page is generated from Hara source. Edit the source or tests, then regenerate it; do not edit this page by hand.
+Current direction: native-static-object `OS`.
 
-## `platform`
+This former name is not part of the current public Foundation namespace set.
 
-defn · `[]`
+## Update imports
 
-No source docstring is currently provided.
+Remove the old dependency and use the OS/Process boundary supported by the runtime profile.
 
-Source: `std/foundation/os.hal:56`
+## Update calls
 
-## `arch`
+Replace std.foundation.os/... with OS/... where available; retain runtime-native Process handling for process values.
 
-defn · `[]`
+Documented source: `https://github.com/hara-lang/hara` at `209ffd3f8ac596b02290cd73663a75f1918ff436` (`209ffd3f8ac596b02290cd73663a75f1918ff436`).
 
-No source docstring is currently provided.
+Semantic surface: `sha256:8fdb5fafde7b0c29b1a01b2d7f7f9dfae037aa35ac622a9f277840bd4c8db95e`. Manifest schema: `2`.
 
-Source: `std/foundation/os.hal:57`
-
-## `cwd`
-
-defn · `[]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:58`
-
-## `env`
-
-defn · `[]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:59`
-
-## `getenv`
-
-defn · `[name]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:60`
-
-## `spawn`
-
-defn
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:62`
-
-## `process?`
-
-defn · `[value]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:66`
-
-## `process-alive?`
-
-defn · `[process]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:67`
-
-## `process-write`
-
-defn · `[process bytes]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:68`
-
-## `process-close-input`
-
-defn · `[process]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:69`
-
-## `process-stdout`
-
-defn · `[process]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:70`
-
-## `process-stderr`
-
-defn · `[process]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:71`
-
-## `process-wait`
-
-defn · `[process]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:72`
-
-## `process-kill`
-
-defn · `[process]`
-
-No source docstring is currently provided.
-
-Source: `std/foundation/os.hal:73`
+> This migration page is generated from Hara's canonical migration ledger.
