@@ -5,13 +5,13 @@ description: Migrate from retired Foundation child namespaces to the current por
 
 # The August 2026 `std.foundation` reorganization
 
-Hara now uses a smaller, explicit Foundation boundary. This guide describes the API represented by Hara commit `ce04b2ead4e47c7c194df900f0e3c6a0982bc155` and explains how to migrate code written against the earlier `std.foundation.*` arrangement.
+Hara now uses a smaller, explicit Foundation boundary. This guide describes the API pinned to Hara commit `209ffd3f8ac596b02290cd73663a75f1918ff436` and explains how to migrate code written against the earlier `std.foundation.*` arrangement.
 
 The central rule is:
 
-> A loadable namespace, an automatic alias, and a native static object are different things.
+> A loadable namespace, an automatic namespace alias, a native static object, and a runtime value are different things.
 
-Older documentation often treated all three as Foundation child namespaces. The runtime no longer does.
+Older documentation sometimes flattened these categories into one list of Foundation children. The runtime and generated API manifest now keep them separate.
 
 ## Current Foundation namespaces
 
@@ -26,7 +26,7 @@ std.foundation.promise
 std.foundation.string
 ```
 
-The root `std.foundation` namespace is the portable value layer. It owns functions and macros for composition, collections, sequences, set algebra, metadata, references, structural traversal, predicates, and other language-level operations.
+The root `std.foundation` namespace is the portable value layer. It owns composition, collection and sequence operations, set algebra, metadata, references, structural traversal, predicates, macros, and other language-level helpers.
 
 The five child libraries have these default aliases:
 
@@ -38,11 +38,11 @@ The five child libraries have these default aliases:
 | `std.foundation.coroutine` | `co` | coroutines and suspension |
 | `std.foundation.pretty` | `pretty` | document and pretty rendering |
 
-These names are loadable because they are present in Hara's registered standard-library inventory. A source file, test fixture, historical page, or runtime alias does not add another namespace to that list.
+These names are loadable because they appear in Hara's registered standard-library inventory. A source file, test fixture, historical page, or runtime alias cannot add another namespace to that list.
 
 ## Native static objects
 
-Host-backed facilities are exposed as built-in objects such as:
+The canonical schema-v2 manifest records native static objects separately. The common runtime configuration includes objects such as:
 
 ```text
 Edn
@@ -52,22 +52,27 @@ File
 Socket
 Host
 Kernel
-OS
-Process
 ```
 
-Their runtime identities use names such as `std.native.Edn` and `std.native.File`, but they are not file-backed namespaces that application code should require.
+It also records lower-level objects used by the language runtime, including `Arr`, `Bits`, `Bytes`, `Coroutine`, `Document`, `Error`, `Iter`, `Maths`, `Numbers`, `Obj`, `Printer`, `Promise`, `Regex`, `Runtime`, `String`, `Test`, and `UUID`.
 
-Use them directly:
+Their implementation identities use names such as `std.native.Edn` and `std.native.File`, but application code does not load those identities with `:require`. Use the object directly:
 
 ```hara
 (Edn/read "{:enabled true}")
 (Json/write {"enabled" true})
 (Crypto/sha256 (str/encode-utf8 "hara"))
-(OS/platform)
 ```
 
-Do not add a dependency such as `[std.native.Edn :as edn]`. Native objects are installed by the runtime rather than loaded as ordinary libraries.
+A native object being visible does not grant authority. File, socket, host, kernel, and other effectful operations remain controlled by the embedding runtime.
+
+## Runtime-profile differences
+
+Not every migrated facility is part of the common automatic native-object inventory.
+
+The former `std.foundation.os` API migrates toward the runtime-provided `OS` object where that profile exposes it. Process handles are runtime values created by process operations; `Process` is not documented as a common automatic static-object alias. Treat OS and process availability as profile-specific until the cross-runtime conformance matrix for your selected Hara revision says otherwise.
+
+This is why migration records include a direction without claiming identical Rust, JVM, and browser/Wasm availability.
 
 ## Migrating imports and calls
 
@@ -128,7 +133,7 @@ After:
 (Crypto/sha256 bytes)
 ```
 
-Use the verified `std.crypto.*` libraries for higher-level algorithms. The native object is the primitive runtime boundary, not a complete cryptography library.
+Use registered `std.crypto.*` libraries for higher-level algorithms. The native object is a primitive runtime boundary, not a complete cryptography library.
 
 ### Set operations
 
@@ -198,7 +203,7 @@ After:
 
 ## Files and `std.fs`
 
-Old material may use a lower-case `file/` alias or require `std.foundation.file`. In the documented revision, current native primitives belong to the `File` static object:
+Old material may use a lower-case `file/` alias or require `std.foundation.file`. In the pinned revision, native byte-oriented I/O belongs to the `File` static object:
 
 ```hara
 (File/read path)
@@ -206,35 +211,33 @@ Old material may use a lower-case `file/` alias or require `std.foundation.file`
 (File/resolve root child)
 ```
 
-`File` being visible does not grant file authority. The embedding host still decides whether reads, writes, and other effects are allowed.
+`File` being visible does not grant filesystem authority. The host decides whether a read, write, list, or deletion is allowed.
 
-Portable filesystem work is moving into the `std.fs` layer. At the pinned revision:
+Portable filesystem work is layered separately:
 
-- `std.fs.path` is registered for portable path operations;
-- the broader `std.fs` facade should not be assumed merely because older plans name it;
-- native byte-oriented I/O remains on `File` until a selected release documents a portable replacement.
+- `std.fs.path` is registered for portable path operations in the pinned revision;
+- the migration ledger marks a broader `std.fs` facade as planned;
+- native byte-oriented I/O remains on `File` until a selected Hara revision registers and documents a portable replacement.
 
-This distinction matters when reading the I/O tutorial: `File/...` is a native static-object call, while `std.fs.*` names are ordinary portable libraries when present in the selected runtime.
+Do not infer that a planned namespace exists merely because it appears in a migration note.
 
 ## Complete migration table
 
 | Former name | Status | Current direction |
 | --- | --- | --- |
 | `std.foundation.component` | moved | `std.lib.component` |
-| `std.foundation.crypto` | moved | `Crypto`; higher-level work under `std.crypto.*` |
+| `std.foundation.crypto` | moved | `Crypto`; higher-level work under registered `std.crypto.*` libraries |
 | `std.foundation.edn` | moved | `Edn` |
-| `std.foundation.file` | moved | `File`; portable path work under `std.fs.path` and broader `std.fs` as implemented |
+| `std.foundation.file` | moved | `File`; portable path work under `std.fs.path`; broader `std.fs` planned |
 | `std.foundation.host` | moved | `Host` |
 | `std.foundation.json` | moved | `Json` |
 | `std.foundation.kernel` | moved | `Kernel` |
-| `std.foundation.os` | moved | `OS` and runtime-native `Process` values |
+| `std.foundation.os` | moved | runtime-provided `OS`, with profile-specific availability |
 | `std.foundation.pretty.engine` | retired | public `std.foundation.pretty` API |
 | `std.foundation.set` | moved | root `std.foundation` operations |
 | `std.foundation.socket` | moved | `Socket` |
 
-Native capability availability can differ by runtime profile. In particular, OS, process, filesystem, network, host-call, and kernel operations depend on what the embedding runtime supports and authorizes.
-
-## Namespace configuration examples
+## Namespace configuration
 
 Automatic aliases for the five current child libraries can be controlled through namespace configuration:
 
@@ -247,35 +250,38 @@ Automatic aliases for the five current child libraries can be controlled through
              coroutine workflow}}}))
 ```
 
-This controls aliases. It does not change the public namespace inventory and does not grant host capabilities.
+This changes aliases only. It does not change the public namespace inventory and does not grant host capabilities.
 
-Native objects are also not converted into namespaces by aliasing them. `Edn` continues to identify the built-in EDN object; there is no corresponding `:require` form.
+Native static objects are also not converted into namespaces by aliasing them. `Edn` identifies a built-in object; there is no corresponding application `:require` form.
 
-## Reading API pages
+## Reading generated API pages
 
 The generated API index separates:
 
-1. **Current namespaces** — generated from Hara's registered inventory and public source bindings.
-2. **Historical namespace migrations** — generated from Hara's migration ledger.
+1. **Current namespaces** — derived from Hara's registered inventory and public source bindings.
+2. **Historical namespace migrations** — derived from Hara's migration ledger.
 
 A historical page is a migration destination, not evidence that the old namespace remains loadable.
 
 Every generated page records:
 
-- the Hara repository and commit;
+- the Hara repository and immutable commit;
 - the manifest schema version;
 - the deterministic semantic surface digest;
 - runtime-profile information supplied by the canonical manifest.
 
+The manifest also uses repository-relative provenance paths. This allows the specs registry and documentation site to compare artifacts produced in different checkout directories without runner-specific path drift.
+
 ## Upgrade checklist
 
 1. Remove `:require` entries for retired Foundation children.
-2. Replace native-facade calls with `Edn`, `Json`, `Crypto`, `File`, `Socket`, `Host`, `Kernel`, `OS`, or `Process` as appropriate.
+2. Replace native-facade calls with the relevant native static object where it is part of your runtime profile.
 3. Move set calls to root `std.foundation`.
 4. Move component lifecycle calls to `std.lib.component`.
 5. Replace pretty-engine imports with the public `std.foundation.pretty` API.
-6. Check the selected runtime profile before relying on host capabilities.
-7. Treat planned `std.fs` or other higher-level surfaces as unavailable until they are registered in the Hara revision you deploy.
-8. Regenerate API documentation from the pinned canonical manifest rather than copying binding lists into prose.
+6. Use `File/...` for the pinned native I/O boundary and `std.fs.path` for registered portable path operations.
+7. Check profile conformance before relying on OS, process, filesystem, network, host-call, or kernel behavior.
+8. Treat planned `std.fs` or other planned surfaces as unavailable until they appear in the registered inventory of the Hara revision you deploy.
+9. Regenerate API documentation from the pinned canonical manifest rather than copying binding lists into prose.
 
 The [Language API](../api/index.md) is the source-derived current reference. Historical pages linked there are migration records rather than current namespace documentation.

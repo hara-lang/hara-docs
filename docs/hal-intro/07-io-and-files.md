@@ -1,26 +1,23 @@
 # 07. I/O and files
 
-I/O crosses from a Hara program into its host environment. File operations are effects, require authority, use bytes, and return promises.
+I/O crosses from a Hara program into its host environment. File operations are effects, require authority, use bytes, and normally return promises.
 
-The file namespace can exist even when the runtime does not grant file access.
+The current native file boundary is the `File` static object. `File` is not a loadable `std.foundation.file` namespace, and seeing the object does not grant filesystem authority.
 
-The runnable examples on this page share one lesson session. Work from top to
-bottom when an example uses an earlier definition, and reload the page to start
-with a clean session. File reads and writes remain static because this browser
-session does not grant or seed the file authority used by those examples.
+The runnable examples on this page share one lesson session. Work from top to bottom when an example uses an earlier definition, and reload the page to start with a clean session. File reads and writes remain static in the browser because this session does not grant or seed filesystem authority.
 
 ## Learning goals
 
 By the end of this lesson, you can:
 
-1. Explain why file access is a capability.
-2. Resolve a child path beneath an allowed root.
-3. Read a file as bytes.
-4. Decode file bytes as UTF-8 text.
-5. Transform text without I/O.
+1. Distinguish a native static object from a loadable namespace.
+2. Explain why file access is a capability.
+3. Resolve a child path beneath an allowed root.
+4. Read a file as bytes and decode text explicitly.
+5. Keep transformation pure and I/O at the boundary.
 6. Encode and write output bytes.
-7. Compose file operations with promises.
-8. Keep errors and cleanup at an explicit boundary.
+7. Compose file operations with promises or coroutines.
+8. Distinguish `File` from portable `std.fs.path` operations.
 
 ## I/O is an effect
 
@@ -34,46 +31,69 @@ A pure function returns a value from its arguments:
 A file operation asks the host environment to read or change an external resource:
 
 ```hara
-(file/read "data/input.txt")
+(File/read "data/input.txt")
 ```
 
-The file can change without the Hara source changing. The operation can also fail because of authority, availability, path, or host errors.
+The file can change without the Hara source changing. The call can also fail because of authority, availability, path, or host errors.
 
 Keep pure transformation and I/O in separate functions.
 
+## `File` is a native static object
+
+Older examples used a lower-case `file/` alias or required `std.foundation.file`. That child namespace is no longer current API.
+
+Use the built-in object directly:
+
+```hara
+(File/resolve "." "data/input.txt")
+(File/read "data/input.txt")
+(File/write "data/output.txt" output-bytes)
+```
+
+Do not write:
+
+```hara
+(ns app
+  (:require [std.foundation.file :as file]))
+```
+
+The runtime installs `File`; it is not loaded through the standard namespace mechanism.
+
 ## File access needs authority
 
-The `file/` alias is available by default. Availability does not grant authority.
+Object availability does not grant authority. A `File` call can fail because:
 
-A file call can fail because:
-
-- the embedding runtime does not support file I/O;
+- the embedding runtime does not support filesystem I/O;
 - the runtime did not grant file authority;
 - the path is outside the allowed boundary;
 - the file does not exist;
 - the host rejects the operation.
 
-The native CLI grants file authority explicitly with `--allow-file`. A JVM embedding grants authority through Graal `IOAccess`.
+The native CLI grants file authority explicitly. Embeddings provide their own capability policy.
 
-Do not treat a missing capability as a missing namespace.
+Do not treat a denied capability as a missing namespace or missing object.
 
-## Resolve paths beneath a root
+## Native paths and portable path libraries
 
-Use `file/resolve` to resolve a child path beneath a supplied root:
+`File/resolve` is part of the native file boundary used by the examples in this lesson:
 
 ```hara eval group=hal-intro-07
 (def project-root ".")
 
 (def input-path
-  (file/resolve project-root "data/input.txt"))
+  (File/resolve project-root "data/input.txt"))
 
 (def output-path
-  (file/resolve project-root "data/output.txt"))
+  (File/resolve project-root "data/output.txt"))
 ```
 
-The result is a normalized path string.
+The pinned Hara revision also registers `std.fs.path` for portable path operations. Use it when your program needs portable path manipulation independently of native I/O.
 
-Keep the root and child path separate in configuration:
+A broader `std.fs` facade is still planned in the migration ledger. Do not assume it exists until it appears in the registered standard-library inventory of the Hara revision you deploy.
+
+## Keep path configuration explicit
+
+Keep the root and child path separate:
 
 ```hara eval group=hal-intro-07
 (def file-config
@@ -86,7 +106,7 @@ Resolve paths at the I/O boundary:
 
 ```hara eval group=hal-intro-07
 (defn input-path [config]
-  (file/resolve
+  (File/resolve
     (:file/root config)
     (:file/input config)))
 ```
@@ -95,11 +115,11 @@ This makes the path authority boundary visible.
 
 ## Read a file
 
-`file/read` returns a promise that settles with bytes:
+`File/read` returns a promise that settles with bytes:
 
 ```hara
 (def input-promise
-  (file/read input-path))
+  (File/read input-path))
 ```
 
 The immediate result is a promise, not file contents.
@@ -124,42 +144,28 @@ A Hara promise supports dereference in environments where blocking inspection is
 (deref text-promise)
 ```
 
-Use blocking dereference for small REPL experiments and tests. Do not make it the default architecture for event-loop or interactive code.
+Use blocking dereference for small REPL experiments and tests. Compose promises in event-loop and interactive application code.
 
-Use promise composition in application code.
+## Keep text transformation pure
 
-## Split text into lines
-
-Keep line parsing pure:
+Split text into lines without performing I/O:
 
 ```hara eval group=hal-intro-07
 (defn text-lines [text]
   (str/split-lines text))
+
+(defn lines->text [lines]
+  (str (str/join "\n" lines) "\n"))
 ```
 
-Build a line pipeline:
+Build a pure transformation:
 
 ```hara
 (defn transformed-lines [text]
   (->> (text-lines text)
        (filter non-empty-line?)
        (map normalize-line)))
-```
 
-Serialize the complete result:
-
-```hara eval group=hal-intro-07
-(defn lines->text [lines]
-  (str (str/join "\n" lines) "\n"))
-```
-
-The trailing newline is an output-format decision. Keep it in the serializer.
-
-## Transform file bytes without I/O
-
-Create one pure bytes-to-bytes function:
-
-```hara
 (defn transform-document-bytes [input-bytes]
   (-> input-bytes
       (str/decode-utf8)
@@ -168,7 +174,7 @@ Create one pure bytes-to-bytes function:
       (str/encode-utf8)))
 ```
 
-This function can be tested with in-memory values:
+Test it with in-memory values:
 
 ```hara
 (def sample-input
@@ -179,23 +185,23 @@ This function can be tested with in-memory values:
 ; => "alpha\nbeta\n"
 ```
 
-No file authority is required for this test.
+No filesystem authority is required for this test.
 
 ## Write a file
 
-`file/write` accepts bytes and returns a promise:
+`File/write` accepts bytes and returns a promise:
 
 ```hara
 (def output-bytes
   (str/encode-utf8 "alpha\nbeta\n"))
 
 (def write-promise
-  (file/write output-path output-bytes))
+  (File/write output-path output-bytes))
 ```
 
-Do not pass a string directly. Encode the text first.
+Do not pass a string directly. Encode text first.
 
-Use `promise/then` to handle successful completion:
+Handle successful completion with `promise/then`:
 
 ```hara
 (promise/then
@@ -205,7 +211,7 @@ Use `promise/then` to handle successful completion:
      :write/result result}))
 ```
 
-Use the actual file contract for the precise write result. Do not assume that it returns the bytes value.
+Use the selected runtime's actual file contract for the precise write result. Do not assume the call returns the bytes value.
 
 ## Compose read, transform, and write
 
@@ -214,9 +220,9 @@ Build one promise chain:
 ```hara
 (defn transform-file [input-path output-path]
   (promise/then
-    (file/read input-path)
+    (File/read input-path)
     (fn [input-bytes]
-      (file/write
+      (File/write
         output-path
         (transform-document-bytes input-bytes)))))
 ```
@@ -226,17 +232,17 @@ The callback returns the write promise. Promise adoption makes the returned chai
 The control flow is:
 
 ```text
-read promise
+File/read promise
 -> input bytes
 -> pure transformation
 -> output bytes
--> write promise
+-> File/write promise
 -> write result
 ```
 
-## Record progress in the atom
+## Record progress at the boundary
 
-Keep state updates at the I/O boundary:
+Keep state updates beside the effectful workflow:
 
 ```hara
 (defn start-file-run! []
@@ -270,7 +276,7 @@ Wrap the file chain:
           (throw error)))))
 ```
 
-The pure transformation still has no knowledge of the atom.
+The pure bytes transformation still has no knowledge of the atom.
 
 ## Cleanup with `promise/finally`
 
@@ -286,9 +292,9 @@ Use `promise/finally` for state or resource cleanup that must run after either o
 
 Do not use `finally` to hide the original failure.
 
-## Use a coroutine for sequential async workflow
+## Sequential workflow with a coroutine
 
-A coroutine can express a sequence of promise waits:
+A coroutine can express several promise waits:
 
 ```hara
 (ns intro.file-workflow
@@ -299,55 +305,44 @@ A coroutine can express a sequence of promise waits:
     (fn []
       (let [input-bytes
             (coroutine/await
-              (file/read input-path))]
+              (File/read input-path))]
         (coroutine/yield
           {:phase :phase/read
            :bytes (bytes/count input-bytes)})
         (let [output-bytes
               (transform-document-bytes input-bytes)]
           (coroutine/await
-            (file/write output-path output-bytes))
+            (File/write output-path output-bytes))
           {:phase :phase/complete
            :bytes (bytes/count output-bytes)})))))
 ```
 
-The coroutine makes each await point explicit. The promise chain remains the simpler choice for a short read-transform-write flow.
-
-Use the coroutine when the workflow must pause, expose intermediate values, and resume through several stages.
+A short read-transform-write flow is usually clearer as a promise chain. Use a coroutine when the workflow must pause, expose intermediate values, and resume across several stages.
 
 ## File I/O is byte-oriented
 
-The current file boundary reads and writes bytes.
-
-This design avoids hidden text assumptions:
+The native boundary reads and writes bytes. This avoids hidden text assumptions:
 
 - a text program chooses UTF-8 decoding;
 - a binary program keeps bytes;
 - a protocol parser can inspect exact byte values;
 - a writer chooses the serialized format before the host call.
 
-Do not decode a binary file merely because the file API returned bytes.
+Do not decode a binary file merely because `File/read` returned bytes.
 
-## Streaming and whole-file I/O
+## Whole-file I/O is not streaming
 
-The iterator lesson introduced demand-driven processing. The basic `file/read` operation returns the file bytes through one promise.
+The basic `File/read` operation returns the complete file bytes through one promise.
 
-For a small file, whole-file processing is direct:
+For a small file:
 
 ```text
 read all bytes -> transform -> write all bytes
 ```
 
-For a large or continuous source, use a provider that exposes chunks or an iterator. Keep the same design:
+For a large or continuous source, use a provider or library that explicitly exposes chunks or an iterator. Keep resource lifetime and close behavior explicit.
 
-```text
-resource-backed iterator
--> bounded transforms
--> explicit consumer
--> explicit close
-```
-
-Do not claim that whole-file `file/read` is streaming.
+Asynchronous whole-file I/O is not automatically streaming.
 
 ## Complete the course project
 
@@ -364,12 +359,12 @@ Resolve both paths:
 
 ```hara eval group=hal-intro-07
 (def resolved-input
-  (file/resolve
+  (File/resolve
     (:file/root config)
     (:file/input config)))
 
 (def resolved-output
-  (file/resolve
+  (File/resolve
     (:file/root config)
     (:file/output config)))
 ```
@@ -383,7 +378,7 @@ Start the operation:
     resolved-output))
 ```
 
-Inspect the returned promise and run state:
+Inspect the returned promise and run state in an environment with filesystem authority:
 
 ```hara
 operation
@@ -397,24 +392,21 @@ When blocking inspection is suitable:
 @run
 ```
 
-## Practice loop
-
-1. Transform sample bytes without file access.
-2. Predict the output text.
-3. Resolve a path beneath a test root.
-4. Run a read with file authority disabled and inspect the error.
-5. Grant file authority in the runtime.
-6. Run the file pipeline.
-7. Inspect the output bytes and run state.
-8. Change the pure transformation and run it again.
-
 ## Common mistakes
 
-### Assuming namespace access grants file authority
+### Requiring `std.foundation.file`
 
-The `file/` alias can exist while calls remain denied.
+That namespace is retired. Use the `File` static object for the native boundary.
 
-### Passing text directly to `file/write`
+### Assuming object access grants authority
+
+`File` can exist while every effectful call remains denied.
+
+### Treating `File` as `std.fs`
+
+`File` is native. `std.fs.path` is a registered portable path library. The broader `std.fs` facade is planned until a later inventory proves otherwise.
+
+### Passing text directly to `File/write`
 
 Encode the text as bytes.
 
@@ -436,15 +428,16 @@ A promise-based whole-file result is asynchronous, but it is not a chunk stream.
 
 ## Check yourself
 
-You have completed the tutorial when you can answer these questions:
+You have completed the tutorial when you can answer:
 
-1. Why can `file/read` fail when `file/` exists?
-2. What does `file/resolve` make explicit?
-3. Which value type does `file/read` produce through its promise?
-4. Where should UTF-8 decoding occur?
-5. Why should document transformation remain pure?
-6. How does a returned write promise extend a promise chain?
-7. When is a coroutine clearer than a short promise chain?
-8. Why is whole-file asynchronous I/O not automatically streaming?
+1. Why is `File` not a loadable Foundation child namespace?
+2. Why can `File/read` fail when the `File` object exists?
+3. What distinction does `std.fs.path` introduce?
+4. Which value type does `File/read` produce through its promise?
+5. Where should UTF-8 decoding occur?
+6. Why should document transformation remain pure?
+7. How does returning the write promise extend a promise chain?
+8. When is a coroutine clearer than a short promise chain?
+9. Why is whole-file asynchronous I/O not automatically streaming?
 
-Continue with the [language contract](../reference/l0-language.md) or [runtime libraries](../projects/index.md#namespaces-and-libraries).
+Continue with the [Foundation reorganization guide](../guides/foundation-reorganization-2026.md), the [language contract](../reference/l0-language.md), or the [Language API](../api/index.md).
