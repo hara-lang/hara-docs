@@ -23,7 +23,10 @@
         { "label": "Emacs", "path": "getting-started/emacs.md" },
         { "label": "Projects and namespaces", "path": "projects/index.md" },
         { "label": "Runtime-driven development", "path": "concepts/runtime-driven-development.md" },
-        { "label": "Build Tic Tac Toe", "path": "create/first-game.md" }
+        { "label": "Build Tic Tac Toe", "path": "create/first-game.md" },
+        { "label": "Stream transforms", "path": "guides/streams.md" },
+        { "label": "Async streams and channels", "path": "guides/async-streams.md" },
+        { "label": "Relay over processes and sockets", "path": "guides/relay-processes-and-sockets.md" }
       ]
     },
     {
