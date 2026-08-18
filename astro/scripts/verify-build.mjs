@@ -4,6 +4,7 @@ import { relative, resolve, sep } from "node:path";
 import { appRoot } from "./docs-manifest.mjs";
 
 const dist = resolve(appRoot, "dist");
+const docsMarkPath = "M15 12 33 24 15 36V12Zm18 0v24L15 24 33 12Z";
 const required = [
   "index.html",
   "learn/index.html",
@@ -11,6 +12,7 @@ const required = [
   "books/the-little-book-of-hal/docs/index.html",
   "api/index.html",
   "start/orientation/index.html",
+  "assets/hara-favicon.svg",
   "assets/og-hara-docs.jpg",
   "assets/visual-language/motifs/web/aperture-light-1280.avif",
   "assets/visual-language/motifs/web/aperture-light-1280.webp",
@@ -37,6 +39,22 @@ for (const path of required) {
   const info = await stat(resolve(dist, path));
   assert.ok(info.isFile() && info.size > 0, `missing non-empty Astro artifact: ${path}`);
 }
+
+const publishedFavicon = await readFile(resolve(dist, "assets/hara-favicon.svg"), "utf8");
+assert.match(
+  publishedFavicon,
+  /viewBox="0 0 48 48"/,
+  "published Hara Docs favicon must retain the established 48-unit view box"
+);
+assert.ok(
+  publishedFavicon.includes(`d="${docsMarkPath}"`),
+  "published Hara Docs favicon no longer matches the established mark"
+);
+assert.doesNotMatch(
+  publishedFavicon,
+  /M10 8h13v18h18V8h13v48H41V38H23v18H10z|M130 19 231 130 130 241 29 130/,
+  "published Hara Docs favicon contains a renderer-migration replacement mark"
+);
 
 const allFiles = await filesUnder(dist);
 const relativeFiles = allFiles.map((path) => relative(dist, path).split(sep).join("/"));
