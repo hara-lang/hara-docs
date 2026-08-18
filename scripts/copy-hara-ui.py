@@ -23,13 +23,17 @@ def on_post_build(config, **_kwargs):
         raise FileNotFoundError(f"missing pinned @hara-lang/live sources: {live_source}")
     copytree(live_source, live_target, dirs_exist_ok=True)
 
-    # The inline tutorials use a small subset of Studio's browser host.
+    # The inline tutorials use a small subset of Studio's browser host. Keep
+    # the portable frame source inside hara-docs so the compatibility build is
+    # reproducible and never depends on an undeclared sibling Hara checkout.
     studio = project / "docs" / "rust" / "studio"
-    substrate_source = project / "docs" / "rust" / "std" / "lib" / "substrate" / "frame.hal"
+    substrate_source = project / "docs" / "rust" / "std" / "substrate" / "frame.hal"
     if not (studio / "broker.js").is_file():
-        studio = project.parent / "rust" / "web" / "studio"
+        raise FileNotFoundError(f"missing checked-in Studio runtime: {studio}")
     if not substrate_source.is_file():
-        substrate_source = project.parent / "lib" / "src" / "std" / "lib" / "substrate" / "frame.hal"
+        raise FileNotFoundError(
+            f"missing checked-in std.substrate.frame source: {substrate_source}"
+        )
     runtime = Path(config.site_dir) / "rust" / "studio"
     (runtime / "hal").mkdir(parents=True, exist_ok=True)
     for name in ("broker.js", "canvas-runtime.js"):
