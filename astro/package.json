@@ -7,9 +7,10 @@
     "dev": "npm run prepare:docs && astro dev",
     "prepare:docs": "node scripts/prepare-docs.mjs",
     "verify:visual-language": "node scripts/verify-visual-language.mjs",
-    "check": "npm run prepare:docs && npm run verify:visual-language && astro check",
+    "brand:check": "node --test test/brand-contract.test.mjs",
+    "check": "npm run prepare:docs && npm run verify:visual-language && npm run brand:check && astro check",
     "test": "npm run prepare:docs && npm run verify:visual-language && node --test test/*.test.mjs",
-    "build": "npm run prepare:docs && npm run verify:visual-language && astro check && astro build && node scripts/flatten-artifact.mjs && node scripts/verify-build.mjs",
+    "build": "npm run prepare:docs && npm run verify:visual-language && npm run brand:check && astro check && astro build && node scripts/flatten-artifact.mjs && node scripts/verify-build.mjs",
     "verify:build": "node scripts/verify-build.mjs"
   },
   "dependencies": {
