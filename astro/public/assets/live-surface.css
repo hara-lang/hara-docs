@@ -1,5 +1,20 @@
-/* Hara visual-language bridge for every @hara-lang/live surface.
-   The package keeps portable defaults; the canonical site supplies identity. */
+/* Hara visual-language bridge for @hara-lang/live and its workbench shell. */
+
+body .hara-live-workbench {
+  --hara-live-workbench-bg: var(--hara-bg-clean);
+  --hara-live-workbench-panel: var(--hara-surface-solid);
+  --hara-live-workbench-raised: var(--hara-surface-raised);
+  --hara-live-workbench-ink: var(--hara-text);
+  --hara-live-workbench-muted: var(--hara-muted);
+  --hara-live-workbench-line: color-mix(in srgb, var(--hara-line) 76%, transparent);
+  --hara-live-workbench-line-strong: color-mix(in srgb, var(--hara-line-strong) 72%, transparent);
+  --hara-live-workbench-signal: var(--hara-signal);
+  --hara-live-workbench-wash: color-mix(in srgb, var(--hara-signal) 9%, transparent);
+
+  background: color-mix(in srgb, var(--hara-bg-clean) 96%, transparent);
+  border-radius: var(--hara-radius-md);
+  box-shadow: var(--hara-shadow);
+}
 
 body .hara-live-card {
   --hara-live-bg: var(--hara-bg-clean);
@@ -12,9 +27,7 @@ body .hara-live-card {
   --hara-live-error: var(--hara-danger);
   --hara-live-mono-font: var(--hara-font-mono);
 
-  border-radius: var(--hara-radius-md);
   background: color-mix(in srgb, var(--hara-bg-clean) 96%, transparent);
-  box-shadow: var(--hara-shadow);
 }
 
 body .hara-live-card-header {
@@ -50,54 +63,40 @@ body .hara-live-card-canvas-meta {
   background-color: var(--hara-surface-raised);
 }
 
-body .hara-live-card .code-highlight .comment {
-  color: var(--hara-faint);
+body .hara-live-card .code-highlight .comment { color: var(--hara-faint); }
+body .hara-live-card .code-highlight .string { color: color-mix(in srgb, var(--hara-warning) 72%, var(--hara-text)); }
+body .hara-live-card .code-highlight .keyword { color: var(--hara-signal); }
+body .hara-live-card .code-highlight .paren-0 { color: var(--hara-signal); }
+body .hara-live-card .code-highlight .paren-1 { color: color-mix(in srgb, var(--hara-success) 76%, var(--hara-text)); }
+body .hara-live-card .code-highlight .paren-2 { color: color-mix(in srgb, var(--hara-warning) 74%, var(--hara-text)); }
+body .hara-live-card .code-highlight .paren-3 { color: color-mix(in srgb, var(--hara-signal) 54%, var(--hara-text)); }
+body .hara-live-card .code-highlight .paren-4 { color: color-mix(in srgb, var(--hara-success) 48%, var(--hara-text)); }
+body .hara-live-card .code-highlight .paren-5 { color: var(--hara-muted); }
+
+body .hara-live-card-canvas { background: #03070d; }
+
+.code-stage-card > .hara-live-workbench,
+.live-stage > .hara-live-workbench,
+.sl-markdown-content .hara-live-workbench {
+  border-color: color-mix(in srgb, var(--hara-line-strong) 64%, transparent);
 }
 
-body .hara-live-card .code-highlight .string {
-  color: color-mix(in srgb, var(--hara-warning) 72%, var(--hara-text));
-}
-
-body .hara-live-card .code-highlight .keyword {
-  color: var(--hara-signal);
-}
-
-body .hara-live-card .code-highlight .paren-0 {
-  color: var(--hara-signal);
-}
-
-body .hara-live-card .code-highlight .paren-1 {
-  color: color-mix(in srgb, var(--hara-success) 76%, var(--hara-text));
-}
-
-body .hara-live-card .code-highlight .paren-2 {
-  color: color-mix(in srgb, var(--hara-warning) 74%, var(--hara-text));
-}
-
-body .hara-live-card .code-highlight .paren-3 {
-  color: color-mix(in srgb, var(--hara-signal) 54%, var(--hara-text));
-}
-
-body .hara-live-card .code-highlight .paren-4 {
-  color: color-mix(in srgb, var(--hara-success) 48%, var(--hara-text));
-}
-
-body .hara-live-card .code-highlight .paren-5 {
-  color: var(--hara-muted);
-}
-
-body .hara-live-card-canvas {
-  background: #03070d;
-}
-
-.code-stage-card > .hara-live-card,
-.live-stage > .hara-live-card,
-.sl-markdown-content .hara-live-card {
-  border-color: var(--hara-line-strong);
-}
-
-.sl-markdown-content .hara-live-card {
+.sl-markdown-content .hara-live-workbench {
   margin-block: 1.25rem;
+}
+
+body .hara-live-workbench-sections button,
+body .hara-live-workbench-pane-tabs button,
+body .hara-live-workbench-pane-toggle,
+body .hara-live-control button,
+body .hara-live-control select {
+  font-family: var(--hara-font-sans);
+}
+
+body .hara-live-workbench-entry span,
+body .hara-live-workbench-entry small,
+body .hara-live-control-range output {
+  font-family: var(--hara-font-mono);
 }
 
 @media (max-width: 720px) {
