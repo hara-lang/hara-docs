@@ -114,12 +114,20 @@ test("emits scope metadata on runnable Hara fences", () => {
   assert.match(tree.children[1].value, /data-hara-group="lesson"/);
 });
 
-test("runnable docs use canonical /docs live-card assets", async () => {
-  const repl = await readFile(new URL("../public/assets/docs-repl.js", import.meta.url), "utf8");
+test("runnable docs use the canonical calm live workbench assets", async () => {
+  const [repl, config] = await Promise.all([
+    readFile(new URL("../public/assets/docs-repl.js", import.meta.url), "utf8"),
+    readFile(new URL("../astro.config.mjs", import.meta.url), "utf8")
+  ]);
   assert.match(repl, /from "\/docs\/docs-assets\/live\/kernel\.js"/);
-  assert.match(repl, /from "\/docs\/docs-assets\/live\/live-card\.js"/);
+  assert.match(repl, /from "\/docs\/docs-assets\/live\/workbench\.js"/);
   assert.match(repl, /from "\/docs\/docs-assets\/live\/snippets\.js"/);
-  assert.match(repl, /mountLiveCard/);
+  assert.match(repl, /mountLiveWorkbench/);
+  assert.match(repl, /activeSection:\s*"code"/);
+  assert.match(repl, /navigation:\s*pageNavigation\(\)/);
+  assert.match(repl, /frontmatter:\s*sessionFrontmatter/);
+  assert.match(repl, /controlPane:\s*controlPaneFor/);
+  assert.match(config, /docs-assets\/live\/workbench\.css/);
   assert.match(repl, /sessionProxyKernel/);
   assert.match(repl, /progress\.toast\.remove\(\)/);
   assert.doesNotMatch(repl, /\/docs\/docs\/docs-assets/);
@@ -128,11 +136,27 @@ test("runnable docs use canonical /docs live-card assets", async () => {
 test("tutorial canvases and reset keep the shared component contract", async () => {
   const repl = await readFile(new URL("../public/assets/docs-repl.js", import.meta.url), "utf8");
   const live = await readFile(new URL("../../vendor/hara-ui/packages/live/src/live-card.js", import.meta.url), "utf8");
+  const workbench = await readFile(new URL("../../vendor/hara-ui/packages/live/src/workbench.js", import.meta.url), "utf8");
   const state = await readFile(new URL("../public/assets/docs-repl-state.js", import.meta.url), "utf8");
   assert.match(repl, /docsSnippet\(descriptor, source, "canvas"\)/);
-  assert.match(repl, /kernel: directSessionKernel\(sessions, descriptor\)/);
+  assert.match(repl, /kernel:\s*directSessionKernel\(sessions, descriptor\)/);
+  assert.match(repl, /graphicsSnippet:\s*descriptor\.id/);
+  assert.match(repl, /id:\s*"stop"/);
+  assert.match(repl, /id:\s*"reset"/);
+  assert.match(repl, /threeD:\s*false/);
   assert.match(repl, /hara:reset-session/);
   assert.match(repl, /matching\.forEach\(\(runner\) => runner\.beginReset\(\)\)/);
   assert.match(live, /operation \+= 1/);
+  assert.match(workbench, /setSessions\(entries\)/);
+  assert.match(workbench, /setFiles\(entries\)/);
   assert.match(state, /await session\.close\?\.\(\)/);
+});
+
+test("Docs main surfaces use the calm navigation rhythm", async () => {
+  const styles = await readFile(new URL("../src/styles/calm-docs.css", import.meta.url), "utf8");
+  assert.match(styles, /--docs-calm-motion:\s*185ms/);
+  assert.match(styles, /\.sidebar-content a\[aria-current="page"\]/);
+  assert.match(styles, /\.sl-markdown-content > h1:first-child/);
+  assert.match(styles, /\.hara-live-workbench/);
+  assert.match(styles, /prefers-reduced-motion:\s*reduce/);
 });
