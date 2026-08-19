@@ -1,5 +1,5 @@
 import { createLiveKernel } from "/docs/docs-assets/live/kernel.js";
-import { mountLiveCard } from "/docs/docs-assets/live/live-card.js";
+import { mountLiveWorkbench } from "/docs/docs-assets/live/workbench.js";
 import { getLiveSnippet } from "/docs/docs-assets/live/snippets.js";
 import {
   createDocsSessionRegistry,
@@ -59,6 +59,59 @@ function createMount(frame, className = "hara-docs-live") {
   return mount;
 }
 
+function pageNavigation() {
+  return [...document.querySelectorAll("main :is(h2, h3)[id]")]
+    .slice(0, 12)
+    .map((heading) => ({
+      id: heading.id,
+      label: heading.textContent?.trim() || heading.id,
+      href: `#${heading.id}`
+    }));
+}
+
+function sessionFrontmatter(descriptor, fileName, kind) {
+  return [
+    { label: "Scope", value: descriptor.label },
+    { label: "Session", value: descriptor.id },
+    { label: "Filesystem", value: descriptor.filesystem },
+    { label: "Shared with", value: descriptor.sharedWith },
+    { label: "File", value: fileName },
+    { label: "Surface", value: kind === "canvas" ? "Canvas / 2D" : "Live code" }
+  ];
+}
+
+function controlPaneFor(descriptor, fileName, kind, getWorkbench) {
+  const canvas = kind === "canvas"
+    ? [
+        { id: "stop", label: "Execution", type: "action", actionLabel: "Stop" },
+        { id: "reset", label: "Surface", type: "action", actionLabel: "Reset" }
+      ]
+    : false;
+  return {
+    open: false,
+    sessions: [{
+      id: descriptor.id,
+      label: descriptor.label,
+      value: descriptor.id,
+      status: "ready"
+    }],
+    files: [{
+      id: fileName,
+      label: fileName,
+      value: descriptor.filesystem,
+      status: "current"
+    }],
+    canvas,
+    threeD: false,
+    onControl({ group, id }) {
+      const workbench = getWorkbench();
+      if (group !== "canvas" || !workbench) return;
+      if (id === "stop") workbench.interrupt();
+      if (id === "reset") workbench.reset();
+    }
+  };
+}
+
 function sessionProxyKernel(sessions, descriptor) {
   return {
     async createSession() {
@@ -96,19 +149,25 @@ function mountDocsRunner(frame, descriptor, sessions) {
   if (!source.trim()) return null;
 
   const mount = createMount(frame);
-  const card = mountLiveCard(mount, {
+  const fileName = frame.dataset.haraFile || `${descriptor.id}.hal`;
+  let workbench = null;
+  workbench = mountLiveWorkbench(mount, {
     snippets: [docsSnippet(descriptor, source)],
     activeSnippet: descriptor.id,
-    kernel: sessionProxyKernel(sessions, descriptor)
+    kernel: sessionProxyKernel(sessions, descriptor),
+    activeSection: "code",
+    navigation: pageNavigation(),
+    frontmatter: sessionFrontmatter(descriptor, fileName, "console"),
+    controlPane: controlPaneFor(descriptor, fileName, "console", () => workbench)
   });
 
   return {
     descriptor,
-    card,
+    card: workbench,
     beginReset() {
       // reset() increments the card operation counter, so stale evaluations
       // cannot repaint the surface after the shared session has been replaced.
-      card.reset();
+      workbench.reset();
     }
   };
 }
@@ -138,17 +197,24 @@ async function mountCanvasStage(stage, index, sessions) {
   }
   if (!source.trim()) return null;
 
+  const fileName = stage.dataset.haraCanvasProgram?.split("/").pop() || `${descriptor.id}.hal`;
   const mount = createMount(frame, "hara-docs-live hara-docs-live-canvas");
-  const card = mountLiveCard(mount, {
+  let workbench = null;
+  workbench = mountLiveWorkbench(mount, {
     snippets: [docsSnippet(descriptor, source, "canvas")],
     activeSnippet: descriptor.id,
-    kernel: directSessionKernel(sessions, descriptor)
+    graphicsSnippet: descriptor.id,
+    kernel: directSessionKernel(sessions, descriptor),
+    activeSection: "graphics",
+    navigation: pageNavigation(),
+    frontmatter: sessionFrontmatter(descriptor, fileName, "canvas"),
+    controlPane: controlPaneFor(descriptor, fileName, "canvas", () => workbench)
   });
-  card.run().catch((error) => {
+  workbench.run().catch((error) => {
     console.error("[hara docs canvas]", errorMessage(error));
   });
 
-  return { descriptor, card };
+  return { descriptor, card: workbench };
 }
 
 const frames = [...document.querySelectorAll("main [data-hara-eval]")];
@@ -198,13 +264,28 @@ if (frames.length > 0 || canvasStages.length > 0) {
   });
 }
 
-// Curated live cards and runnable documentation fences now mount the exact same
-// @hara-lang/live component. createLiveKernel caches the underlying page kernel.
+// Curated live cards and runnable documentation fences mount the same shared
+// calm workbench. createLiveKernel caches the underlying page kernel.
 for (const mount of document.querySelectorAll("main [data-hara-live]")) {
   const selected = String(mount.dataset.haraLive ?? "")
     .split(",")
     .map((id) => getLiveSnippet(id.trim()))
     .filter(Boolean);
   if (!selected.length) continue;
-  mountLiveCard(mount, { snippets: selected, activeSnippet: selected[0].id });
+  const canvasSnippet = selected.find(({ kind }) => kind === "canvas");
+  const descriptor = describeDocsSession({
+    pagePath: `${location.pathname}/curated`,
+    sequence: [...document.querySelectorAll("main [data-hara-live]")].indexOf(mount) + 1
+  });
+  const fileName = `${selected[0].id}.hal`;
+  let workbench = null;
+  workbench = mountLiveWorkbench(mount, {
+    snippets: selected,
+    activeSnippet: selected[0].id,
+    graphicsSnippet: canvasSnippet?.id,
+    activeSection: canvasSnippet ? "graphics" : "code",
+    navigation: pageNavigation(),
+    frontmatter: sessionFrontmatter(descriptor, fileName, canvasSnippet ? "canvas" : "console"),
+    controlPane: controlPaneFor(descriptor, fileName, canvasSnippet ? "canvas" : "console", () => workbench)
+  });
 }
