@@ -1,0 +1,138 @@
+/* Docs refinement aligned with the v2 calm-surface language. */
+:root {
+  --docs-calm-radius: 12px;
+  --docs-calm-radius-small: 8px;
+  --docs-calm-motion: 185ms cubic-bezier(.2, .7, .2, 1);
+  --docs-calm-line: color-mix(in srgb, var(--hara-line-strong) 46%, transparent);
+  --docs-calm-wash: color-mix(in srgb, var(--hara-signal) 9%, transparent);
+}
+
+.header {
+  border-bottom-color: var(--docs-calm-line);
+  box-shadow: 0 8px 30px color-mix(in srgb, #000 7%, transparent);
+}
+
+.sidebar-pane,
+.right-sidebar {
+  border-color: var(--docs-calm-line) !important;
+  background: color-mix(in srgb, var(--hara-bg) 96%, transparent) !important;
+}
+
+.sidebar-content a,
+.right-sidebar a,
+starlight-menu-button button,
+.social-icons a,
+site-search button {
+  border-radius: var(--docs-calm-radius-small) !important;
+  transition:
+    color var(--docs-calm-motion),
+    background-color var(--docs-calm-motion),
+    border-color var(--docs-calm-motion),
+    box-shadow var(--docs-calm-motion);
+}
+
+.sidebar-content a:hover,
+.right-sidebar a:hover {
+  color: var(--hara-text) !important;
+  background: var(--docs-calm-wash) !important;
+}
+
+.sidebar-content a[aria-current="page"] {
+  color: var(--hara-text) !important;
+  background: var(--docs-calm-wash) !important;
+  box-shadow: inset 2px 0 0 var(--hara-signal);
+}
+
+.main-pane {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--hara-bg-clean) 58%, transparent),
+    transparent 32rem);
+}
+
+.content-panel {
+  padding-block-start: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.sl-container {
+  width: min(100%, 1180px);
+}
+
+.sl-markdown-content > h1:first-child {
+  max-width: 18ch;
+  margin-block-end: .55rem;
+  font-size: clamp(2.45rem, 6vw, 5.4rem);
+  line-height: .94;
+  letter-spacing: -.065em;
+}
+
+.sl-markdown-content > p:first-of-type {
+  max-width: 72ch;
+  color: var(--hara-muted);
+  font-size: clamp(1rem, 1.3vw, 1.12rem);
+  line-height: 1.72;
+}
+
+.sl-markdown-content :where(.card, details, table, .expressive-code, .hara-repl) {
+  border-color: var(--docs-calm-line) !important;
+  border-radius: var(--docs-calm-radius) !important;
+  box-shadow: 0 14px 36px color-mix(in srgb, #000 7%, transparent) !important;
+}
+
+.sl-markdown-content .card-grid {
+  gap: .8rem;
+}
+
+.sl-markdown-content .card {
+  background: color-mix(in srgb, var(--hara-surface-solid) 92%, transparent);
+  transition: transform var(--docs-calm-motion), border-color var(--docs-calm-motion), background-color var(--docs-calm-motion);
+}
+
+.sl-markdown-content .card:hover {
+  border-color: color-mix(in srgb, var(--hara-signal) 24%, var(--docs-calm-line)) !important;
+  background: color-mix(in srgb, var(--hara-surface-solid) 96%, var(--hara-signal));
+  transform: translateY(-2px);
+}
+
+.sl-markdown-content :where(button, input, select, textarea, a):focus-visible {
+  outline: 2px solid var(--hara-signal);
+  outline-offset: 2px;
+}
+
+.hara-docs-live {
+  margin-block: 1.35rem;
+}
+
+.hara-docs-live .hara-live-workbench {
+  border-color: var(--docs-calm-line);
+  box-shadow: 0 18px 48px color-mix(in srgb, #000 12%, transparent);
+}
+
+.hara-docs-live-canvas .hara-live-workbench {
+  margin-inline: min(0px, calc((var(--sl-content-width) - 100%) / -2));
+}
+
+@media (max-width: 72rem) {
+  .right-sidebar {
+    background: var(--hara-bg) !important;
+  }
+}
+
+@media (max-width: 50rem) {
+  .content-panel {
+    padding-block-start: 1rem;
+  }
+
+  .sl-markdown-content > h1:first-child {
+    font-size: clamp(2.2rem, 12vw, 4.25rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-pane,
+  .main-pane * {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
