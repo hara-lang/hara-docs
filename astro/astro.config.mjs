@@ -32,7 +32,7 @@ export default defineConfig({
         { tag: "meta", attrs: { name: "hara-identity-auto", content: "starlight" } },
         { tag: "script", attrs: { type: "module", src: asset("/assets/identity-loader.js") } },
         { tag: "link", attrs: { rel: "stylesheet", href: asset("/docs-assets/stylesheets/syllabus.css") } },
-        { tag: "link", attrs: { rel: "stylesheet", href: asset("/docs-assets/live/style.css") } },
+        { tag: "link", attrs: { rel: "stylesheet", href: asset("/docs-assets/live/workbench.css") } },
         { tag: "link", attrs: { rel: "stylesheet", href: asset("/assets/live-surface.css") } },
         { tag: "script", attrs: { type: "module", src: asset("/assets/docs-repl.js") } },
         { tag: "script", attrs: { type: "module", src: asset("/docs-assets/javascripts/syllabus.js") } },
