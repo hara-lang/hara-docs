@@ -10,6 +10,7 @@ on:
       - "docs/guides/foundation-reorganization-2026.md"
       - "docs/hal-intro/07-io-and-files.md"
       - "generated/api-index.json"
+      - "generated/foundation-api-gaps.json"
       - ".github/workflows/foundation-api-docs.yml"
   push:
     branches: [main]
@@ -21,6 +22,7 @@ on:
       - "docs/guides/foundation-reorganization-2026.md"
       - "docs/hal-intro/07-io-and-files.md"
       - "generated/api-index.json"
+      - "generated/foundation-api-gaps.json"
       - ".github/workflows/foundation-api-docs.yml"
   workflow_dispatch:
 
@@ -38,26 +40,39 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
           fetch-depth: 0
 
-      - name: Read pinned Hara target
+      - name: Read pinned Hara and specification targets
         id: target
         shell: bash
         run: |
           python - <<'PY' >> "$GITHUB_OUTPUT"
           import json
-          from pathlib import Path
+          from pathlib import Path, PurePosixPath
 
           target = json.loads(Path("foundation-api-target.json").read_text())
           repository = target["repository"]
           commit = target["commit"]
           schema = target["manifestSchemaVersion"]
+          authority = target["authority"]
+          gap_ledger = target["gapLedger"]
           if repository != "hara-lang/hara":
               raise SystemExit(f"unsupported Foundation API repository: {repository}")
           if len(commit) != 40 or any(ch not in "0123456789abcdef" for ch in commit):
               raise SystemExit(f"Foundation API target is not an immutable commit: {commit}")
           if schema != 2:
               raise SystemExit(f"unsupported Foundation API manifest schema: {schema}")
+          if authority["repository"] != "hara-lang/hara-specs-registry":
+              raise SystemExit(f"unsupported Foundation authority repository: {authority['repository']}")
+          registry_commit = authority["commit"]
+          if len(registry_commit) != 40 or any(ch not in "0123456789abcdef" for ch in registry_commit):
+              raise SystemExit(f"Foundation authority is not an immutable commit: {registry_commit}")
+          gap_path = PurePosixPath(gap_ledger)
+          if gap_path.is_absolute() or ".." in gap_path.parts:
+              raise SystemExit(f"unsafe Foundation API gap ledger path: {gap_ledger}")
           print(f"repository={repository}")
           print(f"commit={commit}")
+          print(f"registry_repository={authority['repository']}")
+          print(f"registry_commit={registry_commit}")
+          print(f"gap_ledger={gap_ledger}")
           PY
 
       - name: Checkout pinned Hara source
@@ -66,6 +81,13 @@ jobs:
           repository: ${{ steps.target.outputs.repository }}
           ref: ${{ steps.target.outputs.commit }}
           path: .hara-api-source
+
+      - name: Checkout pinned Foundation specification authority
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.target.outputs.registry_repository }}
+          ref: ${{ steps.target.outputs.registry_commit }}
+          path: .hara-specs-source
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -85,7 +107,7 @@ jobs:
         with:
           workspaces: .hara-api-source/core/rust
 
-      - name: Generate pinned schema-v2 manifest
+      - name: Generate pinned schema-v2 manifest reproducibly
         run: |
           python .hara-api-source/scripts/generate_foundation_api_manifest.py \
             --root .hara-api-source \
@@ -93,6 +115,14 @@ jobs:
             --ref ${{ steps.target.outputs.commit }} \
             --commit ${{ steps.target.outputs.commit }} \
             --output generated/foundation-api-manifest.json
+          cp generated/foundation-api-manifest.json "$RUNNER_TEMP/foundation-api-manifest-first.json"
+          python .hara-api-source/scripts/generate_foundation_api_manifest.py \
+            --root .hara-api-source \
+            --repository https://github.com/${{ steps.target.outputs.repository }} \
+            --ref ${{ steps.target.outputs.commit }} \
+            --commit ${{ steps.target.outputs.commit }} \
+            --output generated/foundation-api-manifest.json
+          cmp "$RUNNER_TEMP/foundation-api-manifest-first.json" generated/foundation-api-manifest.json
 
       - name: Test the documentation generator
         run: |
@@ -100,13 +130,18 @@ jobs:
           node --check scripts/generate-api.test.mjs
           node --test scripts/generate-api.test.mjs
 
-      - name: Generate current API and migration pages
+      - name: Generate current API and migration pages reproducibly
         run: |
           node scripts/generate-api.mjs \
             --input generated/foundation-api-manifest.json
+          git diff -- docs/api generated/api-index.json > "$RUNNER_TEMP/foundation-api-docs-first.diff"
+          node scripts/generate-api.mjs \
+            --input generated/foundation-api-manifest.json
+          git diff -- docs/api generated/api-index.json > "$RUNNER_TEMP/foundation-api-docs-second.diff"
+          cmp "$RUNNER_TEMP/foundation-api-docs-first.diff" "$RUNNER_TEMP/foundation-api-docs-second.diff"
           git status --short -- docs/api generated/api-index.json
 
-      - name: Validate generated provenance and boundary
+      - name: Validate generated provenance, authority, gaps, and boundary
         run: |
           python - <<'PY'
           import json
@@ -114,6 +149,7 @@ jobs:
 
           manifest = json.loads(Path("generated/api-index.json").read_text())
           target = json.loads(Path("foundation-api-target.json").read_text())
+          gaps = json.loads(Path(target["gapLedger"]).read_text())
           expected = [
               "std.foundation",
               "std.foundation.bytes",
@@ -142,6 +178,23 @@ jobs:
               value = PurePosixPath(field)
               assert not value.is_absolute(), field
               assert ".." not in value.parts, field
+
+          authority = target["authority"]
+          assert gaps["schemaVersion"] == 1
+          assert gaps["core"]["repository"] == target["repository"]
+          assert gaps["core"]["commit"] == target["commit"]
+          assert gaps["registry"]["repository"] == authority["repository"]
+          assert gaps["registry"]["commit"] == authority["commit"]
+          assert gaps["registry"]["foundation"] == authority["foundation"]
+          assert gaps["registry"]["foundationAnnex"] == authority["foundationAnnex"]
+          assert Path(".hara-specs-source", authority["foundation"]).is_dir()
+          assert Path(".hara-specs-source", authority["foundationAnnex"]).is_dir()
+          tracking = {gap["tracking"] for gap in gaps["gaps"]}
+          assert "https://github.com/hara-lang/hara/issues/844" in tracking
+          assert "https://github.com/hara-lang/hara/issues/649" in tracking
+          for gap in gaps["gaps"]:
+              assert gap["id"] and gap["status"] and gap["scope"]
+              assert gap["currentBehavior"] and gap["requiredClosure"]
           PY
 
       - name: Commit generated API and migration pages
@@ -172,5 +225,6 @@ jobs:
             docs/api
             generated/api-index.json
             generated/foundation-api-manifest.json
+            generated/foundation-api-gaps.json
           if-no-files-found: error
           retention-days: 30

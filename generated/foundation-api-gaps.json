@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "core": {
+    "repository": "hara-lang/hara",
+    "commit": "e8ed43f532fe6dc3c5c78d07b92ca6b1bf9d5366",
+    "selection": "Merge commit of hara-lang/hara#933, the first validated integration point after restoring and conforming the Foundation surface."
+  },
+  "registry": {
+    "repository": "hara-lang/hara-specs-registry",
+    "commit": "64d81ebe5fded2809c6fc4414796a3feddf98a33",
+    "foundation": "01-lang/004-foundation/draft",
+    "foundationAnnex": "01-lang/005-foundation-annex/draft"
+  },
+  "gaps": [
+    {
+      "id": "explicit-public-var-filtering",
+      "status": "blocked-by-core-contract",
+      "scope": "definition-selection",
+      "tracking": "https://github.com/hara-lang/hara/issues/844",
+      "currentBehavior": "The schema-v2 generator consumes the current hara-api-doc inventory. Core has not yet implemented the shared ^{:public true} selection contract, so this generated reference must not claim that unmarked reachable helpers have already been removed from supported API output.",
+      "requiredClosure": "After #844 lands across parser, loader, HALC/HBX, completion, and documentation manifests, repin Hara and regenerate so supported definitions are selected by the explicit public surface while all-interns introspection remains separate."
+    },
+    {
+      "id": "foundation-migration-ledger-closure",
+      "status": "tracked",
+      "scope": "migration-ledger",
+      "tracking": "https://github.com/hara-lang/hara/issues/649",
+      "currentBehavior": "The generated reference consumes the eleven checked-in Foundation migration rows available at the selected core commit. Issue #649 remains authoritative for proving complete coverage of every removed or moved Foundation name and reconciling drifted roadmap issues.",
+      "requiredClosure": "Regenerate when #649 expands or closes the canonical ledger; do not infer unrecorded replacements in documentation."
+    }
+  ]
+}
