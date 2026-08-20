@@ -60,20 +60,23 @@ Choose this when Java interop or the JVM ecosystem is part of the application.
 
 ## One project, several surfaces
 
-A normal Hara project keeps its durable source and project description together:
+A normal Hara project keeps its durable source and its single contributor-authored project manifest together:
 
 ```text
 my-project/
   project.edn
-  workspace.edn
   src/
     app/
       main.hal
+  workspace.edn  # optional editor or product workspace metadata
 ```
 
 - `.hal` files contain executable source.
-- `project.edn` describes source roots, dependencies, runtime expectations, and requested capabilities.
-- `workspace.edn` can describe the files, areas, nodes, controllers, visualisers, and connections that form a visual workspace.
+- `project.edn` is the package/project authority for source roots, dependencies, runtime profiles, builds, extensions, requested capabilities, and package identity.
+- `project.lock.edn` and the `package.edn` inside a `.harp` archive are generated outputs, not additional authored manifests.
+- A host may use an optional `workspace.edn` to describe files, areas, nodes, controllers, visualisers, and connections in a visual workspace. It does not replace or redefine `project.edn`.
+
+See [Projects, packages, and visual workspaces](projects/index.md) for the current package, runtime-profile, namespace, and publishing boundaries. The underlying normative specifications are draft contracts, so that guide records the exact registry revision it explains.
 
 The Playground, CLI, browser, JVM, and editors are ways to reach the project. They are not separate versions of the language.
 
