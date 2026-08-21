@@ -13,6 +13,7 @@ const requiredExports = [
   "./theme.js",
   "./astro/v2/Shell.astro",
   "./astro/v2/Header.astro",
+  "./astro/v2/ContextNav.astro",
   "./astro/v2/PageHeader.astro"
 ];
 const requiredDocuments = [

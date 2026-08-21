@@ -74,6 +74,8 @@ test("retains Hara theme, search, route middleware, and live hooks", async () =>
   const middleware = await read("../src/starlight-route-data.mjs");
   assert.match(config, /starlight\(/);
   assert.match(config, /routeMiddleware/);
+  assert.match(config, /DocsHeader\.astro/);
+  assert.match(config, /DocsPageFrame\.astro/);
   assert.match(config, /docs-repl\.js/);
   assert.match(styles, /@hara-lang\/visual-language\/theme\.css/);
   assert.doesNotMatch(styles, /@hara-lang\/visual-language\/motifs\.css/);

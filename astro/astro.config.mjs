@@ -48,6 +48,10 @@ export default defineConfig({
         { tag: "meta", attrs: { name: "twitter:image:alt", content: "Hara Docs — build live, across every host" } }
       ],
       customCss: ["./src/styles/docs.css", "./src/styles/v2-adoption.css"],
+      components: {
+        Header: "./src/components/DocsHeader.astro",
+        PageFrame: "./src/components/DocsPageFrame.astro"
+      },
       social: [{ icon: "github", label: "GitHub", href: "https://github.com/hara-lang/hara" }],
       routeMiddleware: ["./src/starlight-route-data.mjs"],
       sidebar: docsSidebar

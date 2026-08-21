@@ -19,6 +19,20 @@ test("Starlight remains the renderer and loads the v2 product mapping after exis
   assert.match(config, /customCss: \["\.\/src\/styles\/docs\.css", "\.\/src\/styles\/v2-adoption\.css"\]/);
   assert.match(config, /routeMiddleware: \["\.\/src\/starlight-route-data\.mjs"\]/);
   assert.match(config, /sidebar: docsSidebar/);
+  assert.match(config, /Header: "\.\/src\/components\/DocsHeader\.astro"/);
+  assert.match(config, /PageFrame: "\.\/src\/components\/DocsPageFrame\.astro"/);
+});
+
+test("the Starlight frame uses the shared v2 header and section navigation", async () => {
+  const [header, frame] = await Promise.all([
+    read("src/components/DocsHeader.astro"),
+    read("src/components/DocsPageFrame.astro")
+  ]);
+  assert.match(header, /@hara-lang\/visual-language\/astro\/v2\/Header\.astro/);
+  assert.match(header, /data-hara-identity/);
+  assert.match(frame, /@hara-lang\/visual-language\/astro\/v2\/ContextNav\.astro/);
+  assert.match(frame, /class="hara-v2 hara-v2-shell docs-v2-shell"/);
+  assert.match(frame, /Docs sections/);
 });
 
 test("the package verifier requires and materialises the accepted published boundary", async () => {

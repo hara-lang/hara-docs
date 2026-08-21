@@ -13,6 +13,7 @@ The pin is represented in the publishing workflow checkout. The build verifier r
 ## This first adoption slice
 
 - keeps Starlight as the document renderer and route owner;
+- uses the shared v2 header, context navigation and shell frame around the Starlight document content;
 - loads the shared `v2.css` document language through Starlight `customCss`;
 - maps Starlight header, sidebar, content, right outline, cards, tables and pagination to v2 tokens;
 - preserves dark code, REPL editor and canvas surfaces in both themes;

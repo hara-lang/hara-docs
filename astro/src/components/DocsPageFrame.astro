@@ -1,0 +1,40 @@
+---
+import MobileMenuToggle from "@astrojs/starlight/components/MobileMenuToggle.astro";
+import V2ContextNav from "@hara-lang/visual-language/astro/v2/ContextNav.astro";
+
+const { hasSidebar } = Astro.locals.starlightRoute;
+const activePath = Astro.url.pathname;
+const contextItems = [
+  { label: "Docs home", href: "/docs/" },
+  { label: "Learn", href: "/docs/learn/" },
+  { label: "Build", href: "/docs/build/" },
+  { label: "Reference", href: "/docs/api/" },
+  { label: "Self learning", href: "/docs/self-learning/" }
+];
+---
+<div
+  class="hara-v2 hara-v2-shell docs-v2-shell"
+  data-sidebar={hasSidebar ? "true" : "false"}
+  data-aside="false"
+  data-context="true"
+  data-embedded="false"
+  data-density="comfortable"
+>
+  <slot name="header" />
+  <V2ContextNav items={contextItems} activePath={activePath} label="Docs sections" />
+  <div class="docs-v2-workspace">
+    {
+      hasSidebar && (
+        <nav class="sidebar docs-v2-sidebar print:hidden" aria-label={Astro.locals.t('sidebarNav.accessibleLabel')}>
+          <MobileMenuToggle />
+          <div id="starlight__sidebar" class="sidebar-pane">
+            <div class="sidebar-content sl-flex">
+              <slot name="sidebar" />
+            </div>
+          </div>
+        </nav>
+      )
+    }
+    <div class="main-frame docs-v2-main-frame"><slot /></div>
+  </div>
+</div>

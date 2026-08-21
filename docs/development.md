@@ -89,7 +89,7 @@ DISABLE_MKDOCS_2_WARNING=true mkdocs build --clean --site-dir site-mkdocs
 
 git clone https://github.com/hara-lang/visual-language \
   astro/packages/visual-language
-(cd astro/packages/visual-language && git checkout c49ad17d5052c8eeca0aff4a6146ff60b89ce88f)
+(cd astro/packages/visual-language && git checkout a2ab66d0fde79edb1cee46b79528098b3fda68cf)
 npm install --prefix astro --no-audit --no-fund
 npm test --prefix astro
 npm run build --prefix astro
