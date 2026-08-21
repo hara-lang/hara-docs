@@ -14,6 +14,8 @@ const required = [
   "start/orientation/index.html",
   "assets/hara-favicon.svg",
   "assets/og-hara-docs.jpg",
+  "assets/docs-repl.js",
+  "assets/docs-repl-evidence.js",
   "assets/visual-language/motifs/web/aperture-light-1280.avif",
   "assets/visual-language/motifs/web/aperture-light-1280.webp",
   "assets/visual-language/motifs/web/aperture-dark-1280.avif",
