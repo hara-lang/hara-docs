@@ -1,4 +1,5 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "compilerOptions": { "allowJs": true, "checkJs": false }
+  "compilerOptions": { "allowJs": true, "checkJs": false },
+  "exclude": ["packages/visual-language/**"]
 }
