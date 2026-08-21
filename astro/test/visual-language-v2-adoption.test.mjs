@@ -13,10 +13,10 @@ test("the publishing workflow pins the accepted merged visual-language revision"
   assert.doesNotMatch(workflow, /ref: (?:c49ad17d5052c8eeca0aff4a6146ff60b89ce88f|9a88bddd7a539d7aa790e316ee169e8cc81886a4)/);
 });
 
-test("Starlight remains the renderer and loads the v2 product mapping after existing docs CSS", async () => {
+test("Starlight remains the renderer and loads v2 mapping layers after existing docs CSS", async () => {
   const config = await read("astro.config.mjs");
   assert.match(config, /starlight\(\{/);
-  assert.match(config, /customCss: \["\.\/src\/styles\/docs\.css", "\.\/src\/styles\/v2-adoption\.css"\]/);
+  assert.match(config, /customCss: \[[\s\S]*?"\.\/src\/styles\/docs\.css"[\s\S]*?"\.\/src\/styles\/v2-adoption\.css"/);
   assert.match(config, /routeMiddleware: \["\.\/src\/starlight-route-data\.mjs"\]/);
   assert.match(config, /sidebar: docsSidebar/);
 });
@@ -69,7 +69,7 @@ test("the v2 mapping covers the information shell while preserving dark executab
 test("the adoption note preserves routes, runtime, identity, search and compatibility boundaries", async () => {
   const document = await readRoot("VISUAL-LANGUAGE-V2-ADOPTION.md");
   assert.match(document, new RegExp(acceptedRevision));
-  for (const phrase of ["Starlight", "Pagefind", "REPL", "live-card", "canvas", "popup identity", "MkDocs compatibility", "does not close", "merged Visual Language revisions"]) {
+  for (const phrase of ["Starlight", "Pagefind", "REPL", "live-card", "canvas", "popup identity", "MkDocs compatibility", "do not close", "merged Visual Language revisions"]) {
     assert.match(document, new RegExp(phrase, "i"));
   }
 });
