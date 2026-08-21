@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: hara-lang/visual-language
-          ref: 9a88bddd7a539d7aa790e316ee169e8cc81886a4
+          ref: a2ab66d0fde79edb1cee46b79528098b3fda68cf
           path: astro/packages/visual-language
 
       - name: Setup Python
