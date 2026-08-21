@@ -6,11 +6,11 @@ description: Generated API reference for std.foundation.pretty.
 
 # `std.foundation.pretty`
 
-Generated from `std/foundation/pretty.hal` and its companion tests. 11 public definitions.
+Generated from `std/foundation/pretty.hal` and its companion tests. 13 public definitions.
 
-Documented source: `https://github.com/hara-lang/hara` at `209ffd3f8ac596b02290cd73663a75f1918ff436` (`209ffd3f8ac596b02290cd73663a75f1918ff436`).
+Documented source: `https://github.com/hara-lang/hara` at `e8ed43f532fe6dc3c5c78d07b92ca6b1bf9d5366` (`e8ed43f532fe6dc3c5c78d07b92ca6b1bf9d5366`).
 
-Semantic surface: `sha256:8fdb5fafde7b0c29b1a01b2d7f7f9dfae037aa35ac622a9f277840bd4c8db95e`. Manifest schema: `2`.
+Semantic surface: `sha256:d2d75c2ab58bee209afa64942ab431c346cb58a68df271a479811cda55ad4e60`. Manifest schema: `2`.
 
 > This page is generated from the canonical Hara API manifest. Edit Hara source or tests, then regenerate it; do not edit this page by hand.
 
@@ -22,7 +22,7 @@ def
 
 No source docstring is currently provided.
 
-Source: `std/foundation/pretty.hal:3`
+Source: `std/foundation/pretty.hal:13`
 
 ## `CanonicalVisitor`
 
@@ -30,7 +30,15 @@ defstruct · `[options]`
 
 No source docstring is currently provided.
 
-Source: `std/foundation/pretty.hal:8`
+Source: `std/foundation/pretty.hal:20`
+
+## `CanonicalVisitor`
+
+def
+
+No source docstring is currently provided.
+
+Source: `std/foundation/pretty.hal:21`
 
 ## `PrettyVisitor`
 
@@ -38,68 +46,76 @@ defstruct · `[options]`
 
 No source docstring is currently provided.
 
-Source: `std/foundation/pretty.hal:9`
+Source: `std/foundation/pretty.hal:26`
+
+## `PrettyVisitor`
+
+def
+
+No source docstring is currently provided.
+
+Source: `std/foundation/pretty.hal:27`
 
 ## `canonical-printer`
 
 defn
 
-No source docstring is currently provided.
+Returns a canonical EDN visitor configured with options.
 
-Source: `std/foundation/pretty.hal:139`
+Source: `std/foundation/pretty.hal:160`
 
 ## `pretty-printer`
 
 defn
 
-No source docstring is currently provided.
+Returns an annotated pretty-print visitor configured with options.
 
-Source: `std/foundation/pretty.hal:145`
+Source: `std/foundation/pretty.hal:169`
 
 ## `format-doc-edn`
 
 defn · `[visitor value]`
 
-No source docstring is currently provided.
+Encodes value through visitor without adding metadata decoration.
 
-Source: `std/foundation/pretty.hal:151`
+Source: `std/foundation/pretty.hal:178`
 
 ## `format-doc`
 
 defn
 
-No source docstring is currently provided.
+Formats value as a document, using the default pretty visitor when omitted.
 
-Source: `std/foundation/pretty.hal:154`
+Source: `std/foundation/pretty.hal:184`
 
 ## `render`
 
 defn
 
-No source docstring is currently provided.
+Renders document to a string with optional Document rendering options.
 
-Source: `std/foundation/pretty.hal:168`
+Source: `std/foundation/pretty.hal:201`
 
 ## `write`
 
 defn
 
-No source docstring is currently provided.
+Renders document and writes it through the portable Printer boundary.
 
-Source: `std/foundation/pretty.hal:172`
+Source: `std/foundation/pretty.hal:208`
 
 ## `pprint-str`
 
 defn
 
-No source docstring is currently provided.
+Pretty-formats value to a width-sensitive string.
 
-Source: `std/foundation/pretty.hal:176`
+Source: `std/foundation/pretty.hal:215`
 
 ## `pprint`
 
 defn
 
-No source docstring is currently provided.
+Pretty-formats value and writes it through the portable Printer boundary.
 
-Source: `std/foundation/pretty.hal:183`
+Source: `std/foundation/pretty.hal:225`
