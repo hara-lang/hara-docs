@@ -47,7 +47,11 @@ export default defineConfig({
         { tag: "meta", attrs: { name: "twitter:image", content: docsCard } },
         { tag: "meta", attrs: { name: "twitter:image:alt", content: "Hara Docs — build live, across every host" } }
       ],
-      customCss: ["./src/styles/docs.css", "./src/styles/v2-adoption.css"],
+      customCss: [
+        "./src/styles/docs.css",
+        "./src/styles/v2-adoption.css",
+        "./src/styles/v2-runtime-evidence.css"
+      ],
       components: {
         Header: "./src/components/DocsHeader.astro",
         PageFrame: "./src/components/DocsPageFrame.astro"

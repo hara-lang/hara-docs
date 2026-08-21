@@ -1,6 +1,7 @@
 import { createLiveKernel } from "/docs/docs-assets/live/kernel.js";
 import { mountLiveCard } from "/docs/docs-assets/live/live-card.js";
 import { getLiveSnippet } from "/docs/docs-assets/live/snippets.js";
+import { mountDocsRuntimeEvidence } from "./docs-repl-evidence.js";
 import {
   createDocsSessionRegistry,
   describeDocsSession
@@ -101,6 +102,11 @@ function mountDocsRunner(frame, descriptor, sessions) {
     activeSnippet: descriptor.id,
     kernel: sessionProxyKernel(sessions, descriptor)
   });
+  const evidence = mountDocsRuntimeEvidence(mount, descriptor, {
+    revision: sessions.revision(descriptor),
+    route: location.pathname,
+    capabilities: ["eval", "observations", "memory filesystem"]
+  });
 
   return {
     descriptor,
@@ -109,6 +115,9 @@ function mountDocsRunner(frame, descriptor, sessions) {
       // reset() increments the card operation counter, so stale evaluations
       // cannot repaint the surface after the shared session has been replaced.
       card.reset();
+    },
+    refreshEvidence() {
+      evidence?.setRevision(sessions.revision(descriptor));
     }
   };
 }
@@ -143,6 +152,11 @@ async function mountCanvasStage(stage, index, sessions) {
     snippets: [docsSnippet(descriptor, source, "canvas")],
     activeSnippet: descriptor.id,
     kernel: directSessionKernel(sessions, descriptor)
+  });
+  mountDocsRuntimeEvidence(mount, descriptor, {
+    revision: sessions.revision(descriptor),
+    route: location.pathname,
+    capabilities: ["eval", "observations", "memory filesystem", "canvas/2d"]
   });
   card.run().catch((error) => {
     console.error("[hara docs canvas]", errorMessage(error));
@@ -186,6 +200,7 @@ if (frames.length > 0 || canvasStages.length > 0) {
     matching.forEach((runner) => runner.beginReset());
     try {
       await sessions.reset(descriptor);
+      matching.forEach((runner) => runner.refreshEvidence());
       document.dispatchEvent(new CustomEvent("hara:session-reset", {
         detail: { groupName, sessionId: descriptor.id }
       }));
