@@ -4,13 +4,13 @@ import test from "node:test";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 const readRoot = (path) => readFile(new URL(`../../${path}`, import.meta.url), "utf8");
-const acceptedRevision = "9a88bddd7a539d7aa790e316ee169e8cc81886a4";
+const acceptedRevision = "a2ab66d0fde79edb1cee46b79528098b3fda68cf";
 
 test("the publishing workflow pins the accepted merged visual-language revision", async () => {
   const workflow = await readRoot(".github/workflows/pages-docs.yml");
   assert.match(workflow, /repository: hara-lang\/visual-language/);
   assert.match(workflow, new RegExp(`ref: ${acceptedRevision}`));
-  assert.doesNotMatch(workflow, /ref: c49ad17d5052c8eeca0aff4a6146ff60b89ce88f/);
+  assert.doesNotMatch(workflow, /ref: (?:c49ad17d5052c8eeca0aff4a6146ff60b89ce88f|9a88bddd7a539d7aa790e316ee169e8cc81886a4)/);
 });
 
 test("Starlight remains the renderer and loads the v2 product mapping after existing docs CSS", async () => {
@@ -24,7 +24,18 @@ test("Starlight remains the renderer and loads the v2 product mapping after exis
 test("the package verifier requires the accepted v2 exports, guide and Docs reference contract", async () => {
   const script = await read("scripts/verify-visual-language.mjs");
   assert.match(script, new RegExp(acceptedRevision));
-  for (const value of ["./v2.css", "./theme.js", "./astro/v2/Shell.astro", "./astro/v2/Header.astro", "./astro/v2/PageHeader.astro", "V2-THEME.md", "V2-GUIDE.md", "V2-WWW.md"]) {
+  for (const value of [
+    "./v2.css",
+    "./v2-data.css",
+    "./theme.js",
+    "./astro/v2/Shell.astro",
+    "./astro/v2/Header.astro",
+    "./astro/v2/PageHeader.astro",
+    "V2-THEME.md",
+    "V2-GUIDE.md",
+    "V2-WWW.md",
+    "V2-DATA-VISUALISATION.md"
+  ]) {
     assert.match(script, new RegExp(value.replaceAll(".", "\\.")));
   }
 });
