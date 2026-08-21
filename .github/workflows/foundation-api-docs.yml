@@ -163,14 +163,29 @@ jobs:
               for item in manifest["namespaces"]
               if item.get("group") == "foundation"
           ]
+          libraries = [
+              item["name"]
+              for item in manifest["namespaces"]
+              if item.get("group") == "library"
+          ]
           assert manifest["schemaVersion"] == target["manifestSchemaVersion"] == 2
           assert manifest["source"]["commit"] == target["commit"]
           assert current == expected, {"expected": expected, "actual": current}
+          assert libraries == ["std.lib.collection"], {
+              "expected": ["std.lib.collection"],
+              "actual": libraries,
+          }
           assert manifest["surfaceDigest"].startswith("sha256:")
           assert len(manifest.get("migrations", [])) == 11
           native = {item["name"] for item in manifest.get("nativeObjects", [])}
-          assert {"Edn", "Json", "Crypto", "File", "Socket", "Host", "Kernel"}.issubset(native)
-          assert "Process" not in native
+          required_native = {
+              "Edn", "Json", "Crypto", "File", "Socket",
+              "Host", "Kernel", "Process", "Runtime",
+          }
+          assert required_native.issubset(native), {
+              "missing": sorted(required_native - native),
+              "actual": sorted(native),
+          }
           for field in (
               manifest["inventory"]["path"],
               manifest["migrationLedger"]["path"],
