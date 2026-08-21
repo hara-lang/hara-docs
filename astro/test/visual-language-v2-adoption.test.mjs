@@ -21,7 +21,7 @@ test("Starlight remains the renderer and loads the v2 product mapping after exis
   assert.match(config, /sidebar: docsSidebar/);
 });
 
-test("the package verifier requires the accepted v2 exports, guide and Docs reference contract", async () => {
+test("the package verifier requires and materialises the accepted published boundary", async () => {
   const script = await read("scripts/verify-visual-language.mjs");
   assert.match(script, new RegExp(acceptedRevision));
   for (const value of [
@@ -38,6 +38,11 @@ test("the package verifier requires the accepted v2 exports, guide and Docs refe
   ]) {
     assert.match(script, new RegExp(value.replaceAll(".", "\\.")));
   }
+  assert.match(script, /manifest\.files/);
+  assert.match(script, /node_modules\/@hara-lang\/visual-language/);
+  assert.match(script, /await cp\(from, to, \{ recursive: true, dereference: true \}\)/);
+  assert.match(script, /materialised @hara-lang\/visual-language/);
+  assert.doesNotMatch(script, /await symlink/, "Docs must consume the package publication boundary, not the catalogue source tree");
 });
 
 test("the v2 mapping covers the information shell while preserving dark executable surfaces", async () => {
