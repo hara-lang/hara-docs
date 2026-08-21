@@ -2,12 +2,13 @@ import { access, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { appRoot } from "./docs-manifest.mjs";
 
-const visualLanguageRevision = "9a88bddd7a539d7aa790e316ee169e8cc81886a4";
+const visualLanguageRevision = "a2ab66d0fde79edb1cee46b79528098b3fda68cf";
 const packageRoot = resolve(appRoot, "packages/visual-language");
 const manifestPath = resolve(packageRoot, "package.json");
 const requiredExports = [
   "./theme.css",
   "./v2.css",
+  "./v2-data.css",
   "./theme.js",
   "./astro/v2/Shell.astro",
   "./astro/v2/Header.astro",
@@ -16,7 +17,8 @@ const requiredExports = [
 const requiredDocuments = [
   "V2-THEME.md",
   "V2-GUIDE.md",
-  "V2-WWW.md"
+  "V2-WWW.md",
+  "V2-DATA-VISUALISATION.md"
 ];
 const requiredAssets = [
   "aperture-light-1280.avif",
