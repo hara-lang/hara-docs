@@ -11,6 +11,26 @@
     "foundation": "01-lang/004-foundation/draft",
     "foundationAnnex": "01-lang/005-foundation-annex/draft"
   },
+  "generatedSurface": {
+    "schemaVersion": 2,
+    "surfaceDigest": "sha256:d2d75c2ab58bee209afa64942ab431c346cb58a68df271a479811cda55ad4e60",
+    "namespaceCount": 7,
+    "definitionCount": 402,
+    "foundationNamespaces": [
+      "std.foundation",
+      "std.foundation.bytes",
+      "std.foundation.coroutine",
+      "std.foundation.pretty",
+      "std.foundation.promise",
+      "std.foundation.string"
+    ],
+    "libraryNamespaces": [
+      "std.lib.collection"
+    ],
+    "migrationCount": 11,
+    "previousDefinitionCount": 276,
+    "definitionDelta": 126
+  },
   "gaps": [
     {
       "id": "explicit-public-var-filtering",
