@@ -5,10 +5,10 @@
 The Astro/Starlight build pins `hara-lang/visual-language` at merged revision:
 
 ```text
-9a88bddd7a539d7aa790e316ee169e8cc81886a4
+a2ab66d0fde79edb1cee46b79528098b3fda68cf
 ```
 
-The pin is represented in the repository gitlink and the publishing workflow checkout. The build verifier requires the v2 stylesheet, Astro document primitives and the merged theme, catalogue-guide and WWW/Docs adoption documents.
+The pin is represented in the publishing workflow checkout. The build verifier requires the v2 stylesheet, Astro document primitives, merged theme/catalogue/WWW contracts and the accessible evidence/data-visualisation contract.
 
 ## This first adoption slice
 
@@ -18,7 +18,8 @@ The pin is represented in the repository gitlink and the publishing workflow che
 - preserves dark code, REPL editor and canvas surfaces in both themes;
 - gives shared documentation controls visible focus and 44-pixel compact touch targets;
 - hides the right outline first and keeps dense tables locally scrollable;
-- records reduced-motion and sticky-anchor behavior.
+- records reduced-motion and sticky-anchor behavior;
+- verifies the accepted document and data-visualisation exports before build without transferring content or methodology authority.
 
 ## Preserved product behavior
 
@@ -48,5 +49,6 @@ This PR begins but does not close the complete Docs adoption. Follow-on PRs shou
 1. compare prose, API, REPL and canvas pages against the accepted `/v2/www/docs/` laboratory;
 2. attach light/dark desktop and mobile screenshots for each representative page;
 3. refine search, pagination, local navigation and code-example density only after visual evidence is recorded;
-4. keep runtime and identity mechanics unchanged unless a separately reviewed product issue explicitly requires them;
-5. pin only merged Visual Language revisions.
+4. adopt evidence graphics where documentation needs benchmark, package or runtime views while keeping data and methodology product-owned;
+5. keep runtime and identity mechanics unchanged unless a separately reviewed product issue explicitly requires them;
+6. pin only merged Visual Language revisions.
