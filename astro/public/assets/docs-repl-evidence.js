@@ -32,7 +32,7 @@ function addField(list, label, value, marker = "") {
   const description = document.createElement("dd");
   term.textContent = label;
   description.textContent = value;
-  if (marker) description.dataset[marker] = "";
+  if (marker) description.setAttribute(marker, "");
   row.append(term, description);
   list.append(row);
   return description;
@@ -63,7 +63,7 @@ export function mountDocsRuntimeEvidence(mount, descriptor, options = {}) {
   const list = document.createElement("dl");
   addField(list, "Scope", model.scopeLabel);
   addField(list, "Session", model.sessionId);
-  addField(list, "Generation", String(model.generation), "docsRuntimeGeneration");
+  addField(list, "Generation", String(model.generation), "data-docs-runtime-generation");
   addField(list, "Filesystem", model.filesystem);
   addField(list, "Shared with", model.sharedWith);
   addField(list, "Route", model.route);
