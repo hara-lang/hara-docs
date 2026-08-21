@@ -45,6 +45,13 @@ test("the package verifier requires and materialises the accepted published boun
   assert.doesNotMatch(script, /await symlink/, "Docs must consume the package publication boundary, not the catalogue source tree");
 });
 
+test("the checked-out package source is not treated as Docs application source", async () => {
+  const tsconfig = JSON.parse(await read("tsconfig.json"));
+  assert.ok(tsconfig.exclude?.includes("packages/visual-language/**"));
+  assert.equal(tsconfig.compilerOptions?.allowJs, true);
+  assert.equal(tsconfig.compilerOptions?.checkJs, false);
+});
+
 test("the v2 mapping covers the information shell while preserving dark executable surfaces", async () => {
   const css = await read("src/styles/v2-adoption.css");
   assert.match(css, /@import "@hara-lang\/visual-language\/v2\.css"/);
