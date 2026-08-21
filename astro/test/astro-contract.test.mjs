@@ -12,6 +12,7 @@ import {
 } from "../scripts/docs-manifest.mjs";
 
 const read = (path) => readFile(new URL(path, import.meta.url), "utf8");
+const acceptedVisualLanguageRevision = "a2ab66d0fde79edb1cee46b79528098b3fda68cf";
 
 test("owns the renderer inside hara-docs with no workspace dependency", async () => {
   const prepare = await read("../scripts/prepare-docs.mjs");
@@ -61,8 +62,8 @@ test("keeps the established navigation and isolated course trees", () => {
 test("pins the visual-language checkout and exact theme assets", async () => {
   const workflow = await read("../../.github/workflows/pages-docs.yml");
   const verifier = await read("../scripts/verify-visual-language.mjs");
-  assert.match(workflow, /repository: hara-lang\/visual-language[\s\S]*ref: c49ad17d5052c8eeca0aff4a6146ff60b89ce88f[\s\S]*path: astro\/packages\/visual-language/);
-  assert.match(verifier, /c49ad17d5052c8eeca0aff4a6146ff60b89ce88f/);
+  assert.match(workflow, new RegExp(`repository: hara-lang/visual-language[\\s\\S]*ref: ${acceptedVisualLanguageRevision}[\\s\\S]*path: astro/packages/visual-language`));
+  assert.match(verifier, new RegExp(acceptedVisualLanguageRevision));
   assert.match(verifier, /aperture-light-1280\.avif/);
   assert.match(verifier, /aperture-dark-1280\.webp/);
 });
