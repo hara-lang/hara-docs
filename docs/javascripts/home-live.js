@@ -62,7 +62,7 @@
       activeSnippet: selected[0].id,
       kernel: getKernel(),
       runtimeBase,
-      playgroundUrl: "https://playground.hara-lang.org/"
+      playgroundUrl: "https://play.hara-lang.org/"
     });
   }
 })();

@@ -19,6 +19,6 @@ model through collections, state, lifecycle, and a practical protocol atlas.
 
 ## Practise
 
-[Hara Koans](https://world.hara-lang.org/learn/koans/) is the interactive
+[Hara Koans](https://learn.hara-lang.org/learn/koans/) is the interactive
 problem set on Hara World. Solve problems in the browser, retain progress with
 your Hara identity, and compare accepted solutions after completing a Koan.

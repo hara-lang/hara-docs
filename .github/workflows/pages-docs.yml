@@ -98,7 +98,7 @@ jobs:
           test -s site-mkdocs/books/the-little-book-of-hal/docs/index.html
           test -s site-mkdocs/rust/hara.wasm
           test -s site-mkdocs/vendor/hara-ui/packages/live/src/live-card.js
-          grep -Fq 'https://www.hara-lang.org/docs/' site-mkdocs/index.html
+          grep -Fq 'https://hara-lang.org/docs/' site-mkdocs/index.html
           grep -Fq 'The Little Book of HAL' site-mkdocs/books/the-little-book-of-hal/docs/index.html
 
       - name: Test the transferred Astro renderer
@@ -123,10 +123,10 @@ jobs:
           test -s astro/dist/docs-assets/rust/hara.wasm
           test ! -e astro/dist/docs/docs
           grep -Eq '<meta[^>]+name="generator"[^>]+content="Astro ' astro/dist/index.html
-          grep -Fq 'https://www.hara-lang.org/docs/' astro/dist/index.html
+          grep -Fq 'https://hara-lang.org/docs/' astro/dist/index.html
           grep -Fq '/docs/assets/docs-repl.js' astro/dist/index.html
           grep -Fq 'pagefind' astro/dist/index.html
-          ! grep -R -F 'https://www.hara-lang.org/docs/docs/' astro/dist
+          ! grep -R -F 'https://hara-lang.org/docs/docs/' astro/dist
           ! grep -R -F '__VITE_ASSET__' astro/dist
 
       - name: Verify independent deployment credential
@@ -159,7 +159,7 @@ jobs:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       NETLIFY_SITE_ID: ebf43b71-ef29-44d0-a951-8217f3e2471b
       DOCS_ORIGIN: https://hara-docs.netlify.app
-      DOCS_CANONICAL: https://www.hara-lang.org/docs
+      DOCS_CANONICAL: https://hara-lang.org/docs
     steps:
       - name: Download validated Astro site
         uses: actions/download-artifact@v4
@@ -202,7 +202,7 @@ jobs:
               && grep -Fq 'pagefind' /tmp/origin-root.html \
               && ! grep -Fq '/docs/docs/' /tmp/origin-root.html \
               && cmp -s /tmp/origin-root.html /tmp/origin-docs.html \
-              && grep -Fq 'https://www.hara-lang.org/docs/' /tmp/canonical-root.html; then
+              && grep -Fq 'https://hara-lang.org/docs/' /tmp/canonical-root.html; then
               break
             fi
             if [ "$attempt" -eq 24 ]; then

@@ -11,7 +11,7 @@
   }
 
   if (!identityOrigin) {
-    const testing = location.hostname === "www.testing.hara-lang.org"
+    const testing = location.hostname === "testing.hara-lang.org"
       || location.hostname.endsWith(".testing.hara-lang.org");
     identityOrigin = testing
       ? "https://id.testing.hara-lang.org"

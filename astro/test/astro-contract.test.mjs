@@ -31,13 +31,13 @@ test("owns the renderer inside hara-docs with no workspace dependency", async ()
 test("emits canonical /docs URLs while building at the artifact root", async () => {
   const config = await read("../astro.config.mjs");
   const flatten = await read("../scripts/flatten-artifact.mjs");
-  assert.match(config, /site:\s*"https:\/\/www\.hara-lang\.org"/);
+  assert.match(config, /site:\s*"https:\/\/hara-lang\.org"/);
   assert.match(config, /base,\n\s*output:\s*"static"/);
   assert.match(config, /const base = "\/docs"/);
   assert.match(config, /outDir:\s*"\.\/dist"/);
   assert.match(config, /favicon:\s*"\/assets\/hara-favicon\.svg"/);
   assert.doesNotMatch(config, /favicon:\s*asset\(/);
-  assert.match(config, /https:\/\/www\.hara-lang\.org\/docs\/assets\/og-hara-docs\.jpg/);
+  assert.match(config, /https:\/\/hara-lang\.org\/docs\/assets\/og-hara-docs\.jpg/);
   assert.match(config, /asset\("\/docs-assets\/live\/style\.css"\)/);
   assert.match(flatten, /resolve\(dist, "docs"\)/);
   assert.doesNotMatch(config, /\/docs\/docs\//);
@@ -105,7 +105,7 @@ test("serves both origin route shapes and proxies runtime only to the canonical 
   assert.match(redirects, /^\/docs \/ 200!$/m);
   assert.match(redirects, /^\/docs\/ \/ 200!$/m);
   assert.match(redirects, /^\/docs\/\* \/:splat 200!$/m);
-  assert.match(redirects, /^\/runtime\/\* https:\/\/www\.hara-lang\.org\/runtime\/:splat 200!$/m);
+  assert.match(redirects, /^\/runtime\/\* https:\/\/hara-lang\.org\/runtime\/:splat 200!$/m);
 });
 
 test("keeps the shared identity provider in hara-www while loading it from docs", async () => {

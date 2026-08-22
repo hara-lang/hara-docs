@@ -10,13 +10,12 @@ const shouldRenderSearch =
   config.pagefind || config.components.Search !== "@astrojs/starlight/components/Search.astro";
 const activePath = Astro.url.pathname;
 const navigation = [
-  { label: "Benchmarks", href: "/benchmarks/" },
-  { label: "Docs", href: "/docs/" },
-  { label: "Specs", href: "https://specs.hara-lang.org/", external: true },
-  { label: "World", href: "https://world.hara-lang.org/", external: true }
+  { label: "Play", href: "https://play.hara-lang.org/", external: true },
+  { label: "Learn", href: "https://learn.hara-lang.org/", external: true },
+  { label: "Build", href: "https://build.hara-lang.org/", external: true }
 ];
 ---
-<V2Header homeHref="/" section="Docs" nav={navigation} activePath={activePath}>
+<V2Header homeHref="https://hara-lang.org/" section="Docs" nav={navigation} activePath={activePath}>
   {shouldRenderSearch && <Search />}
   <div data-hara-identity></div>
   <div class="hara-docs-header-social"><SocialIcons /></div>

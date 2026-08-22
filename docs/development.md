@@ -67,10 +67,10 @@ at `https://hara-docs.netlify.app/`; MkDocs is not the published artifact.
 Pull requests and the `testing` branch perform the same validation without
 replacing production.
 
-Astro is configured with `site: https://www.hara-lang.org` and `base: /docs`.
+Astro is configured with `site: https://hara-lang.org` and `base: /docs`.
 The deploy artifact is rooted at `/`, while generated canonical links,
 navigation, Pagefind, CSS, JavaScript, images, live-card modules, and WASM URLs
-remain below `https://www.hara-lang.org/docs/`. Origin rewrites make both
+remain below `https://hara-lang.org/docs/`. Origin rewrites make both
 `https://hara-docs.netlify.app/` and `https://hara-docs.netlify.app/docs/`
 serve the same artifact. The origin also proxies `/runtime/*` to the canonical
 Hara runtime so runnable examples can be inspected there directly.

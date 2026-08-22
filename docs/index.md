@@ -47,7 +47,7 @@ hide:
     <p class="hara-label">Measured in the open</p>
     <h2>Performance is evidence, not a slogan.</h2>
     <p>Hara publishes the source, environment, raw samples, checksums, and complete comparison table for its benchmarks—including the runtimes that are faster.</p>
-    <a class="hara-inline-link" href="https://www.hara-lang.org/benchmarks/">Inspect the benchmarks <b>→</b></a>
+    <a class="hara-inline-link" href="https://hara-lang.org/benchmarks/">Inspect the benchmarks <b>→</b></a>
   </div>
   <div class="hara-fact-grid" aria-label="Hara benchmark evidence">
     <article><span>Equivalent work</span><h3>Verified results</h3><p>Each timed workload must return its expected checksum before it is published.</p></article>
