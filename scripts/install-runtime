@@ -64,7 +64,7 @@ cp "$DEST/studio/hal/fs.hal" "$CURRENT/studio/hal/"
 
 # Docs ships the browser kernel ABI and current Studio host/resource set used
 # by the interactive examples. Projects, examples, and workspace assets remain
-# owned by playground.hara-lang.org.
+# owned by play.hara-lang.org.
 rm -rf "$DEST"
 mkdir -p "$DEST"
 cp -R "$STAGE/rust/." "$DEST/"

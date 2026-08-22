@@ -6,10 +6,10 @@ import { docsRedirects, docsSidebar } from "./scripts/docs-manifest.mjs";
 
 const base = "/docs";
 const asset = (path) => `${base}${path}`;
-const docsCard = "https://www.hara-lang.org/docs/assets/og-hara-docs.jpg";
+const docsCard = "https://hara-lang.org/docs/assets/og-hara-docs.jpg";
 
 export default defineConfig({
-  site: "https://www.hara-lang.org",
+  site: "https://hara-lang.org",
   base,
   output: "static",
   outDir: "./dist",

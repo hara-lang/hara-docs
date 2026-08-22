@@ -22,19 +22,19 @@ Alternatively, you can use the curl installer. The installer endpoint is being
 restored, so the commands below will work once the download service is back up:
 
 ```shell
-curl -fsSL https://www.hara-lang.org/install.sh | sh -- --rust --truffle
+curl -fsSL https://hara-lang.org/install.sh | sh -- --rust --truffle
 ```
 
 Install only the Rust runtime:
 
 ```shell
-curl -fsSL https://www.hara-lang.org/install.sh | sh -- --rust
+curl -fsSL https://hara-lang.org/install.sh | sh -- --rust
 ```
 
 Install only the Truffle native image:
 
 ```shell
-curl -fsSL https://www.hara-lang.org/install.sh | sh -- --truffle
+curl -fsSL https://hara-lang.org/install.sh | sh -- --truffle
 ```
 
 Use `HARA_INSTALL_DIR` to choose another destination, or set `HARA_VERSION` to
@@ -43,7 +43,7 @@ pin a release:
 ```shell
 HARA_INSTALL_DIR="$HOME/bin" \
 HARA_VERSION=v0.1.0 \
-  curl -fsSL https://www.hara-lang.org/install.sh | sh -- --rust
+  curl -fsSL https://hara-lang.org/install.sh | sh -- --rust
 ```
 
 Make sure the installation directory is on `PATH`, then check that the command

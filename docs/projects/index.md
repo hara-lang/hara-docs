@@ -100,7 +100,7 @@ That file is optional host-facing metadata. It is not package identity, does not
 replace `project.edn`, and must not become a second place to declare package
 dependencies, builds, or extensions.
 
-The browser [Playground](https://playground.hara-lang.org/) can open projects
+The browser [Play](https://play.hara-lang.org/) can open projects
 with visual workspace metadata. Use [the Web setup](../getting-started/web.md)
 when the project belongs near a browser workspace, or
 [the VS Code setup](../getting-started/vscode.md) when source and a named session

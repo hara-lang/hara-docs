@@ -29,7 +29,7 @@ test("the Starlight frame uses the shared v2 header and section navigation", asy
     read("src/components/DocsPageFrame.astro")
   ]);
   assert.match(header, /@hara-lang\/visual-language\/astro\/v2\/Header\.astro/);
-  assert.match(header, /homeHref="\/"/);
+  assert.match(header, /homeHref="https:\/\/hara-lang\.org\/"/);
   assert.match(header, /data-hara-identity/);
   assert.match(frame, /@hara-lang\/visual-language\/astro\/v2\/ContextNav\.astro/);
   assert.match(frame, /class="hara-v2 hara-v2-shell docs-v2-shell"/);

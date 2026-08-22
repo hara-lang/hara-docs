@@ -4,7 +4,7 @@ Playground is the quickest way to experience Hara. It runs in the browser, does
 not require a local editor, and keeps code, evaluation, state, and visual output
 close together.
 
-Open [playground.hara-lang.org](https://playground.hara-lang.org/) and use this
+Open [play.hara-lang.org](https://play.hara-lang.org/) and use this
 guide as a first session. The goal is not to read the whole language before
 writing anything. The goal is to change a running program and understand what
 each form does.

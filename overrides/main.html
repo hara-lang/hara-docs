@@ -18,8 +18,8 @@
   <meta property="og:description" content="Build live, across every host.">
   <meta property="og:site_name" content="Hara / Docs">
   <meta property="og:url" content="{{ page.canonical_url }}">
-  <meta property="og:image" content="https://www.hara-lang.org/docs/assets/og-hara-docs.jpg">
-  <meta property="og:image:secure_url" content="https://www.hara-lang.org/docs/assets/og-hara-docs.jpg">
+  <meta property="og:image" content="https://hara-lang.org/docs/assets/og-hara-docs.jpg">
+  <meta property="og:image:secure_url" content="https://hara-lang.org/docs/assets/og-hara-docs.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="3840">
   <meta property="og:image:height" content="2016">
@@ -27,7 +27,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ hara_page_title }}">
   <meta name="twitter:description" content="Build live, across every host.">
-  <meta name="twitter:image" content="https://www.hara-lang.org/docs/assets/og-hara-docs.jpg">
+  <meta name="twitter:image" content="https://hara-lang.org/docs/assets/og-hara-docs.jpg">
   <meta name="twitter:image:alt" content="Hara Docs — build live, across every host">
 {% endblock %}
 {% block header %}
@@ -36,15 +36,14 @@
     <label class="hara-docs-menu" for="__drawer" aria-label="Open navigation">
       <span></span><span></span><span></span>
     </label>
-    <a class="hara-docs-brand" href="{{ nav.homepage.url | url }}" aria-label="Hara documentation home">
+    <a class="hara-docs-brand" href="https://hara-lang.org/" aria-label="Hara home">
       <img src="{{ config.theme.logo | url }}" alt="">
       <span>Hara</span>
     </a>
     <nav class="hara-docs-nav" aria-label="Primary navigation">
-      <a href="{{ 'getting-started/' | url }}" data-hara-section="start">Start</a>
-      <a href="{{ 'learn/' | url }}" data-hara-section="learn">Learn</a>
-      <a href="{{ 'start/clojure/' | url }}" data-hara-section="guides">Guides</a>
-      <a href="{{ 'reference/' | url }}" data-hara-section="reference">Reference</a>
+      <a href="https://play.hara-lang.org/" data-hara-section="play">Play</a>
+      <a href="https://learn.hara-lang.org/" data-hara-section="learn">Learn</a>
+      <a href="https://build.hara-lang.org/" data-hara-section="build" aria-current="page">Build</a>
       <div data-hara-identity></div>
       <button class="hara-theme-toggle" type="button" data-hara-theme-toggle aria-label="Switch color theme">
         <svg class="hara-theme-icon hara-theme-icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>

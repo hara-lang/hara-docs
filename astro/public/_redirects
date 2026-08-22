@@ -1,4 +1,4 @@
-/runtime/* https://www.hara-lang.org/runtime/:splat 200!
+/runtime/* https://hara-lang.org/runtime/:splat 200!
 /docs / 200!
 /docs/ / 200!
 /docs/* /:splat 200!

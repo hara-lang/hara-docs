@@ -85,8 +85,8 @@ assert.ok(hasPinnedBackdrop, "the compiled Hara theme is missing its pinned aper
 const root = await readFile(resolve(dist, "index.html"), "utf8");
 assert.match(
   root,
-  /<link[^>]+rel=["']canonical["'][^>]+href=["']https:\/\/www\.hara-lang\.org\/docs\/["']/i,
-  "root canonical URL must be exactly https://www.hara-lang.org/docs/"
+  /<link[^>]+rel=["']canonical["'][^>]+href=["']https:\/\/hara-lang\.org\/docs\/["']/i,
+  "root canonical URL must be exactly https://hara-lang.org/docs/"
 );
 assert.match(root, /<meta[^>]+name=["']generator["'][^>]+content=["']Astro\s/i);
 assert.match(root, /pagefind/i);
@@ -102,7 +102,7 @@ const htmlFiles = allFiles.filter((path) => path.endsWith(".html"));
 let hasLiveEvaluator = false;
 for (const path of htmlFiles) {
   const html = await readFile(path, "utf8");
-  assert.doesNotMatch(html, /https:\/\/www\.hara-lang\.org\/docs\/docs\//);
+  assert.doesNotMatch(html, /https:\/\/hara-lang\.org\/docs\/docs\//);
   assert.doesNotMatch(html, /(?:href|src)=["']\/docs\/docs\//);
   if (/data-hara-eval|data-hara-live|data-hara-canvas-stage/.test(html)) {
     hasLiveEvaluator = true;
@@ -111,7 +111,7 @@ for (const path of htmlFiles) {
 assert.ok(hasLiveEvaluator, "no live evaluator hooks survived the Astro build");
 
 const redirects = await readFile(resolve(dist, "_redirects"), "utf8");
-assert.match(redirects, /^\/runtime\/\* https:\/\/www\.hara-lang\.org\/runtime\/:splat 200!$/m);
+assert.match(redirects, /^\/runtime\/\* https:\/\/hara-lang\.org\/runtime\/:splat 200!$/m);
 assert.match(redirects, /^\/docs\/\* \/:splat 200!$/m);
 
 console.log(`verified ${relativeFiles.length} Astro artifact files at ${dist}`);
