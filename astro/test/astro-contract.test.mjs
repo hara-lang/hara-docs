@@ -12,7 +12,7 @@ import {
 } from "../scripts/docs-manifest.mjs";
 
 const read = (path) => readFile(new URL(path, import.meta.url), "utf8");
-const acceptedVisualLanguageRevision = "a2ab66d0fde79edb1cee46b79528098b3fda68cf";
+const acceptedUiPackage = "@hara-lang/ui";
 
 test("owns the renderer inside hara-docs with no workspace dependency", async () => {
   const prepare = await read("../scripts/prepare-docs.mjs");
@@ -25,7 +25,7 @@ test("owns the renderer inside hara-docs with no workspace dependency", async ()
   assert.match(prepare, /vendor\/hara-ui\/packages\/live\/src/);
   assert.doesNotMatch(`${prepare}\n${manifest}`, /HARA_WORKSPACE_ROOT|website\/hara-docs|hara-www/);
   assert.equal(packageJson.dependencies["@hara-lang/live"], "file:../vendor/hara-ui/packages/live");
-  assert.equal(packageJson.dependencies["@hara-lang/visual-language"], "file:packages/visual-language");
+  assert.equal(packageJson.dependencies[acceptedUiPackage], "file:../../../technology/hara-ui");
 });
 
 test("emits canonical /docs URLs while building at the artifact root", async () => {
@@ -59,13 +59,12 @@ test("keeps the established navigation and isolated course trees", () => {
   assert.equal(docsSidebar[3].items[1].slug, "books/the-little-book-of-hal/docs");
 });
 
-test("pins the visual-language checkout and exact theme assets", async () => {
+test("materialises the independently packaged Hara UI foundation", async () => {
   const workflow = await read("../../.github/workflows/pages-docs.yml");
-  const verifier = await read("../scripts/verify-visual-language.mjs");
-  assert.match(workflow, new RegExp(`repository: hara-lang/visual-language[\\s\\S]*ref: ${acceptedVisualLanguageRevision}[\\s\\S]*path: astro/packages/visual-language`));
-  assert.match(verifier, new RegExp(acceptedVisualLanguageRevision));
-  assert.match(verifier, /aperture-light-1280\.avif/);
-  assert.match(verifier, /aperture-dark-1280\.webp/);
+  const verifier = await read("../scripts/verify-ui.mjs");
+  assert.match(workflow, /hara-lang\/hara-ui/);
+  assert.match(verifier, /@hara-lang\/ui/);
+  assert.match(verifier, /technology\/hara-ui/);
 });
 
 test("retains Hara theme, search, route middleware, and live hooks", async () => {
@@ -77,7 +76,7 @@ test("retains Hara theme, search, route middleware, and live hooks", async () =>
   assert.match(config, /DocsHeader\.astro/);
   assert.match(config, /DocsPageFrame\.astro/);
   assert.match(config, /docs-repl\.js/);
-  assert.match(styles, /@hara-lang\/visual-language\/theme\.css/);
+  assert.match(styles, /@hara-lang\/ui\/theme\.css/);
   assert.doesNotMatch(styles, /@hara-lang\/visual-language\/motifs\.css/);
   assert.match(styles, /\/docs\/assets\/visual-language\/motifs\/web\/aperture-light-1280\.avif/);
   assert.match(styles, /\.sl-markdown-content \.hara-live-card-editor \.code-highlight/);

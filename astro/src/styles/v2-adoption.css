@@ -1,4 +1,4 @@
-@import "@hara-lang/visual-language/v2.css";
+@import "@hara-lang/ui/v2.css";
 
 :root,
 :root[data-theme="light"] {

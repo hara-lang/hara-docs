@@ -2,10 +2,10 @@
 
 ## Accepted source
 
-The Astro/Starlight build pins `hara-lang/visual-language` at merged revision:
+The Astro/Starlight build consumes the independently packaged Hara UI layers:
 
 ```text
-a2ab66d0fde79edb1cee46b79528098b3fda68cf
+@hara-lang/ui, @hara-lang/ui-astro, and @hara-lang/ui-tool
 ```
 
 The pin is represented in the publishing workflow checkout. The build verifier requires the v2 stylesheet, Astro document primitives, merged theme/catalogue/WWW contracts and the accessible evidence/data-visualisation contract.
@@ -56,7 +56,7 @@ This visual adoption does not change:
 
 ## Ownership boundary
 
-Visual Language owns shared tokens, information-shell geometry, state presentation, focus, responsive grammar and the reference acceptance guide. Starlight remains the documentation framework. `hara-docs` owns routes, generated content, search, navigation data, session grouping and documentation composition. The shared live/runtime packages remain authoritative for kernel connection, capabilities, evaluation, observations and results.
+Hara UI owns shared tokens, information-shell geometry, state presentation, focus, responsive grammar and shell adapters. Starlight remains the documentation framework. `hara-docs` owns routes, generated content, search, navigation data, session grouping and documentation composition. The shared live/runtime packages remain authoritative for kernel connection, capabilities, evaluation, observations and results.
 
 `astro/src/styles/v2-adoption.css` and `astro/src/styles/v2-runtime-evidence.css` are product mapping layers. They may consume `--hara-v2-*` values and set Starlight or Docs composition styles, but they do not redefine the protected Hara token contract or fork Starlight/live-card rendering.
 
@@ -69,4 +69,4 @@ These slices begin but do not close the complete Docs adoption. Follow-on PRs sh
 3. refine search, pagination, local navigation and code-example density only after visual evidence is recorded;
 4. adopt evidence graphics where documentation needs benchmark, package or runtime views while keeping data and methodology product-owned;
 5. keep runtime and identity mechanics unchanged unless a separately reviewed product issue explicitly requires them;
-6. pin only merged Visual Language revisions.
+6. consume only published Hara UI package revisions.

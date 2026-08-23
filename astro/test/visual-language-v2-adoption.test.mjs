@@ -4,13 +4,12 @@ import test from "node:test";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 const readRoot = (path) => readFile(new URL(`../../${path}`, import.meta.url), "utf8");
-const acceptedRevision = "a2ab66d0fde79edb1cee46b79528098b3fda68cf";
 
-test("the publishing workflow pins the accepted merged visual-language revision", async () => {
+test("the publishing workflow uses the independently packaged Hara UI", async () => {
   const workflow = await readRoot(".github/workflows/pages-docs.yml");
-  assert.match(workflow, /repository: hara-lang\/visual-language/);
-  assert.match(workflow, new RegExp(`ref: ${acceptedRevision}`));
-  assert.doesNotMatch(workflow, /ref: (?:c49ad17d5052c8eeca0aff4a6146ff60b89ce88f|9a88bddd7a539d7aa790e316ee169e8cc81886a4)/);
+  assert.match(workflow, /repository: hara-lang\/hara-ui/);
+  assert.match(workflow, /technology\/hara-ui/);
+  assert.doesNotMatch(workflow, /repository: hara-lang\/visual-language/);
 });
 
 test("Starlight remains the renderer and loads v2 mapping layers after existing docs CSS", async () => {
@@ -23,41 +22,29 @@ test("Starlight remains the renderer and loads v2 mapping layers after existing 
   assert.match(config, /PageFrame: "\.\/src\/components\/DocsPageFrame\.astro"/);
 });
 
-test("the Starlight frame uses the shared v2 header and section navigation", async () => {
+test("the Starlight frame uses the shared Hara UI header and section navigation", async () => {
   const [header, frame] = await Promise.all([
     read("src/components/DocsHeader.astro"),
     read("src/components/DocsPageFrame.astro")
   ]);
-  assert.match(header, /@hara-lang\/visual-language\/astro\/v2\/Header\.astro/);
+  assert.match(header, /@hara-lang\/ui-astro\/astro\/v2\/Header\.astro/);
   assert.match(header, /homeHref="https:\/\/hara-lang\.org\/"/);
   assert.match(header, /data-hara-identity/);
-  assert.match(frame, /@hara-lang\/visual-language\/astro\/v2\/ContextNav\.astro/);
+  assert.match(frame, /@hara-lang\/ui-astro\/astro\/v2\/ContextNav\.astro/);
   assert.match(frame, /class="hara-v2 hara-v2-shell docs-v2-shell"/);
   assert.match(frame, /Docs sections/);
 });
 
-test("the package verifier requires and materialises the accepted published boundary", async () => {
-  const script = await read("scripts/verify-visual-language.mjs");
-  assert.match(script, new RegExp(acceptedRevision));
-  for (const value of [
-    "./v2.css",
-    "./v2-data.css",
-    "./theme.js",
-    "./astro/v2/Shell.astro",
-    "./astro/v2/Header.astro",
-    "./astro/v2/PageHeader.astro",
-    "V2-THEME.md",
-    "V2-GUIDE.md",
-    "V2-WWW.md",
-    "V2-DATA-VISUALISATION.md"
-  ]) {
-    assert.match(script, new RegExp(value.replaceAll(".", "\\.")));
-  }
+test("the package verifier materialises the UI publication boundary", async () => {
+  const script = await read("scripts/verify-ui.mjs");
+  assert.match(script, /@hara-lang\/ui/);
+  assert.match(script, /@hara-lang\/ui-astro/);
+  assert.match(script, /technology\/hara-ui/);
   assert.match(script, /manifest\.files/);
-  assert.match(script, /node_modules\/@hara-lang\/visual-language/);
+  assert.match(script, /node_modules\/\@hara-lang\/ui/);
   assert.match(script, /await cp\(from, to, \{ recursive: true, dereference: true \}\)/);
-  assert.match(script, /materialised @hara-lang\/visual-language/);
-  assert.doesNotMatch(script, /await symlink/, "Docs must consume the package publication boundary, not the catalogue source tree");
+  assert.match(script, /using materialised \$\{entry\.name\}/);
+  assert.doesNotMatch(script, /await symlink/, "Docs must consume a materialised package boundary");
 });
 
 test("the checked-out package source is not treated as Docs application source", async () => {
@@ -67,9 +54,9 @@ test("the checked-out package source is not treated as Docs application source",
   assert.equal(tsconfig.compilerOptions?.checkJs, false);
 });
 
-test("the v2 mapping covers the information shell while preserving dark executable surfaces", async () => {
+test("the v2 mapping consumes the Hara UI foundation while preserving dark executable surfaces", async () => {
   const css = await read("src/styles/v2-adoption.css");
-  assert.match(css, /@import "@hara-lang\/visual-language\/v2\.css"/);
+  assert.match(css, /@import "@hara-lang\/ui\/v2\.css"/);
   for (const selector of [".header", ".sidebar-pane", ".main-pane", ".right-sidebar", ".sl-markdown-content", ".pagination-links", ".hara-repl", ".hara-live-card", ".hara-live-canvas-panel"]) {
     assert.match(css, new RegExp(selector.replace(".", "\\.")));
   }
@@ -83,8 +70,8 @@ test("the v2 mapping covers the information shell while preserving dark executab
 
 test("the adoption note preserves routes, runtime, identity, search and compatibility boundaries", async () => {
   const document = await readRoot("VISUAL-LANGUAGE-V2-ADOPTION.md");
-  assert.match(document, new RegExp(acceptedRevision));
-  for (const phrase of ["Starlight", "Pagefind", "REPL", "live-card", "canvas", "popup identity", "MkDocs compatibility", "do not close", "merged Visual Language revisions"]) {
+  assert.match(document, /@hara-lang\/ui/);
+  for (const phrase of ["Starlight", "Pagefind", "REPL", "live-card", "canvas", "popup identity", "MkDocs compatibility", "do not close", "Hara UI package revisions"]) {
     assert.match(document, new RegExp(phrase, "i"));
   }
 });
