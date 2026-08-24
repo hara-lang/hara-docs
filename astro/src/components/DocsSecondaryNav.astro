@@ -78,7 +78,7 @@ const currentGroup = groups
 
       nav.dataset.ready = "true";
 
-      const setGroupOpen = (requestedOpen, restoreFocus = false) => {
+      const setGroupOpen = (requestedOpen: boolean, restoreFocus = false) => {
         const open = Boolean(requestedOpen);
         nav.dataset.groupOpen = String(open);
         groupTrigger.setAttribute("aria-expanded", String(open));
@@ -88,7 +88,7 @@ const currentGroup = groups
         if (!open && restoreFocus) groupTrigger.focus();
       };
 
-      const setSectionOpen = (requestedOpen, restoreFocus = false) => {
+      const setSectionOpen = (requestedOpen: boolean, restoreFocus = false) => {
         const open = Boolean(requestedOpen) && !sectionTrigger.hidden;
         nav.dataset.sectionOpen = String(open);
         sectionTrigger.setAttribute("aria-expanded", String(open));
@@ -102,12 +102,20 @@ const currentGroup = groups
       groupMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setGroupOpen(false)));
       sectionTrigger.addEventListener("click", () => setSectionOpen(nav.dataset.sectionOpen !== "true"));
 
-      const headings = [...document.querySelectorAll("main .sl-markdown-content :is(h2,h3)[id]")]
-        .filter((heading) => heading instanceof HTMLElement)
-        .slice(0, 16);
-      const linksById = new Map();
+      const headings = [...document.querySelectorAll<HTMLElement>("main .sl-markdown-content :is(h2,h3)[id]")].slice(0, 16);
+      const linksById = new Map<string, HTMLAnchorElement>();
+      const setCurrent = (id: string) => {
+        linksById.forEach((link, candidateId) => {
+          if (candidateId === id) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+        const active = linksById.get(id);
+        if (sectionCurrent instanceof HTMLElement && active instanceof HTMLAnchorElement) {
+          sectionCurrent.textContent = active.textContent || "On this page";
+        }
+      };
+
       headings.forEach((heading, index) => {
-        if (!(heading instanceof HTMLElement)) return;
         const link = document.createElement("a");
         link.href = `#${heading.id}`;
         link.textContent = heading.textContent?.trim().replace(/\s+#$/, "") || heading.id;
@@ -121,21 +129,9 @@ const currentGroup = groups
         linksById.set(heading.id, link);
       });
 
-      const setCurrent = (id) => {
-        linksById.forEach((link, candidateId) => {
-          if (candidateId === id) link.setAttribute("aria-current", "location");
-          else link.removeAttribute("aria-current");
-        });
-        const active = linksById.get(id);
-        if (sectionCurrent instanceof HTMLElement && active instanceof HTMLAnchorElement) {
-          sectionCurrent.textContent = active.textContent || "On this page";
-        }
-      };
-
       if (headings.length > 0) {
         sectionTrigger.hidden = false;
-        const first = headings[0];
-        if (first instanceof HTMLElement) setCurrent(first.id);
+        setCurrent(headings[0].id);
         if ("IntersectionObserver" in window) {
           const observer = new IntersectionObserver((entries) => {
             const visible = entries
