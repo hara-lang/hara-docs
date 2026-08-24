@@ -16,24 +16,36 @@ test("the publishing workflow pins the accepted merged visual-language revision"
 test("Starlight remains the renderer and loads v2 mapping layers after existing docs CSS", async () => {
   const config = await read("astro.config.mjs");
   assert.match(config, /starlight\(\{/);
-  assert.match(config, /customCss: \[[\s\S]*?"\.\/src\/styles\/docs\.css"[\s\S]*?"\.\/src\/styles\/v2-adoption\.css"/);
+  assert.match(config, /customCss: \[[\s\S]*?"\.\/src\/styles\/docs\.css"[\s\S]*?"\.\/src\/styles\/v2-adoption\.css"[\s\S]*?"\.\/src\/styles\/navigation\.css"/);
   assert.match(config, /routeMiddleware: \["\.\/src\/starlight-route-data\.mjs"\]/);
   assert.match(config, /sidebar: docsSidebar/);
   assert.match(config, /Header: "\.\/src\/components\/DocsHeader\.astro"/);
   assert.match(config, /PageFrame: "\.\/src\/components\/DocsPageFrame\.astro"/);
+  assert.match(config, /@hara-lang\/ui\/v2\/header\.js/);
 });
 
-test("the Starlight frame uses the shared v2 header and section navigation", async () => {
-  const [header, frame] = await Promise.all([
+test("the Starlight frame uses the merged Hara UI product header and one all-width context shell", async () => {
+  const [header, frame, secondary] = await Promise.all([
     read("src/components/DocsHeader.astro"),
-    read("src/components/DocsPageFrame.astro")
+    read("src/components/DocsPageFrame.astro"),
+    read("src/components/DocsSecondaryNav.astro")
   ]);
-  assert.match(header, /@hara-lang\/visual-language\/astro\/v2\/Header\.astro/);
-  assert.match(header, /homeHref="https:\/\/hara-lang\.org\/"/);
+  assert.match(header, /vendor\/hara-ui\/foundation\/astro\/v2\/Header\.astro/);
+  assert.match(header, /menuMode="product"/);
+  assert.match(header, /menuControls="hara-docs-product-menu"/);
+  assert.match(header, /hara:header-menu-request/);
+  assert.match(header, /data-docs-menu-tree/);
+  assert.match(header, /\.docs-v2-sidebar \.sidebar-content a\[href\]/);
   assert.match(header, /data-hara-identity/);
-  assert.match(frame, /@hara-lang\/visual-language\/astro\/v2\/ContextNav\.astro/);
+  assert.match(frame, /\.\/DocsSecondaryNav\.astro/);
   assert.match(frame, /class="hara-v2 hara-v2-shell docs-v2-shell"/);
-  assert.match(frame, /Docs sections/);
+  assert.doesNotMatch(frame, /ContextNav\.astro/);
+  assert.match(secondary, /data-docs-group-trigger/);
+  assert.match(secondary, /data-docs-section-trigger/);
+  assert.match(secondary, /if \(open\) setSectionOpen\(false\)/);
+  assert.match(secondary, /if \(open\) setGroupOpen\(false\)/);
+  assert.match(secondary, /event\.key !== "Escape"/);
+  assert.doesNotMatch(secondary, /matchMedia/);
 });
 
 test("the package verifier requires and materialises the accepted published boundary", async () => {
@@ -68,7 +80,10 @@ test("the checked-out package source is not treated as Docs application source",
 });
 
 test("the v2 mapping covers the information shell while preserving dark executable surfaces", async () => {
-  const css = await read("src/styles/v2-adoption.css");
+  const [css, navigation] = await Promise.all([
+    read("src/styles/v2-adoption.css"),
+    read("src/styles/navigation.css")
+  ]);
   assert.match(css, /@import "@hara-lang\/visual-language\/v2\.css"/);
   for (const selector of [".header", ".sidebar-pane", ".main-pane", ".right-sidebar", ".sl-markdown-content", ".pagination-links", ".hara-repl", ".hara-live-card", ".hara-live-canvas-panel"]) {
     assert.match(css, new RegExp(selector.replace(".", "\\.")));
@@ -79,6 +94,14 @@ test("the v2 mapping covers the information shell while preserving dark executab
   assert.match(css, /overflow-x:\s*auto/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
   assert.doesNotMatch(css, /--hara-v2-[A-Za-z0-9_-]+\s*:/, "Docs may consume but not redefine protected v2 tokens");
+
+  assert.match(navigation, /\.hara-docs-secondary \{[\s\S]*?min-height: 48px;[\s\S]*?max-height: 48px;/);
+  assert.match(navigation, /left: clamp\(12px, 2vw, 28px\)/);
+  assert.match(navigation, /width: min\(360px, calc\(100vw - 56px\)\)/);
+  assert.match(navigation, /@media \(max-width: 840px\)[\s\S]*?\.hara-docs-secondary__panel \{[\s\S]*?left: 0;[\s\S]*?width: 100%;/);
+  assert.match(navigation, /html\[data-docs-navigation-ready="true"\][\s\S]*?starlight-menu-button/);
+  assert.match(navigation, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.doesNotMatch(navigation, /--hara-v2-[A-Za-z0-9_-]+\s*:/, "Docs navigation may consume but not redefine protected v2 tokens");
 });
 
 test("the adoption note preserves routes, runtime, identity, search and compatibility boundaries", async () => {

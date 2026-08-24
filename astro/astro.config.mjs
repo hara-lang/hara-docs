@@ -7,6 +7,7 @@ import { docsRedirects, docsSidebar } from "./scripts/docs-manifest.mjs";
 const base = "/docs";
 const asset = (path) => `${base}${path}`;
 const docsCard = "https://hara-lang.org/docs/assets/og-hara-docs.jpg";
+const sharedHeaderController = new URL("../vendor/hara-ui/foundation/v2/header.js", import.meta.url).pathname;
 
 export default defineConfig({
   site: "https://hara-lang.org",
@@ -16,6 +17,13 @@ export default defineConfig({
   trailingSlash: "always",
   redirects: docsRedirects,
   markdown: { remarkPlugins: [remarkHaraEval] },
+  vite: {
+    resolve: {
+      alias: {
+        "@hara-lang/ui/v2/header.js": sharedHeaderController
+      }
+    }
+  },
   integrations: [
     sitemap(),
     starlight({
@@ -50,7 +58,8 @@ export default defineConfig({
       customCss: [
         "./src/styles/docs.css",
         "./src/styles/v2-adoption.css",
-        "./src/styles/v2-runtime-evidence.css"
+        "./src/styles/v2-runtime-evidence.css",
+        "./src/styles/navigation.css"
       ],
       components: {
         Header: "./src/components/DocsHeader.astro",
