@@ -1,16 +1,8 @@
 ---
 import MobileMenuToggle from "@astrojs/starlight/components/MobileMenuToggle.astro";
-import V2ContextNav from "@hara-lang/visual-language/astro/v2/ContextNav.astro";
+import DocsSecondaryNav from "./DocsSecondaryNav.astro";
 
 const { hasSidebar } = Astro.locals.starlightRoute;
-const activePath = Astro.url.pathname;
-const contextItems = [
-  { label: "Docs home", href: "/docs/" },
-  { label: "Learn", href: "/docs/learn/" },
-  { label: "Build", href: "/docs/build/" },
-  { label: "Reference", href: "/docs/api/" },
-  { label: "Self learning", href: "/docs/self-learning/" }
-];
 ---
 <div
   class="hara-v2 hara-v2-shell docs-v2-shell"
@@ -21,7 +13,7 @@ const contextItems = [
   data-density="comfortable"
 >
   <slot name="header" />
-  <V2ContextNav items={contextItems} activePath={activePath} label="Docs sections" />
+  <DocsSecondaryNav />
   <div class="docs-v2-workspace">
     {
       hasSidebar && (
