@@ -24,7 +24,7 @@ test("Starlight remains the renderer and loads v2 mapping layers after existing 
   assert.match(config, /@hara-lang\/ui\/v2\/header\.js/);
 });
 
-test("the Starlight frame uses the merged Hara UI product header and one all-width context shell", async () => {
+test("the Starlight frame uses the merged Hara UI product header and one non-floating context shell", async () => {
   const [header, frame, secondary] = await Promise.all([
     read("src/components/DocsHeader.astro"),
     read("src/components/DocsPageFrame.astro"),
@@ -42,6 +42,7 @@ test("the Starlight frame uses the merged Hara UI product header and one all-wid
   assert.doesNotMatch(frame, /ContextNav\.astro/);
   assert.match(secondary, /data-docs-group-trigger/);
   assert.match(secondary, /data-docs-section-trigger/);
+  assert.match(secondary, /data-sticky="false"/);
   assert.match(secondary, /if \(open\) setSectionOpen\(false\)/);
   assert.match(secondary, /if \(open\) setGroupOpen\(false\)/);
   assert.match(secondary, /event\.key !== "Escape"/);
@@ -93,12 +94,25 @@ test("the v2 mapping covers the information shell while preserving dark executab
   assert.match(css, /min-height:\s*44px/);
   assert.match(css, /overflow-x:\s*auto/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.match(css, /\.docs-v2-sidebar \{[\s\S]*?top: var\(--hara-v2-header-height\);[\s\S]*?height: calc\(100svh - var\(--hara-v2-header-height\)\);/);
+  assert.match(css, /scroll-margin-top: calc\(var\(--hara-v2-header-height\) \+ 1rem\)/);
+  assert.doesNotMatch(css, /docs-v2-sidebar[\s\S]{0,220}--hara-v2-context-height/);
   assert.doesNotMatch(css, /--hara-v2-[A-Za-z0-9_-]+\s*:/, "Docs may consume but not redefine protected v2 tokens");
 
-  assert.match(navigation, /\.hara-docs-secondary \{[\s\S]*?min-height: 48px;[\s\S]*?max-height: 48px;/);
+  const shellStart = navigation.indexOf(".hara-docs-secondary {");
+  const shellEnd = navigation.indexOf("}", shellStart);
+  const shellRule = navigation.slice(shellStart, shellEnd + 1);
+  assert.match(shellRule, /position: relative/);
+  assert.match(shellRule, /top: auto/);
+  assert.match(shellRule, /isolation: isolate/);
+  assert.match(shellRule, /min-height: 48px/);
+  assert.match(shellRule, /max-height: 48px/);
+  assert.doesNotMatch(shellRule, /position:\s*(?:sticky|fixed)/);
   assert.match(navigation, /left: clamp\(12px, 2vw, 28px\)/);
   assert.match(navigation, /width: min\(360px, calc\(100vw - 56px\)\)/);
   assert.match(navigation, /@media \(max-width: 840px\)[\s\S]*?\.hara-docs-secondary__panel \{[\s\S]*?left: 0;[\s\S]*?width: 100%;/);
+  assert.match(navigation, /\.docs-v2-sidebar \{[\s\S]*?top: var\(--hara-v2-header-height\);/);
+  assert.match(navigation, /scroll-margin-top: calc\(var\(--hara-v2-header-height\) \+ 1rem\)/);
   assert.match(navigation, /html\[data-docs-navigation-ready="true"\][\s\S]*?starlight-menu-button/);
   assert.match(navigation, /@media \(prefers-reduced-motion: reduce\)/);
   assert.doesNotMatch(navigation, /--hara-v2-[A-Za-z0-9_-]+\s*:/, "Docs navigation may consume but not redefine protected v2 tokens");

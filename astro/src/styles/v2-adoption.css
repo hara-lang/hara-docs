@@ -61,18 +61,20 @@ body {
   min-height: 100vh;
 }
 
+/* Only the global Hara header is persistent. The local Docs context row
+   participates in document flow and must not reserve a sticky offset. */
 .docs-v2-workspace {
   display: grid;
   grid-template-columns: var(--sl-sidebar-width) minmax(0, 1fr);
-  min-height: calc(100svh - var(--hara-v2-header-height) - var(--hara-v2-context-height));
+  min-height: calc(100svh - var(--hara-v2-header-height));
 }
 
 .docs-v2-sidebar {
   position: sticky;
   z-index: 5;
-  top: calc(var(--hara-v2-header-height) + var(--hara-v2-context-height));
+  top: var(--hara-v2-header-height);
   align-self: start;
-  height: calc(100svh - var(--hara-v2-header-height) - var(--hara-v2-context-height));
+  height: calc(100svh - var(--hara-v2-header-height));
 }
 
 .docs-v2-sidebar .sidebar-pane {
@@ -96,7 +98,7 @@ body {
 
 .docs-v2-shell .right-sidebar {
   top: 0;
-  padding-top: calc(var(--hara-v2-header-height) + var(--hara-v2-context-height));
+  padding-top: var(--hara-v2-header-height);
 }
 
 .hara-docs-header-social {
@@ -185,7 +187,7 @@ body {
 
 .sl-markdown-content :where(h1, h2, h3, h4)[id],
 .sl-markdown-content :where(section, article)[id] {
-  scroll-margin-top: 6.5rem;
+  scroll-margin-top: calc(var(--hara-v2-header-height) + 1rem);
 }
 
 .card,
@@ -284,7 +286,7 @@ body {
 
   .docs-v2-sidebar {
     position: fixed;
-    inset: calc(var(--hara-v2-header-height) + var(--hara-v2-context-height)) 0 0;
+    inset: var(--hara-v2-header-height) 0 0;
     z-index: var(--sl-z-index-menu);
     width: 100%;
     height: auto;
@@ -294,7 +296,7 @@ body {
   .docs-v2-sidebar .sidebar-pane {
     visibility: hidden;
     position: fixed;
-    inset: calc(var(--hara-v2-header-height) + var(--hara-v2-context-height)) 0 0;
+    inset: var(--hara-v2-header-height) 0 0;
     z-index: var(--sl-z-index-menu);
     width: 100%;
     height: auto;
@@ -320,7 +322,7 @@ body {
 
   .sl-markdown-content :where(h1, h2, h3, h4)[id],
   .sl-markdown-content :where(section, article)[id] {
-    scroll-margin-top: 5.5rem;
+    scroll-margin-top: calc(var(--hara-v2-header-height) + 1rem);
   }
 }
 
