@@ -1,0 +1,163 @@
+---
+const activePath = Astro.url.pathname;
+const groups = [
+  { label: "Docs home", href: "/docs/" },
+  { label: "Learn", href: "/docs/learn/" },
+  { label: "Build", href: "/docs/build/" },
+  { label: "Reference", href: "/docs/api/" },
+  { label: "Self learning", href: "/docs/self-learning/" }
+];
+
+const currentGroup = groups
+  .filter((item) => item.href !== "/docs/" && activePath.startsWith(item.href))
+  .sort((left, right) => right.href.length - left.href.length)[0] ?? groups[0];
+---
+<nav
+  class="hara-docs-secondary hara-v2-context-nav"
+  aria-label="Docs page navigation"
+  data-docs-secondary
+  data-group-open="false"
+  data-section-open="false"
+>
+  <div class="hara-docs-secondary__line">
+    <a class="hara-docs-secondary__parent" href="/docs/" aria-label="Docs home">
+      <span aria-hidden="true">←</span>
+      <span>Docs</span>
+    </a>
+
+    <button
+      class="hara-docs-secondary__trigger"
+      type="button"
+      aria-expanded="false"
+      aria-controls="hara-docs-group-menu"
+      aria-label="Show document groups"
+      data-docs-group-trigger
+    >
+      <span>{currentGroup.label}</span>
+      <i aria-hidden="true"></i>
+    </button>
+
+    <button
+      class="hara-docs-secondary__trigger"
+      type="button"
+      aria-expanded="false"
+      aria-controls="hara-docs-section-menu"
+      aria-label="Show on this page navigation"
+      data-docs-section-trigger
+      hidden
+    >
+      <span data-docs-section-current>On this page</span>
+      <i aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <div class="hara-docs-secondary__panel" id="hara-docs-group-menu" data-docs-group-menu aria-hidden="true">
+    <span class="hara-docs-secondary__panel-label">Document groups</span>
+    {groups.map((item) => (
+      <a href={item.href} aria-current={item.href === currentGroup.href ? "page" : undefined}>{item.label}</a>
+    ))}
+  </div>
+
+  <div class="hara-docs-secondary__panel" id="hara-docs-section-menu" data-docs-section-menu aria-hidden="true">
+    <span class="hara-docs-secondary__panel-label">On this page</span>
+    <div data-docs-section-links></div>
+  </div>
+</nav>
+
+<script>
+  const initialiseDocsSecondaryNavigation = () => {
+    document.querySelectorAll("[data-docs-secondary]").forEach((nav) => {
+      if (!(nav instanceof HTMLElement) || nav.dataset.ready === "true") return;
+      const groupTrigger = nav.querySelector("[data-docs-group-trigger]");
+      const groupMenu = nav.querySelector("[data-docs-group-menu]");
+      const sectionTrigger = nav.querySelector("[data-docs-section-trigger]");
+      const sectionMenu = nav.querySelector("[data-docs-section-menu]");
+      const sectionLinks = nav.querySelector("[data-docs-section-links]");
+      const sectionCurrent = nav.querySelector("[data-docs-section-current]");
+      if (!(groupTrigger instanceof HTMLButtonElement) || !(groupMenu instanceof HTMLElement) || !(sectionTrigger instanceof HTMLButtonElement) || !(sectionMenu instanceof HTMLElement) || !(sectionLinks instanceof HTMLElement)) return;
+
+      nav.dataset.ready = "true";
+
+      const setGroupOpen = (requestedOpen, restoreFocus = false) => {
+        const open = Boolean(requestedOpen);
+        nav.dataset.groupOpen = String(open);
+        groupTrigger.setAttribute("aria-expanded", String(open));
+        groupTrigger.setAttribute("aria-label", `${open ? "Hide" : "Show"} document groups`);
+        groupMenu.setAttribute("aria-hidden", String(!open));
+        if (open) setSectionOpen(false);
+        if (!open && restoreFocus) groupTrigger.focus();
+      };
+
+      const setSectionOpen = (requestedOpen, restoreFocus = false) => {
+        const open = Boolean(requestedOpen) && !sectionTrigger.hidden;
+        nav.dataset.sectionOpen = String(open);
+        sectionTrigger.setAttribute("aria-expanded", String(open));
+        sectionTrigger.setAttribute("aria-label", `${open ? "Hide" : "Show"} on this page navigation`);
+        sectionMenu.setAttribute("aria-hidden", String(!open));
+        if (open) setGroupOpen(false);
+        if (!open && restoreFocus) sectionTrigger.focus();
+      };
+
+      groupTrigger.addEventListener("click", () => setGroupOpen(nav.dataset.groupOpen !== "true"));
+      groupMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setGroupOpen(false)));
+      sectionTrigger.addEventListener("click", () => setSectionOpen(nav.dataset.sectionOpen !== "true"));
+
+      const headings = [...document.querySelectorAll("main .sl-markdown-content :is(h2,h3)[id]")]
+        .filter((heading) => heading instanceof HTMLElement)
+        .slice(0, 16);
+      const linksById = new Map();
+      headings.forEach((heading, index) => {
+        if (!(heading instanceof HTMLElement)) return;
+        const link = document.createElement("a");
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent?.trim().replace(/\s+#$/, "") || heading.id;
+        link.dataset.docsSectionLink = heading.id;
+        if (index === 0) link.setAttribute("aria-current", "location");
+        link.addEventListener("click", () => {
+          setCurrent(heading.id);
+          setSectionOpen(false);
+        });
+        sectionLinks.append(link);
+        linksById.set(heading.id, link);
+      });
+
+      const setCurrent = (id) => {
+        linksById.forEach((link, candidateId) => {
+          if (candidateId === id) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+        const active = linksById.get(id);
+        if (sectionCurrent instanceof HTMLElement && active instanceof HTMLAnchorElement) {
+          sectionCurrent.textContent = active.textContent || "On this page";
+        }
+      };
+
+      if (headings.length > 0) {
+        sectionTrigger.hidden = false;
+        const first = headings[0];
+        if (first instanceof HTMLElement) setCurrent(first.id);
+        if ("IntersectionObserver" in window) {
+          const observer = new IntersectionObserver((entries) => {
+            const visible = entries
+              .filter((entry) => entry.isIntersecting)
+              .sort((left, right) => left.boundingClientRect.top - right.boundingClientRect.top)[0];
+            if (visible?.target instanceof HTMLElement) setCurrent(visible.target.id);
+          }, { rootMargin: "-30% 0px -62% 0px", threshold: [0, .05, .25] });
+          headings.forEach((heading) => observer.observe(heading));
+        }
+      }
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        if (nav.dataset.sectionOpen === "true") setSectionOpen(false, true);
+        else if (nav.dataset.groupOpen === "true") setGroupOpen(false, true);
+      });
+
+      setGroupOpen(false);
+      setSectionOpen(false);
+    });
+  };
+
+  initialiseDocsSecondaryNavigation();
+  document.addEventListener("astro:page-load", initialiseDocsSecondaryNavigation);
+</script>
