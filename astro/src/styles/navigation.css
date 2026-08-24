@@ -107,17 +107,18 @@
 .hara-docs-menu-backdrop[hidden] { display: none; }
 html[data-docs-menu-open="true"] { overflow: hidden; }
 
+/* The global Hara header is the only persistent navigation layer. */
 .hara-docs-secondary {
-  position: sticky;
-  z-index: 35;
-  top: var(--hara-v2-header-height);
+  position: relative;
+  top: auto;
+  z-index: 20;
+  isolation: isolate;
   min-height: 48px;
   max-height: 48px;
   overflow: visible;
   border-bottom: 1px solid var(--hara-v2-line-strong);
-  background: color-mix(in srgb, var(--hara-v2-panel-raised) 98%, transparent);
+  background: var(--hara-v2-panel-raised);
   box-shadow: 0 1px 0 var(--hara-v2-sketch);
-  backdrop-filter: blur(14px) saturate(106%);
 }
 
 .hara-docs-secondary__line {
@@ -188,7 +189,7 @@ html[data-docs-menu-open="true"] { overflow: hidden; }
 
 .hara-docs-secondary__panel {
   position: absolute;
-  z-index: 38;
+  z-index: 2;
   top: 100%;
   left: clamp(12px, 2vw, 28px);
   display: none;
@@ -245,23 +246,23 @@ html[data-docs-menu-open="true"] { overflow: hidden; }
   outline-offset: -3px;
 }
 
-/* Existing Starlight sidebars now clear the real 48px context row. */
+/* Persistent Starlight rails now clear only the global Hara header. */
 .docs-v2-workspace {
-  min-height: calc(100svh - var(--hara-v2-header-height) - 48px);
+  min-height: calc(100svh - var(--hara-v2-header-height));
 }
 
 .docs-v2-sidebar {
-  top: calc(var(--hara-v2-header-height) + 48px);
-  height: calc(100svh - var(--hara-v2-header-height) - 48px);
+  top: var(--hara-v2-header-height);
+  height: calc(100svh - var(--hara-v2-header-height));
 }
 
 .docs-v2-shell .right-sidebar {
-  padding-top: calc(var(--hara-v2-header-height) + 48px);
+  padding-top: var(--hara-v2-header-height);
 }
 
 .sl-markdown-content :where(h1, h2, h3, h4)[id],
 .sl-markdown-content :where(section, article)[id] {
-  scroll-margin-top: calc(var(--hara-v2-header-height) + 48px + 1rem);
+  scroll-margin-top: calc(var(--hara-v2-header-height) + 1rem);
 }
 
 @media (max-width: 840px) {
@@ -289,12 +290,12 @@ html[data-docs-menu-open="true"] { overflow: hidden; }
 
 @media (max-width: 800px) {
   .docs-v2-sidebar {
-    inset: calc(var(--hara-v2-header-height) + 48px) 0 0;
+    inset: var(--hara-v2-header-height) 0 0;
     height: auto;
   }
 
   .docs-v2-sidebar .sidebar-pane {
-    inset: calc(var(--hara-v2-header-height) + 48px) 0 0;
+    inset: var(--hara-v2-header-height) 0 0;
   }
 
   html[data-docs-navigation-ready="true"] .docs-v2-sidebar starlight-menu-button {
