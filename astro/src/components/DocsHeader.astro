@@ -99,7 +99,7 @@ const ecosystemDestinations = [
 
       const syncTree = () => {
         const sourceLinks = [...document.querySelectorAll(".docs-v2-sidebar .sidebar-content a[href]")];
-        const seen = new Set();
+        const seen = new Set<string>();
         tree.replaceChildren();
         sourceLinks.forEach((source) => {
           if (!(source instanceof HTMLAnchorElement)) return;
@@ -115,7 +115,7 @@ const ecosystemDestinations = [
         });
       };
 
-      const setOpen = (requestedOpen, restoreFocus = false) => {
+      const setOpen = (requestedOpen: boolean, restoreFocus = false) => {
         const open = Boolean(requestedOpen);
         masthead.dataset.menuOpen = String(open);
         menu.hidden = !open;
