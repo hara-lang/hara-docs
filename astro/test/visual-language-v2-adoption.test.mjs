@@ -30,8 +30,12 @@ test("the Starlight frame uses the shared Hara UI header and section navigation"
   assert.match(header, /@hara-lang\/ui-astro\/astro\/v2\/Header\.astro/);
   assert.match(header, /homeHref="https:\/\/hara-lang\.org\/"/);
   assert.match(header, /data-hara-identity/);
+  assert.match(frame, /@hara-lang\/ui-astro\/astro\/v2\/Shell\.astro/);
   assert.match(frame, /@hara-lang\/ui-astro\/astro\/v2\/ContextNav\.astro/);
-  assert.match(frame, /class="hara-v2 hara-v2-shell docs-v2-shell"/);
+  assert.match(frame, /class="docs-v2-shell"/);
+  assert.match(frame, /<Fragment slot="header"><slot name="header" \/><\/Fragment>/);
+  assert.match(frame, /variant="document"/);
+  assert.match(frame, /sidebar=\{hasSidebar\}/);
   assert.match(frame, /Docs sections/);
 });
 
