@@ -1,32 +1,32 @@
 ---
 import MobileMenuToggle from "@astrojs/starlight/components/MobileMenuToggle.astro";
+import V2Shell from "../../../vendor/hara-ui/foundation/astro/v2/Shell.astro";
 import DocsSecondaryNav from "./DocsSecondaryNav.astro";
 
 const { hasSidebar } = Astro.locals.starlightRoute;
 ---
-<div
-  class="hara-v2 hara-v2-shell docs-v2-shell"
-  data-sidebar={hasSidebar ? "true" : "false"}
-  data-aside="false"
-  data-context="true"
-  data-embedded="false"
-  data-density="comfortable"
+<V2Shell
+  sidebar={hasSidebar}
+  aside={false}
+  variant="document"
+  density="comfortable"
+  mainId="content"
+  class="docs-v2-shell"
+  style="--hara-v2-page: clamp(16px, 2.4vw, 32px); --hara-v2-rail-width: 256px;"
 >
-  <slot name="header" />
-  <DocsSecondaryNav />
-  <div class="docs-v2-workspace">
-    {
-      hasSidebar && (
-        <nav class="sidebar docs-v2-sidebar print:hidden" aria-label={Astro.locals.t('sidebarNav.accessibleLabel')}>
-          <MobileMenuToggle />
-          <div id="starlight__sidebar" class="sidebar-pane">
-            <div class="sidebar-content sl-flex">
-              <slot name="sidebar" />
-            </div>
+  <Fragment slot="header"><slot name="header" /></Fragment>
+  <DocsSecondaryNav slot="context" />
+  {
+    hasSidebar && (
+      <nav slot="sidebar" class="sidebar docs-v2-sidebar print:hidden" aria-label={Astro.locals.t('sidebarNav.accessibleLabel')}>
+        <MobileMenuToggle />
+        <div id="starlight__sidebar" class="sidebar-pane">
+          <div class="sidebar-content sl-flex">
+            <slot name="sidebar" />
           </div>
-        </nav>
-      )
-    }
-    <div class="main-frame docs-v2-main-frame"><slot /></div>
-  </div>
-</div>
+        </div>
+      </nav>
+    )
+  }
+  <div class="main-frame docs-v2-main-frame"><slot /></div>
+</V2Shell>

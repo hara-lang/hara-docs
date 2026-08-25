@@ -1,4 +1,4 @@
-@import "@hara-lang/visual-language/theme.css";
+@import "@hara-lang/ui/theme.css";
 :root,
 :root[data-theme="light"] {
   --sl-color-bg:var(--hara-bg);
