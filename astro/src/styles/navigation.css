@@ -1,0 +1,325 @@
+/* Hara Docs navigation shell ------------------------------------------------
+ * The compact product/header composition is canonical at every viewport.
+ */
+
+.hara-docs-masthead { position: relative; z-index: 40; }
+
+.hara-docs-masthead .hara-v2-ecosystem-nav { display: none; }
+
+.hara-docs-product-menu {
+  position: fixed;
+  z-index: 52;
+  top: var(--hara-v2-header-height);
+  left: 20px;
+  width: min(390px, calc(100vw - 40px));
+  max-height: min(76svh, 640px);
+  overflow: auto;
+  color: var(--hara-v2-ink);
+  border: 1px solid var(--hara-v2-line-strong);
+  background: var(--hara-v2-panel-raised);
+  box-shadow: var(--hara-v2-shadow);
+}
+
+.hara-docs-product-menu[hidden] { display: none; }
+
+.hara-docs-product-menu > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 60px;
+  padding: .65rem .7rem .65rem .9rem;
+  border-bottom: 1px solid var(--hara-v2-line-strong);
+}
+
+.hara-docs-product-menu > header > div { display: grid; gap: .12rem; }
+.hara-docs-product-menu > header span {
+  color: var(--hara-v2-faint);
+  font: 680 .56rem var(--hara-v2-font-code);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.hara-docs-product-menu > header strong {
+  color: var(--hara-v2-ink);
+  font: 720 .82rem var(--hara-v2-font-body);
+}
+
+.hara-docs-product-menu > header button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  padding: 0;
+  color: var(--hara-v2-muted);
+  border: 1px solid var(--hara-v2-line-strong);
+  border-radius: var(--hara-v2-radius);
+  background: var(--hara-v2-panel);
+  cursor: pointer;
+}
+
+.hara-docs-product-menu nav,
+.hara-docs-product-menu__tree {
+  display: grid;
+  gap: 1px;
+  padding: 8px;
+}
+
+.hara-docs-product-menu__tree {
+  max-height: 260px;
+  overflow: auto;
+  border-block: 1px solid var(--hara-v2-line-strong);
+  background: var(--hara-v2-panel-recess);
+}
+
+.hara-docs-product-menu__tree:empty { display: none; }
+
+.hara-docs-product-menu a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: .58rem .72rem;
+  color: var(--hara-v2-muted);
+  border: 1px solid var(--hara-v2-line);
+  background: var(--hara-v2-panel);
+  font: 650 .72rem var(--hara-v2-font-body);
+  text-decoration: none;
+}
+
+.hara-docs-product-menu a[aria-current="page"] {
+  color: var(--hara-v2-signal);
+  border-color: var(--hara-v2-signal);
+  box-shadow: inset 3px 0 var(--hara-v2-signal);
+}
+
+.hara-docs-product-menu a:hover { color: var(--hara-v2-ink); background: var(--hara-v2-hover); }
+
+.hara-docs-menu-backdrop {
+  position: fixed;
+  z-index: 51;
+  inset: var(--hara-v2-header-height) 0 0;
+  border: 0;
+  background: color-mix(in srgb, var(--hara-v2-canvas-clean) 62%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+.hara-docs-menu-backdrop[hidden] { display: none; }
+html[data-docs-menu-open="true"] { overflow: hidden; }
+
+/* The global Hara header is the only persistent navigation layer. */
+.hara-docs-secondary {
+  position: relative;
+  top: auto;
+  z-index: 20;
+  isolation: isolate;
+  min-height: 48px;
+  max-height: 48px;
+  overflow: visible;
+  border-bottom: 1px solid var(--hara-v2-line-strong);
+  background: var(--hara-v2-panel-raised);
+  box-shadow: 0 1px 0 var(--hara-v2-sketch);
+}
+
+.hara-docs-secondary__line {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  max-height: 48px;
+  padding-inline: clamp(12px, 2vw, 28px);
+  white-space: nowrap;
+}
+
+.hara-docs-secondary__parent,
+.hara-docs-secondary__trigger {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 48px;
+  max-height: 48px;
+  color: var(--hara-v2-muted);
+  border: 0;
+  border-right: 1px solid var(--hara-v2-line);
+  background: transparent;
+  font: 660 .7rem var(--hara-v2-font-body);
+  text-decoration: none;
+}
+
+.hara-docs-secondary__parent {
+  flex: 0 0 auto;
+  gap: .4rem;
+  max-width: 132px;
+  padding: 0 .75rem;
+}
+
+.hara-docs-secondary__trigger {
+  flex: 0 1 auto;
+  justify-content: space-between;
+  gap: .6rem;
+  width: clamp(180px, 23vw, 270px);
+  padding: 0 .75rem;
+  cursor: pointer;
+}
+
+.hara-docs-secondary__trigger[hidden] { display: none; }
+
+.hara-docs-secondary__parent span:last-child,
+.hara-docs-secondary__trigger > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hara-docs-secondary__trigger i {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform var(--hara-v2-motion) ease;
+}
+
+.hara-docs-secondary[data-group-open="true"] [data-docs-group-trigger] i,
+.hara-docs-secondary[data-section-open="true"] [data-docs-section-trigger] i {
+  transform: rotate(225deg) translate(-1px, -1px);
+}
+
+.hara-docs-secondary__panel {
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  left: clamp(12px, 2vw, 28px);
+  display: none;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  width: min(360px, calc(100vw - 56px));
+  max-height: min(62svh, 460px);
+  padding: 8px;
+  overflow: auto;
+  border: 1px solid var(--hara-v2-line-strong);
+  border-top: 0;
+  background: var(--hara-v2-panel);
+  box-shadow: var(--hara-v2-shadow);
+}
+
+.hara-docs-secondary[data-group-open="true"] [data-docs-group-menu],
+.hara-docs-secondary[data-section-open="true"] [data-docs-section-menu] {
+  display: grid;
+}
+
+.hara-docs-secondary__panel-label {
+  padding: .5rem .65rem .35rem;
+  color: var(--hara-v2-faint);
+  font: 680 .56rem var(--hara-v2-font-code);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.hara-docs-secondary__panel [data-docs-section-links] { display: grid; gap: 1px; }
+
+.hara-docs-secondary__panel a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: .58rem .72rem;
+  color: var(--hara-v2-muted);
+  border: 1px solid var(--hara-v2-line);
+  background: var(--hara-v2-panel-raised);
+  font: 650 .72rem var(--hara-v2-font-body);
+  text-decoration: none;
+}
+
+.hara-docs-secondary__panel a[aria-current] {
+  color: var(--hara-v2-signal);
+  border-color: var(--hara-v2-signal);
+  box-shadow: inset 3px 0 var(--hara-v2-signal);
+}
+
+.hara-docs-product-menu :is(a, button):focus-visible,
+.hara-docs-secondary :is(a, button):focus-visible {
+  position: relative;
+  z-index: 2;
+  outline: 2px solid var(--hara-v2-signal);
+  outline-offset: -3px;
+}
+
+/* Persistent Starlight rails now clear only the global Hara header. */
+.docs-v2-workspace {
+  min-height: calc(100svh - var(--hara-v2-header-height));
+}
+
+.docs-v2-sidebar {
+  top: var(--hara-v2-header-height);
+  height: calc(100svh - var(--hara-v2-header-height));
+}
+
+.docs-v2-shell .right-sidebar {
+  padding-top: var(--hara-v2-header-height);
+}
+
+.sl-markdown-content :where(h1, h2, h3, h4)[id],
+.sl-markdown-content :where(section, article)[id] {
+  scroll-margin-top: calc(var(--hara-v2-header-height) + 1rem);
+}
+
+@media (max-width: 840px) {
+  .hara-docs-product-menu {
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-height: min(78svh, 680px);
+    border-right: 0;
+    border-left: 0;
+  }
+
+  .hara-docs-secondary__line { padding-inline: 12px; }
+  .hara-docs-secondary__parent { max-width: 104px; padding-inline: .6rem; }
+  .hara-docs-secondary__trigger { flex: 1 1 0; width: auto; padding-inline: .6rem; }
+  .hara-docs-secondary__panel {
+    right: 0;
+    left: 0;
+    width: 100%;
+    padding: 8px 12px 12px;
+    border-right: 0;
+    border-left: 0;
+  }
+}
+
+@media (max-width: 800px) {
+  .docs-v2-sidebar {
+    inset: var(--hara-v2-header-height) 0 0;
+    height: auto;
+  }
+
+  .docs-v2-sidebar .sidebar-pane {
+    inset: var(--hara-v2-header-height) 0 0;
+  }
+
+  html[data-docs-navigation-ready="true"] .docs-v2-sidebar starlight-menu-button {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .hara-docs-secondary__line { padding-inline: 8px; }
+  .hara-docs-secondary__parent { max-width: 84px; padding-inline: .45rem; }
+  .hara-docs-secondary__trigger { padding-inline: .5rem; }
+}
+
+@media (max-width: 340px) {
+  .hara-docs-secondary__parent {
+    width: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    justify-content: center;
+    padding: 0;
+  }
+  .hara-docs-secondary__parent span:last-child { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hara-docs-secondary__trigger i { transition: none; }
+}

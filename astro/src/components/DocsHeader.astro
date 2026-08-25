@@ -4,21 +4,153 @@ import Search from "@astrojs/starlight/components/Search.astro";
 import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
 import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
 import LanguageSelect from "@astrojs/starlight/components/LanguageSelect.astro";
-import V2Header from "@hara-lang/ui-astro/astro/v2/Header.astro";
+import V2Header from "../../../vendor/hara-ui/foundation/astro/v2/Header.astro";
 
 const shouldRenderSearch =
   config.pagefind || config.components.Search !== "@astrojs/starlight/components/Search.astro";
 const activePath = Astro.url.pathname;
-const navigation = [
-  { label: "Play", href: "https://play.hara-lang.org/", external: true },
-  { label: "Learn", href: "https://learn.hara-lang.org/", external: true },
-  { label: "Build", href: "https://build.hara-lang.org/", external: true }
+const docsDestinations = [
+  { label: "Docs home", href: "/docs/" },
+  { label: "Learn", href: "/docs/learn/" },
+  { label: "Build", href: "/docs/build/" },
+  { label: "Reference", href: "/docs/api/" },
+  { label: "Self learning", href: "/docs/self-learning/" }
+];
+const ecosystemDestinations = [
+  { label: "Play", href: "https://play.hara-lang.org/" },
+  { label: "Learn site", href: "https://learn.hara-lang.org/" },
+  { label: "Build site", href: "https://build.hara-lang.org/" }
 ];
 ---
-<V2Header homeHref="https://hara-lang.org/" section="Docs" variant="document" nav={navigation} activePath={activePath}>
-  {shouldRenderSearch && <Search />}
-  <div data-hara-identity></div>
-  <div class="hara-docs-header-social"><SocialIcons /></div>
-  <ThemeSelect />
-  <LanguageSelect />
-</V2Header>
+<div class="hara-docs-masthead" data-docs-masthead data-menu-open="false">
+  <V2Header
+    homeHref="https://hara-lang.org/"
+    section="Docs"
+    showSection={true}
+    nav={[]}
+    activePath={activePath}
+    account="logged-in"
+    menuMode="product"
+    menuControls="hara-docs-product-menu"
+    menuLabel="Open Docs menu"
+    menuCloseLabel="Close Docs menu"
+  >
+    {shouldRenderSearch && <Search />}
+    <div data-hara-identity></div>
+    <div class="hara-docs-header-social"><SocialIcons /></div>
+    <ThemeSelect />
+    <LanguageSelect />
+  </V2Header>
+
+  <aside
+    class="hara-docs-product-menu"
+    id="hara-docs-product-menu"
+    data-docs-product-menu
+    aria-hidden="true"
+    hidden
+  >
+    <header>
+      <div>
+        <span>Hara Docs</span>
+        <strong>Documentation</strong>
+      </div>
+      <button type="button" data-docs-menu-close aria-label="Close Docs menu" title="Close Docs menu">
+        <span aria-hidden="true">×</span>
+      </button>
+    </header>
+
+    <nav aria-label="Docs sections">
+      {docsDestinations.map((item) => (
+        <a href={item.href} aria-current={activePath.startsWith(item.href) ? "page" : undefined}>{item.label}</a>
+      ))}
+    </nav>
+
+    <div class="hara-docs-product-menu__tree" data-docs-menu-tree aria-label="Current documentation tree"></div>
+
+    <nav class="hara-docs-product-menu__ecosystem" aria-label="Hara applications">
+      {ecosystemDestinations.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+  </aside>
+
+  <button
+    class="hara-docs-menu-backdrop"
+    type="button"
+    data-docs-menu-backdrop
+    aria-label="Close Docs menu"
+    hidden
+  ></button>
+</div>
+
+<script>
+  import { setHaraHeaderMenuState } from "../../../vendor/hara-ui/foundation/v2/header.js";
+
+  const initialiseDocsProductMenu = () => {
+    document.querySelectorAll("[data-docs-masthead]").forEach((masthead) => {
+      if (!(masthead instanceof HTMLElement) || masthead.dataset.ready === "true") return;
+      const header = masthead.querySelector("[data-hara-shell-header]");
+      const menu = masthead.querySelector("[data-docs-product-menu]");
+      const tree = masthead.querySelector("[data-docs-menu-tree]");
+      const backdrop = masthead.querySelector("[data-docs-menu-backdrop]");
+      const close = masthead.querySelector("[data-docs-menu-close]");
+      if (!(header instanceof HTMLElement) || !(menu instanceof HTMLElement) || !(tree instanceof HTMLElement) || !(backdrop instanceof HTMLButtonElement)) return;
+
+      masthead.dataset.ready = "true";
+      document.documentElement.dataset.docsNavigationReady = "true";
+
+      const syncTree = () => {
+        const sourceLinks = [...document.querySelectorAll(".docs-v2-sidebar .sidebar-content a[href]")];
+        const seen = new Set<string>();
+        tree.replaceChildren();
+        sourceLinks.forEach((source) => {
+          if (!(source instanceof HTMLAnchorElement)) return;
+          const href = source.getAttribute("href");
+          const label = source.textContent?.trim().replace(/\s+/g, " ");
+          if (!href || !label || seen.has(href)) return;
+          seen.add(href);
+          const link = document.createElement("a");
+          link.href = href;
+          link.textContent = label;
+          if (source.getAttribute("aria-current") === "page") link.setAttribute("aria-current", "page");
+          tree.append(link);
+        });
+      };
+
+      const setOpen = (requestedOpen: boolean, restoreFocus = false) => {
+        const open = Boolean(requestedOpen);
+        masthead.dataset.menuOpen = String(open);
+        menu.hidden = !open;
+        menu.setAttribute("aria-hidden", String(!open));
+        backdrop.hidden = !open;
+        document.documentElement.dataset.docsMenuOpen = String(open);
+        setHaraHeaderMenuState(header, open, {
+          compact: window.matchMedia("(max-width: 840px)").matches,
+          restoreFocus,
+          syncNavigation: false
+        });
+        if (open) {
+          syncTree();
+          const firstLink = menu.querySelector("a[aria-current], a");
+          if (firstLink instanceof HTMLAnchorElement) requestAnimationFrame(() => firstLink.focus());
+        }
+      };
+
+      header.addEventListener("hara:header-menu-request", (event) => {
+        if (!(event instanceof CustomEvent)) return;
+        event.preventDefault();
+        setOpen(Boolean(event.detail?.open), Boolean(event.detail?.restoreFocus));
+      });
+      backdrop.addEventListener("click", () => setOpen(false, true));
+      if (close instanceof HTMLButtonElement) close.addEventListener("click", () => setOpen(false, true));
+      menu.addEventListener("click", (event) => {
+        if (event.target instanceof Element && event.target.closest("a")) setOpen(false);
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && masthead.dataset.menuOpen === "true") setOpen(false, true);
+      });
+      setOpen(false);
+    });
+  };
+
+  initialiseDocsProductMenu();
+  document.addEventListener("astro:page-load", initialiseDocsProductMenu);
+</script>
