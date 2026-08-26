@@ -1,0 +1,459 @@
+---
+title: "Hara L0 language contract"
+---
+Version: `0.1`
+
+This document is the normative, implementation-independent contract for Hara
+L0 across the JVM, native Rust, and raw WASM hosts. The executable examples and expected values
+are maintained in [`l0-conformance.edn`](l0-conformance.edn). An implementation
+may use different storage or compiler techniques, but it must preserve the
+observable behavior described here.
+
+## 1. Source and reader
+
+Hara source is read as immutable forms. Whitespace, commas, and semicolon
+comments are discarded. Multiple forms may occur in one source. Supported
+literal forms are nil, booleans, strings, characters, symbols, keywords,
+integers, floating-point values, `N`-suffixed big integers, `M`-suffixed
+big decimals, lists, vectors, maps, sets, quote, syntax-quote, unquote,
+unquote-splicing, deref, metadata, and discard (`#_`).
+
+Collections require matching delimiters. EOF, mismatched delimiters, invalid
+dispatch, incomplete reader prefixes, invalid escapes, and invalid numeric
+tokens are reader errors. Reader errors include the source name, line, and
+column when a source name is available. Leading whitespace is not part of a
+form's source span.
+
+Aggregate forms may carry `:line`, `:column`, `:end-line`, and `:end-column`
+metadata. Anonymous function literals use `#(...)`; `%`, `%1`, `%2`, and `%&`
+name their arguments and nested literals establish their own argument scope.
+This metadata is diagnostic information and does not change value
+equality or symbol/keyword identity. Readable immutable values use canonical
+printing and must round-trip through the reader. Ratios are rejected.
+
+## 2. Values and evaluation
+
+Nil and `false` are falsey; every other value, including zero, the empty
+collection, and the empty string, is truthy. Expressions evaluate from left to
+right. A `do` form returns its final expression, and a source containing
+multiple top-level forms returns the final result.
+
+The core special forms are `quote`, `if`, `do`, `when`, `when-not`, `and`,
+`or`, `cond`, `let`, `letfn`, `binding`, `loop`, `recur`, `fn`, `def`,
+`defn`, `defn-`, `declare`, `defmulti`, `defmethod`, `var`, `deref`, `set!`,
+`throw`, `try`, `ns`, `ns+`, `in-ns`, `require`, `refer`, `use`, `alias`,
+`defstruct`, `defmutable`, `defprotocol`, `extend-type`, `field`, and
+`apply`. `defn` is the only function-definition form; there is no `defn.xt`.
+
+The ordinary collection functions `count`, `get`, `assoc`, `conj`, `cons`,
+`nth`, and `empty` are protocol-backed language functions. `cons` follows the
+public `(cons item collection)` argument order; the other update/lookup
+functions place the collection first. Protocol method Vars dispatch through
+the same context-local registry, so language-defined extensions are visible
+without requiring Java interface implementation.
+
+`let` initializers are evaluated in parallel against the enclosing lexical
+environment. `letfn` installs all local function bindings before evaluating
+the body, so self-recursion and mutual recursion work. Closures capture the
+lexical values they reference. `recur` is valid only in tail position and
+must match the enclosing `loop` or function arity.
+
+`def` installs a Var and returns that Var, so definition results remain
+inspectable and dereferenceable. `ns+` extends the current namespace declaration
+without replacing its existing aliases, refers, or loaded-module state.
+
+Functions support fixed arities, variadic parameter vectors using a final
+`&` binding, and multiple arity clauses. Exact arities take precedence over a
+variadic fallback. `apply` spreads the final sequential argument into the
+call. Invocation supports Hara functions, protocol `IFn` implementations,
+multifunctions, and `defstruct` or `defmutable` constructors.
+
+The packaged `std/foundation.hal` bootstrap defines `nil?`, `false?`, `true?`,
+`empty?`, `first`, `second`, `rest`, and `not-empty` using ordinary L0 forms
+and iterator operations. `rest` returns a lazy `Seq`, or nil when no values
+remain. There is no separate `next` operation.
+
+A `Seq` is a guaranteed non-empty lazy cell. Mathematically, Hara uses
+`HaraSeq(A) = Option(NonEmptyLazySeq(A))`: `nil` is the empty option, while a
+value satisfying `seq?` has a head and a lazy tail that eventually yields
+another `Seq` or `nil`. A `Seq` is also a one-shot iterator, so both `seq?`
+and `iter?` return true for it. An empty vector and an exhausted iterator are
+not identical to `nil`, but all three expose the empty element stream through
+their conversions:
+
+```clojure
+(seq nil)          ; => nil
+(seq [])           ; => nil
+(rest [])          ; => nil
+(rest [1])         ; => nil
+(seq? (rest [1 2])); => true
+(iter? (rest [1 2])); => true
+(vec nil)          ; => []
+(vec (rest [1]))   ; => []
+(vec (rest [1 2])) ; => [2]
+```
+
+`iter-has?` observes the next iterator step exactly and buffers a discovered
+item. Calling it repeatedly does not logically advance the cursor; the next
+`iter-next` returns that item. Exhaustion returns `false`, while other iterator
+failures propagate.
+
+Iterator operations remain strict about representation: `(iter nil)` creates
+an exhausted cursor, while `(iter-has? nil)` is an error. `cons` can prepend
+to a `Seq` without realizing its tail; `conj` is not defined for `Seq`.
+`cycle` requires a non-empty source and rejects an empty one.
+
+The same bootstrap provides ordinary names `map`, `filter`, `take`, `drop`,
+`mapcat`, `keep`, `cycle`, `zip`, and `partition-pair`; their `iter-*`
+counterparts return raw one-shot iterators. Direct `(map f concrete)` eagerly
+materializes a vector. Curried `((map f) source)` returns a lazy raw iterator;
+passing a `Seq` to the full-arity form does not preserve laziness. Materialize
+a transform result with `vec` when it must cross a display or storage boundary.
+Predicate reductions `every?` and `any?` stop as soon as their result is known.
+
+The bootstrap also provides `get-in`, `assoc-in`, `update`, and `update-in` for
+persistent nested values. These are ordinary `.hal` functions built on the
+collection protocol functions; they do not introduce mutable update semantics.
+
+Collection navigation also includes `last`, `reverse`, `key`, `val`, `keys`,
+and `vals`. Membership is protocol-based: use `IFind/find` to retrieve an
+entry and public `has?` to distinguish absence from a present nil value.
+`keys` and `vals` return vectors, while `reverse` returns a persistent list and
+does not mutate its input.
+
+`reduce` eagerly consumes an iterator with either `(reduce function value)`
+or `(reduce function initial value)`. The two-argument form uses the first
+source element as its accumulator and rejects an empty source; the three-
+argument form returns the initial value for an empty source. The callback is an
+ordinary Hara function receiving accumulator and element.
+
+Closures resolve captured locals before namespace Vars, including locals
+introduced by destructuring and nested anonymous-function literals.
+Destructuring supports nested positional vector patterns, vector rest
+bindings, map `:keys`, `:strs`, `:syms`, `:as`, and `:or` patterns in function,
+`let`, and `loop` bindings. Missing sequential or map values produce nil
+unless a map default applies.
+
+## 3. Exceptions and cleanup
+
+`throw` propagates a guest value. `try` supports ordered typed catch clauses
+and an optional `finally`; typed catches match Hara struct types and the
+documented scalar/generic exception categories. Unmatched guest values
+propagate. `finally` executes during normal completion and exception
+unwinding. Arity, unbound symbol, invalid form, reader, protocol, and
+interop failures are stable Hara errors and retain source sections where the
+offending form has a source span.
+
+## 4. Persistent collections and iteration
+
+Lists, vectors, maps, sets, queues, deques, tuples, ordered collections, sorted
+collections, tries, and priority maps are persistent values. Literal `[]`, `{}`, lists, and sets never
+become mutable merely because they cross a host boundary. Protocol operations
+such as count, lookup, nth, assoc, dissoc, conj, cons, first, and
+empty preserve the collection-family rules tested by the conformance suites.
+
+Hash maps, hash sets, lists, vectors, and their literal forms are foundational.
+The specialized constructors and predicates are owned by `std.lib.collection`:
+
+```clojure
+(ns example.collections
+  (:require [std.lib.collection :as collection]))
+
+(collection/ordered-map :first 1 :second 2)
+(collection/ordered-set :first :second)
+(collection/deque :first :second)
+(collection/priority-map :background 20 :interactive 1)
+(collection/sorted-map :second 2 :first 1)
+(collection/sorted-set 2 1)
+(collection/queue :first :second)
+(collection/trie "first" 1 "second" 2)
+
+(collection/trie? (collection/trie "first" 1)) ; => true
+```
+
+The complete predicate family is `deque?`, `ordered-map?`, `ordered-set?`,
+`priority-map?`, `sorted-map?`, `sorted-set?`, `queue?`, and `trie?`, qualified through the same namespace.
+Trie keys must be strings. Sorted families iterate in sort order, while ordered
+families preserve insertion order. Priority maps iterate by ascending natural
+priority and preserve insertion order among equal-priority keys.
+
+Deque end operations are explicit and live on the same public collection
+surface: `peek-first`, `peek-last`, `pop-first`, `pop-last`, `push-first`, and
+`push-last`. They dispatch through the native canonical protocols and preserve
+the receiver. A deque uses an internal count-measured finger tree; the finger
+tree is not a separate public collection type.
+
+This ownership is a breaking namespace migration. Specialized constructors are
+not unqualified foundation Vars and there are no compatibility aliases:
+
+| Previous call | Current call |
+| --- | --- |
+| `(ordered-map ...)` | `(collection/ordered-map ...)` |
+| `(ordered-set ...)` | `(collection/ordered-set ...)` |
+| `(sorted-map ...)` | `(collection/sorted-map ...)` |
+| `(sorted-set ...)` | `(collection/sorted-set ...)` |
+| `(queue ...)` | `(collection/queue ...)` |
+| `(trie ...)` | `(collection/trie ...)` |
+
+`deque` and `priority-map` are new collection constructors rather than migrated
+foundation aliases.
+
+The ordinary `dissoc` function accepts a collection followed by one or more
+keys and returns persistent updates. `peek` and `pop` expose first-element
+navigation through the collection protocol; they never mutate the input.
+
+The bootstrap provides lazy `range`, `repeat`, `repeatedly`, and `iterate`
+generators. These return `Seq` values; their `iter-*` primitives return raw
+iterators. Infinite forms remain lazy until consumed by an iterator operation.
+Full-arity `(take amount source)` consumes the bounded prefix and returns a
+vector; unary `(take amount)` constructs a lazy iterator transform.
+
+Unary `take-while` and `drop-while` construct lazy iterator transforms. Their
+full-arity collection forms eagerly materialize vectors. The transforms
+evaluate predicates only as demand advances and close their source when it is
+exhausted or the stopping predicate is reached.
+
+Unary `partition-all` and `partition` construct iterator transforms. Their
+collection forms eagerly return vectors of persistent vector chunks.
+`partition-all` retains a final partial chunk; `partition` discards an
+unmatched tail. Both require a positive chunk size.
+
+`map` and `iter-map` accept one or more sources. With multiple sources they
+advance them in lockstep and stop at the shortest source, invoking the function
+with one value from each source.
+
+Unary `interpose` constructs a lazy iterator transform; its collection form
+eagerly returns a vector. `interleave` eagerly returns a vector while
+round-robinning multiple sources and stops when the shortest is exhausted.
+
+Hara is iterator-first. It does not require Clojure `ISeq`/`Seq` semantics.
+The core iterator forms are:
+
+* `iter`, `iter-has?`, `iter-next`, and `iter-close`;
+* lazy `concat`, `iter-map`, `iter-filter`, `iter-take`, `iter-drop`, and
+  `iter-zip`, `iter-cycle`, `iter-partition-pair`, `iter-mapcat`, and
+  `iter-keep`.
+
+`iter-cycle` re-acquires a replayable source only after its current iteration
+is exhausted. `iter-partition-pair` emits two-element persistent vectors and
+drops an unmatched final element.
+
+Iterator sources are acquired only when demanded. `iter-next` reports a stable
+exhaustion error, and closing a wrapper closes its acquired source iterators.
+The language does not include mandatory transducers, `transduce`, or
+`eduction`.
+
+## 5. Explicit marker values and bytes
+
+Persistent literals remain distinct from target-like mutable values:
+
+* `array` creates a mutable indexed marker.
+* `object` creates a mutable string-keyed marker.
+
+Only values created by these markers accept restricted dot calls. Array methods
+are `get`, `set`, `push-first`, `push-last`, `pop-first`, `pop-last`, `insert`,
+`remove`, `clone`, `slice`, `map`, `filter`, `fold-left`, and `fold-right`.
+Object methods are `has?`, `get`, `set`, `delete`, `clone`, `assign`, `keys`,
+`vals`, and `pairs`. A call has the form `(. target (method arguments...))` and
+does not expose host members or reflection. Marker arrays also implement the
+ordinary `ICount` and `INth` collection protocols. Mutable values have identity
+semantics and are not specified as thread-safe.
+
+Bytes are an ordinary value category constructed with `(bytes ...)`. Elements
+use signed-byte storage and accept the checked `-128..255` input domain.
+Operations live in `std.foundation.bytes`: `bytes/count`, `bytes/get`, `bytes/set`,
+`bytes/copy`, `bytes/slice`, `bytes/u8`, and `bytes/s8`. `bytes/get` returns an
+unsigned element in the range `0..255` and accepts an optional fallback for an
+invalid index; without a fallback it reports a bounds error. Protocol
+`INth/nth` exposes the signed stored element. `bytes/set` mutates and returns
+the same byte array after checked conversion. Copy and
+slice allocate independent storage. Readable bytes print as `(bytes ...)`,
+and equality/hashing use byte content. Raw connector transport preserves
+bytes as bytes.
+
+## 6. Numbers
+
+The numeric categories are fixed-width integral values, floating-point values,
+`java.math.BigInteger`, and `java.math.BigDecimal`. Arithmetic promotes to a
+representation capable of preserving the operation result; primitive pairs
+use specialized Truffle paths and big-number cases use generic fallback.
+`+`, `-`, `*`, `/`, and `mod` are variadic with the documented identities and
+unary behavior and are also callable Vars, so they can be passed to functions
+such as `reduce`. Division is ratio-free: `(/ 2)` evaluates to integer `0`.
+Division or remainder by zero is an error. Numeric equality and hashing
+normalize equivalent integral/decimal representations, decimal scale, and
+signed zero according to the conformance cases. NaN and infinities are valid
+floating values with the specified comparison behavior.
+
+The comparison and equality operators `<`, `<=`, `>`, `>=`, `=`, and `not=` are
+also callable Vars. They require at least two arguments and apply pairwise from
+left to right, so they can be passed to iterator consumers such as `reduce`.
+
+Ratios, implicit complex numbers, and an implicit irrational-number tower are
+not L0 numeric categories. They may be explicit library or host values later.
+
+## 7. Protocols, structs, and multimethods
+
+### 7.1 Collection operation matrix
+
+The collection profile distinguishes language values from dispatch categories. A
+Java object participates only when it implements a Hara protocol adapter; being
+a `java.util.Collection` does not implicitly grant language operations. Foreign
+polyglot values likewise require an explicit protocol extension.
+
+| Receiver family | Lookup / invocation | Persistent update | Count / empty | Indexed access | Iteration |
+| --- | --- | --- | --- | --- | --- |
+| Persistent maps (HAMT, ordered, sorted, trie) | keys preserve present-`nil` versus missing fallback; maps are callable | `assoc`/`dissoc` return the same concrete family and preserve the original | supported; `empty` preserves the family | unsupported unless the concrete ordered/sorted contract declares it | entries are Hara `IPair` values |
+| Persistent sets (HAMT, ordered, sorted) | callable membership returns the stored value or fallback | `conj`/removal return the same family and preserve the original | supported; `empty` preserves the family | ordered/sorted forms expose only their declared indexed contract | yields unique values |
+| Vector | callable `nth` | `assoc` and `conj` return a new vector | supported | supported; negative and past-end indexes fail | insertion order |
+| List | lookup and `nth` through its sequential contract | `cons`/`push-first` prepend; navigation returns new lists | supported | supported by its declared sequential contract | head to tail |
+| Queue | sequential lookup | `conj`/`push-last` enqueue and preserve the original | supported | supported by its declared sequential contract | head to tail |
+| Tuple | callable `nth` | fixed-arity operations return the canonical resulting tuple arity | supported; empty is canonical `Tup0` | supported | tuple order |
+| Immutable named structs | keyword invocation and `get` read declared fields | `assoc`, `assoc-in`, `update`, and `update-in` return the same struct type; `dissoc` of a declared field returns a plain persistent map | `count` is the declared width; `empty` preserves the type with nil fields | unsupported | declared field order |
+| `defmutable` named values | keyword invocation, `get`, and `field` read declared fields | persistent updates are rejected; `(set! (field value :name) replacement)` mutates the existing identity | `count` is the declared width; `empty` is not a mutable update operation | unsupported | declared field order |
+| Mutable Hara collections and `array`/`object` markers | supported only by their declared protocols or restricted dot methods | mutation returns the same identity and is immediately visible | declared collection protocols only | arrays support indexed access; objects use string keys | declared protocol only |
+| Bytes | byte lookup supports a fallback; `INth` exposes signed storage | `bytes/set` mutates the byte buffer and returns its identity | count supported | checked bounds | byte order |
+| `nil` | lookup returns `nil` or the supplied fallback | `conj` creates a singleton list; `assoc` is unsupported | count is zero and empty is `nil` | unsupported | empty iterator where explicitly requested |
+| Primitive scalar | no collection lookup or update | unsupported | unsupported unless explicitly extended | unsupported | unsupported |
+| Foreign polyglot value | only explicitly installed foreign extensions | only explicitly installed foreign extensions | only explicitly installed foreign extensions | only explicitly installed foreign extensions | only explicitly installed foreign extensions |
+
+Duplicate map keys retain one entry with the last associated value. Duplicate set
+items retain one value. Invalid indexes and missing protocol implementations are
+errors identifying the protocol/method, receiver category, and searched dispatch
+path. Mutable and persistent operations must never silently cross their identity
+boundary.
+
+Hara remains iterator-first: this matrix does not imply Clojure `ISeq`,
+transducers, `transduce`, or `eduction` semantics.
+
+### 7.2 Protocol dispatch and language extensions
+
+Protocols are language descriptors with context-local dispatch registries.
+Java interfaces are optional adapters and fast paths, not the language
+definition. `defprotocol` declares direct namespace method Vars; `extend-type`
+installs language implementations; calling the method Var performs dispatch. Dispatch supports Hara
+values, adapted Java values, primitives, nil, and foreign values. Replacing a
+method or extension invalidates affected dispatch assumptions.
+
+### 7.3 Immutable and mutable named values
+
+`defstruct` and `defmutable` use parallel declaration and constructor shapes:
+
+```clojure
+(defstruct Point [x y])
+(defmutable Cursor [x y])
+
+(Point 1 2)
+(->Point 1 2)
+(map->Point {:x 1 :y 2})
+
+(Cursor 1 2)
+(->Cursor 1 2)
+(map->Cursor {:x 1 :y 2})
+```
+
+An immutable struct is backed by Hara's persistent map implementation while its
+type descriptor retains declared field order. Keyword invocation and `get` read
+fields. `assoc`, `assoc-in`, `update`, and `update-in` accept declared fields
+only, return the same struct type, preserve the receiver, and use structural
+sharing. A map constructor supplies `nil` for a missing declared field and
+ignores extra keys. Removing a declared field with `dissoc` returns a plain
+persistent map. `empty` preserves the struct type and supplies `nil` for every
+declared field. The `field` special form rejects immutable structs; use
+`(:x value)` or `(get value :x)` instead. Struct equality and hashing include
+type identity and field values.
+
+A mutable named value has fixed declared fields and reference identity. `field`
+reads a field and is a settable place:
+
+```clojure
+(field cursor :x)
+(set! (field cursor :x) 10)
+```
+
+The receiver and replacement are each evaluated once, from left to right.
+Mutation is visible through aliases and `set!` returns the replacement value.
+Keyword lookup, `get`, `keys`, `vals`, `count`, and iteration are supported.
+`assoc`, `dissoc`, and persistent nested updates reject mutable values. Use
+`(into {} value)` for a shallow persistent-map snapshot; later mutation does
+not alter that snapshot. Mutable equality and hashing use reference identity,
+and mutable named values are not HTA-serializable or session-transferable.
+
+Metadata, `instance?`, inline protocol clauses, `extend-type`, callable `IFn`,
+typed catch matching, and polyglot member access apply consistently to both
+named-value families without changing their persistence or identity rules.
+`defmulti`/`defmethod` dispatch by Hara equality and support `:default`.
+
+## 8. Vars, namespaces, macros, and modules
+
+Definitions live in namespace Vars. `var`, `deref`, `set!`, `alter-var-root`,
+and `binding` implement root and dynamic binding behavior. Dynamic bindings
+are restored after normal completion and guest errors. Namespace aliases and
+referred Vars preserve live Var identity.
+
+`defmacro` runs in the context-local compile-time registry. Syntax-quote,
+unquote, unquote-splicing, variadic macros, `macroexpand-1`, and recursive
+`macroexpand` are supported. Literal `require` loads filesystem or packaged
+`.hal` modules during analysis when necessary, supports aliases, `:refer`,
+`:refer-macros`, and `:reload`, and rolls back failed loads transactionally.
+Already compiled Truffle call targets are immutable; a newly compiled source
+observes a reloaded macro/module definition.
+
+The packaged bootstrap is intentionally language-level. Runtime libraries use
+the `std.foundation.*` namespace family; namespace metadata uses the plural
+`:aliases` key. The published symbol inventory is generated from runtime
+source and conformance evidence rather than kept as a second handwritten list.
+
+## Symbols
+
+The stable L0 surface consists of the special forms named in section 2, the
+protocol-backed collection operations in sections 2 and 4, arithmetic and
+comparison Vars in section 6, and the packaged Foundation bootstrap. Treat
+`std.foundation.*` source and the conformance manifest as authoritative for an
+exact release inventory. Historical `std.lib.string`, `std.lib.bytes`,
+`std.lib.promise`, `std.lib.file`, and `std.lib.socket` names are not current
+public namespaces.
+
+## 9. Host and Native Image boundary
+
+Level 0 has no guest-visible JVM or general host interop. `host-symbol`,
+`host-get`, and `host-call` are unbound symbols. Polyglot array/member access is
+available only for values that explicitly expose that interop; guest dot calls
+remain restricted to `array` and `object` markers.
+Native Image must include the same language resources and supported adapters;
+reflection, generated classes, mutable classpaths, and unrestricted host
+loading are not required by the core profile.
+
+The JVM and Native Image profiles must execute the same conformance manifest.
+Native Image startup, binary size, reachability/build-report, and benchmark
+results are release evidence rather than language semantics.
+
+## 10. Conformance and intentional differences
+
+`l0-conformance.edn` is the stable executable corpus. Each case has an ID,
+category, source/setup, and expected value, type, readable form, or error.
+Implementations classify mismatches as a bug, a capability difference, or an
+approved specification revision. The current intentional differences from
+Clojure are: no mandatory ISeq/Seq, no ratios, no transducers/
+`transduce`/`eduction`, no Clojure-style host record contract (`defstruct` is the primitive struct form), no `deftype`, and no `defn.xt`.
+
+## Clojure compatibility
+
+Clojure readers will recognize immutable values, Vars, namespaces, atoms,
+protocols, multimethods, destructuring, macros, and the evaluate-inspect-change
+workflow. Hara deliberately keeps those transferable ideas while defining its
+own runtime contract.
+
+Important differences are normative rather than temporary omissions:
+
+- Hara is iterator-first and does not require Clojure `ISeq` semantics.
+- Empty iteration is represented explicitly by `nil`; a `Seq` is non-empty.
+- Ratios, transducers, `deftype`, and ambient JVM interop are not L0 features.
+- `defstruct` is Hara's primitive immutable named-value form; `defmutable` is its fixed-shape reference-identity counterpart.
+- Host services are capabilities or providers, not implicitly reachable Java
+  classes or JavaScript objects.
+- Sessions isolate namespaces, Vars, loaded modules, tasks, and capabilities
+  inside one kernel.
+
+Treat familiar spelling as a starting point, not proof of identical behavior.
+The conformance corpus and the sections above define the portable semantics.
