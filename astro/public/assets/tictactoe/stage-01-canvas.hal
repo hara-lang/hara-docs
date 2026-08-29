@@ -1,0 +1,25 @@
+(ns+
+  (:require [studio.draw :as draw]))
+
+;; Stage 01 — draw before adding game state.
+(defn opening-commands [width height]
+  [[:grid 48 "rgba(67,247,231,.12)" 1]
+   [:text "DRAW A BOARD FROM FOUR LINES" 48 72 "#dffeff" 24]
+   [:text "FIRST: CHANGE A NUMBER. THEN RUN THIS FILE." 48 102 "#7dfff3" 14]
+   ;; [:line x1 y1 x2 y2 color width alpha]
+   ;; Two vertical lines split the board into three columns.
+   [:line 220 170 220 470 "#386779" 2 1]
+   [:line 380 170 380 470 "#386779" 2 1]
+   ;; Two horizontal lines split it into three rows.
+   [:line 60 270 540 270 "#386779" 2 1]
+   [:line 60 370 540 370 "#386779" 2 1]])
+
+(node/start
+  (fn []
+    (loop []
+      (let [frame (co/await (draw/next-frame "canvas/background"))]
+        (co/await (draw/render "canvas/background"
+          {:type :canvas-2d
+           :background "#03070d"
+           :commands (opening-commands 960 600)}))
+        (recur)))))

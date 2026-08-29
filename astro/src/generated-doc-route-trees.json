@@ -1,0 +1,272 @@
+[
+  {
+    "id": "foundations",
+    "prefix": "/docs/hal-intro/",
+    "label": "Hara Foundations",
+    "items": [
+      {
+        "label": "Course overview",
+        "path": "hal-intro/index.md",
+        "href": "/docs/hal-intro/"
+      },
+      {
+        "label": "01 — Data and collections",
+        "path": "hal-intro/01-basic-data.md",
+        "href": "/docs/hal-intro/01-basic-data/"
+      },
+      {
+        "label": "02 — Functions and atoms",
+        "path": "hal-intro/02-functions-and-atoms.md",
+        "href": "/docs/hal-intro/02-functions-and-atoms/"
+      },
+      {
+        "label": "03 — Sequences and streams",
+        "path": "hal-intro/03-iterators-and-streaming.md",
+        "href": "/docs/hal-intro/03-iterators-and-streaming/"
+      },
+      {
+        "label": "04 — Coroutines and promises",
+        "path": "hal-intro/04-coroutines-and-promises.md",
+        "href": "/docs/hal-intro/04-coroutines-and-promises/"
+      },
+      {
+        "label": "05 — Arrays and objects",
+        "path": "hal-intro/05-array-and-object.md",
+        "href": "/docs/hal-intro/05-array-and-object/"
+      },
+      {
+        "label": "06 — Bytes and strings",
+        "path": "hal-intro/06-bytes-and-strings.md",
+        "href": "/docs/hal-intro/06-bytes-and-strings/"
+      },
+      {
+        "label": "07 — I/O and files",
+        "path": "hal-intro/07-io-and-files.md",
+        "href": "/docs/hal-intro/07-io-and-files/"
+      }
+    ]
+  },
+  {
+    "id": "protocols",
+    "prefix": "/docs/learn/protocols/",
+    "label": "Protocols for Builders",
+    "items": [
+      {
+        "label": "Course overview",
+        "path": "learn/protocols/index.md",
+        "href": "/docs/learn/protocols/"
+      },
+      {
+        "label": "Collections",
+        "path": "learn/protocols/collections.md",
+        "href": "/docs/learn/protocols/collections/"
+      },
+      {
+        "label": "State and lifecycle",
+        "path": "learn/protocols/state-lifecycle.md",
+        "href": "/docs/learn/protocols/state-lifecycle/"
+      },
+      {
+        "label": "Protocol atlas",
+        "path": "learn/protocols/atlas.md",
+        "href": "/docs/learn/protocols/atlas/"
+      }
+    ]
+  },
+  {
+    "id": "tic-tac-toe",
+    "prefix": "/docs/create/",
+    "label": "Build Tic Tac Toe",
+    "items": [
+      {
+        "label": "Course overview",
+        "path": "create/first-game.md",
+        "href": "/docs/create/first-game/"
+      },
+      {
+        "label": "01 — Board",
+        "path": "create/tictactoe/board.md",
+        "href": "/docs/create/tictactoe/board/"
+      },
+      {
+        "label": "02 — State",
+        "path": "create/tictactoe/state.md",
+        "href": "/docs/create/tictactoe/state/"
+      },
+      {
+        "label": "03 — Rendering",
+        "path": "create/tictactoe/rendering.md",
+        "href": "/docs/create/tictactoe/rendering/"
+      },
+      {
+        "label": "04 — Input",
+        "path": "create/tictactoe/input.md",
+        "href": "/docs/create/tictactoe/input/"
+      },
+      {
+        "label": "05 — Live workflow",
+        "path": "create/tictactoe/live.md",
+        "href": "/docs/create/tictactoe/live/"
+      },
+      {
+        "label": "06 — Files",
+        "path": "create/tictactoe/files.md",
+        "href": "/docs/create/tictactoe/files/"
+      }
+    ]
+  },
+  {
+    "id": "little-book",
+    "prefix": "/docs/books/the-little-book-of-hal/",
+    "label": "The Little Book of HAL",
+    "items": [
+      {
+        "label": "Read the book",
+        "path": "books/the-little-book-of-hal/docs/index.md",
+        "href": "/docs/books/the-little-book-of-hal/docs/"
+      },
+      {
+        "label": "01 — Values Have Shapes",
+        "path": "books/the-little-book-of-hal/docs/01-values-have-shapes.md",
+        "href": "/docs/books/the-little-book-of-hal/docs/01-values-have-shapes/"
+      },
+      {
+        "label": "02 — Ask Again",
+        "path": "books/the-little-book-of-hal/docs/02-ask-again.md",
+        "href": "/docs/books/the-little-book-of-hal/docs/02-ask-again/"
+      },
+      {
+        "label": "03 — Build on Return",
+        "path": "books/the-little-book-of-hal/docs/03-build-on-return.md",
+        "href": "/docs/books/the-little-book-of-hal/docs/03-build-on-return/"
+      },
+      {
+        "label": "04 — Number Games",
+        "path": "books/the-little-book-of-hal/docs/04-number-games.md",
+        "href": "/docs/books/the-little-book-of-hal/docs/04-number-games/"
+      },
+      {
+        "label": "05 — Trees of Values",
+        "path": "books/the-little-book-of-hal/docs/05-trees-of-values.md",
+        "href": "/docs/books/the-little-book-of-hal/docs/05-trees-of-values/"
+      },
+      {
+        "label": "06 — Forms Have Meaning",
+        "path": "books/the-little-book-of-hal/docs/06-forms-have-meaning.md",
+        "href": "/docs/books/the-little-book-of-hal/docs/06-forms-have-meaning/"
+      },
+      {
+        "label": "07 — Sets and Relations",
+        "path": "books/the-little-book-of-hal/docs/07-sets-and-relations.md",
+        "href": "/docs/books/the-little-book-of-hal/docs/07-sets-and-relations/"
+      },
+      {
+        "label": "08 — Functions Make Functions",
+        "path": "books/the-little-book-of-hal/docs/08-functions-make-functions.md",
+        "href": "/docs/books/the-little-book-of-hal/docs/08-functions-make-functions/"
+      },
+      {
+        "label": "09 — Recursion Without a Name",
+        "path": "books/the-little-book-of-hal/docs/09-recursion-without-a-name.md",
+        "href": "/docs/books/the-little-book-of-hal/docs/09-recursion-without-a-name/"
+      },
+      {
+        "label": "10 — The Value of a Form",
+        "path": "books/the-little-book-of-hal/docs/10-the-value-of-a-form.md",
+        "href": "/docs/books/the-little-book-of-hal/docs/10-the-value-of-a-form/"
+      }
+    ]
+  },
+  {
+    "id": "language-api",
+    "prefix": "/docs/api/",
+    "label": "Language API",
+    "items": [
+      {
+        "label": "API index",
+        "path": "api/index.md",
+        "href": "/docs/api/"
+      },
+      {
+        "label": "std.foundation",
+        "path": "api/std.foundation.md",
+        "href": "/docs/api/stdfoundation/"
+      },
+      {
+        "label": "bytes",
+        "path": "api/std.foundation.bytes.md",
+        "href": "/docs/api/stdfoundationbytes/"
+      },
+      {
+        "label": "coroutines",
+        "path": "api/std.foundation.coroutine.md",
+        "href": "/docs/api/stdfoundationcoroutine/"
+      },
+      {
+        "label": "crypto",
+        "path": "api/std.foundation.crypto.md",
+        "href": "/docs/api/stdfoundationcrypto/"
+      },
+      {
+        "label": "EDN",
+        "path": "api/std.foundation.edn.md",
+        "href": "/docs/api/stdfoundationedn/"
+      },
+      {
+        "label": "files",
+        "path": "api/std.foundation.file.md",
+        "href": "/docs/api/stdfoundationfile/"
+      },
+      {
+        "label": "host",
+        "path": "api/std.foundation.host.md",
+        "href": "/docs/api/stdfoundationhost/"
+      },
+      {
+        "label": "JSON",
+        "path": "api/std.foundation.json.md",
+        "href": "/docs/api/stdfoundationjson/"
+      },
+      {
+        "label": "kernel",
+        "path": "api/std.foundation.kernel.md",
+        "href": "/docs/api/stdfoundationkernel/"
+      },
+      {
+        "label": "operating system",
+        "path": "api/std.foundation.os.md",
+        "href": "/docs/api/stdfoundationos/"
+      },
+      {
+        "label": "pretty printing",
+        "path": "api/std.foundation.pretty.md",
+        "href": "/docs/api/stdfoundationpretty/"
+      },
+      {
+        "label": "pretty-print engine",
+        "path": "api/std.foundation.pretty.engine.md",
+        "href": "/docs/api/stdfoundationprettyengine/"
+      },
+      {
+        "label": "promises",
+        "path": "api/std.foundation.promise.md",
+        "href": "/docs/api/stdfoundationpromise/"
+      },
+      {
+        "label": "sets",
+        "path": "api/std.foundation.set.md",
+        "href": "/docs/api/stdfoundationset/"
+      },
+      {
+        "label": "sockets",
+        "path": "api/std.foundation.socket.md",
+        "href": "/docs/api/stdfoundationsocket/"
+      },
+      {
+        "label": "strings",
+        "path": "api/std.foundation.string.md",
+        "href": "/docs/api/stdfoundationstring/"
+      }
+    ]
+  }
+]
