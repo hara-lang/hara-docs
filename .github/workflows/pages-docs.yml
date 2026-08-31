@@ -132,7 +132,7 @@ jobs:
       - name: Verify independent deployment credential
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.HARA_NETLIFY_AUTH_TOKEN }}
         run: |
           if [ -z "${NETLIFY_AUTH_TOKEN:-}" ]; then
             echo "NETLIFY_AUTH_TOKEN is required for independent documentation publication." >&2
@@ -156,8 +156,8 @@ jobs:
       name: netlify-production
       url: https://hara-docs.netlify.app/
     env:
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      NETLIFY_SITE_ID: ebf43b71-ef29-44d0-a951-8217f3e2471b
+      NETLIFY_AUTH_TOKEN: ${{ secrets.HARA_NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: ${{ vars.HARA_DOCS_NETLIFY_PRODUCTION_SITE_ID }}
       DOCS_ORIGIN: https://hara-docs.netlify.app
       DOCS_CANONICAL: https://hara-lang.org/docs
     steps:
