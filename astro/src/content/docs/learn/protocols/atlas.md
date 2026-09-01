@@ -126,7 +126,6 @@ resuming are different capabilities.
 | `IFn` | `std.protocol.ifn` | `invoke` |
 | `IOFn` | `std.protocol.iofn` | marker protocol |
 | `IApplicable` | `std.protocol.iapplicable` | `apply-in`, `apply-default`, `transform-in`, `transform-out` |
-| `IInvokeIn` | `std.protocol.iinvokein` | `invoke-in` |
 | `IContext` | `std.protocol.icontext` | `call` |
 | `IContextLifeCycle` | `std.protocol.icontextlifecycle` | `has-module?`, `setup-module`, `teardown-module`, `has-pointer?`, `setup-pointer`, `teardown-pointer` |
 
