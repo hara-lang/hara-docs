@@ -169,7 +169,7 @@ jobs:
       url: https://hara-docs.netlify.app/
     env:
       NETLIFY_AUTH_TOKEN: ${{ secrets.HARA_NETLIFY_AUTH_TOKEN }}
-      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_PRODUCTION_SITE_ID }}
+      NETLIFY_SITE_ID: ebf43b71-ef29-44d0-a951-8217f3e2471b
       DOCS_ORIGIN: https://hara-docs.netlify.app
       DOCS_CANONICAL: https://hara-lang.org/docs
     steps:
