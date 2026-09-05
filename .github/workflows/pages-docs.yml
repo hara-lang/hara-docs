@@ -39,8 +39,8 @@ jobs:
 
       - name: Expose shared UI package for npm file dependencies
         run: |
-          mkdir -p "$GITHUB_WORKSPACE/../technology"
-          ln -sfn "$GITHUB_WORKSPACE/technology/hara-ui" "$GITHUB_WORKSPACE/../technology/hara-ui"
+          mkdir -p "$GITHUB_WORKSPACE/../../technology"
+          ln -sfn "$GITHUB_WORKSPACE/technology/hara-ui" "$GITHUB_WORKSPACE/../../technology/hara-ui"
 
       - name: Setup Python
         uses: actions/setup-python@v5
