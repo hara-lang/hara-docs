@@ -172,6 +172,7 @@ jobs:
       NETLIFY_SITE_ID: ebf43b71-ef29-44d0-a951-8217f3e2471b
       DOCS_ORIGIN: https://hara-docs.netlify.app
       DOCS_CANONICAL: https://hara-lang.org/docs
+      DOCS_CANONICAL_TARGET: https://learn.hara-lang.org/
     steps:
       - name: Download validated Astro site
         uses: actions/download-artifact@v4
@@ -207,14 +208,12 @@ jobs:
           for attempt in $(seq 1 24); do
             if fetch "$DOCS_ORIGIN/" /tmp/origin-root.html \
               && fetch "$DOCS_ORIGIN/docs/" /tmp/origin-docs.html \
-              && fetch "$DOCS_CANONICAL/" /tmp/canonical-root.html \
               && grep -Eq '<meta[^>]+name="generator"[^>]+content="Astro ' /tmp/origin-root.html \
               && grep -Eq 'sidebar-pane|data-has-sidebar|aria-label="Main navigation"' /tmp/origin-root.html \
               && grep -Fq '/docs/assets/docs-repl.js' /tmp/origin-root.html \
               && grep -Fq 'pagefind' /tmp/origin-root.html \
               && ! grep -Fq '/docs/docs/' /tmp/origin-root.html \
-              && cmp -s /tmp/origin-root.html /tmp/origin-docs.html \
-              && grep -Fq 'https://hara-lang.org/docs/' /tmp/canonical-root.html; then
+              && cmp -s /tmp/origin-root.html /tmp/origin-docs.html; then
               break
             fi
             if [ "$attempt" -eq 24 ]; then
@@ -227,17 +226,17 @@ jobs:
           effective_url="$(curl --fail --location --silent --show-error \
             --output /tmp/canonical-effective.html --write-out '%{url_effective}' \
             "$DOCS_CANONICAL/")"
-          test "$effective_url" = "$DOCS_CANONICAL/"
+          test "$effective_url" = "$DOCS_CANONICAL_TARGET"
 
-          fetch "$DOCS_CANONICAL/hal-intro/01-basic-data/" /tmp/lesson.html
-          fetch "$DOCS_CANONICAL/books/the-little-book-of-hal/docs/" /tmp/book.html
-          fetch "$DOCS_CANONICAL/api/" /tmp/api.html
-          fetch "$DOCS_CANONICAL/start/orientation/" /tmp/redirect.html
-          fetch "$DOCS_CANONICAL/pagefind/pagefind.js" /tmp/pagefind.js
-          fetch "$DOCS_CANONICAL/assets/og-hara-docs.jpg" /tmp/docs-card.jpg
-          fetch "$DOCS_CANONICAL/assets/visual-language/motifs/web/aperture-light-1280.avif" /tmp/aperture.avif
-          fetch "$DOCS_CANONICAL/docs-assets/live/live-card.js" /tmp/live-card.js
-          fetch "$DOCS_CANONICAL/docs-assets/rust/hara.wasm" /tmp/hara.wasm
+          fetch "$DOCS_ORIGIN/hal-intro/01-basic-data/" /tmp/lesson.html
+          fetch "$DOCS_ORIGIN/books/the-little-book-of-hal/docs/" /tmp/book.html
+          fetch "$DOCS_ORIGIN/api/" /tmp/api.html
+          fetch "$DOCS_ORIGIN/start/orientation/" /tmp/redirect.html
+          fetch "$DOCS_ORIGIN/pagefind/pagefind.js" /tmp/pagefind.js
+          fetch "$DOCS_ORIGIN/assets/og-hara-docs.jpg" /tmp/docs-card.jpg
+          fetch "$DOCS_ORIGIN/assets/visual-language/motifs/web/aperture-light-1280.avif" /tmp/aperture.avif
+          fetch "$DOCS_ORIGIN/docs-assets/live/live-card.js" /tmp/live-card.js
+          fetch "$DOCS_ORIGIN/docs-assets/rust/hara.wasm" /tmp/hara.wasm
 
           grep -Eq 'data-hara-eval|data-hara-live|data-hara-canvas-stage' /tmp/lesson.html
           grep -Fq 'The Little Book of HAL' /tmp/book.html
