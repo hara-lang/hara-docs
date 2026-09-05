@@ -9,7 +9,9 @@ test("the publishing workflow uses the independently packaged Hara UI", async ()
   const workflow = await readRoot(".github/workflows/pages-docs.yml");
   assert.match(workflow, /repository: hara-lang\/hara-ui/);
   assert.match(workflow, /technology\/hara-ui/);
-  assert.doesNotMatch(workflow, /repository: hara-lang\/visual-language/);
+  assert.match(workflow, /repository: hara-lang\/visual-language/);
+  assert.match(workflow, /ref: a2ab66d0fde79edb1cee46b79528098b3fda68cf/);
+  assert.match(workflow, /path: astro\/packages\/visual-language/);
 });
 
 test("Starlight remains the renderer and loads v2 mapping layers after existing docs CSS", async () => {
